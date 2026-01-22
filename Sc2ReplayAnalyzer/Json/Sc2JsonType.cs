@@ -6,6 +6,7 @@ public class Sc2JsonType
     public const string Modules = "modules";
     public const string Declaration = "decls";
     public const string Type = "type";
+    public const string Tag = "tag";
     public const string TypeInfo = "type_info";
     public const string Fields = "fields";
     public const string Value = "value";
