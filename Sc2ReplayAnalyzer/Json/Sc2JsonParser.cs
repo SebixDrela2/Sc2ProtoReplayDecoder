@@ -10,6 +10,9 @@ public class Sc2JsonParser(Dictionary<string, string> jsonFiles)
     private const string NNetReplay = "NNet.Replay";
     private const string NNetGame = "NNet.Game";
 
+    private readonly Sc2ByteAlignedProcessor _byteAlignedProcessor = new Sc2ByteAlignedProcessor();
+    private readonly Sc2BitPackedProcessor _bitPackedProcessor = new Sc2BitPackedProcessor();
+
     public IReadOnlyList<Sc2GeneratorData> Parse()
     {
         var result = new List<Sc2GeneratorData>();
@@ -32,8 +35,8 @@ public class Sc2JsonParser(Dictionary<string, string> jsonFiles)
         return new Sc2GeneratorData
         {
             EnumTags = ParseRootModuleForEnumTags(rootModule),
-            ByteAligned = ProcessByteAligned(rootModule),
-            BitPacked = []
+            ByteAligned = _byteAlignedProcessor.ProcessByteAligned(rootModule),
+            BitPacked = _bitPackedProcessor.ProcessBitPacked(rootModule)
         };
     }
 
@@ -46,86 +49,6 @@ public class Sc2JsonParser(Dictionary<string, string> jsonFiles)
         return enumTags;
     }
 
-    private IReadOnlyList<JsonNode> ProcessByteAligned(JsonNode rootModule)
-    {
-        var result = new List<JsonNode>();
-        var moduleDeclarations = rootModule[Declaration].AsArray();
-
-        foreach(var module in moduleDeclarations)
-        {
-            var fullName = module[FullName].ToString();
-
-            switch(fullName)
-            {
-                case "NNet.SVersion":
-                case "NNet.SVarUint32":
-                case "NNet.SMD5":
-                case "NNet.EObserve":
-                    result.Add(module);
-                    break;
-
-                case "NNet.Replay":
-                case "NNet.Game":
-                    result.AddRange(ProcessReplayEvent(module));
-                    break;
-            }
-        }
-
-        return result;
-    }
-
-    private IReadOnlyList<JsonNode> ProcessReplayEvent(JsonNode typeDeclaration)
-    {
-        var result = new List<JsonNode>();
-        var replayDeclarations = typeDeclaration[Declaration].AsArray();
-
-        foreach(var replayDecl in replayDeclarations)
-        {
-            var fullName = replayDecl[FullName].ToString();
-
-            switch(fullName)
-            {
-                case "NNet.Replay.SHeader":
-                    result.Add(replayDecl);
-                    break;
-
-                case "NNet.Replay.Tracker":
-                    result.AddRange(ProcessReplayTracker(replayDecl));
-                    break;
-
-                case "NNet.Game.CPlayerDetailsArray":
-                case "NNet.Game.SDetails":
-                case "NNet.Game.SPlayerDetails":
-                case "NNet.Game.SThumbnail":
-                case "NNet.Game.EGameSpeed":
-                case "NNet.Game.EResultDetails":
-                case "NNet.Game.SToonNameDetails":
-                case "NNet.Game.SColor":
-                    result.Add(replayDecl);
-                    break;
-            }
-        }
-
-        return result;
-    }
-
-    private IReadOnlyList<JsonNode> ProcessReplayTracker(JsonNode typeDeclaration)
-    {
-        var result = new List<JsonNode>();
-        var trackerDeclarations = typeDeclaration[Declaration].AsArray();
-
-        foreach(var trackerDeclaration in trackerDeclarations)
-        {
-            var fullName = trackerDeclaration[FullName].ToString();
-
-            if (fullName.StartsWith("NNet.Replay.Tracker.S") || fullName is "NNet.Replay.Tracker.EEventId")
-            {
-                result.Add(trackerDeclaration);
-            }
-        }
-
-        return result;
-    }
 
     private Sc2StructDeclaration ProcessModuleDeclaration(JsonNode module, Dictionary<string, string> enumTags)
     {

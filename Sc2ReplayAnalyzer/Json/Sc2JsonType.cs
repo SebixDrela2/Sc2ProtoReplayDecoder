@@ -11,4 +11,9 @@ public class Sc2JsonType
     public const string Value = "value";
     public const string Name = "name";
     public const string ElementType = "element_type";
+    public const string Bounds = "bounds";
+    public const string Min = "min";
+    public const string Max = "max";
+    public const string EValue = "evalue";
+    public const string Inclusive = "inclusive";
 }
