@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="CodeGenerator/Sc2ReplayAnalyzer.CodeGenerator.csproj" Id="f07d3735-20b9-4268-b5a6-cb989fe40375" />
+  <Project Path="MPQArchive/MPQArchive.csproj" />
+  <Project Path="Sc2ReplayAnalyzer.TestApp/Sc2ReplayAnalyzer.TestApp.csproj" />
+  <Project Path="Sc2ReplayAnalyzer/Sc2ReplayAnalyzer.csproj" />
+</Solution>

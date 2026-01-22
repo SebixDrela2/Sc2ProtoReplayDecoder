@@ -1,0 +1,14 @@
+﻿namespace Sc2ReplayAnalyzer.Json;
+
+public class Sc2JsonType
+{
+    public const string FullName = "fullname";
+    public const string Modules = "modules";
+    public const string Declaration = "decls";
+    public const string Type = "type";
+    public const string TypeInfo = "type_info";
+    public const string Fields = "fields";
+    public const string Value = "value";
+    public const string Name = "name";
+    public const string ElementType = "element_type";
+}
