@@ -4,7 +4,7 @@ namespace Sc2ReplayAnalyzer.Tokenizer;
 
 public class Sc2JsonProvider
 {
-    private const string ResourcePrefix = "Sc2ReplayAnalyzer.Tokenizer.Protocols.";
+    private const string ResourcePrefix = "Sc2ReplayAnalyzer.Json.Protocols.";
 
     public Dictionary<string, string> Provide()
     {

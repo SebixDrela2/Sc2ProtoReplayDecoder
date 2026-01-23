@@ -34,6 +34,7 @@ public class Sc2JsonParser(Dictionary<string, string> jsonFiles)
 
         return new Sc2GeneratorData
         {
+            ProtocolName = protocolName,
             EnumTags = ParseRootModuleForEnumTags(rootModule),
             ByteAligned = _byteAlignedProcessor.ProcessByteAligned(rootModule),
             BitPacked = _bitPackedProcessor.ProcessBitPacked(rootModule)

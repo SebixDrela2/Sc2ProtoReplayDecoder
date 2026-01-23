@@ -1,11 +1,13 @@
 ﻿using System.Diagnostics;
+using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using System.Text.Json.Nodes;
 
 namespace Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes;
 
 using static Sc2ReplayAnalyzer.Json.Sc2JsonType;
 
-internal class Sc2ChoiceGenerator
+internal class Sc2ChoiceGenerator(StringBuilder builder) : Sc2GeneratorBase(builder)
 {
     public void GenerateChoices<T>(IReadOnlyList<JsonNode> nodes)
         where T : ISc2JsonTypeConversionAlignment
@@ -15,15 +17,19 @@ internal class Sc2ChoiceGenerator
         foreach (var node in choiceNodes)
         {
             var variantArray = node[TypeInfo][Fields].AsArray();
+            var fullName = node[FullName]?.ToString() ?? node[Name].ToString();
 
-            foreach (var variant in variantArray)
+            if (OpenChoice(fullName))
             {
-                HandleVariant<T>(variant);
+                foreach (var variant in variantArray)
+                {
+                    HandleVariant<T>(variant, fullName);
+                }            
             }
         }    
     }
 
-    private void HandleVariant<T>(JsonNode variant)
+    private void HandleVariant<T>(JsonNode variant, string fullName)
         where T : ISc2JsonTypeConversionAlignment
     {
         if (variant[TypeInfo][Type].ToString() is "NullType")
@@ -56,6 +62,12 @@ internal class Sc2ChoiceGenerator
 
         var fieldType = fieldConverted.CSharpType;
 
-        Console.WriteLine($"\"{variantName}\": {fieldType}");
+        Console.WriteLine($"\"{fieldTypeInfoFullName}\": {fieldType}");
+
+        if (OpenClass(variantName, fullName))
+        {
+            AddField("Value", fieldType);
+            Close();
+        }       
     }
 }

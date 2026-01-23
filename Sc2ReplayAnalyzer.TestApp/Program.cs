@@ -2,6 +2,7 @@
 using Sc2ReplayAnalyzer.CodeGenerator.Generators;
 using Sc2ReplayAnalyzer.Json;
 using Sc2ReplayAnalyzer.Tokenizer;
+using System.Text;
 
 internal class Program
 {
@@ -16,7 +17,7 @@ internal class Program
         var jsonParser = new Sc2JsonParser(jsonFiles);
         var dataList = jsonParser.Parse();
 
-        var generator = new Sc2CodeGenerator(dataList);
+        var generator = new Sc2CodeGenerator(new StringBuilder(), dataList);
         generator.Generate();
     }
 }

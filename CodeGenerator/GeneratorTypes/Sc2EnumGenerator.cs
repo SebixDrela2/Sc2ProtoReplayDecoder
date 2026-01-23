@@ -1,10 +1,11 @@
 ﻿using System.Diagnostics;
+using System.Text;
 using System.Text.Json.Nodes;
 
 namespace Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes;
 using static Sc2ReplayAnalyzer.Json.Sc2JsonType;
 
-internal class Sc2EnumGenerator(Dictionary<string, string> enumTags)
+internal class Sc2EnumGenerator(StringBuilder builder, Dictionary<string, string> enumTags) : Sc2GeneratorBase(builder)
 {
     public void Generator(IReadOnlyList<JsonNode> nodes)
     {
@@ -12,18 +13,31 @@ internal class Sc2EnumGenerator(Dictionary<string, string> enumTags)
 
         foreach(var node in enumNodes)
         {
-            var variantArray = node[TypeInfo][Fields].AsArray();
+            var fullName = node[FullName].ToString();
 
-            foreach(var variant in variantArray)
+            if (OpenEnum(fullName))
             {
-                var variantName = variant[Name].ToString();
-                var variantValueFullName = $"{node[FullName]}.{variantName}";
-                var variantValue = variant[Value][Value].ToString();
+                var variantArray = node[TypeInfo][Fields].AsArray();
 
-                Debug.Assert(variant[Value][Type].ToString() is "IntLiteral");
+                foreach (var variant in variantArray)
+                {
+                    HandleVariant(node, variant);
+                }
 
-                Console.WriteLine($"{variantValueFullName} = {variantValue}");
+                Close();
             }
         }
+    }
+
+    private void HandleVariant(JsonNode node, JsonNode variant)
+    {
+        var variantName = variant[Name].ToString();
+        var variantValue = variant[Value][Value].ToString();
+
+        Debug.Assert(variant[Value][Type].ToString() is "IntLiteral");
+
+        Console.WriteLine($"{variantName} = {variantValue}");
+
+        AddEnum(variantName, variantValue);
     }
 }

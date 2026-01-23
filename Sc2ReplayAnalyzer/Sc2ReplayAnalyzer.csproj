@@ -10,11 +10,20 @@
     <None Remove="Json\Protocols\*.json" />
   </ItemGroup>
 
+<!--<ItemGroup>
+    <None Include="ProtocolGen\*.cs" />
+	<Compile Remove="ProtocolGen\*.cs"/>
+</ItemGroup>-->
+
   <ItemGroup>
     <EmbeddedResource Include="Json\Protocols\*.json" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\MPQArchive\MPQArchive.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ProtocolGen\" />
   </ItemGroup>
 </Project>

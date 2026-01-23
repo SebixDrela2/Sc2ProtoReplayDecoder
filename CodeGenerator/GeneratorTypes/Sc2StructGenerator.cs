@@ -1,10 +1,11 @@
-﻿using System.Text.Json.Nodes;
+﻿using System.Text;
+using System.Text.Json.Nodes;
 
 namespace Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes;
 
 using static Sc2ReplayAnalyzer.Json.Sc2JsonType;
 
-internal class Sc2StructGenerator
+internal class Sc2StructGenerator(StringBuilder builder) : Sc2GeneratorBase(builder)
 {
     public void GenerateStructs<T>(IReadOnlyList<JsonNode> nodes)
         where T : ISc2JsonTypeConversionAlignment
@@ -14,16 +15,22 @@ internal class Sc2StructGenerator
         foreach (var node in structNodes)
         {
             var unitTypeName = node[FullName].ToString();
-            var unitType = node[TypeInfo][Type];
+            var unitType = node[TypeInfo][Type].ToString();
             var fields = node[TypeInfo][Fields].AsArray();
             var hasTags = fields.Count > 1 || fields[0]["tag"] is not null;
 
             Console.WriteLine();
             Console.WriteLine($"{unitTypeName} {unitType}");
 
-            foreach (var field in fields)
+            if (OpenClass(unitTypeName))
             {
-                HandleStructField<T>(field);
+
+                foreach (var field in fields)
+                {
+                    HandleStructField<T>(field);
+                }
+
+                Close();
             }
         }
     }
@@ -52,6 +59,8 @@ internal class Sc2StructGenerator
         var fieldType = GetStructFieldType<T>(field, fieldTypeInfo);
 
         Console.WriteLine($"\"{fieldName}\": \"{fieldType}\"");
+
+        AddField(fieldName, fieldType);
     }
 
     private string GetStructFieldType<T>(JsonNode field, string fieldTypeInfo)
