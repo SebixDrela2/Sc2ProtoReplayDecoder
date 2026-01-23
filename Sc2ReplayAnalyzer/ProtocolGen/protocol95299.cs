@@ -1,6 +1,261 @@
 
 namespace Sc2ReplayAnalyzer.Json.protocol95299;
 
+// NNet.SVarUint32
+public interface ISVarUint32 { }
+
+// m_uint6
+public class m_uint6 : ISVarUint32
+{
+    public byte Value;
+}
+
+// m_uint14
+public class m_uint14 : ISVarUint32
+{
+    public int Value;
+}
+
+// m_uint22
+public class m_uint22 : ISVarUint32
+{
+    public int Value;
+}
+
+// m_uint32
+public class m_uint32 : ISVarUint32
+{
+    public int Value;
+}
+
+// NNet.Game.SCmdData
+public interface IGameSCmdData { }
+
+// TargetPoint
+public class TargetPoint : IGameSCmdData
+{
+    public GameSMapCoord3D Value;
+}
+
+// TargetUnit
+public class TargetUnit : IGameSCmdData
+{
+    public GameSCmdDataTargetUnit Value;
+}
+
+// Data
+public class Data : IGameSCmdData
+{
+    public uint32 Value;
+}
+
+// m_eventData
+public interface Im_eventData { }
+
+// Checked
+public class Checked : Im_eventData
+{
+    public bool Value;
+}
+
+// ValueChanged
+public class ValueChanged : Im_eventData
+{
+    public uint32 Value;
+}
+
+// SelectionChanged
+public class SelectionChanged : Im_eventData
+{
+    public int32 Value;
+}
+
+// TextChanged
+public class TextChanged : Im_eventData
+{
+    public GameCChatString Value;
+}
+
+// MouseButton
+public class MouseButton : Im_eventData
+{
+    public uint32 Value;
+}
+
+// NNet.Game.SLobbySlotChange
+public interface IGameSLobbySlotChange { }
+
+// m_control
+public class m_control : IGameSLobbySlotChange
+{
+    public GameTControlId Value;
+}
+
+// m_userId
+public class m_userId : IGameSLobbySlotChange
+{
+    public Option<TUserId> Value;
+}
+
+// m_teamId
+public class m_teamId : IGameSLobbySlotChange
+{
+    public GameTTeamId Value;
+}
+
+// m_colorPref
+public class m_colorPref : IGameSLobbySlotChange
+{
+    public GameTColorPreference Value;
+}
+
+// m_racePref
+public class m_racePref : IGameSLobbySlotChange
+{
+    public TRacePreference Value;
+}
+
+// m_difficulty
+public class m_difficulty : IGameSLobbySlotChange
+{
+    public GameTDifficulty Value;
+}
+
+// m_aiBuild
+public class m_aiBuild : IGameSLobbySlotChange
+{
+    public GameTAIBuild Value;
+}
+
+// m_handicap
+public class m_handicap : IGameSLobbySlotChange
+{
+    public GameTHandicap Value;
+}
+
+// m_observe
+public class m_observe : IGameSLobbySlotChange
+{
+    public EObserve Value;
+}
+
+// m_logoIndex
+public class m_logoIndex : IGameSLobbySlotChange
+{
+    public GameTPlayerLogoIndex Value;
+}
+
+// m_hero
+public class m_hero : IGameSLobbySlotChange
+{
+    public CHeroHandle Value;
+}
+
+// m_skin
+public class m_skin : IGameSLobbySlotChange
+{
+    public CSkinHandle Value;
+}
+
+// m_mount
+public class m_mount : IGameSLobbySlotChange
+{
+    public CMountHandle Value;
+}
+
+// m_licenses
+public class m_licenses : IGameSLobbySlotChange
+{
+    public GameCLicenseArray Value;
+}
+
+// m_tandemLeaderId
+public class m_tandemLeaderId : IGameSLobbySlotChange
+{
+    public Option<TUserId> Value;
+}
+
+// m_commander
+public class m_commander : IGameSLobbySlotChange
+{
+    public CCommanderHandle Value;
+}
+
+// m_commanderLevel
+public class m_commanderLevel : IGameSLobbySlotChange
+{
+    public uint32 Value;
+}
+
+// m_hasSilencePenalty
+public class m_hasSilencePenalty : IGameSLobbySlotChange
+{
+    public bool Value;
+}
+
+// m_tandemId
+public class m_tandemId : IGameSLobbySlotChange
+{
+    public Option<TUserId> Value;
+}
+
+// m_commanderMasteryLevel
+public class m_commanderMasteryLevel : IGameSLobbySlotChange
+{
+    public uint32 Value;
+}
+
+// m_brutalPlusDifficulty
+public class m_brutalPlusDifficulty : IGameSLobbySlotChange
+{
+    public uint32 Value;
+}
+
+// m_retryMutationIndexes
+public class m_retryMutationIndexes : IGameSLobbySlotChange
+{
+    public GameCRetryMutationIndexArray Value;
+}
+
+// m_aCEnemyRace
+public class m_aCEnemyRace : IGameSLobbySlotChange
+{
+    public uint32 Value;
+}
+
+// m_aCEnemyWaveType
+public class m_aCEnemyWaveType : IGameSLobbySlotChange
+{
+    public uint32 Value;
+}
+
+// m_selectedCommanderPrestige
+public class m_selectedCommanderPrestige : IGameSLobbySlotChange
+{
+    public uint32 Value;
+}
+
+// NNet.Game.SSelectionMask
+public interface IGameSSelectionMask { }
+
+// Mask
+public class Mask : IGameSSelectionMask
+{
+    public GameSelectionMaskType Value;
+}
+
+// OneIndices
+public class OneIndices : IGameSSelectionMask
+{
+    public GameSelectionIndexArrayType Value;
+}
+
+// ZeroIndices
+public class ZeroIndices : IGameSSelectionMask
+{
+    public GameSelectionIndexArrayType Value;
+}
+
 // NNet.SVersion
 public class SVersion
 {
@@ -91,9 +346,9 @@ public class ReplaySHeader
     public byte m_type;
     public int m_elapsedGameLoops;
     public bool m_useScaledTime;
-    public Smd5 m_ngdpRootKey;
+    public SMD5 m_ngdpRootKey;
     public int m_dataBuildNum;
-    public Smd5 m_replayCompatibilityHash;
+    public SMD5 m_replayCompatibilityHash;
     public bool m_ngdpRootKeyIsDevData;
 }
 
@@ -301,7 +556,7 @@ public class GameSCmdDataTargetUnit
 public class GameSSetLobbySlotEvent
 {
     public GameTLobbySlotId m_slotId;
-    public GameSLobbySlotChange m_slotChange;
+    public IGameSLobbySlotChange m_slotChange;
 }
 
 // NNet.Game.SDropUserEvent
@@ -496,7 +751,7 @@ public class GameSCmdEvent
 {
     public long m_cmdFlags;
     public Option<GameSCmdAbil> m_abil;
-    public GameSCmdData m_data;
+    public IGameSCmdData m_data;
     public long m_sequence;
     public Option<GameTUnitTag> m_otherUnit;
     public Option<uint32> m_unitGroup;
@@ -514,7 +769,7 @@ public class GameSControlGroupUpdateEvent
 {
     public GameTControlGroupIndex m_controlGroupIndex;
     public GameEControlGroupUpdate m_controlGroupUpdate;
-    public GameSSelectionMask m_mask;
+    public IGameSSelectionMask m_mask;
 }
 
 // NNet.Game.SSelectionSyncCheckEvent
@@ -676,7 +931,7 @@ public class GameSTriggerDialogControlEvent
 {
     public int32 m_controlId;
     public int32 m_eventType;
-    public MEventData m_eventData;
+    public Im_eventData m_eventData;
 }
 
 // NNet.Game.STriggerSkippedEvent
@@ -1345,7 +1600,7 @@ public class GameSSelectionDeltaSubgroup
 public class GameSSelectionDelta
 {
     public GameTSubgroupIndex m_subgroupIndex;
-    public GameSSelectionMask m_removeMask;
+    public IGameSSelectionMask m_removeMask;
     public List<GameSSelectionDeltaSubgroup> m_addSubgroups;
     public List<GameTUnitTag> m_addUnitTags;
 }
@@ -1383,261 +1638,6 @@ public class ReplaySInitData
 public class ReplaySGameUserId
 {
     public long m_userId;
-}
-
-// NNet.SVarUint32
-public interface ISVarUint32 { }
-
-// m_uint6
-public class m_uint6 : ISVarUint32
-{
-    public byte Value;
-}
-
-// m_uint14
-public class m_uint14 : ISVarUint32
-{
-    public int Value;
-}
-
-// m_uint22
-public class m_uint22 : ISVarUint32
-{
-    public int Value;
-}
-
-// m_uint32
-public class m_uint32 : ISVarUint32
-{
-    public int Value;
-}
-
-// NNet.Game.SCmdData
-public interface IGameSCmdData { }
-
-// TargetPoint
-public class TargetPoint : IGameSCmdData
-{
-    public GameSMapCoord3D Value;
-}
-
-// TargetUnit
-public class TargetUnit : IGameSCmdData
-{
-    public GameSCmdDataTargetUnit Value;
-}
-
-// Data
-public class Data : IGameSCmdData
-{
-    public uint32 Value;
-}
-
-// m_eventData
-public interface Im_eventData { }
-
-// Checked
-public class Checked : Im_eventData
-{
-    public bool Value;
-}
-
-// ValueChanged
-public class ValueChanged : Im_eventData
-{
-    public uint32 Value;
-}
-
-// SelectionChanged
-public class SelectionChanged : Im_eventData
-{
-    public int32 Value;
-}
-
-// TextChanged
-public class TextChanged : Im_eventData
-{
-    public GameCChatString Value;
-}
-
-// MouseButton
-public class MouseButton : Im_eventData
-{
-    public uint32 Value;
-}
-
-// NNet.Game.SLobbySlotChange
-public interface IGameSLobbySlotChange { }
-
-// m_control
-public class m_control : IGameSLobbySlotChange
-{
-    public GameTControlId Value;
-}
-
-// m_userId
-public class m_userId : IGameSLobbySlotChange
-{
-    public Option<TUserId> Value;
-}
-
-// m_teamId
-public class m_teamId : IGameSLobbySlotChange
-{
-    public GameTTeamId Value;
-}
-
-// m_colorPref
-public class m_colorPref : IGameSLobbySlotChange
-{
-    public GameTColorPreference Value;
-}
-
-// m_racePref
-public class m_racePref : IGameSLobbySlotChange
-{
-    public TRacePreference Value;
-}
-
-// m_difficulty
-public class m_difficulty : IGameSLobbySlotChange
-{
-    public GameTDifficulty Value;
-}
-
-// m_aiBuild
-public class m_aiBuild : IGameSLobbySlotChange
-{
-    public GameTAIBuild Value;
-}
-
-// m_handicap
-public class m_handicap : IGameSLobbySlotChange
-{
-    public GameTHandicap Value;
-}
-
-// m_observe
-public class m_observe : IGameSLobbySlotChange
-{
-    public EObserve Value;
-}
-
-// m_logoIndex
-public class m_logoIndex : IGameSLobbySlotChange
-{
-    public GameTPlayerLogoIndex Value;
-}
-
-// m_hero
-public class m_hero : IGameSLobbySlotChange
-{
-    public CHeroHandle Value;
-}
-
-// m_skin
-public class m_skin : IGameSLobbySlotChange
-{
-    public CSkinHandle Value;
-}
-
-// m_mount
-public class m_mount : IGameSLobbySlotChange
-{
-    public CMountHandle Value;
-}
-
-// m_licenses
-public class m_licenses : IGameSLobbySlotChange
-{
-    public GameCLicenseArray Value;
-}
-
-// m_tandemLeaderId
-public class m_tandemLeaderId : IGameSLobbySlotChange
-{
-    public Option<TUserId> Value;
-}
-
-// m_commander
-public class m_commander : IGameSLobbySlotChange
-{
-    public CCommanderHandle Value;
-}
-
-// m_commanderLevel
-public class m_commanderLevel : IGameSLobbySlotChange
-{
-    public uint32 Value;
-}
-
-// m_hasSilencePenalty
-public class m_hasSilencePenalty : IGameSLobbySlotChange
-{
-    public bool Value;
-}
-
-// m_tandemId
-public class m_tandemId : IGameSLobbySlotChange
-{
-    public Option<TUserId> Value;
-}
-
-// m_commanderMasteryLevel
-public class m_commanderMasteryLevel : IGameSLobbySlotChange
-{
-    public uint32 Value;
-}
-
-// m_brutalPlusDifficulty
-public class m_brutalPlusDifficulty : IGameSLobbySlotChange
-{
-    public uint32 Value;
-}
-
-// m_retryMutationIndexes
-public class m_retryMutationIndexes : IGameSLobbySlotChange
-{
-    public GameCRetryMutationIndexArray Value;
-}
-
-// m_aCEnemyRace
-public class m_aCEnemyRace : IGameSLobbySlotChange
-{
-    public uint32 Value;
-}
-
-// m_aCEnemyWaveType
-public class m_aCEnemyWaveType : IGameSLobbySlotChange
-{
-    public uint32 Value;
-}
-
-// m_selectedCommanderPrestige
-public class m_selectedCommanderPrestige : IGameSLobbySlotChange
-{
-    public uint32 Value;
-}
-
-// NNet.Game.SSelectionMask
-public interface IGameSSelectionMask { }
-
-// Mask
-public class Mask : IGameSSelectionMask
-{
-    public GameSelectionMaskType Value;
-}
-
-// OneIndices
-public class OneIndices : IGameSSelectionMask
-{
-    public GameSelectionIndexArrayType Value;
-}
-
-// ZeroIndices
-public class ZeroIndices : IGameSSelectionMask
-{
-    public GameSelectionIndexArrayType Value;
 }
 
 // NNet.EObserve

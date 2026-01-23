@@ -7,7 +7,8 @@ namespace Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes;
 
 using static Sc2ReplayAnalyzer.Json.Sc2JsonType;
 
-internal class Sc2ChoiceGenerator(StringBuilder builder) : Sc2GeneratorBase(builder)
+internal class Sc2ChoiceGenerator(StringBuilder builder, Dictionary<string, string> choiceMap)
+    : Sc2GeneratorBase(builder, choiceMap)
 {
     public void GenerateChoices<T>(IReadOnlyList<JsonNode> nodes)
         where T : ISc2JsonTypeConversionAlignment
@@ -61,8 +62,6 @@ internal class Sc2ChoiceGenerator(StringBuilder builder) : Sc2GeneratorBase(buil
         Debug.Assert(variant[Tag][Type].ToString() == "IntLiteral");
 
         var fieldType = fieldConverted.CSharpType;
-
-        Console.WriteLine($"\"{fieldTypeInfoFullName}\": {fieldType}");
 
         if (OpenClass(variantName, fullName))
         {

@@ -5,7 +5,10 @@ using System.Text.Json.Nodes;
 namespace Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes;
 using static Sc2ReplayAnalyzer.Json.Sc2JsonType;
 
-internal class Sc2EnumGenerator(StringBuilder builder, Dictionary<string, string> enumTags) : Sc2GeneratorBase(builder)
+internal class Sc2EnumGenerator(StringBuilder builder,
+    Dictionary<string, string> enumTags,
+    Dictionary<string, string> choiceMap)
+    : Sc2GeneratorBase(builder, choiceMap)
 {
     public void Generator(IReadOnlyList<JsonNode> nodes)
     {
@@ -35,8 +38,6 @@ internal class Sc2EnumGenerator(StringBuilder builder, Dictionary<string, string
         var variantValue = variant[Value][Value].ToString();
 
         Debug.Assert(variant[Value][Type].ToString() is "IntLiteral");
-
-        Console.WriteLine($"{variantName} = {variantValue}");
 
         AddEnum(variantName, variantValue);
     }

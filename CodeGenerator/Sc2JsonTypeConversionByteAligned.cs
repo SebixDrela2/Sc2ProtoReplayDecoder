@@ -86,8 +86,8 @@ public class Sc2TypeConversionBitPacked : ISc2JsonTypeConversionAlignment
         var fieldConverted = field[Name].ToString() is "m_eventData" && fieldTypeInfo is "ChoiceType"
             ? new Sc2JsonTypeConversion
             {
-                CSharpType = "MEventData",
-                Parser = "MEventData.Parse",
+                CSharpType = "m_eventData",
+                Parser = "m_eventData.Parse",
             }
             : FromNnetName(fieldTypeInfo);
 
@@ -277,8 +277,8 @@ public class Sc2JsonTypeConversionByteAligned : ISc2JsonTypeConversionAlignment
         },
         "NNet.SMD5" => new Sc2JsonTypeConversion
         {
-            CSharpType = "Smd5",
-            Parser = "Smd5.Parse",
+            CSharpType = "SMD5",
+            Parser = "SMD5.Parse",
         },
         "NNet.EObserve" => new Sc2JsonTypeConversion
         {

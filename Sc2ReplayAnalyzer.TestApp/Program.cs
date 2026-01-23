@@ -15,9 +15,12 @@ internal class Program
         var jsonFiles = _provider.Provide();
 
         var jsonParser = new Sc2JsonParser(jsonFiles);
-        var dataList = jsonParser.Parse();
+        var dataList = jsonParser.Parse().ToArray();
 
-        var generator = new Sc2CodeGenerator(new StringBuilder(), dataList);
-        generator.Generate();
+        foreach (var data in dataList[0..1])
+        {
+            var generator = new Sc2CodeGenerator(new StringBuilder(), data);
+            generator.Generate();
+        }
     }
 }

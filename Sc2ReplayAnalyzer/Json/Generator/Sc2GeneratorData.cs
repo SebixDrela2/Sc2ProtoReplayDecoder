@@ -8,4 +8,6 @@ public class Sc2GeneratorData
     public required Dictionary<string, string> EnumTags;
     public required IReadOnlyList<JsonNode> ByteAligned;
     public required IReadOnlyList<JsonNode> BitPacked;
+
+    public readonly Dictionary<string, string> ChoiceMap = [];
 }

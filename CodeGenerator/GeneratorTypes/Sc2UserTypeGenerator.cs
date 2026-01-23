@@ -4,7 +4,8 @@ using System.Text;
 using System.Text.Json.Nodes;
 using static Sc2ReplayAnalyzer.Json.Sc2JsonType;
 
-internal class Sc2UserTypeGenerator(StringBuilder builder) : Sc2GeneratorBase(builder)
+internal class Sc2UserTypeGenerator(StringBuilder builder, Dictionary<string, string> choiceMap)
+    : Sc2GeneratorBase(builder, choiceMap)
 {
     public void Generate(IReadOnlyList<JsonNode> nodes)
     {

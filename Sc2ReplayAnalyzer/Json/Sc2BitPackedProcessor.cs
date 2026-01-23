@@ -58,7 +58,6 @@ internal class Sc2BitPackedProcessor
                     ProcessGame(result, moduleDecleration);
                     break;
             }
-
         }
 
         return result;

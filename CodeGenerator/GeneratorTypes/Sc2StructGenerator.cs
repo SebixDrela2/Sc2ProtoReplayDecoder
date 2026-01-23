@@ -5,7 +5,8 @@ namespace Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes;
 
 using static Sc2ReplayAnalyzer.Json.Sc2JsonType;
 
-internal class Sc2StructGenerator(StringBuilder builder) : Sc2GeneratorBase(builder)
+internal class Sc2StructGenerator(StringBuilder builder, Dictionary<string, string> choiceMap)
+    : Sc2GeneratorBase(builder, choiceMap)
 {
     public void GenerateStructs<T>(IReadOnlyList<JsonNode> nodes)
         where T : ISc2JsonTypeConversionAlignment
@@ -17,14 +18,10 @@ internal class Sc2StructGenerator(StringBuilder builder) : Sc2GeneratorBase(buil
             var unitTypeName = node[FullName].ToString();
             var unitType = node[TypeInfo][Type].ToString();
             var fields = node[TypeInfo][Fields].AsArray();
-            var hasTags = fields.Count > 1 || fields[0]["tag"] is not null;
-
-            Console.WriteLine();
-            Console.WriteLine($"{unitTypeName} {unitType}");
+            var hasTags = fields.Count > 1 && fields[0]["tag"] is not null;
 
             if (OpenClass(unitTypeName))
             {
-
                 foreach (var field in fields)
                 {
                     HandleStructField<T>(field);
@@ -57,8 +54,6 @@ internal class Sc2StructGenerator(StringBuilder builder) : Sc2GeneratorBase(buil
 
         var fieldName = field[Name].ToString();
         var fieldType = GetStructFieldType<T>(field, fieldTypeInfo);
-
-        Console.WriteLine($"\"{fieldName}\": \"{fieldType}\"");
 
         AddField(fieldName, fieldType);
     }

@@ -10,15 +10,18 @@ internal abstract class Sc2GeneratorBase
     private readonly HashSet<string> _enumDefinitions = [];
     private readonly HashSet<string> _choiceDefinitions = [];
 
+    private readonly Dictionary<string, string> _choiceMap = [];
+
     public string Data => _builder.ToString();
 
-    public Sc2GeneratorBase(StringBuilder builder)
+    public Sc2GeneratorBase(StringBuilder builder, Dictionary<string, string> choiceMap)
     {
+        _choiceMap = choiceMap;
         _builder = builder;
     }
 
     protected bool OpenClass(string className, string choiceType = null)
-    {
+    {  
         if (_classDefinitions.Contains(className))
         {
             return false;
@@ -64,9 +67,14 @@ internal abstract class Sc2GeneratorBase
 
         _choiceDefinitions.Add(choiceName);
 
+        var nonInterfaceChoiceType = GetTypeName(choiceName);
+        var interfaceChoiceType = $"I{nonInterfaceChoiceType}";
+
+        _choiceMap.TryAdd(nonInterfaceChoiceType, interfaceChoiceType);
+
         _builder.AppendLine($"// {choiceName}");
         _builder.AppendLine($$"""
-            public interface I{{GetTypeName(choiceName)}} { }
+            public interface {{interfaceChoiceType}} { }
             """);
         _builder.AppendLine();
 
@@ -88,9 +96,20 @@ internal abstract class Sc2GeneratorBase
 
     protected void AddField(string fieldName, string fieldType)
     {
-        _builder.AppendLine($"""
-                public {GetTypeName(fieldType)} {fieldName};
+        var typeName = GetTypeName(fieldType);
+
+        if (_choiceMap.TryGetValue(typeName, out var choiceType))
+        {
+            _builder.AppendLine($"""
+                public {choiceType} {fieldName};
             """);
+        }
+        else
+        {
+            _builder.AppendLine($"""
+                public {typeName} {fieldName};
+            """);
+        }
     }
 
     private string GetTypeName(string fullName) => fullName
