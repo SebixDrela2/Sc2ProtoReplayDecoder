@@ -17,7 +17,7 @@ public class Sc2JsonParser(Dictionary<string, string> jsonFiles)
     {
         var result = new List<Sc2GeneratorData>();
 
-        foreach(var json in (KeyValuePair<string, string>[])[jsonFiles.Last()])
+        foreach(var json in jsonFiles)
         {
             result.Add(ParseJson(json.Key, json.Value));
         }
