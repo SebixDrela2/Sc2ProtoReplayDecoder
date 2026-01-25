@@ -22,7 +22,7 @@ internal class Sc2UserTypeGenerator(StringBuilder builder, Sc2GeneratorData data
             if (OpenClass(fullName))
             {
                 AddField("Value", typeInfoFullName);
-                Close(GetMethodParser<T>().MethodBuilder);
+                Close();
             }
         }
     }

@@ -28,14 +28,14 @@ public class Sc2CodeGenerator(StringBuilder builder, Sc2GeneratorData data)
 
         Init(protocolName);
 
-        _choiceGenerator.GenerateChoices<Sc2TypeConversionByteAligned>(byteAligned);
-        _choiceGenerator.GenerateChoices<Sc2TypeConversionBitPacked>(bitPacked);
+        _choiceGenerator.Generate<Sc2TypeConversionByteAligned>(byteAligned);
+        _choiceGenerator.Generate<Sc2TypeConversionBitPacked>(bitPacked);
 
-        _structGenerator.GenerateStructs<Sc2TypeConversionByteAligned>(byteAligned);
-        _structGenerator.GenerateStructs<Sc2TypeConversionBitPacked>(bitPacked);
+        _structGenerator.Generate<Sc2TypeConversionByteAligned>(byteAligned);
+        _structGenerator.Generate<Sc2TypeConversionBitPacked>(bitPacked);
 
-        _enumGenerator.Generator<Sc2TypeConversionByteAligned>(byteAligned);
-        _enumGenerator.Generator<Sc2TypeConversionBitPacked>(bitPacked);
+        _enumGenerator.Generate<Sc2TypeConversionByteAligned>(byteAligned);
+        _enumGenerator.Generate<Sc2TypeConversionBitPacked>(bitPacked);
 
         _intGenerator.Generate<Sc2TypeConversionByteAligned>(byteAligned);
         _intGenerator.Generate<Sc2TypeConversionBitPacked>(bitPacked);
@@ -64,6 +64,12 @@ public class Sc2CodeGenerator(StringBuilder builder, Sc2GeneratorData data)
 
     private void Finalise(string protocolName)
     {
+        builder.AppendLine($$"""
+            public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
+            {
+            {{data.ParserGenerator}}
+            }
+            """);
         File.WriteAllText(@$"{GenPath}\{protocolName}.cs", builder.ToString());
     }
 }

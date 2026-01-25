@@ -107,14 +107,10 @@ internal abstract class Sc2GeneratorBase
         return true;
     }
 
-    protected void Close(StringBuilder methodBuilder)
+    protected void Close()
     {
-        _builder.Append(methodBuilder);
-
         _builder.AppendLine("}");
         _builder.AppendLine();
-
-        methodBuilder.Clear();
     }
 
     protected void AddEnum(string enumName, string enumValue)

@@ -21,7 +21,7 @@ internal class Sc2BitArrayGenerator(StringBuilder builder, Sc2GeneratorData data
             if(OpenClass(fullName))
             {
                 AddField("Value", "List<byte>");
-                Close(GetMethodParser<T>().MethodBuilder);
+                Close();
             }
         }
     }

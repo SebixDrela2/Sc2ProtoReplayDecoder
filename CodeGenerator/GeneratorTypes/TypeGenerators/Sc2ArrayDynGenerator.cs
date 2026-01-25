@@ -22,7 +22,7 @@ internal class Sc2ArrayDynGenerator(StringBuilder builder, Sc2GeneratorData data
             if (OpenClass(fullName))
             {
                 AddField("Value", elementType);
-                Close(GetMethodParser<T>().MethodBuilder);
+                Close();
             }
         }
     }

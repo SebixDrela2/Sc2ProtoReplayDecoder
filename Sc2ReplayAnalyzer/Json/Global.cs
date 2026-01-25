@@ -141,6 +141,12 @@ public class ProtocolReader(BinaryReader reader) : IDisposable
     public byte ReadByte() => reader.ReadByte();
     public List<byte> ReadBytes(long length) => reader.ReadBytes((int)length).ToList();
     public List<byte> ReadBytes(int length) => reader.ReadBytes(length).ToList();
+
+    public T[] ReadArray<T>(Func<T> parseMethod, long count) =>
+        [.. Enumerable.Range(0, (int)count).Select(_ => parseMethod())];
+
+    public List<T> ReadList<T>(Func<T> parseMethod, long count) =>
+        [.. Enumerable.Range(0, (int)count).Select(_ => parseMethod())];
 }
 
 public static class ProtocolConversion<TResult>

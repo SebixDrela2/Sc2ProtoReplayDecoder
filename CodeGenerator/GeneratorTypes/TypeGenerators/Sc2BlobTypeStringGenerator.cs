@@ -22,7 +22,7 @@ internal class Sc2BlobTypeStringGenerator(StringBuilder builder, Sc2GeneratorDat
             if (OpenClass(fullName))
             {
                 AddField("Value", "List<byte>");
-                Close(GetMethodParser<T>().MethodBuilder);
+                Close();
             }
         }
 
@@ -33,7 +33,7 @@ internal class Sc2BlobTypeStringGenerator(StringBuilder builder, Sc2GeneratorDat
             if (OpenClass(fullName))
             {
                 AddField("Value", "List<byte>");
-                Close(GetMethodParser<T>().MethodBuilder);
+                Close();
             }
         }
     }

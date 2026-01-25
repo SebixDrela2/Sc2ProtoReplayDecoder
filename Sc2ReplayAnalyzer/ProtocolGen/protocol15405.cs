@@ -115,176 +115,12 @@ public class SVersion
     public byte m_revision;
     public uint m_build;
     public uint m_baseBuild;
-
-    public static SVersion Parse(ProtocolReader reader) 
-    {
-        Option<byte> m_flags = Option.None;
-        Option<byte> m_major = Option.None;
-        Option<byte> m_minor = Option.None;
-        Option<byte> m_revision = Option.None;
-        Option<uint> m_build = Option.None;
-        Option<uint> m_baseBuild = Option.None;
-        reader.ValidateStructTag();
-        var structFieldCount = reader.ParseVlqInt();           
-        for (var i = 0; i < structFieldCount; i++)
-        {
-            var fieldTag = reader.ParseVlqInt();
-    
-            switch (fieldTag)
-            {
-                case 0:
-                {
-                    if (m_flags is { HasValue: false })                           
-                    {
-                        var parsed_m_flags = Parse_m_flags(reader);
-                        m_flags = Option.Some(parsed_m_flags);
-                        continue;
-                    }
-                    else
-                    {
-                        throw new Exception("Duplicate tag!");
-                    }
-                }
-                break;
-                case 1:
-                {
-                    if (m_major is { HasValue: false })                           
-                    {
-                        var parsed_m_major = Parse_m_major(reader);
-                        m_major = Option.Some(parsed_m_major);
-                        continue;
-                    }
-                    else
-                    {
-                        throw new Exception("Duplicate tag!");
-                    }
-                }
-                break;
-                case 2:
-                {
-                    if (m_minor is { HasValue: false })                           
-                    {
-                        var parsed_m_minor = Parse_m_minor(reader);
-                        m_minor = Option.Some(parsed_m_minor);
-                        continue;
-                    }
-                    else
-                    {
-                        throw new Exception("Duplicate tag!");
-                    }
-                }
-                break;
-                case 3:
-                {
-                    if (m_revision is { HasValue: false })                           
-                    {
-                        var parsed_m_revision = Parse_m_revision(reader);
-                        m_revision = Option.Some(parsed_m_revision);
-                        continue;
-                    }
-                    else
-                    {
-                        throw new Exception("Duplicate tag!");
-                    }
-                }
-                break;
-                case 4:
-                {
-                    if (m_build is { HasValue: false })                           
-                    {
-                        var parsed_m_build = Parse_m_build(reader);
-                        m_build = Option.Some(parsed_m_build);
-                        continue;
-                    }
-                    else
-                    {
-                        throw new Exception("Duplicate tag!");
-                    }
-                }
-                break;
-                case 5:
-                {
-                    if (m_baseBuild is { HasValue: false })                           
-                    {
-                        var parsed_m_baseBuild = Parse_m_baseBuild(reader);
-                        m_baseBuild = Option.Some(parsed_m_baseBuild);
-                        continue;
-                    }
-                    else
-                    {
-                        throw new Exception("Duplicate tag!");
-                    }
-                }
-                break;
-            }
-        }
-        return new SVersion
-        {   
-            m_flags = Option.OkOrReturnMissingFieldErr(m_flags),
-            m_major = Option.OkOrReturnMissingFieldErr(m_major),
-            m_minor = Option.OkOrReturnMissingFieldErr(m_minor),
-            m_revision = Option.OkOrReturnMissingFieldErr(m_revision),
-            m_build = Option.OkOrReturnMissingFieldErr(m_build),
-            m_baseBuild = Option.OkOrReturnMissingFieldErr(m_baseBuild),
-        };
-    }
-    public static byte Parse_m_flags(ProtocolReader reader)
-    {                             
-        var m_flags = reader.tagged_vlq_int();
-        return ProtocolConversion<byte>.From(m_flags);
-    }//1
-    public static byte Parse_m_major(ProtocolReader reader)
-    {                             
-        var m_major = reader.tagged_vlq_int();
-        return ProtocolConversion<byte>.From(m_major);
-    }//1
-    public static byte Parse_m_minor(ProtocolReader reader)
-    {                             
-        var m_minor = reader.tagged_vlq_int();
-        return ProtocolConversion<byte>.From(m_minor);
-    }//1
-    public static byte Parse_m_revision(ProtocolReader reader)
-    {                             
-        var m_revision = reader.tagged_vlq_int();
-        return ProtocolConversion<byte>.From(m_revision);
-    }//1
-    public static uint Parse_m_build(ProtocolReader reader)
-    {                             
-        var m_build = reader.tagged_vlq_int();
-        return ProtocolConversion<uint>.From(m_build);
-    }//1
-    public static uint Parse_m_baseBuild(ProtocolReader reader)
-    {                             
-        var m_baseBuild = reader.tagged_vlq_int();
-        return ProtocolConversion<uint>.From(m_baseBuild);
-    }//1
 }
 
 // NNet.Game.SThumbnail
 public class GameSThumbnail
 {
     public List<byte> m_file;
-
-    public static GameSThumbnail Parse(ProtocolReader reader) 
-    {
-        Option<List<byte>> m_file = Option.None;
-        reader.ValidateStructTag();
-        var structFieldCount = reader.ParseVlqInt();           
-        if (m_file is { HasValue: false })                           
-        {
-            var parsed_m_file = Parse_m_file(reader);
-            m_file = Option.Some(parsed_m_file);
-        }
-        return new GameSThumbnail
-        {   
-            m_file = Option.OkOrReturnMissingFieldErr(m_file),
-        };
-    }
-    public static List<byte> Parse_m_file(ProtocolReader reader)
-    {                             
-        var m_file = reader.tagged_blob();
-        return m_file;
-    }//1
 }
 
 // NNet.Game.SColor
@@ -294,107 +130,6 @@ public class GameSColor
     public byte m_r;
     public byte m_g;
     public byte m_b;
-
-    public static GameSColor Parse(ProtocolReader reader) 
-    {
-        Option<byte> m_a = Option.None;
-        Option<byte> m_r = Option.None;
-        Option<byte> m_g = Option.None;
-        Option<byte> m_b = Option.None;
-        reader.ValidateStructTag();
-        var structFieldCount = reader.ParseVlqInt();           
-        for (var i = 0; i < structFieldCount; i++)
-        {
-            var fieldTag = reader.ParseVlqInt();
-    
-            switch (fieldTag)
-            {
-                case 0:
-                {
-                    if (m_a is { HasValue: false })                           
-                    {
-                        var parsed_m_a = Parse_m_a(reader);
-                        m_a = Option.Some(parsed_m_a);
-                        continue;
-                    }
-                    else
-                    {
-                        throw new Exception("Duplicate tag!");
-                    }
-                }
-                break;
-                case 1:
-                {
-                    if (m_r is { HasValue: false })                           
-                    {
-                        var parsed_m_r = Parse_m_r(reader);
-                        m_r = Option.Some(parsed_m_r);
-                        continue;
-                    }
-                    else
-                    {
-                        throw new Exception("Duplicate tag!");
-                    }
-                }
-                break;
-                case 2:
-                {
-                    if (m_g is { HasValue: false })                           
-                    {
-                        var parsed_m_g = Parse_m_g(reader);
-                        m_g = Option.Some(parsed_m_g);
-                        continue;
-                    }
-                    else
-                    {
-                        throw new Exception("Duplicate tag!");
-                    }
-                }
-                break;
-                case 3:
-                {
-                    if (m_b is { HasValue: false })                           
-                    {
-                        var parsed_m_b = Parse_m_b(reader);
-                        m_b = Option.Some(parsed_m_b);
-                        continue;
-                    }
-                    else
-                    {
-                        throw new Exception("Duplicate tag!");
-                    }
-                }
-                break;
-            }
-        }
-        return new GameSColor
-        {   
-            m_a = Option.OkOrReturnMissingFieldErr(m_a),
-            m_r = Option.OkOrReturnMissingFieldErr(m_r),
-            m_g = Option.OkOrReturnMissingFieldErr(m_g),
-            m_b = Option.OkOrReturnMissingFieldErr(m_b),
-        };
-    }
-    public static byte Parse_m_a(ProtocolReader reader)
-    {                             
-        var m_a = reader.tagged_vlq_int();
-        return ProtocolConversion<byte>.From(m_a);
-    }//1
-    public static byte Parse_m_r(ProtocolReader reader)
-    {                             
-        var m_r = reader.tagged_vlq_int();
-        return ProtocolConversion<byte>.From(m_r);
-    }//1
-    public static byte Parse_m_g(ProtocolReader reader)
-    {                             
-        var m_g = reader.tagged_vlq_int();
-        return ProtocolConversion<byte>.From(m_g);
-    }//1
-    public static byte Parse_m_b(ProtocolReader reader)
-    {                             
-        var m_b = reader.tagged_vlq_int();
-        return ProtocolConversion<byte>.From(m_b);
-    }//1
 }
 
 // NNet.Game.SToonNameDetails
@@ -404,107 +139,6 @@ public class GameSToonNameDetails
     public uint m_programId;
     public uint m_realm;
     public List<byte> m_name;
-
-    public static GameSToonNameDetails Parse(ProtocolReader reader) 
-    {
-        Option<byte> m_region = Option.None;
-        Option<uint> m_programId = Option.None;
-        Option<uint> m_realm = Option.None;
-        Option<List<byte>> m_name = Option.None;
-        reader.ValidateStructTag();
-        var structFieldCount = reader.ParseVlqInt();           
-        for (var i = 0; i < structFieldCount; i++)
-        {
-            var fieldTag = reader.ParseVlqInt();
-    
-            switch (fieldTag)
-            {
-                case 0:
-                {
-                    if (m_region is { HasValue: false })                           
-                    {
-                        var parsed_m_region = Parse_m_region(reader);
-                        m_region = Option.Some(parsed_m_region);
-                        continue;
-                    }
-                    else
-                    {
-                        throw new Exception("Duplicate tag!");
-                    }
-                }
-                break;
-                case 1:
-                {
-                    if (m_programId is { HasValue: false })                           
-                    {
-                        var parsed_m_programId = Parse_m_programId(reader);
-                        m_programId = Option.Some(parsed_m_programId);
-                        continue;
-                    }
-                    else
-                    {
-                        throw new Exception("Duplicate tag!");
-                    }
-                }
-                break;
-                case 2:
-                {
-                    if (m_realm is { HasValue: false })                           
-                    {
-                        var parsed_m_realm = Parse_m_realm(reader);
-                        m_realm = Option.Some(parsed_m_realm);
-                        continue;
-                    }
-                    else
-                    {
-                        throw new Exception("Duplicate tag!");
-                    }
-                }
-                break;
-                case 3:
-                {
-                    if (m_name is { HasValue: false })                           
-                    {
-                        var parsed_m_name = Parse_m_name(reader);
-                        m_name = Option.Some(parsed_m_name);
-                        continue;
-                    }
-                    else
-                    {
-                        throw new Exception("Duplicate tag!");
-                    }
-                }
-                break;
-            }
-        }
-        return new GameSToonNameDetails
-        {   
-            m_region = Option.OkOrReturnMissingFieldErr(m_region),
-            m_programId = Option.OkOrReturnMissingFieldErr(m_programId),
-            m_realm = Option.OkOrReturnMissingFieldErr(m_realm),
-            m_name = Option.OkOrReturnMissingFieldErr(m_name),
-        };
-    }
-    public static byte Parse_m_region(ProtocolReader reader)
-    {                             
-        var m_region = reader.tagged_vlq_int();
-        return ProtocolConversion<byte>.From(m_region);
-    }//1
-    public static uint Parse_m_programId(ProtocolReader reader)
-    {                             
-        var m_programId = reader.tagged_fourcc();
-        return m_programId;
-    }//1
-    public static uint Parse_m_realm(ProtocolReader reader)
-    {                             
-        var m_realm = reader.tagged_vlq_int();
-        return ProtocolConversion<uint>.From(m_realm);
-    }//1
-    public static List<byte> Parse_m_name(ProtocolReader reader)
-    {                             
-        var m_name = reader.tagged_blob();
-        return m_name;
-    }//1
 }
 
 // NNet.Game.SPlayerDetails
@@ -519,212 +153,6 @@ public class GameSPlayerDetails
     public uint m_handicap;
     public EObserve m_observe;
     public GameEResultDetails m_result;
-
-    public static GameSPlayerDetails Parse(ProtocolReader reader) 
-    {
-        Option<List<byte>> m_name = Option.None;
-        Option<GameSToonNameDetails> m_toon = Option.None;
-        Option<List<byte>> m_race = Option.None;
-        Option<GameSColor> m_color = Option.None;
-        Option<byte> m_control = Option.None;
-        Option<byte> m_teamId = Option.None;
-        Option<uint> m_handicap = Option.None;
-        Option<EObserve> m_observe = Option.None;
-        Option<GameEResultDetails> m_result = Option.None;
-        reader.ValidateStructTag();
-        var structFieldCount = reader.ParseVlqInt();           
-        for (var i = 0; i < structFieldCount; i++)
-        {
-            var fieldTag = reader.ParseVlqInt();
-    
-            switch (fieldTag)
-            {
-                case 0:
-                {
-                    if (m_name is { HasValue: false })                           
-                    {
-                        var parsed_m_name = Parse_m_name(reader);
-                        m_name = Option.Some(parsed_m_name);
-                        continue;
-                    }
-                    else
-                    {
-                        throw new Exception("Duplicate tag!");
-                    }
-                }
-                break;
-                case 1:
-                {
-                    if (m_toon is { HasValue: false })                           
-                    {
-                        var parsed_m_toon = Parse_m_toon(reader);
-                        m_toon = Option.Some(parsed_m_toon);
-                        continue;
-                    }
-                    else
-                    {
-                        throw new Exception("Duplicate tag!");
-                    }
-                }
-                break;
-                case 2:
-                {
-                    if (m_race is { HasValue: false })                           
-                    {
-                        var parsed_m_race = Parse_m_race(reader);
-                        m_race = Option.Some(parsed_m_race);
-                        continue;
-                    }
-                    else
-                    {
-                        throw new Exception("Duplicate tag!");
-                    }
-                }
-                break;
-                case 3:
-                {
-                    if (m_color is { HasValue: false })                           
-                    {
-                        var parsed_m_color = Parse_m_color(reader);
-                        m_color = Option.Some(parsed_m_color);
-                        continue;
-                    }
-                    else
-                    {
-                        throw new Exception("Duplicate tag!");
-                    }
-                }
-                break;
-                case 4:
-                {
-                    if (m_control is { HasValue: false })                           
-                    {
-                        var parsed_m_control = Parse_m_control(reader);
-                        m_control = Option.Some(parsed_m_control);
-                        continue;
-                    }
-                    else
-                    {
-                        throw new Exception("Duplicate tag!");
-                    }
-                }
-                break;
-                case 5:
-                {
-                    if (m_teamId is { HasValue: false })                           
-                    {
-                        var parsed_m_teamId = Parse_m_teamId(reader);
-                        m_teamId = Option.Some(parsed_m_teamId);
-                        continue;
-                    }
-                    else
-                    {
-                        throw new Exception("Duplicate tag!");
-                    }
-                }
-                break;
-                case 6:
-                {
-                    if (m_handicap is { HasValue: false })                           
-                    {
-                        var parsed_m_handicap = Parse_m_handicap(reader);
-                        m_handicap = Option.Some(parsed_m_handicap);
-                        continue;
-                    }
-                    else
-                    {
-                        throw new Exception("Duplicate tag!");
-                    }
-                }
-                break;
-                case 7:
-                {
-                    if (m_observe is { HasValue: false })                           
-                    {
-                        var parsed_m_observe = Parse_m_observe(reader);
-                        m_observe = Option.Some(parsed_m_observe);
-                        continue;
-                    }
-                    else
-                    {
-                        throw new Exception("Duplicate tag!");
-                    }
-                }
-                break;
-                case 8:
-                {
-                    if (m_result is { HasValue: false })                           
-                    {
-                        var parsed_m_result = Parse_m_result(reader);
-                        m_result = Option.Some(parsed_m_result);
-                        continue;
-                    }
-                    else
-                    {
-                        throw new Exception("Duplicate tag!");
-                    }
-                }
-                break;
-            }
-        }
-        return new GameSPlayerDetails
-        {   
-            m_name = Option.OkOrReturnMissingFieldErr(m_name),
-            m_toon = Option.OkOrReturnMissingFieldErr(m_toon),
-            m_race = Option.OkOrReturnMissingFieldErr(m_race),
-            m_color = Option.OkOrReturnMissingFieldErr(m_color),
-            m_control = Option.OkOrReturnMissingFieldErr(m_control),
-            m_teamId = Option.OkOrReturnMissingFieldErr(m_teamId),
-            m_handicap = Option.OkOrReturnMissingFieldErr(m_handicap),
-            m_observe = Option.OkOrReturnMissingFieldErr(m_observe),
-            m_result = Option.OkOrReturnMissingFieldErr(m_result),
-        };
-    }
-    public static List<byte> Parse_m_name(ProtocolReader reader)
-    {                             
-        var m_name = reader.tagged_blob();
-        return m_name;
-    }//1
-    public static GameSToonNameDetails Parse_m_toon(ProtocolReader reader)
-    {                             
-        var m_toon = reader.GameSToonNameDetails.Parse();
-        return m_toon;
-    }//1
-    public static List<byte> Parse_m_race(ProtocolReader reader)
-    {                             
-        var m_race = reader.tagged_blob();
-        return m_race;
-    }//1
-    public static GameSColor Parse_m_color(ProtocolReader reader)
-    {                             
-        var m_color = reader.GameSColor.Parse();
-        return m_color;
-    }//1
-    public static byte Parse_m_control(ProtocolReader reader)
-    {                             
-        var m_control = reader.tagged_vlq_int();
-        return ProtocolConversion<byte>.From(m_control);
-    }//1
-    public static byte Parse_m_teamId(ProtocolReader reader)
-    {                             
-        var m_teamId = reader.tagged_vlq_int();
-        return ProtocolConversion<byte>.From(m_teamId);
-    }//1
-    public static uint Parse_m_handicap(ProtocolReader reader)
-    {                             
-        var m_handicap = reader.tagged_vlq_int();
-        return ProtocolConversion<uint>.From(m_handicap);
-    }//1
-    public static EObserve Parse_m_observe(ProtocolReader reader)
-    {                             
-        var m_observe = reader.EObserve.Parse();
-        return m_observe;
-    }//1
-    public static GameEResultDetails Parse_m_result(ProtocolReader reader)
-    {                             
-        var m_result = reader.GameEResultDetails.Parse();
-        return m_result;
-    }//1
 }
 
 // NNet.Game.SDetails
@@ -744,348 +172,6 @@ public class GameSDetails
     public bool m_miniSave;
     public GameEGameSpeed m_gameSpeed;
     public uint m_defaultDifficulty;
-
-    public static GameSDetails Parse(ProtocolReader reader) 
-    {
-        var m_playerList = Option.Some<Option<List<GameSPlayerDetails>>>(Option.None);
-        Option<List<byte>> m_title = Option.None;
-        Option<List<byte>> m_difficulty = Option.None;
-        Option<GameSThumbnail> m_thumbnail = Option.None;
-        Option<bool> m_isBlizzardMap = Option.None;
-        Option<long> m_timeUTC = Option.None;
-        Option<long> m_timeLocalOffset = Option.None;
-        Option<List<byte>> m_description = Option.None;
-        Option<List<byte>> m_imageFilePath = Option.None;
-        Option<List<byte>> m_mapFileName = Option.None;
-        var m_cacheHandles = Option.Some<Option<List<List<byte>>>>(Option.None);
-        Option<bool> m_miniSave = Option.None;
-        Option<GameEGameSpeed> m_gameSpeed = Option.None;
-        Option<uint> m_defaultDifficulty = Option.None;
-        reader.ValidateStructTag();
-        var structFieldCount = reader.ParseVlqInt();           
-        for (var i = 0; i < structFieldCount; i++)
-        {
-            var fieldTag = reader.ParseVlqInt();
-    
-            switch (fieldTag)
-            {
-                case 0:
-                {
-                    if (m_playerList is { HasValue: true, Value.HasValue: false })
-                    {
-                        var parsed_m_playerList = Parse_m_playerList(reader);
-                        m_playerList = Option.Some(parsed_m_playerList);
-                        continue;
-                    }
-                    else
-                    {
-                        throw new Exception("Duplicate tag!");
-                    }
-                }
-                break;
-                case 1:
-                {
-                    if (m_title is { HasValue: false })                           
-                    {
-                        var parsed_m_title = Parse_m_title(reader);
-                        m_title = Option.Some(parsed_m_title);
-                        continue;
-                    }
-                    else
-                    {
-                        throw new Exception("Duplicate tag!");
-                    }
-                }
-                break;
-                case 2:
-                {
-                    if (m_difficulty is { HasValue: false })                           
-                    {
-                        var parsed_m_difficulty = Parse_m_difficulty(reader);
-                        m_difficulty = Option.Some(parsed_m_difficulty);
-                        continue;
-                    }
-                    else
-                    {
-                        throw new Exception("Duplicate tag!");
-                    }
-                }
-                break;
-                case 3:
-                {
-                    if (m_thumbnail is { HasValue: false })                           
-                    {
-                        var parsed_m_thumbnail = Parse_m_thumbnail(reader);
-                        m_thumbnail = Option.Some(parsed_m_thumbnail);
-                        continue;
-                    }
-                    else
-                    {
-                        throw new Exception("Duplicate tag!");
-                    }
-                }
-                break;
-                case 4:
-                {
-                    if (m_isBlizzardMap is { HasValue: false })                           
-                    {
-                        var parsed_m_isBlizzardMap = Parse_m_isBlizzardMap(reader);
-                        m_isBlizzardMap = Option.Some(parsed_m_isBlizzardMap);
-                        continue;
-                    }
-                    else
-                    {
-                        throw new Exception("Duplicate tag!");
-                    }
-                }
-                break;
-                case 5:
-                {
-                    if (m_timeUTC is { HasValue: false })                           
-                    {
-                        var parsed_m_timeUTC = Parse_m_timeUTC(reader);
-                        m_timeUTC = Option.Some(parsed_m_timeUTC);
-                        continue;
-                    }
-                    else
-                    {
-                        throw new Exception("Duplicate tag!");
-                    }
-                }
-                break;
-                case 6:
-                {
-                    if (m_timeLocalOffset is { HasValue: false })                           
-                    {
-                        var parsed_m_timeLocalOffset = Parse_m_timeLocalOffset(reader);
-                        m_timeLocalOffset = Option.Some(parsed_m_timeLocalOffset);
-                        continue;
-                    }
-                    else
-                    {
-                        throw new Exception("Duplicate tag!");
-                    }
-                }
-                break;
-                case 7:
-                {
-                    if (m_description is { HasValue: false })                           
-                    {
-                        var parsed_m_description = Parse_m_description(reader);
-                        m_description = Option.Some(parsed_m_description);
-                        continue;
-                    }
-                    else
-                    {
-                        throw new Exception("Duplicate tag!");
-                    }
-                }
-                break;
-                case 8:
-                {
-                    if (m_imageFilePath is { HasValue: false })                           
-                    {
-                        var parsed_m_imageFilePath = Parse_m_imageFilePath(reader);
-                        m_imageFilePath = Option.Some(parsed_m_imageFilePath);
-                        continue;
-                    }
-                    else
-                    {
-                        throw new Exception("Duplicate tag!");
-                    }
-                }
-                break;
-                case 9:
-                {
-                    if (m_mapFileName is { HasValue: false })                           
-                    {
-                        var parsed_m_mapFileName = Parse_m_mapFileName(reader);
-                        m_mapFileName = Option.Some(parsed_m_mapFileName);
-                        continue;
-                    }
-                    else
-                    {
-                        throw new Exception("Duplicate tag!");
-                    }
-                }
-                break;
-                case 10:
-                {
-                    if (m_cacheHandles is { HasValue: true, Value.HasValue: false })
-                    {
-                        var parsed_m_cacheHandles = Parse_m_cacheHandles(reader);
-                        m_cacheHandles = Option.Some(parsed_m_cacheHandles);
-                        continue;
-                    }
-                    else
-                    {
-                        throw new Exception("Duplicate tag!");
-                    }
-                }
-                break;
-                case 11:
-                {
-                    if (m_miniSave is { HasValue: false })                           
-                    {
-                        var parsed_m_miniSave = Parse_m_miniSave(reader);
-                        m_miniSave = Option.Some(parsed_m_miniSave);
-                        continue;
-                    }
-                    else
-                    {
-                        throw new Exception("Duplicate tag!");
-                    }
-                }
-                break;
-                case 12:
-                {
-                    if (m_gameSpeed is { HasValue: false })                           
-                    {
-                        var parsed_m_gameSpeed = Parse_m_gameSpeed(reader);
-                        m_gameSpeed = Option.Some(parsed_m_gameSpeed);
-                        continue;
-                    }
-                    else
-                    {
-                        throw new Exception("Duplicate tag!");
-                    }
-                }
-                break;
-                case 13:
-                {
-                    if (m_defaultDifficulty is { HasValue: false })                           
-                    {
-                        var parsed_m_defaultDifficulty = Parse_m_defaultDifficulty(reader);
-                        m_defaultDifficulty = Option.Some(parsed_m_defaultDifficulty);
-                        continue;
-                    }
-                    else
-                    {
-                        throw new Exception("Duplicate tag!");
-                    }
-                }
-                break;
-            }
-        }
-        return new GameSDetails
-        {   
-            m_playerList = Option.OkOrReturnMissingFieldErr(m_playerList),
-            m_title = Option.OkOrReturnMissingFieldErr(m_title),
-            m_difficulty = Option.OkOrReturnMissingFieldErr(m_difficulty),
-            m_thumbnail = Option.OkOrReturnMissingFieldErr(m_thumbnail),
-            m_isBlizzardMap = Option.OkOrReturnMissingFieldErr(m_isBlizzardMap),
-            m_timeUTC = Option.OkOrReturnMissingFieldErr(m_timeUTC),
-            m_timeLocalOffset = Option.OkOrReturnMissingFieldErr(m_timeLocalOffset),
-            m_description = Option.OkOrReturnMissingFieldErr(m_description),
-            m_imageFilePath = Option.OkOrReturnMissingFieldErr(m_imageFilePath),
-            m_mapFileName = Option.OkOrReturnMissingFieldErr(m_mapFileName),
-            m_cacheHandles = Option.OkOrReturnMissingFieldErr(m_cacheHandles),
-            m_miniSave = Option.OkOrReturnMissingFieldErr(m_miniSave),
-            m_gameSpeed = Option.OkOrReturnMissingFieldErr(m_gameSpeed),
-            m_defaultDifficulty = Option.OkOrReturnMissingFieldErr(m_defaultDifficulty),
-        };
-    }
-    public static Option<List<GameSPlayerDetails>> Parse_m_playerList(ProtocolReader reader)
-    {                             
-        reader.ValidateOptTag();
-        var isProvided = reader.ReadByte(); // nom::number::complete::u8(tail)
-        var m_playerList = null;
-
-        if (isProvided != 0)
-        {                                   
-            var res = reader.GameSPlayerDetails.Parse();
-
-        //"  m_playerList = Option.Some(res);          
-        }
-        else
-        {
-            m_playerList = Option.None;
-        }
-
-        return m_playerList;
-    }//1
-    public static List<byte> Parse_m_title(ProtocolReader reader)
-    {                             
-        var m_title = reader.tagged_blob();
-        return m_title;
-    }//1
-    public static List<byte> Parse_m_difficulty(ProtocolReader reader)
-    {                             
-        var m_difficulty = reader.tagged_blob();
-        return m_difficulty;
-    }//1
-    public static GameSThumbnail Parse_m_thumbnail(ProtocolReader reader)
-    {                             
-        var m_thumbnail = reader.GameSThumbnail.Parse();
-        return m_thumbnail;
-    }//1
-    public static bool Parse_m_isBlizzardMap(ProtocolReader reader)
-    {                             
-        var m_isBlizzardMap = reader.tagged_bool();
-        return m_isBlizzardMap;
-    }//1
-    public static long Parse_m_timeUTC(ProtocolReader reader)
-    {                             
-        var m_timeUTC = reader.tagged_vlq_int();
-        return ProtocolConversion<long>.From(m_timeUTC);
-    }//1
-    public static long Parse_m_timeLocalOffset(ProtocolReader reader)
-    {                             
-        var m_timeLocalOffset = reader.tagged_vlq_int();
-        return ProtocolConversion<long>.From(m_timeLocalOffset);
-    }//1
-    public static List<byte> Parse_m_description(ProtocolReader reader)
-    {                             
-        var m_description = reader.tagged_blob();
-        return m_description;
-    }//1
-    public static List<byte> Parse_m_imageFilePath(ProtocolReader reader)
-    {                             
-        var m_imageFilePath = reader.tagged_blob();
-        return m_imageFilePath;
-    }//1
-    public static List<byte> Parse_m_mapFileName(ProtocolReader reader)
-    {                             
-        var m_mapFileName = reader.tagged_blob();
-        return m_mapFileName;
-    }//1
-    public static Option<List<List<byte>>> Parse_m_cacheHandles(ProtocolReader reader)
-    {                             
-        reader.ValidateOptTag();
-        var isProvided = reader.ReadByte(); // nom::number::complete::u8(tail)
-        var m_cacheHandles = null;
-
-        if (isProvided != 0)
-        {                                   
-            reader.ValidateArrayTag();
-            var arrayLength = reader.ParseVlqInt();
-
-            var array = Enumerable.Range(0, arrayLength).Select(_ => reader.tagged_blob()).ToArray();
-
-            m_cacheHandles = Option.Some(array);
-        }
-        else
-        {
-            m_cacheHandles = Option.None;
-        }
-
-        return m_cacheHandles;
-    }//1
-    public static bool Parse_m_miniSave(ProtocolReader reader)
-    {                             
-        var m_miniSave = reader.tagged_bool();
-        return m_miniSave;
-    }//1
-    public static GameEGameSpeed Parse_m_gameSpeed(ProtocolReader reader)
-    {                             
-        var m_gameSpeed = reader.GameEGameSpeed.Parse();
-        return m_gameSpeed;
-    }//1
-    public static uint Parse_m_defaultDifficulty(ProtocolReader reader)
-    {                             
-        var m_defaultDifficulty = reader.tagged_vlq_int();
-        return ProtocolConversion<uint>.From(m_defaultDifficulty);
-    }//1
 }
 
 // NNet.Replay.SHeader
@@ -1095,119 +181,12 @@ public class ReplaySHeader
     public SVersion m_version;
     public byte m_type;
     public uint m_elapsedGameLoops;
-
-    public static ReplaySHeader Parse(ProtocolReader reader) 
-    {
-        Option<List<byte>> m_signature = Option.None;
-        Option<SVersion> m_version = Option.None;
-        Option<byte> m_type = Option.None;
-        Option<uint> m_elapsedGameLoops = Option.None;
-        reader.ValidateStructTag();
-        var structFieldCount = reader.ParseVlqInt();           
-        for (var i = 0; i < structFieldCount; i++)
-        {
-            var fieldTag = reader.ParseVlqInt();
-    
-            switch (fieldTag)
-            {
-                case 0:
-                {
-                    if (m_signature is { HasValue: false })                           
-                    {
-                        var parsed_m_signature = Parse_m_signature(reader);
-                        m_signature = Option.Some(parsed_m_signature);
-                        continue;
-                    }
-                    else
-                    {
-                        throw new Exception("Duplicate tag!");
-                    }
-                }
-                break;
-                case 1:
-                {
-                    if (m_version is { HasValue: false })                           
-                    {
-                        var parsed_m_version = Parse_m_version(reader);
-                        m_version = Option.Some(parsed_m_version);
-                        continue;
-                    }
-                    else
-                    {
-                        throw new Exception("Duplicate tag!");
-                    }
-                }
-                break;
-                case 2:
-                {
-                    if (m_type is { HasValue: false })                           
-                    {
-                        var parsed_m_type = Parse_m_type(reader);
-                        m_type = Option.Some(parsed_m_type);
-                        continue;
-                    }
-                    else
-                    {
-                        throw new Exception("Duplicate tag!");
-                    }
-                }
-                break;
-                case 3:
-                {
-                    if (m_elapsedGameLoops is { HasValue: false })                           
-                    {
-                        var parsed_m_elapsedGameLoops = Parse_m_elapsedGameLoops(reader);
-                        m_elapsedGameLoops = Option.Some(parsed_m_elapsedGameLoops);
-                        continue;
-                    }
-                    else
-                    {
-                        throw new Exception("Duplicate tag!");
-                    }
-                }
-                break;
-            }
-        }
-        return new ReplaySHeader
-        {   
-            m_signature = Option.OkOrReturnMissingFieldErr(m_signature),
-            m_version = Option.OkOrReturnMissingFieldErr(m_version),
-            m_type = Option.OkOrReturnMissingFieldErr(m_type),
-            m_elapsedGameLoops = Option.OkOrReturnMissingFieldErr(m_elapsedGameLoops),
-        };
-    }
-    public static List<byte> Parse_m_signature(ProtocolReader reader)
-    {                             
-        var m_signature = reader.tagged_blob();
-        return m_signature;
-    }//1
-    public static SVersion Parse_m_version(ProtocolReader reader)
-    {                             
-        var m_version = reader.SVersion.Parse();
-        return m_version;
-    }//1
-    public static byte Parse_m_type(ProtocolReader reader)
-    {                             
-        var m_type = reader.tagged_vlq_int();
-        return ProtocolConversion<byte>.From(m_type);
-    }//1
-    public static uint Parse_m_elapsedGameLoops(ProtocolReader reader)
-    {                             
-        var m_elapsedGameLoops = reader.tagged_vlq_int();
-        return ProtocolConversion<uint>.From(m_elapsedGameLoops);
-    }//1
 }
 
 // NNet.TRacePreference
 public class TRacePreference
 {
     public Option<TRaceId> m_race;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.SUserInitialData
@@ -1219,24 +198,12 @@ public class SUserInitialData
     public bool m_testMap;
     public bool m_testAuto;
     public EObserve m_observe;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.TColorPreference
 public class GameTColorPreference
 {
     public Option<GameTColorId> m_color;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SSetLobbySlotEvent
@@ -1244,12 +211,6 @@ public class GameSSetLobbySlotEvent
 {
     public GameTLobbySlotId m_slotId;
     public IGameSLobbySlotChange m_slotChange;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SDropUserEvent
@@ -1257,58 +218,28 @@ public class GameSDropUserEvent
 {
     public TUserId m_userId;
     public ELeaveReason m_reason;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SStartGameEvent
 public class GameSStartGameEvent
 {
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SDropOurselvesEvent
 public class GameSDropOurselvesEvent
 {
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SBankFileEvent
 public class GameSBankFileEvent
 {
     public List<byte> m_name;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SBankSectionEvent
 public class GameSBankSectionEvent
 {
     public List<byte> m_name;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SBankKeyEvent
@@ -1317,12 +248,6 @@ public class GameSBankKeyEvent
     public List<byte> m_name;
     public uint32 m_type;
     public List<byte> m_data;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SBankValueEvent
@@ -1331,12 +256,6 @@ public class GameSBankValueEvent
     public uint32 m_type;
     public List<byte> m_name;
     public List<byte> m_data;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SUserOptionsEvent
@@ -1346,128 +265,62 @@ public class GameSUserOptionsEvent
     public bool m_multiplayerCheatsEnabled;
     public bool m_syncChecksummingEnabled;
     public bool m_isMapToMapTransition;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SUserFinishedLoadingEvent
 public class GameSUserFinishedLoadingEvent
 {
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SUserFinishedLoadingSyncEvent
 public class GameSUserFinishedLoadingSyncEvent
 {
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SSetGameDurationEvent
 public class GameSSetGameDurationEvent
 {
     public uint32 m_gameDuration;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.STurnEvent
 public class GameSTurnEvent
 {
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SPauseGameEvent
 public class GameSPauseGameEvent
 {
     public uint8 m_pauseTypeIndex;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SUnpauseGameEvent
 public class GameSUnpauseGameEvent
 {
     public uint8 m_pauseTypeIndex;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SSingleStepGameEvent
 public class GameSSingleStepGameEvent
 {
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SSetGameSpeedEvent
 public class GameSSetGameSpeedEvent
 {
     public GameEGameSpeed m_speed;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SAddGameSpeedEvent
 public class GameSAddGameSpeedEvent
 {
     public int8 m_delta;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SRestartGameEvent
 public class GameSRestartGameEvent
 {
     public uint32 m_reloadGameLoop;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SSaveGameEvent
@@ -1478,23 +331,11 @@ public class GameSSaveGameEvent
     public bool m_overwrite;
     public List<byte> m_name;
     public List<byte> m_description;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SSaveGameDoneEvent
 public class GameSSaveGameDoneEvent
 {
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SCheatEventData
@@ -1504,47 +345,23 @@ public class GameSCheatEventData
     public int32 m_time;
     public GameCCheatString m_verb;
     public GameCCheatString m_arguments;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SSessionCheatEvent
 public class GameSSessionCheatEvent
 {
     public GameSCheatEventData m_data;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SPlayerLeaveEvent
 public class GameSPlayerLeaveEvent
 {
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SGameCheatEvent
 public class GameSGameCheatEvent
 {
     public GameSCheatEventData m_data;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SCmdEvent
@@ -1561,12 +378,6 @@ public class GameSCmdEvent
     public GameTUnitLink m_targetUnitSnapshotUnitLink;
     public Option<GameTPlayerId> m_targetUnitSnapshotPlayerId;
     public GameSPoint3 m_targetPoint;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SSelectionDeltaEvent
@@ -1574,12 +385,6 @@ public class GameSSelectionDeltaEvent
 {
     public GameTControlGroupId m_controlGroupId;
     public GameSSelectionDelta m_delta;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SControlGroupUpdateEvent
@@ -1588,12 +393,6 @@ public class GameSControlGroupUpdateEvent
     public GameTControlGroupIndex m_controlGroupIndex;
     public GameEControlGroupUpdate m_controlGroupUpdate;
     public GameSSelectionMask m_mask;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SSelectionSyncCheckEvent
@@ -1601,12 +400,6 @@ public class GameSSelectionSyncCheckEvent
 {
     public GameTControlGroupId m_controlGroupId;
     public GameSSelectionSyncData m_selectionSyncData;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SResourceTradeEvent
@@ -1614,24 +407,12 @@ public class GameSResourceTradeEvent
 {
     public GameTPlayerId m_recipientId;
     public List<int32> m_resources;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.STriggerChatMessageEvent
 public class GameSTriggerChatMessageEvent
 {
     public GameCTriggerChatMessageString m_chatMessage;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SAICommunicateEvent
@@ -1644,36 +425,18 @@ public class GameSAICommunicateEvent
     public GameTUnitLink m_targetUnitSnapshotUnitLink;
     public Option<GameTPlayerId> m_targetUnitSnapshotPlayerId;
     public GameSPoint3 m_targetPoint;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SSetAbsoluteGameSpeedEvent
 public class GameSSetAbsoluteGameSpeedEvent
 {
     public GameEGameSpeed m_speed;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SAddAbsoluteGameSpeedEvent
 public class GameSAddAbsoluteGameSpeedEvent
 {
     public int8 m_delta;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SBroadcastCheatEvent
@@ -1681,12 +444,6 @@ public class GameSBroadcastCheatEvent
 {
     public GameCCheatString m_verb;
     public GameCCheatString m_arguments;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SAllianceEvent
@@ -1694,24 +451,12 @@ public class GameSAllianceEvent
 {
     public uint32 m_alliance;
     public uint32 m_control;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SUnitClickEvent
 public class GameSUnitClickEvent
 {
     public GameTUnitTag m_unitTag;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SUnitHighlightEvent
@@ -1719,12 +464,6 @@ public class GameSUnitHighlightEvent
 {
     public GameTUnitTag m_unitTag;
     public uint8 m_flags;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.STriggerReplySelectedEvent
@@ -1732,69 +471,33 @@ public class GameSTriggerReplySelectedEvent
 {
     public int32 m_conversationId;
     public int32 m_replyId;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.STriggerAbortMissionEvent
 public class GameSTriggerAbortMissionEvent
 {
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.STriggerPurchaseMadeEvent
 public class GameSTriggerPurchaseMadeEvent
 {
     public int32 m_purchaseItemId;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.STriggerPurchaseExitEvent
 public class GameSTriggerPurchaseExitEvent
 {
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.STriggerPlanetMissionLaunchedEvent
 public class GameSTriggerPlanetMissionLaunchedEvent
 {
     public int32 m_difficultyLevel;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.STriggerPlanetPanelCanceledEvent
 public class GameSTriggerPlanetPanelCanceledEvent
 {
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.STriggerDialogControlEvent
@@ -1803,23 +506,11 @@ public class GameSTriggerDialogControlEvent
     public int32 m_controlId;
     public int32 m_eventType;
     public Im_eventData m_eventData;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.STriggerSkippedEvent
 public class GameSTriggerSkippedEvent
 {
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.STriggerSoundLengthQueryEvent
@@ -1827,60 +518,30 @@ public class GameSTriggerSoundLengthQueryEvent
 {
     public uint32 m_soundHash;
     public uint32 m_length;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.STriggerSoundLengthSyncEvent
 public class GameSTriggerSoundLengthSyncEvent
 {
     public GameSSyncSoundLength m_syncInfo;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.STriggerSoundOffsetEvent
 public class GameSTriggerSoundOffsetEvent
 {
     public GameTTriggerSoundTag m_sound;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.STriggerTransmissionOffsetEvent
 public class GameSTriggerTransmissionOffsetEvent
 {
     public int32 m_transmissionId;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.STriggerTransmissionCompleteEvent
 public class GameSTriggerTransmissionCompleteEvent
 {
     public int32 m_transmissionId;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SCameraUpdateEvent
@@ -1890,24 +551,12 @@ public class GameSCameraUpdateEvent
     public GameTFixedBits m_distance;
     public GameTFixedBits m_pitch;
     public GameTFixedBits m_yaw;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.STriggerConversationSkippedEvent
 public class GameSTriggerConversationSkippedEvent
 {
     public GameEConversationSkip m_skipType;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.STriggerMouseClickedEvent
@@ -1920,47 +569,23 @@ public class GameSTriggerMouseClickedEvent
     public GameTFixedBits m_posXWorld;
     public GameTFixedBits m_posYWorld;
     public GameTFixedBits m_posZWorld;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.STriggerPlanetPanelReplayEvent
 public class GameSTriggerPlanetPanelReplayEvent
 {
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.STriggerSoundtrackDoneEvent
 public class GameSTriggerSoundtrackDoneEvent
 {
     public uint32 m_soundtrack;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.STriggerPlanetMissionSelectedEvent
 public class GameSTriggerPlanetMissionSelectedEvent
 {
     public int32 m_planetId;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.STriggerKeyPressedEvent
@@ -1968,172 +593,82 @@ public class GameSTriggerKeyPressedEvent
 {
     public int8 m_key;
     public int8 m_flags;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.STriggerPlanetPanelBirthCompleteEvent
 public class GameSTriggerPlanetPanelBirthCompleteEvent
 {
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.STriggerPlanetPanelDeathCompleteEvent
 public class GameSTriggerPlanetPanelDeathCompleteEvent
 {
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SResourceRequestEvent
 public class GameSResourceRequestEvent
 {
     public List<int32> m_resources;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SResourceRequestFulfillEvent
 public class GameSResourceRequestFulfillEvent
 {
     public int32 m_fulfillRequestId;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SResourceRequestCancelEvent
 public class GameSResourceRequestCancelEvent
 {
     public int32 m_cancelRequestId;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.STriggerResearchPanelExitEvent
 public class GameSTriggerResearchPanelExitEvent
 {
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.STriggerResearchPanelPurchaseEvent
 public class GameSTriggerResearchPanelPurchaseEvent
 {
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.STriggerResearchPanelSelectionChangedEvent
 public class GameSTriggerResearchPanelSelectionChangedEvent
 {
     public int32 m_researchItemId;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SLagMessageEvent
 public class GameSLagMessageEvent
 {
     public GameTPlayerId m_laggingPlayerId;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.STriggerMercenaryPanelExitEvent
 public class GameSTriggerMercenaryPanelExitEvent
 {
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.STriggerMercenaryPanelPurchaseEvent
 public class GameSTriggerMercenaryPanelPurchaseEvent
 {
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.STriggerMercenaryPanelSelectionChangedEvent
 public class GameSTriggerMercenaryPanelSelectionChangedEvent
 {
     public int32 m_mercenaryId;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.STriggerVictoryPanelExitEvent
 public class GameSTriggerVictoryPanelExitEvent
 {
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.STriggerBattleReportPanelExitEvent
 public class GameSTriggerBattleReportPanelExitEvent
 {
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.STriggerBattleReportPanelPlayMissionEvent
@@ -2141,189 +676,93 @@ public class GameSTriggerBattleReportPanelPlayMissionEvent
 {
     public int32 m_battleReportId;
     public int32 m_difficultyLevel;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.STriggerBattleReportPanelPlaySceneEvent
 public class GameSTriggerBattleReportPanelPlaySceneEvent
 {
     public int32 m_battleReportId;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.STriggerBattleReportPanelSelectionChangedEvent
 public class GameSTriggerBattleReportPanelSelectionChangedEvent
 {
     public int32 m_battleReportId;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.STriggerVictoryPanelPlayMissionAgainEvent
 public class GameSTriggerVictoryPanelPlayMissionAgainEvent
 {
     public int32 m_difficultyLevel;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.STriggerMovieStartedEvent
 public class GameSTriggerMovieStartedEvent
 {
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.STriggerMovieFinishedEvent
 public class GameSTriggerMovieFinishedEvent
 {
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SDecrementGameTimeRemainingEvent
 public class GameSDecrementGameTimeRemainingEvent
 {
     public uint32 m_decrementMs;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.STriggerPortraitLoadedEvent
 public class GameSTriggerPortraitLoadedEvent
 {
     public int32 m_portraitId;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.STriggerMovieFunctionEvent
 public class GameSTriggerMovieFunctionEvent
 {
     public List<byte> m_functionName;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.STriggerCustomDialogDismissedEvent
 public class GameSTriggerCustomDialogDismissedEvent
 {
     public int32 m_result;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.STriggerGameMenuItemSelectedEvent
 public class GameSTriggerGameMenuItemSelectedEvent
 {
     public int32 m_gameMenuItemIndex;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.STriggerCameraMoveEvent
 public class GameSTriggerCameraMoveEvent
 {
     public int8 m_reason;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.STriggerPurchasePanelSelectedPurchaseItemChangedEvent
 public class GameSTriggerPurchasePanelSelectedPurchaseItemChangedEvent
 {
     public int32 m_purchaseItemId;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.STriggerPurchasePanelSelectedPurchaseCategoryChangedEvent
 public class GameSTriggerPurchasePanelSelectedPurchaseCategoryChangedEvent
 {
     public int32 m_purchaseCategoryId;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.STriggerButtonPressedEvent
 public class GameSTriggerButtonPressedEvent
 {
     public GameTButtonLink m_button;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.STriggerGameCreditsFinishedEvent
 public class GameSTriggerGameCreditsFinishedEvent
 {
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SPoint
@@ -2331,12 +770,6 @@ public class GameSPoint
 {
     public GameTFixedBits x;
     public GameTFixedBits y;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SPoint3
@@ -2345,12 +778,6 @@ public class GameSPoint3
     public GameTFixedBits x;
     public GameTFixedBits y;
     public GameTFixedBits z;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SSyncSoundLength
@@ -2358,12 +785,6 @@ public class GameSSyncSoundLength
 {
     public List<uint32> m_soundHash;
     public List<uint32> m_length;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SGameOptions
@@ -2380,12 +801,6 @@ public class GameSGameOptions
     public GameEOptionFog m_fog;
     public GameEOptionObservers m_observers;
     public GameEOptionUserDifficulty m_userDifficulty;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SSlotDescription
@@ -2396,12 +811,6 @@ public class GameSSlotDescription
     public GameCAllowedDifficulty m_allowedDifficulty;
     public GameCAllowedControls m_allowedControls;
     public CAllowedObserveTypes m_allowedObserveTypes;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SGameDescription
@@ -2428,12 +837,6 @@ public class GameSGameDescription
     public GameTDifficulty m_defaultDifficulty;
     public GameCCacheHandles m_cacheHandles;
     public bool m_isBlizzardMap;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SLobbySlot
@@ -2448,12 +851,6 @@ public class GameSLobbySlot
     public GameTHandicap m_handicap;
     public EObserve m_observe;
     public GameCRewardArray m_rewards;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SLobbyState
@@ -2468,12 +865,6 @@ public class GameSLobbyState
     public bool m_isSinglePlayer;
     public uint32 m_gameDuration;
     public GameTDifficulty m_defaultDifficulty;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SLobbySyncState
@@ -2482,12 +873,6 @@ public class GameSLobbySyncState
     public CUserInitialDataArray m_userInitialData;
     public GameSGameDescription m_gameDescription;
     public GameSLobbyState m_lobbyState;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SGameOptions_PublicBeta1
@@ -2504,12 +889,6 @@ public class GameSGameOptions_PublicBeta1
     public GameEOptionFog m_fog;
     public GameEOptionObservers m_observers;
     public GameEOptionUserDifficulty m_userDifficulty;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SGameDescription_PublicBeta1
@@ -2536,12 +915,6 @@ public class GameSGameDescription_PublicBeta1
     public GameSSlotDescriptions m_slotDescriptions;
     public GameTDifficulty m_defaultDifficulty;
     public GameCCacheHandles m_cacheHandles;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SLobbySlot_PublicBeta1
@@ -2555,12 +928,6 @@ public class GameSLobbySlot_PublicBeta1
     public GameTDifficulty m_difficulty;
     public GameTHandicap m_handicap;
     public EObserve m_observe;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SLobbyState_PublicBeta1
@@ -2575,12 +942,6 @@ public class GameSLobbyState_PublicBeta1
     public bool m_isSinglePlayer;
     public uint32 m_gameDuration;
     public GameTDifficulty m_defaultDifficulty;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SLobbySyncState_PublicBeta1
@@ -2589,12 +950,6 @@ public class GameSLobbySyncState_PublicBeta1
     public CUserInitialDataArray m_userInitialData;
     public GameSGameDescription_PublicBeta1 m_gameDescription;
     public GameSLobbyState_PublicBeta1 m_lobbyState;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SChatMessage
@@ -2602,12 +957,6 @@ public class GameSChatMessage
 {
     public GameEMessageRecipient m_recipient;
     public GameCChatString m_string;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SPingMessage
@@ -2615,24 +964,12 @@ public class GameSPingMessage
 {
     public GameEMessageRecipient m_recipient;
     public GameSPoint m_point;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SLoadingProgressMessage
 public class GameSLoadingProgressMessage
 {
     public int32 m_progress;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SSelectionDeltaSubgroup
@@ -2641,23 +978,11 @@ public class GameSSelectionDeltaSubgroup
     public GameTUnitLink m_unitLink;
     public GameTSubgroupPriority m_intraSubgroupPriority;
     public GameTSelectionCount m_count;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SSelectionMask
 public class GameSSelectionMask
 {
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SSelectionDelta
@@ -2667,12 +992,6 @@ public class GameSSelectionDelta
     public GameSSelectionMask m_removeMask;
     public List<GameSSelectionDeltaSubgroup> m_addSubgroups;
     public List<GameTUnitTag> m_addUnitTags;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SSelectionSyncData
@@ -2684,12 +1003,6 @@ public class GameSSelectionSyncData
     public GameTSyncChecksum m_unitTagsChecksum;
     public GameTSyncChecksum m_subgroupIndicesChecksum;
     public GameTSyncChecksum m_subgroupsChecksum;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SSessionSyncInfo
@@ -2697,36 +1010,18 @@ public class GameSSessionSyncInfo
 {
     public uint32 m_gameLoop;
     public List<GameTSyncChecksum> m_checksums;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Game.SGameSyncInfo
 public class GameSGameSyncInfo
 {
     public List<GameTSyncChecksum> m_checksums;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.Replay.SInitData
 public class ReplaySInitData
 {
     public GameSLobbySyncState m_syncLobbyState;
-
-    public void Parse(BinaryReader reader) 
-    {
-        ValidateStructTag(reader);
-        var structFieldCount = ParseVlqInt(reader);
-    } // TO DO
 }
 
 // NNet.EObserve
@@ -3506,3 +1801,1021 @@ public class GameCCacheHandle
     public List<byte> Value;
 }
 
+public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
+{
+
+    public SVersion Parse_SVersion() 
+    {
+        Option<byte> m_flags = Option.None;
+        Option<byte> m_major = Option.None;
+        Option<byte> m_minor = Option.None;
+        Option<byte> m_revision = Option.None;
+        Option<uint> m_build = Option.None;
+        Option<uint> m_baseBuild = Option.None;
+        ValidateStructTag();
+        var structFieldCount = ParseVlqInt();           
+        for (var i = 0; i < structFieldCount; i++)
+        {
+            var fieldTag = ParseVlqInt();
+    
+            switch (fieldTag)
+            {
+                case 0:
+                {
+                    if (m_flags is { HasValue: false })                           
+                    {
+                        var parsed_m_flags = Parse_SVersion_m_flags();
+                        m_flags = Option.Some(parsed_m_flags);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 1:
+                {
+                    if (m_major is { HasValue: false })                           
+                    {
+                        var parsed_m_major = Parse_SVersion_m_major();
+                        m_major = Option.Some(parsed_m_major);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 2:
+                {
+                    if (m_minor is { HasValue: false })                           
+                    {
+                        var parsed_m_minor = Parse_SVersion_m_minor();
+                        m_minor = Option.Some(parsed_m_minor);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 3:
+                {
+                    if (m_revision is { HasValue: false })                           
+                    {
+                        var parsed_m_revision = Parse_SVersion_m_revision();
+                        m_revision = Option.Some(parsed_m_revision);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 4:
+                {
+                    if (m_build is { HasValue: false })                           
+                    {
+                        var parsed_m_build = Parse_SVersion_m_build();
+                        m_build = Option.Some(parsed_m_build);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 5:
+                {
+                    if (m_baseBuild is { HasValue: false })                           
+                    {
+                        var parsed_m_baseBuild = Parse_SVersion_m_baseBuild();
+                        m_baseBuild = Option.Some(parsed_m_baseBuild);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+            }
+        }
+        return new SVersion
+        {   
+            m_flags = Option.OkOrReturnMissingFieldErr(m_flags),
+            m_major = Option.OkOrReturnMissingFieldErr(m_major),
+            m_minor = Option.OkOrReturnMissingFieldErr(m_minor),
+            m_revision = Option.OkOrReturnMissingFieldErr(m_revision),
+            m_build = Option.OkOrReturnMissingFieldErr(m_build),
+            m_baseBuild = Option.OkOrReturnMissingFieldErr(m_baseBuild),
+        };
+    }
+    public byte Parse_SVersion_m_flags()
+    {                             
+        var m_flags = tagged_vlq_int();
+        return ProtocolConversion<byte>.From(m_flags);
+    }//1
+    public byte Parse_SVersion_m_major()
+    {                             
+        var m_major = tagged_vlq_int();
+        return ProtocolConversion<byte>.From(m_major);
+    }//1
+    public byte Parse_SVersion_m_minor()
+    {                             
+        var m_minor = tagged_vlq_int();
+        return ProtocolConversion<byte>.From(m_minor);
+    }//1
+    public byte Parse_SVersion_m_revision()
+    {                             
+        var m_revision = tagged_vlq_int();
+        return ProtocolConversion<byte>.From(m_revision);
+    }//1
+    public uint Parse_SVersion_m_build()
+    {                             
+        var m_build = tagged_vlq_int();
+        return ProtocolConversion<uint>.From(m_build);
+    }//1
+    public uint Parse_SVersion_m_baseBuild()
+    {                             
+        var m_baseBuild = tagged_vlq_int();
+        return ProtocolConversion<uint>.From(m_baseBuild);
+    }//1
+
+    public GameSThumbnail Parse_GameSThumbnail() 
+    {
+        Option<List<byte>> m_file = Option.None;
+        ValidateStructTag();
+        var structFieldCount = ParseVlqInt();           
+        if (m_file is { HasValue: false })                           
+        {
+            var parsed_m_file = Parse_GameSThumbnail_m_file();
+            m_file = Option.Some(parsed_m_file);
+        }
+        return new GameSThumbnail
+        {   
+            m_file = Option.OkOrReturnMissingFieldErr(m_file),
+        };
+    }
+    public List<byte> Parse_GameSThumbnail_m_file()
+    {                             
+        var m_file = tagged_blob();
+        return m_file;
+    }//1
+
+    public GameSColor Parse_GameSColor() 
+    {
+        Option<byte> m_a = Option.None;
+        Option<byte> m_r = Option.None;
+        Option<byte> m_g = Option.None;
+        Option<byte> m_b = Option.None;
+        ValidateStructTag();
+        var structFieldCount = ParseVlqInt();           
+        for (var i = 0; i < structFieldCount; i++)
+        {
+            var fieldTag = ParseVlqInt();
+    
+            switch (fieldTag)
+            {
+                case 0:
+                {
+                    if (m_a is { HasValue: false })                           
+                    {
+                        var parsed_m_a = Parse_GameSColor_m_a();
+                        m_a = Option.Some(parsed_m_a);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 1:
+                {
+                    if (m_r is { HasValue: false })                           
+                    {
+                        var parsed_m_r = Parse_GameSColor_m_r();
+                        m_r = Option.Some(parsed_m_r);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 2:
+                {
+                    if (m_g is { HasValue: false })                           
+                    {
+                        var parsed_m_g = Parse_GameSColor_m_g();
+                        m_g = Option.Some(parsed_m_g);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 3:
+                {
+                    if (m_b is { HasValue: false })                           
+                    {
+                        var parsed_m_b = Parse_GameSColor_m_b();
+                        m_b = Option.Some(parsed_m_b);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+            }
+        }
+        return new GameSColor
+        {   
+            m_a = Option.OkOrReturnMissingFieldErr(m_a),
+            m_r = Option.OkOrReturnMissingFieldErr(m_r),
+            m_g = Option.OkOrReturnMissingFieldErr(m_g),
+            m_b = Option.OkOrReturnMissingFieldErr(m_b),
+        };
+    }
+    public byte Parse_GameSColor_m_a()
+    {                             
+        var m_a = tagged_vlq_int();
+        return ProtocolConversion<byte>.From(m_a);
+    }//1
+    public byte Parse_GameSColor_m_r()
+    {                             
+        var m_r = tagged_vlq_int();
+        return ProtocolConversion<byte>.From(m_r);
+    }//1
+    public byte Parse_GameSColor_m_g()
+    {                             
+        var m_g = tagged_vlq_int();
+        return ProtocolConversion<byte>.From(m_g);
+    }//1
+    public byte Parse_GameSColor_m_b()
+    {                             
+        var m_b = tagged_vlq_int();
+        return ProtocolConversion<byte>.From(m_b);
+    }//1
+
+    public GameSToonNameDetails Parse_GameSToonNameDetails() 
+    {
+        Option<byte> m_region = Option.None;
+        Option<uint> m_programId = Option.None;
+        Option<uint> m_realm = Option.None;
+        Option<List<byte>> m_name = Option.None;
+        ValidateStructTag();
+        var structFieldCount = ParseVlqInt();           
+        for (var i = 0; i < structFieldCount; i++)
+        {
+            var fieldTag = ParseVlqInt();
+    
+            switch (fieldTag)
+            {
+                case 0:
+                {
+                    if (m_region is { HasValue: false })                           
+                    {
+                        var parsed_m_region = Parse_GameSToonNameDetails_m_region();
+                        m_region = Option.Some(parsed_m_region);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 1:
+                {
+                    if (m_programId is { HasValue: false })                           
+                    {
+                        var parsed_m_programId = Parse_GameSToonNameDetails_m_programId();
+                        m_programId = Option.Some(parsed_m_programId);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 2:
+                {
+                    if (m_realm is { HasValue: false })                           
+                    {
+                        var parsed_m_realm = Parse_GameSToonNameDetails_m_realm();
+                        m_realm = Option.Some(parsed_m_realm);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 3:
+                {
+                    if (m_name is { HasValue: false })                           
+                    {
+                        var parsed_m_name = Parse_GameSToonNameDetails_m_name();
+                        m_name = Option.Some(parsed_m_name);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+            }
+        }
+        return new GameSToonNameDetails
+        {   
+            m_region = Option.OkOrReturnMissingFieldErr(m_region),
+            m_programId = Option.OkOrReturnMissingFieldErr(m_programId),
+            m_realm = Option.OkOrReturnMissingFieldErr(m_realm),
+            m_name = Option.OkOrReturnMissingFieldErr(m_name),
+        };
+    }
+    public byte Parse_GameSToonNameDetails_m_region()
+    {                             
+        var m_region = tagged_vlq_int();
+        return ProtocolConversion<byte>.From(m_region);
+    }//1
+    public uint Parse_GameSToonNameDetails_m_programId()
+    {                             
+        var m_programId = tagged_fourcc();
+        return m_programId;
+    }//1
+    public uint Parse_GameSToonNameDetails_m_realm()
+    {                             
+        var m_realm = tagged_vlq_int();
+        return ProtocolConversion<uint>.From(m_realm);
+    }//1
+    public List<byte> Parse_GameSToonNameDetails_m_name()
+    {                             
+        var m_name = tagged_blob();
+        return m_name;
+    }//1
+
+    public GameSPlayerDetails Parse_GameSPlayerDetails() 
+    {
+        Option<List<byte>> m_name = Option.None;
+        Option<GameSToonNameDetails> m_toon = Option.None;
+        Option<List<byte>> m_race = Option.None;
+        Option<GameSColor> m_color = Option.None;
+        Option<byte> m_control = Option.None;
+        Option<byte> m_teamId = Option.None;
+        Option<uint> m_handicap = Option.None;
+        Option<EObserve> m_observe = Option.None;
+        Option<GameEResultDetails> m_result = Option.None;
+        ValidateStructTag();
+        var structFieldCount = ParseVlqInt();           
+        for (var i = 0; i < structFieldCount; i++)
+        {
+            var fieldTag = ParseVlqInt();
+    
+            switch (fieldTag)
+            {
+                case 0:
+                {
+                    if (m_name is { HasValue: false })                           
+                    {
+                        var parsed_m_name = Parse_GameSPlayerDetails_m_name();
+                        m_name = Option.Some(parsed_m_name);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 1:
+                {
+                    if (m_toon is { HasValue: false })                           
+                    {
+                        var parsed_m_toon = Parse_GameSPlayerDetails_m_toon();
+                        m_toon = Option.Some(parsed_m_toon);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 2:
+                {
+                    if (m_race is { HasValue: false })                           
+                    {
+                        var parsed_m_race = Parse_GameSPlayerDetails_m_race();
+                        m_race = Option.Some(parsed_m_race);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 3:
+                {
+                    if (m_color is { HasValue: false })                           
+                    {
+                        var parsed_m_color = Parse_GameSPlayerDetails_m_color();
+                        m_color = Option.Some(parsed_m_color);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 4:
+                {
+                    if (m_control is { HasValue: false })                           
+                    {
+                        var parsed_m_control = Parse_GameSPlayerDetails_m_control();
+                        m_control = Option.Some(parsed_m_control);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 5:
+                {
+                    if (m_teamId is { HasValue: false })                           
+                    {
+                        var parsed_m_teamId = Parse_GameSPlayerDetails_m_teamId();
+                        m_teamId = Option.Some(parsed_m_teamId);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 6:
+                {
+                    if (m_handicap is { HasValue: false })                           
+                    {
+                        var parsed_m_handicap = Parse_GameSPlayerDetails_m_handicap();
+                        m_handicap = Option.Some(parsed_m_handicap);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 7:
+                {
+                    if (m_observe is { HasValue: false })                           
+                    {
+                        var parsed_m_observe = Parse_GameSPlayerDetails_m_observe();
+                        m_observe = Option.Some(parsed_m_observe);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 8:
+                {
+                    if (m_result is { HasValue: false })                           
+                    {
+                        var parsed_m_result = Parse_GameSPlayerDetails_m_result();
+                        m_result = Option.Some(parsed_m_result);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+            }
+        }
+        return new GameSPlayerDetails
+        {   
+            m_name = Option.OkOrReturnMissingFieldErr(m_name),
+            m_toon = Option.OkOrReturnMissingFieldErr(m_toon),
+            m_race = Option.OkOrReturnMissingFieldErr(m_race),
+            m_color = Option.OkOrReturnMissingFieldErr(m_color),
+            m_control = Option.OkOrReturnMissingFieldErr(m_control),
+            m_teamId = Option.OkOrReturnMissingFieldErr(m_teamId),
+            m_handicap = Option.OkOrReturnMissingFieldErr(m_handicap),
+            m_observe = Option.OkOrReturnMissingFieldErr(m_observe),
+            m_result = Option.OkOrReturnMissingFieldErr(m_result),
+        };
+    }
+    public List<byte> Parse_GameSPlayerDetails_m_name()
+    {                             
+        var m_name = tagged_blob();
+        return m_name;
+    }//1
+    public GameSToonNameDetails Parse_GameSPlayerDetails_m_toon()
+    {                             
+        var m_toon = Parse_GameSToonNameDetails();
+        return m_toon;
+    }//1
+    public List<byte> Parse_GameSPlayerDetails_m_race()
+    {                             
+        var m_race = tagged_blob();
+        return m_race;
+    }//1
+    public GameSColor Parse_GameSPlayerDetails_m_color()
+    {                             
+        var m_color = Parse_GameSColor();
+        return m_color;
+    }//1
+    public byte Parse_GameSPlayerDetails_m_control()
+    {                             
+        var m_control = tagged_vlq_int();
+        return ProtocolConversion<byte>.From(m_control);
+    }//1
+    public byte Parse_GameSPlayerDetails_m_teamId()
+    {                             
+        var m_teamId = tagged_vlq_int();
+        return ProtocolConversion<byte>.From(m_teamId);
+    }//1
+    public uint Parse_GameSPlayerDetails_m_handicap()
+    {                             
+        var m_handicap = tagged_vlq_int();
+        return ProtocolConversion<uint>.From(m_handicap);
+    }//1
+    public EObserve Parse_GameSPlayerDetails_m_observe()
+    {                             
+        var m_observe = Parse_EObserve();
+        return m_observe;
+    }//1
+    public GameEResultDetails Parse_GameSPlayerDetails_m_result()
+    {                             
+        var m_result = Parse_GameEResultDetails();
+        return m_result;
+    }//1
+
+    public GameSDetails Parse_GameSDetails() 
+    {
+        var m_playerList = Option.Some<Option<List<GameSPlayerDetails>>>(Option.None);
+        Option<List<byte>> m_title = Option.None;
+        Option<List<byte>> m_difficulty = Option.None;
+        Option<GameSThumbnail> m_thumbnail = Option.None;
+        Option<bool> m_isBlizzardMap = Option.None;
+        Option<long> m_timeUTC = Option.None;
+        Option<long> m_timeLocalOffset = Option.None;
+        Option<List<byte>> m_description = Option.None;
+        Option<List<byte>> m_imageFilePath = Option.None;
+        Option<List<byte>> m_mapFileName = Option.None;
+        var m_cacheHandles = Option.Some<Option<List<List<byte>>>>(Option.None);
+        Option<bool> m_miniSave = Option.None;
+        Option<GameEGameSpeed> m_gameSpeed = Option.None;
+        Option<uint> m_defaultDifficulty = Option.None;
+        ValidateStructTag();
+        var structFieldCount = ParseVlqInt();           
+        for (var i = 0; i < structFieldCount; i++)
+        {
+            var fieldTag = ParseVlqInt();
+    
+            switch (fieldTag)
+            {
+                case 0:
+                {
+                    if (m_playerList is { HasValue: true, Value.HasValue: false })
+                    {
+                        var parsed_m_playerList = Parse_GameSDetails_m_playerList();
+                        m_playerList = Option.Some(parsed_m_playerList);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 1:
+                {
+                    if (m_title is { HasValue: false })                           
+                    {
+                        var parsed_m_title = Parse_GameSDetails_m_title();
+                        m_title = Option.Some(parsed_m_title);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 2:
+                {
+                    if (m_difficulty is { HasValue: false })                           
+                    {
+                        var parsed_m_difficulty = Parse_GameSDetails_m_difficulty();
+                        m_difficulty = Option.Some(parsed_m_difficulty);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 3:
+                {
+                    if (m_thumbnail is { HasValue: false })                           
+                    {
+                        var parsed_m_thumbnail = Parse_GameSDetails_m_thumbnail();
+                        m_thumbnail = Option.Some(parsed_m_thumbnail);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 4:
+                {
+                    if (m_isBlizzardMap is { HasValue: false })                           
+                    {
+                        var parsed_m_isBlizzardMap = Parse_GameSDetails_m_isBlizzardMap();
+                        m_isBlizzardMap = Option.Some(parsed_m_isBlizzardMap);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 5:
+                {
+                    if (m_timeUTC is { HasValue: false })                           
+                    {
+                        var parsed_m_timeUTC = Parse_GameSDetails_m_timeUTC();
+                        m_timeUTC = Option.Some(parsed_m_timeUTC);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 6:
+                {
+                    if (m_timeLocalOffset is { HasValue: false })                           
+                    {
+                        var parsed_m_timeLocalOffset = Parse_GameSDetails_m_timeLocalOffset();
+                        m_timeLocalOffset = Option.Some(parsed_m_timeLocalOffset);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 7:
+                {
+                    if (m_description is { HasValue: false })                           
+                    {
+                        var parsed_m_description = Parse_GameSDetails_m_description();
+                        m_description = Option.Some(parsed_m_description);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 8:
+                {
+                    if (m_imageFilePath is { HasValue: false })                           
+                    {
+                        var parsed_m_imageFilePath = Parse_GameSDetails_m_imageFilePath();
+                        m_imageFilePath = Option.Some(parsed_m_imageFilePath);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 9:
+                {
+                    if (m_mapFileName is { HasValue: false })                           
+                    {
+                        var parsed_m_mapFileName = Parse_GameSDetails_m_mapFileName();
+                        m_mapFileName = Option.Some(parsed_m_mapFileName);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 10:
+                {
+                    if (m_cacheHandles is { HasValue: true, Value.HasValue: false })
+                    {
+                        var parsed_m_cacheHandles = Parse_GameSDetails_m_cacheHandles();
+                        m_cacheHandles = Option.Some(parsed_m_cacheHandles);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 11:
+                {
+                    if (m_miniSave is { HasValue: false })                           
+                    {
+                        var parsed_m_miniSave = Parse_GameSDetails_m_miniSave();
+                        m_miniSave = Option.Some(parsed_m_miniSave);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 12:
+                {
+                    if (m_gameSpeed is { HasValue: false })                           
+                    {
+                        var parsed_m_gameSpeed = Parse_GameSDetails_m_gameSpeed();
+                        m_gameSpeed = Option.Some(parsed_m_gameSpeed);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 13:
+                {
+                    if (m_defaultDifficulty is { HasValue: false })                           
+                    {
+                        var parsed_m_defaultDifficulty = Parse_GameSDetails_m_defaultDifficulty();
+                        m_defaultDifficulty = Option.Some(parsed_m_defaultDifficulty);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+            }
+        }
+        return new GameSDetails
+        {   
+            m_playerList = Option.OkOrReturnMissingFieldErr(m_playerList),
+            m_title = Option.OkOrReturnMissingFieldErr(m_title),
+            m_difficulty = Option.OkOrReturnMissingFieldErr(m_difficulty),
+            m_thumbnail = Option.OkOrReturnMissingFieldErr(m_thumbnail),
+            m_isBlizzardMap = Option.OkOrReturnMissingFieldErr(m_isBlizzardMap),
+            m_timeUTC = Option.OkOrReturnMissingFieldErr(m_timeUTC),
+            m_timeLocalOffset = Option.OkOrReturnMissingFieldErr(m_timeLocalOffset),
+            m_description = Option.OkOrReturnMissingFieldErr(m_description),
+            m_imageFilePath = Option.OkOrReturnMissingFieldErr(m_imageFilePath),
+            m_mapFileName = Option.OkOrReturnMissingFieldErr(m_mapFileName),
+            m_cacheHandles = Option.OkOrReturnMissingFieldErr(m_cacheHandles),
+            m_miniSave = Option.OkOrReturnMissingFieldErr(m_miniSave),
+            m_gameSpeed = Option.OkOrReturnMissingFieldErr(m_gameSpeed),
+            m_defaultDifficulty = Option.OkOrReturnMissingFieldErr(m_defaultDifficulty),
+        };
+    }
+    public Option<List<GameSPlayerDetails>> Parse_GameSDetails_m_playerList()
+    {                             
+        ValidateOptTag();
+        var isProvided = ReadByte(); // nom::number::complete::u8(tail)
+
+        Option<List<GameSPlayerDetails>> m_playerList = default;
+        if (isProvided != 0)
+        {                                   
+            ValidateArrayTag();
+            var arrayLength = ParseVlqInt();
+            var array = ReadList(Parse_GameSPlayerDetails, arrayLength);
+            m_playerList = Option.Some(array);
+        }
+        else
+        {
+            m_playerList = Option.None;
+        }
+
+        return m_playerList;
+    }//1
+    public List<byte> Parse_GameSDetails_m_title()
+    {                             
+        var m_title = tagged_blob();
+        return m_title;
+    }//1
+    public List<byte> Parse_GameSDetails_m_difficulty()
+    {                             
+        var m_difficulty = tagged_blob();
+        return m_difficulty;
+    }//1
+    public GameSThumbnail Parse_GameSDetails_m_thumbnail()
+    {                             
+        var m_thumbnail = Parse_GameSThumbnail();
+        return m_thumbnail;
+    }//1
+    public bool Parse_GameSDetails_m_isBlizzardMap()
+    {                             
+        var m_isBlizzardMap = tagged_bool();
+        return m_isBlizzardMap;
+    }//1
+    public long Parse_GameSDetails_m_timeUTC()
+    {                             
+        var m_timeUTC = tagged_vlq_int();
+        return ProtocolConversion<long>.From(m_timeUTC);
+    }//1
+    public long Parse_GameSDetails_m_timeLocalOffset()
+    {                             
+        var m_timeLocalOffset = tagged_vlq_int();
+        return ProtocolConversion<long>.From(m_timeLocalOffset);
+    }//1
+    public List<byte> Parse_GameSDetails_m_description()
+    {                             
+        var m_description = tagged_blob();
+        return m_description;
+    }//1
+    public List<byte> Parse_GameSDetails_m_imageFilePath()
+    {                             
+        var m_imageFilePath = tagged_blob();
+        return m_imageFilePath;
+    }//1
+    public List<byte> Parse_GameSDetails_m_mapFileName()
+    {                             
+        var m_mapFileName = tagged_blob();
+        return m_mapFileName;
+    }//1
+    public Option<List<List<byte>>> Parse_GameSDetails_m_cacheHandles()
+    {                             
+        ValidateOptTag();
+        var isProvided = ReadByte(); // nom::number::complete::u8(tail)
+
+        Option<List<List<byte>>> m_cacheHandles = default;
+        if (isProvided != 0)
+        {                                   
+            ValidateArrayTag();
+            var arrayLength = ParseVlqInt();
+            var array = ReadList(tagged_blob, arrayLength);
+            m_cacheHandles = Option.Some(array);
+        }
+        else
+        {
+            m_cacheHandles = Option.None;
+        }
+
+        return m_cacheHandles;
+    }//1
+    public bool Parse_GameSDetails_m_miniSave()
+    {                             
+        var m_miniSave = tagged_bool();
+        return m_miniSave;
+    }//1
+    public GameEGameSpeed Parse_GameSDetails_m_gameSpeed()
+    {                             
+        var m_gameSpeed = Parse_GameEGameSpeed();
+        return m_gameSpeed;
+    }//1
+    public uint Parse_GameSDetails_m_defaultDifficulty()
+    {                             
+        var m_defaultDifficulty = tagged_vlq_int();
+        return ProtocolConversion<uint>.From(m_defaultDifficulty);
+    }//1
+
+    public ReplaySHeader Parse_ReplaySHeader() 
+    {
+        Option<List<byte>> m_signature = Option.None;
+        Option<SVersion> m_version = Option.None;
+        Option<byte> m_type = Option.None;
+        Option<uint> m_elapsedGameLoops = Option.None;
+        ValidateStructTag();
+        var structFieldCount = ParseVlqInt();           
+        for (var i = 0; i < structFieldCount; i++)
+        {
+            var fieldTag = ParseVlqInt();
+    
+            switch (fieldTag)
+            {
+                case 0:
+                {
+                    if (m_signature is { HasValue: false })                           
+                    {
+                        var parsed_m_signature = Parse_ReplaySHeader_m_signature();
+                        m_signature = Option.Some(parsed_m_signature);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 1:
+                {
+                    if (m_version is { HasValue: false })                           
+                    {
+                        var parsed_m_version = Parse_ReplaySHeader_m_version();
+                        m_version = Option.Some(parsed_m_version);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 2:
+                {
+                    if (m_type is { HasValue: false })                           
+                    {
+                        var parsed_m_type = Parse_ReplaySHeader_m_type();
+                        m_type = Option.Some(parsed_m_type);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 3:
+                {
+                    if (m_elapsedGameLoops is { HasValue: false })                           
+                    {
+                        var parsed_m_elapsedGameLoops = Parse_ReplaySHeader_m_elapsedGameLoops();
+                        m_elapsedGameLoops = Option.Some(parsed_m_elapsedGameLoops);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+            }
+        }
+        return new ReplaySHeader
+        {   
+            m_signature = Option.OkOrReturnMissingFieldErr(m_signature),
+            m_version = Option.OkOrReturnMissingFieldErr(m_version),
+            m_type = Option.OkOrReturnMissingFieldErr(m_type),
+            m_elapsedGameLoops = Option.OkOrReturnMissingFieldErr(m_elapsedGameLoops),
+        };
+    }
+    public List<byte> Parse_ReplaySHeader_m_signature()
+    {                             
+        var m_signature = tagged_blob();
+        return m_signature;
+    }//1
+    public SVersion Parse_ReplaySHeader_m_version()
+    {                             
+        var m_version = Parse_SVersion();
+        return m_version;
+    }//1
+    public byte Parse_ReplaySHeader_m_type()
+    {                             
+        var m_type = tagged_vlq_int();
+        return ProtocolConversion<byte>.From(m_type);
+    }//1
+    public uint Parse_ReplaySHeader_m_elapsedGameLoops()
+    {                             
+        var m_elapsedGameLoops = tagged_vlq_int();
+        return ProtocolConversion<uint>.From(m_elapsedGameLoops);
+    }//1
+
+}

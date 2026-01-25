@@ -9,7 +9,7 @@ using static Sc2ReplayAnalyzer.Json.Sc2JsonType;
 internal class Sc2StructGenerator(StringBuilder builder, Sc2GeneratorData data)
     : Sc2GeneratorBase(builder, data)
 {
-    public void GenerateStructs<T>(IReadOnlyList<JsonNode> nodes)
+    public void Generate<T>(IReadOnlyList<JsonNode> nodes)
         where T : ISc2JsonTypeConversionAlignment
     {
         var structNodes = nodes.Where(x => x[TypeInfo][Type].ToString() is "StructType");
@@ -17,6 +17,12 @@ internal class Sc2StructGenerator(StringBuilder builder, Sc2GeneratorData data)
         foreach (var node in structNodes)
         {
             var unitTypeName = node[FullName].ToString();
+
+            if (unitTypeName is "NNet.Game.SDetails")
+            {
+
+            }
+
             var unitType = node[TypeInfo][Type].ToString();
             var fields = node[TypeInfo][Fields].AsArray();
             var hasTags = fields.Count > 1 && fields[0]["tag"] is not null;
@@ -33,7 +39,8 @@ internal class Sc2StructGenerator(StringBuilder builder, Sc2GeneratorData data)
 
                 methodParser.CloseStruct(hasTags);
                 methodParser.Finalise();
-                Close(methodParser.MethodBuilder);
+
+                Close();
             }
         }
     }

@@ -5,7 +5,6 @@ namespace Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes.MethodGenerators;
 
 internal interface ISc2MethodParser
 {
-    StringBuilder MethodBuilder { get; }
     void OpenStruct(string unitTypeName, bool hasTags);
 
     void ContinueFieldStruct(

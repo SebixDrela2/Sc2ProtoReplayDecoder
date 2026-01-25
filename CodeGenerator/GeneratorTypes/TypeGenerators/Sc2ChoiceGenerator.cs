@@ -11,7 +11,7 @@ using static Sc2ReplayAnalyzer.Json.Sc2JsonType;
 internal class Sc2ChoiceGenerator(StringBuilder builder, Sc2GeneratorData data)
     : Sc2GeneratorBase(builder, data)
 {
-    public void GenerateChoices<T>(IReadOnlyList<JsonNode> nodes)
+    public void Generate<T>(IReadOnlyList<JsonNode> nodes)
         where T : ISc2JsonTypeConversionAlignment
     {
         var choiceNodes = nodes.Where(x => x[TypeInfo][Type].ToString() is "ChoiceType");
@@ -67,7 +67,7 @@ internal class Sc2ChoiceGenerator(StringBuilder builder, Sc2GeneratorData data)
         if (OpenClass(variantName, fullName))
         {
             AddField("Value", fieldType);
-            Close(GetMethodParser<T>().MethodBuilder);
+            Close();
         }       
     }
 }

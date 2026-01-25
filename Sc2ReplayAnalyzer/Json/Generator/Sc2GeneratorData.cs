@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Nodes;
+﻿using System.Text;
+using System.Text.Json.Nodes;
 
 namespace Sc2ReplayAnalyzer.Json.Generator;
 
@@ -10,4 +11,5 @@ public class Sc2GeneratorData
     public required IReadOnlyList<JsonNode> BitPacked;
 
     public readonly Dictionary<string, string> ChoiceMap = [];
+    public readonly StringBuilder ParserGenerator = new();
 }

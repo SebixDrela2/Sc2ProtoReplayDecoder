@@ -21,7 +21,7 @@ internal class Sc2IntGenerator(StringBuilder builder, Sc2GeneratorData data)
             {
                 AddField("Value", "long");
 
-                Close(GetMethodParser<T>().MethodBuilder);
+                Close();
             }
         }
     }

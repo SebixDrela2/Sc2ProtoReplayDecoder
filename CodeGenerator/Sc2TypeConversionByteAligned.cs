@@ -29,7 +29,7 @@ public class Sc2TypeConversionBitPacked : ISc2JsonTypeConversionAlignment
             return new Sc2JsonTypeConversion
             {
                 CSharpType = nnetName,
-                Parser = $"{nnetName}.Parse"
+                Parser = $"Parse_{nnetName}"
             };
         }
 
@@ -87,7 +87,7 @@ public class Sc2TypeConversionBitPacked : ISc2JsonTypeConversionAlignment
             ? new Sc2JsonTypeConversion
             {
                 CSharpType = "m_eventData",
-                Parser = "m_eventData.Parse",
+                Parser = "Parse_m_eventData",
             }
             : FromNnetName(fieldTypeInfo);
 
@@ -225,7 +225,7 @@ public class Sc2TypeConversionByteAligned : ISc2JsonTypeConversionAlignment
         "NNet.SVersion" => new Sc2JsonTypeConversion
         {
             CSharpType = "SVersion",
-            Parser = "SVersion.Parse"
+            Parser = "Parse_SVersion"
         },
         "NNet.Game.TColorId" or "NNet.int64" => new Sc2JsonTypeConversion
         {
@@ -278,17 +278,17 @@ public class Sc2TypeConversionByteAligned : ISc2JsonTypeConversionAlignment
         "NNet.SMD5" => new Sc2JsonTypeConversion
         {
             CSharpType = "SMD5",
-            Parser = "SMD5.Parse",
+            Parser = "Parse_SMD5",
         },
         "NNet.EObserve" => new Sc2JsonTypeConversion
         {
             CSharpType = "EObserve",
-            Parser = "EObserve.Parse",
+            Parser = "Parse_EObserve",
         },
         "NNet.Game.EResultDetails" => new Sc2JsonTypeConversion
         {
             CSharpType = "GameEResultDetails",
-            Parser = "GameEResultDetails.Parse"
+            Parser = "Parse_GameEResultDetails"
         },
         "NNet.Game.CCacheHandles" => new Sc2JsonTypeConversion
         {
@@ -299,17 +299,18 @@ public class Sc2TypeConversionByteAligned : ISc2JsonTypeConversionAlignment
         "NNet.Replay.Tracker.SPlayerStats" => new Sc2JsonTypeConversion
         {
             CSharpType = "ReplayTrackerSPlayerStats",
-            Parser = "ReplayTrackerSPlayerStats.Parse"
+            Parser = "Parse_ReplayTrackerSPlayerStats"
         },
         "NNet.Game.CPlayerDetailsArray" => new Sc2JsonTypeConversion
         {
             CSharpType = "List<GameSPlayerDetails>",
-            Parser = "GameSPlayerDetails.Parse"
+            Parser = "Parse_GameSPlayerDetails",
+            IsVector = true
         },
         "NNet.Game.SThumbnail" => new Sc2JsonTypeConversion
         {
             CSharpType = "GameSThumbnail",
-            Parser = "GameSThumbnail.Parse"
+            Parser = "Parse_GameSThumbnail"
         },
         "NNet.Game.CModPaths" => new Sc2JsonTypeConversion
         {
@@ -320,17 +321,17 @@ public class Sc2TypeConversionByteAligned : ISc2JsonTypeConversionAlignment
         "NNet.Game.EGameSpeed" => new Sc2JsonTypeConversion
         {
             CSharpType = "GameEGameSpeed",
-            Parser = "GameEGameSpeed.Parse"
+            Parser = "Parse_GameEGameSpeed"
         },
         "NNet.Game.SToonNameDetails" => new Sc2JsonTypeConversion
         {
             CSharpType = "GameSToonNameDetails",
-            Parser = "GameSToonNameDetails.Parse"
+            Parser = "Parse_GameSToonNameDetails"
         },
         "NNet.Game.SColor" => new Sc2JsonTypeConversion
         {
             CSharpType = "GameSColor",
-            Parser = "GameSColor.Parse"
+            Parser = "Parse_GameSColor"
         },
         var x => throw new NotSupportedException($"WTF TYPE {x}")
     };

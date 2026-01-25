@@ -8,12 +8,9 @@ namespace Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes.MethodGenerators;
 using static Sc2ReplayAnalyzer.Json.Sc2JsonType;
 internal class Sc2ByteMethodParser(StringBuilder methodBuilder, Sc2GeneratorData data) : ISc2MethodParser
 {
-    private readonly string ClassUnderTest = "TRacePreference";
     public string DebugView => GetDebugView();
 
-    public StringBuilder MethodBuilder => methodBuilder;
-   
-
+    private readonly StringBuilder _parserBuilder = data.ParserGenerator;
     private readonly StringBuilder _methodInitializerBuilder = new StringBuilder();
     private readonly StringBuilder _fieldNameMethodBuilder = new StringBuilder();
     private readonly StringBuilder _methodStarter = new StringBuilder();
@@ -24,25 +21,20 @@ internal class Sc2ByteMethodParser(StringBuilder methodBuilder, Sc2GeneratorData
         var methodCtorBuilder = new StringBuilder();
         var typeName = Sc2TypeUtils.GetTypeName(unitTypeName);
 
-        if (typeName == ClassUnderTest)
-        {
-
-        }
-
         _methodInitializerBuilder.AppendLine($$"""
                         return new {{typeName}}
                         {   
                 """);
 
-        methodBuilder.AppendLine();
-        methodBuilder.AppendLine($$"""
-                    public static {{typeName}} Parse(ProtocolReader reader) 
+        _parserBuilder.AppendLine();
+        _parserBuilder.AppendLine($$"""
+                    public {{typeName}} Parse_{{typeName}}() 
                     {
                 """);
 
         _generalMethodBuilder.AppendLine($$"""
-                        reader.ValidateStructTag();
-                        var structFieldCount = reader.ParseVlqInt();           
+                        ValidateStructTag();
+                        var structFieldCount = ParseVlqInt();           
                 """);
 
         if (hasTags)
@@ -50,7 +42,7 @@ internal class Sc2ByteMethodParser(StringBuilder methodBuilder, Sc2GeneratorData
             _generalMethodBuilder.AppendLine($$"""
                         for (var i = 0; i < structFieldCount; i++)
                         {
-                            var fieldTag = reader.ParseVlqInt();
+                            var fieldTag = ParseVlqInt();
                     
                             switch (fieldTag)
                             {
@@ -66,6 +58,8 @@ internal class Sc2ByteMethodParser(StringBuilder methodBuilder, Sc2GeneratorData
         string unitTypeName,
         bool hasTags)
     {
+        var typeName = Sc2TypeUtils.GetTypeName(unitTypeName);
+
         if (fieldConverted.IsOptional)
         {
             _methodStarter.AppendLine($"""
@@ -107,7 +101,7 @@ internal class Sc2ByteMethodParser(StringBuilder methodBuilder, Sc2GeneratorData
         {
             _generalMethodBuilder.AppendLine($$"""
                                     {
-                                        var parsed_{{fieldName}} = Parse_{{fieldName}}(reader);
+                                        var parsed_{{fieldName}} = Parse_{{typeName}}_{{fieldName}}();
                                         {{fieldName}} = Option.Some(parsed_{{fieldName}});
                                         continue;
                                     }
@@ -123,7 +117,7 @@ internal class Sc2ByteMethodParser(StringBuilder methodBuilder, Sc2GeneratorData
         {
             _generalMethodBuilder.AppendLine($$"""
                 {{tabs}}        {
-                {{tabs}}            var parsed_{{fieldName}} = Parse_{{fieldName}}(reader);
+                {{tabs}}            var parsed_{{fieldName}} = Parse_{{typeName}}_{{fieldName}}();
                 {{tabs}}            {{fieldName}} = Option.Some(parsed_{{fieldName}});
                 {{tabs}}        }
                 """);
@@ -135,17 +129,17 @@ internal class Sc2ByteMethodParser(StringBuilder methodBuilder, Sc2GeneratorData
 
 
         _fieldNameMethodBuilder.AppendLine($$"""
-                    public static {{fieldType}} Parse_{{fieldName}}(ProtocolReader reader)
+                    public {{fieldType}} Parse_{{typeName}}_{{fieldName}}()
                     {                             
                 """);
 
         if (fieldConverted.IsOptional)
         {
             _fieldNameMethodBuilder.AppendLine($$"""
-                        reader.ValidateOptTag();
-                        var isProvided = reader.ReadByte(); // nom::number::complete::u8(tail)
-                        var {{fieldName}} = null;
+                        ValidateOptTag();
+                        var isProvided = ReadByte(); // nom::number::complete::u8(tail)
 
+                        {{fieldType}} {{fieldName}} = default;
                         if (isProvided != 0)
                         {                                   
                 """);
@@ -153,11 +147,9 @@ internal class Sc2ByteMethodParser(StringBuilder methodBuilder, Sc2GeneratorData
             if (fieldConverted.IsVector)
             {
                 _fieldNameMethodBuilder.AppendLine($$"""
-                            reader.ValidateArrayTag();
-                            var arrayLength = reader.ParseVlqInt();
-
-                            var array = Enumerable.Range(0, arrayLength).Select(_ => reader.{{fieldConverted.Parser}}()).ToArray();
-
+                            ValidateArrayTag();
+                            var arrayLength = ParseVlqInt();
+                            var array = ReadList({{fieldConverted.Parser}}, arrayLength);
                 """);
 
                 if (fieldConverted.ShouldTryFrom)
@@ -174,7 +166,7 @@ internal class Sc2ByteMethodParser(StringBuilder methodBuilder, Sc2GeneratorData
             else
             {
                 _fieldNameMethodBuilder.AppendLine($$"""
-                            var res = reader.{{fieldConverted.Parser}}();
+                            var res = {{fieldConverted.Parser}}();
 
                 """);
 
@@ -205,9 +197,9 @@ internal class Sc2ByteMethodParser(StringBuilder methodBuilder, Sc2GeneratorData
         else if (fieldConverted.IsVector)
         {
             _fieldNameMethodBuilder.AppendLine($$"""
-                        reader.ValidateArrayTag();
-                        var arrayLength = reader.ParseVlqInt();
-                        var array = Enumerable.Range(0, arrayLength).Select(_ => reader.{{fieldConverted.Parser}}()).ToArray();
+                        ValidateArrayTag();
+                        var arrayLength = ParseVlqInt();
+                        var array = ReadArray({{fieldConverted.Parser}}, arrayLength);
 
                 """);
 
@@ -221,7 +213,7 @@ internal class Sc2ByteMethodParser(StringBuilder methodBuilder, Sc2GeneratorData
         else if (fieldConverted.IsSizedInt)
         {
             _fieldNameMethodBuilder.AppendLine($$"""
-                        var {{fieldName}} = reader.{{fieldConverted.Parser}}();
+                        var {{fieldName}} = {{fieldConverted.Parser}}();
 
                         return {{fieldName}};
                 """);
@@ -229,7 +221,7 @@ internal class Sc2ByteMethodParser(StringBuilder methodBuilder, Sc2GeneratorData
         else
         {
             _fieldNameMethodBuilder.AppendLine($$"""
-                        var {{fieldName}} = reader.{{fieldConverted.Parser}}();
+                        var {{fieldName}} = {{fieldConverted.Parser}}();
                 """);
 
             if (fieldConverted.ShouldTryFrom)
@@ -269,10 +261,10 @@ internal class Sc2ByteMethodParser(StringBuilder methodBuilder, Sc2GeneratorData
 
     public void Finalise()
     {
-        methodBuilder.Append(_methodStarter);
-        methodBuilder.Append(_generalMethodBuilder);
-        methodBuilder.Append(_methodInitializerBuilder);
-        methodBuilder.Append(_fieldNameMethodBuilder);
+        _parserBuilder.Append(_methodStarter);
+        _parserBuilder.Append(_generalMethodBuilder);
+        _parserBuilder.Append(_methodInitializerBuilder);
+        _parserBuilder.Append(_fieldNameMethodBuilder);
 
         _methodInitializerBuilder.Clear();
         _fieldNameMethodBuilder.Clear();
