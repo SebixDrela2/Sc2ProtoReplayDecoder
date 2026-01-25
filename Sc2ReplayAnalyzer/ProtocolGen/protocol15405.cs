@@ -1920,32 +1920,32 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
     {                             
         var m_flags = tagged_vlq_int();
         return ProtocolConversion<byte>.From(m_flags);
-    }//1
+    }
     public byte Parse_SVersion_m_major()
     {                             
         var m_major = tagged_vlq_int();
         return ProtocolConversion<byte>.From(m_major);
-    }//1
+    }
     public byte Parse_SVersion_m_minor()
     {                             
         var m_minor = tagged_vlq_int();
         return ProtocolConversion<byte>.From(m_minor);
-    }//1
+    }
     public byte Parse_SVersion_m_revision()
     {                             
         var m_revision = tagged_vlq_int();
         return ProtocolConversion<byte>.From(m_revision);
-    }//1
+    }
     public uint Parse_SVersion_m_build()
     {                             
         var m_build = tagged_vlq_int();
         return ProtocolConversion<uint>.From(m_build);
-    }//1
+    }
     public uint Parse_SVersion_m_baseBuild()
     {                             
         var m_baseBuild = tagged_vlq_int();
         return ProtocolConversion<uint>.From(m_baseBuild);
-    }//1
+    }
 
     public GameSThumbnail Parse_GameSThumbnail() 
     {
@@ -1966,7 +1966,7 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
     {                             
         var m_file = tagged_blob();
         return m_file;
-    }//1
+    }
 
     public GameSColor Parse_GameSColor() 
     {
@@ -2052,22 +2052,22 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
     {                             
         var m_a = tagged_vlq_int();
         return ProtocolConversion<byte>.From(m_a);
-    }//1
+    }
     public byte Parse_GameSColor_m_r()
     {                             
         var m_r = tagged_vlq_int();
         return ProtocolConversion<byte>.From(m_r);
-    }//1
+    }
     public byte Parse_GameSColor_m_g()
     {                             
         var m_g = tagged_vlq_int();
         return ProtocolConversion<byte>.From(m_g);
-    }//1
+    }
     public byte Parse_GameSColor_m_b()
     {                             
         var m_b = tagged_vlq_int();
         return ProtocolConversion<byte>.From(m_b);
-    }//1
+    }
 
     public GameSToonNameDetails Parse_GameSToonNameDetails() 
     {
@@ -2153,22 +2153,22 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
     {                             
         var m_region = tagged_vlq_int();
         return ProtocolConversion<byte>.From(m_region);
-    }//1
+    }
     public uint Parse_GameSToonNameDetails_m_programId()
     {                             
         var m_programId = tagged_fourcc();
         return m_programId;
-    }//1
+    }
     public uint Parse_GameSToonNameDetails_m_realm()
     {                             
         var m_realm = tagged_vlq_int();
         return ProtocolConversion<uint>.From(m_realm);
-    }//1
+    }
     public List<byte> Parse_GameSToonNameDetails_m_name()
     {                             
         var m_name = tagged_blob();
         return m_name;
-    }//1
+    }
 
     public GameSPlayerDetails Parse_GameSPlayerDetails() 
     {
@@ -2334,47 +2334,47 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
     {                             
         var m_name = tagged_blob();
         return m_name;
-    }//1
+    }
     public GameSToonNameDetails Parse_GameSPlayerDetails_m_toon()
     {                             
         var m_toon = Parse_GameSToonNameDetails();
         return m_toon;
-    }//1
+    }
     public List<byte> Parse_GameSPlayerDetails_m_race()
     {                             
         var m_race = tagged_blob();
         return m_race;
-    }//1
+    }
     public GameSColor Parse_GameSPlayerDetails_m_color()
     {                             
         var m_color = Parse_GameSColor();
         return m_color;
-    }//1
+    }
     public byte Parse_GameSPlayerDetails_m_control()
     {                             
         var m_control = tagged_vlq_int();
         return ProtocolConversion<byte>.From(m_control);
-    }//1
+    }
     public byte Parse_GameSPlayerDetails_m_teamId()
     {                             
         var m_teamId = tagged_vlq_int();
         return ProtocolConversion<byte>.From(m_teamId);
-    }//1
+    }
     public uint Parse_GameSPlayerDetails_m_handicap()
     {                             
         var m_handicap = tagged_vlq_int();
         return ProtocolConversion<uint>.From(m_handicap);
-    }//1
+    }
     public EObserve Parse_GameSPlayerDetails_m_observe()
     {                             
         var m_observe = Parse_EObserve();
         return m_observe;
-    }//1
+    }
     public GameEResultDetails Parse_GameSPlayerDetails_m_result()
     {                             
         var m_result = Parse_GameEResultDetails();
         return m_result;
-    }//1
+    }
 
     public GameSDetails Parse_GameSDetails() 
     {
@@ -2635,52 +2635,52 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
         }
 
         return m_playerList;
-    }//1
+    }
     public List<byte> Parse_GameSDetails_m_title()
     {                             
         var m_title = tagged_blob();
         return m_title;
-    }//1
+    }
     public List<byte> Parse_GameSDetails_m_difficulty()
     {                             
         var m_difficulty = tagged_blob();
         return m_difficulty;
-    }//1
+    }
     public GameSThumbnail Parse_GameSDetails_m_thumbnail()
     {                             
         var m_thumbnail = Parse_GameSThumbnail();
         return m_thumbnail;
-    }//1
+    }
     public bool Parse_GameSDetails_m_isBlizzardMap()
     {                             
         var m_isBlizzardMap = tagged_bool();
         return m_isBlizzardMap;
-    }//1
+    }
     public long Parse_GameSDetails_m_timeUTC()
     {                             
         var m_timeUTC = tagged_vlq_int();
         return ProtocolConversion<long>.From(m_timeUTC);
-    }//1
+    }
     public long Parse_GameSDetails_m_timeLocalOffset()
     {                             
         var m_timeLocalOffset = tagged_vlq_int();
         return ProtocolConversion<long>.From(m_timeLocalOffset);
-    }//1
+    }
     public List<byte> Parse_GameSDetails_m_description()
     {                             
         var m_description = tagged_blob();
         return m_description;
-    }//1
+    }
     public List<byte> Parse_GameSDetails_m_imageFilePath()
     {                             
         var m_imageFilePath = tagged_blob();
         return m_imageFilePath;
-    }//1
+    }
     public List<byte> Parse_GameSDetails_m_mapFileName()
     {                             
         var m_mapFileName = tagged_blob();
         return m_mapFileName;
-    }//1
+    }
     public Option<List<List<byte>>> Parse_GameSDetails_m_cacheHandles()
     {                             
         ValidateOptTag();
@@ -2700,22 +2700,22 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
         }
 
         return m_cacheHandles;
-    }//1
+    }
     public bool Parse_GameSDetails_m_miniSave()
     {                             
         var m_miniSave = tagged_bool();
         return m_miniSave;
-    }//1
+    }
     public GameEGameSpeed Parse_GameSDetails_m_gameSpeed()
     {                             
         var m_gameSpeed = Parse_GameEGameSpeed();
         return m_gameSpeed;
-    }//1
+    }
     public uint Parse_GameSDetails_m_defaultDifficulty()
     {                             
         var m_defaultDifficulty = tagged_vlq_int();
         return ProtocolConversion<uint>.From(m_defaultDifficulty);
-    }//1
+    }
 
     public ReplaySHeader Parse_ReplaySHeader() 
     {
@@ -2801,21 +2801,4749 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
     {                             
         var m_signature = tagged_blob();
         return m_signature;
-    }//1
+    }
     public SVersion Parse_ReplaySHeader_m_version()
     {                             
         var m_version = Parse_SVersion();
         return m_version;
-    }//1
+    }
     public byte Parse_ReplaySHeader_m_type()
     {                             
         var m_type = tagged_vlq_int();
         return ProtocolConversion<byte>.From(m_type);
-    }//1
+    }
     public uint Parse_ReplaySHeader_m_elapsedGameLoops()
     {                             
         var m_elapsedGameLoops = tagged_vlq_int();
         return ProtocolConversion<uint>.From(m_elapsedGameLoops);
-    }//1
+    }
+
+    public TRacePreference Parse_TRacePreference() 
+    {
+        var m_race = Option.Some<Option<TRaceId>>(Option.None);
+        if (m_race is { HasValue: true, Value.HasValue: false })
+        {
+            var parsed_m_race = Parse_TRacePreference_m_race();
+            m_race = Option.Some(parsed_m_race);
+        }
+
+        return new TRacePreference
+        {   
+            m_race = Option.OkOrReturnMissingFieldErr(m_race),
+        };
+    }
+
+    public Option<TRaceId> Parse_TRacePreference_m_race()
+    {                             
+            var isProvided = parse_bool();
+
+            if (isProvided)
+            {
+                var res = Parse_TRaceId();
+
+                return Option.Some(res);
+            }
+            else
+            {
+                return Option.None;
+            }
+    }
+
+    public SUserInitialData Parse_SUserInitialData() 
+    {
+        Option<CUserName> m_name = Option.None;
+        Option<uint32> m_randomSeed = Option.None;
+        Option<TRacePreference> m_racePreference = Option.None;
+        Option<bool> m_testMap = Option.None;
+        Option<bool> m_testAuto = Option.None;
+        Option<EObserve> m_observe = Option.None;
+        if (m_name is { HasValue: false })                           
+        {
+            var parsed_m_name = Parse_SUserInitialData_m_name();
+            m_name = Option.Some(parsed_m_name);
+        }
+
+        if (m_randomSeed is { HasValue: false })                           
+        {
+            var parsed_m_randomSeed = Parse_SUserInitialData_m_randomSeed();
+            m_randomSeed = Option.Some(parsed_m_randomSeed);
+        }
+
+        if (m_racePreference is { HasValue: false })                           
+        {
+            var parsed_m_racePreference = Parse_SUserInitialData_m_racePreference();
+            m_racePreference = Option.Some(parsed_m_racePreference);
+        }
+
+        if (m_testMap is { HasValue: false })                           
+        {
+            var parsed_m_testMap = Parse_SUserInitialData_m_testMap();
+            m_testMap = Option.Some(parsed_m_testMap);
+        }
+
+        if (m_testAuto is { HasValue: false })                           
+        {
+            var parsed_m_testAuto = Parse_SUserInitialData_m_testAuto();
+            m_testAuto = Option.Some(parsed_m_testAuto);
+        }
+
+        if (m_observe is { HasValue: false })                           
+        {
+            var parsed_m_observe = Parse_SUserInitialData_m_observe();
+            m_observe = Option.Some(parsed_m_observe);
+        }
+
+        return new SUserInitialData
+        {   
+            m_name = Option.OkOrReturnMissingFieldErr(m_name),
+            m_randomSeed = Option.OkOrReturnMissingFieldErr(m_randomSeed),
+            m_racePreference = Option.OkOrReturnMissingFieldErr(m_racePreference),
+            m_testMap = Option.OkOrReturnMissingFieldErr(m_testMap),
+            m_testAuto = Option.OkOrReturnMissingFieldErr(m_testAuto),
+            m_observe = Option.OkOrReturnMissingFieldErr(m_observe),
+        };
+    }
+
+    public CUserName Parse_SUserInitialData_m_name()
+    {                             
+        var m_name = Parse_CUserName();
+        return m_name;
+    }
+
+    public uint32 Parse_SUserInitialData_m_randomSeed()
+    {                             
+        var m_randomSeed = Parse_uint32();
+        return m_randomSeed;
+    }
+
+    public TRacePreference Parse_SUserInitialData_m_racePreference()
+    {                             
+        var m_racePreference = Parse_TRacePreference();
+        return m_racePreference;
+    }
+
+    public bool Parse_SUserInitialData_m_testMap()
+    {                             
+        var m_testMap = parse_bool();
+        return m_testMap;
+    }
+
+    public bool Parse_SUserInitialData_m_testAuto()
+    {                             
+        var m_testAuto = parse_bool();
+        return m_testAuto;
+    }
+
+    public EObserve Parse_SUserInitialData_m_observe()
+    {                             
+        var m_observe = Parse_EObserve();
+        return m_observe;
+    }
+
+    public GameTColorPreference Parse_GameTColorPreference() 
+    {
+        var m_color = Option.Some<Option<GameTColorId>>(Option.None);
+        if (m_color is { HasValue: true, Value.HasValue: false })
+        {
+            var parsed_m_color = Parse_GameTColorPreference_m_color();
+            m_color = Option.Some(parsed_m_color);
+        }
+
+        return new GameTColorPreference
+        {   
+            m_color = Option.OkOrReturnMissingFieldErr(m_color),
+        };
+    }
+
+    public Option<GameTColorId> Parse_GameTColorPreference_m_color()
+    {                             
+            var isProvided = parse_bool();
+
+            if (isProvided)
+            {
+                var res = Parse_GameTColorId();
+
+                return Option.Some(res);
+            }
+            else
+            {
+                return Option.None;
+            }
+    }
+
+    public GameSSetLobbySlotEvent Parse_GameSSetLobbySlotEvent() 
+    {
+        Option<GameTLobbySlotId> m_slotId = Option.None;
+        Option<GameSLobbySlotChange> m_slotChange = Option.None;
+        if (m_slotId is { HasValue: false })                           
+        {
+            var parsed_m_slotId = Parse_GameSSetLobbySlotEvent_m_slotId();
+            m_slotId = Option.Some(parsed_m_slotId);
+        }
+
+        if (m_slotChange is { HasValue: false })                           
+        {
+            var parsed_m_slotChange = Parse_GameSSetLobbySlotEvent_m_slotChange();
+            m_slotChange = Option.Some(parsed_m_slotChange);
+        }
+
+        return new GameSSetLobbySlotEvent
+        {   
+            m_slotId = Option.OkOrReturnMissingFieldErr(m_slotId),
+            m_slotChange = Option.OkOrReturnMissingFieldErr(m_slotChange),
+        };
+    }
+
+    public GameTLobbySlotId Parse_GameSSetLobbySlotEvent_m_slotId()
+    {                             
+        var m_slotId = Parse_GameTLobbySlotId();
+        return m_slotId;
+    }
+
+    public GameSLobbySlotChange Parse_GameSSetLobbySlotEvent_m_slotChange()
+    {                             
+        var m_slotChange = Parse_GameSLobbySlotChange();
+        return m_slotChange;
+    }
+
+    public GameSDropUserEvent Parse_GameSDropUserEvent() 
+    {
+        Option<TUserId> m_userId = Option.None;
+        Option<ELeaveReason> m_reason = Option.None;
+        if (m_userId is { HasValue: false })                           
+        {
+            var parsed_m_userId = Parse_GameSDropUserEvent_m_userId();
+            m_userId = Option.Some(parsed_m_userId);
+        }
+
+        if (m_reason is { HasValue: false })                           
+        {
+            var parsed_m_reason = Parse_GameSDropUserEvent_m_reason();
+            m_reason = Option.Some(parsed_m_reason);
+        }
+
+        return new GameSDropUserEvent
+        {   
+            m_userId = Option.OkOrReturnMissingFieldErr(m_userId),
+            m_reason = Option.OkOrReturnMissingFieldErr(m_reason),
+        };
+    }
+
+    public TUserId Parse_GameSDropUserEvent_m_userId()
+    {                             
+        var m_userId = Parse_TUserId();
+        return m_userId;
+    }
+
+    public ELeaveReason Parse_GameSDropUserEvent_m_reason()
+    {                             
+        var m_reason = Parse_ELeaveReason();
+        return m_reason;
+    }
+
+    public GameSStartGameEvent Parse_GameSStartGameEvent() 
+    {
+        return new GameSStartGameEvent
+        {   
+        };
+    }
+
+    public GameSDropOurselvesEvent Parse_GameSDropOurselvesEvent() 
+    {
+        return new GameSDropOurselvesEvent
+        {   
+        };
+    }
+
+    public GameSBankFileEvent Parse_GameSBankFileEvent() 
+    {
+        Option<List<byte>> m_name = Option.None;
+        if (m_name is { HasValue: false })                           
+        {
+            var parsed_m_name = Parse_GameSBankFileEvent_m_name();
+            m_name = Option.Some(parsed_m_name);
+        }
+
+        return new GameSBankFileEvent
+        {   
+            m_name = Option.OkOrReturnMissingFieldErr(m_name),
+        };
+    }
+
+    public List<byte> Parse_GameSBankFileEvent_m_name()
+    {                             
+        var arrayLength = take_n_bits_into_i64(7);
+        var array = new List<byte>();
+
+        for (var i = 0 ; i < arrayLength ; ++i)
+        {
+            var data = take_unaligned_byte();
+            array.Add(data);
+        }
+        return array;
+    }
+
+    public GameSBankSectionEvent Parse_GameSBankSectionEvent() 
+    {
+        Option<List<byte>> m_name = Option.None;
+        if (m_name is { HasValue: false })                           
+        {
+            var parsed_m_name = Parse_GameSBankSectionEvent_m_name();
+            m_name = Option.Some(parsed_m_name);
+        }
+
+        return new GameSBankSectionEvent
+        {   
+            m_name = Option.OkOrReturnMissingFieldErr(m_name),
+        };
+    }
+
+    public List<byte> Parse_GameSBankSectionEvent_m_name()
+    {                             
+        var arrayLength = take_n_bits_into_i64(6);
+        var array = new List<byte>();
+
+        for (var i = 0 ; i < arrayLength ; ++i)
+        {
+            var data = take_unaligned_byte();
+            array.Add(data);
+        }
+        return array;
+    }
+
+    public GameSBankKeyEvent Parse_GameSBankKeyEvent() 
+    {
+        Option<List<byte>> m_name = Option.None;
+        Option<uint32> m_type = Option.None;
+        Option<List<byte>> m_data = Option.None;
+        if (m_name is { HasValue: false })                           
+        {
+            var parsed_m_name = Parse_GameSBankKeyEvent_m_name();
+            m_name = Option.Some(parsed_m_name);
+        }
+
+        if (m_type is { HasValue: false })                           
+        {
+            var parsed_m_type = Parse_GameSBankKeyEvent_m_type();
+            m_type = Option.Some(parsed_m_type);
+        }
+
+        if (m_data is { HasValue: false })                           
+        {
+            var parsed_m_data = Parse_GameSBankKeyEvent_m_data();
+            m_data = Option.Some(parsed_m_data);
+        }
+
+        return new GameSBankKeyEvent
+        {   
+            m_name = Option.OkOrReturnMissingFieldErr(m_name),
+            m_type = Option.OkOrReturnMissingFieldErr(m_type),
+            m_data = Option.OkOrReturnMissingFieldErr(m_data),
+        };
+    }
+
+    public List<byte> Parse_GameSBankKeyEvent_m_name()
+    {                             
+        var arrayLength = take_n_bits_into_i64(6);
+        var array = new List<byte>();
+
+        for (var i = 0 ; i < arrayLength ; ++i)
+        {
+            var data = take_unaligned_byte();
+            array.Add(data);
+        }
+        return array;
+    }
+
+    public uint32 Parse_GameSBankKeyEvent_m_type()
+    {                             
+        var m_type = Parse_uint32();
+        return m_type;
+    }
+
+    public List<byte> Parse_GameSBankKeyEvent_m_data()
+    {                             
+        var arrayLength = take_n_bits_into_i64(5);
+        var array = new List<byte>();
+
+        for (var i = 0 ; i < arrayLength ; ++i)
+        {
+            var data = take_unaligned_byte();
+            array.Add(data);
+        }
+        return array;
+    }
+
+    public GameSBankValueEvent Parse_GameSBankValueEvent() 
+    {
+        Option<uint32> m_type = Option.None;
+        Option<List<byte>> m_name = Option.None;
+        Option<List<byte>> m_data = Option.None;
+        if (m_type is { HasValue: false })                           
+        {
+            var parsed_m_type = Parse_GameSBankValueEvent_m_type();
+            m_type = Option.Some(parsed_m_type);
+        }
+
+        if (m_name is { HasValue: false })                           
+        {
+            var parsed_m_name = Parse_GameSBankValueEvent_m_name();
+            m_name = Option.Some(parsed_m_name);
+        }
+
+        if (m_data is { HasValue: false })                           
+        {
+            var parsed_m_data = Parse_GameSBankValueEvent_m_data();
+            m_data = Option.Some(parsed_m_data);
+        }
+
+        return new GameSBankValueEvent
+        {   
+            m_type = Option.OkOrReturnMissingFieldErr(m_type),
+            m_name = Option.OkOrReturnMissingFieldErr(m_name),
+            m_data = Option.OkOrReturnMissingFieldErr(m_data),
+        };
+    }
+
+    public uint32 Parse_GameSBankValueEvent_m_type()
+    {                             
+        var m_type = Parse_uint32();
+        return m_type;
+    }
+
+    public List<byte> Parse_GameSBankValueEvent_m_name()
+    {                             
+        var arrayLength = take_n_bits_into_i64(6);
+        var array = new List<byte>();
+
+        for (var i = 0 ; i < arrayLength ; ++i)
+        {
+            var data = take_unaligned_byte();
+            array.Add(data);
+        }
+        return array;
+    }
+
+    public List<byte> Parse_GameSBankValueEvent_m_data()
+    {                             
+        var arrayLength = take_n_bits_into_i64(10);
+        var array = new List<byte>();
+
+        for (var i = 0 ; i < arrayLength ; ++i)
+        {
+            var data = take_unaligned_byte();
+            array.Add(data);
+        }
+        return array;
+    }
+
+    public GameSUserOptionsEvent Parse_GameSUserOptionsEvent() 
+    {
+        Option<bool> m_developmentCheatsEnabled = Option.None;
+        Option<bool> m_multiplayerCheatsEnabled = Option.None;
+        Option<bool> m_syncChecksummingEnabled = Option.None;
+        Option<bool> m_isMapToMapTransition = Option.None;
+        if (m_developmentCheatsEnabled is { HasValue: false })                           
+        {
+            var parsed_m_developmentCheatsEnabled = Parse_GameSUserOptionsEvent_m_developmentCheatsEnabled();
+            m_developmentCheatsEnabled = Option.Some(parsed_m_developmentCheatsEnabled);
+        }
+
+        if (m_multiplayerCheatsEnabled is { HasValue: false })                           
+        {
+            var parsed_m_multiplayerCheatsEnabled = Parse_GameSUserOptionsEvent_m_multiplayerCheatsEnabled();
+            m_multiplayerCheatsEnabled = Option.Some(parsed_m_multiplayerCheatsEnabled);
+        }
+
+        if (m_syncChecksummingEnabled is { HasValue: false })                           
+        {
+            var parsed_m_syncChecksummingEnabled = Parse_GameSUserOptionsEvent_m_syncChecksummingEnabled();
+            m_syncChecksummingEnabled = Option.Some(parsed_m_syncChecksummingEnabled);
+        }
+
+        if (m_isMapToMapTransition is { HasValue: false })                           
+        {
+            var parsed_m_isMapToMapTransition = Parse_GameSUserOptionsEvent_m_isMapToMapTransition();
+            m_isMapToMapTransition = Option.Some(parsed_m_isMapToMapTransition);
+        }
+
+        return new GameSUserOptionsEvent
+        {   
+            m_developmentCheatsEnabled = Option.OkOrReturnMissingFieldErr(m_developmentCheatsEnabled),
+            m_multiplayerCheatsEnabled = Option.OkOrReturnMissingFieldErr(m_multiplayerCheatsEnabled),
+            m_syncChecksummingEnabled = Option.OkOrReturnMissingFieldErr(m_syncChecksummingEnabled),
+            m_isMapToMapTransition = Option.OkOrReturnMissingFieldErr(m_isMapToMapTransition),
+        };
+    }
+
+    public bool Parse_GameSUserOptionsEvent_m_developmentCheatsEnabled()
+    {                             
+        var m_developmentCheatsEnabled = parse_bool();
+        return m_developmentCheatsEnabled;
+    }
+
+    public bool Parse_GameSUserOptionsEvent_m_multiplayerCheatsEnabled()
+    {                             
+        var m_multiplayerCheatsEnabled = parse_bool();
+        return m_multiplayerCheatsEnabled;
+    }
+
+    public bool Parse_GameSUserOptionsEvent_m_syncChecksummingEnabled()
+    {                             
+        var m_syncChecksummingEnabled = parse_bool();
+        return m_syncChecksummingEnabled;
+    }
+
+    public bool Parse_GameSUserOptionsEvent_m_isMapToMapTransition()
+    {                             
+        var m_isMapToMapTransition = parse_bool();
+        return m_isMapToMapTransition;
+    }
+
+    public GameSUserFinishedLoadingEvent Parse_GameSUserFinishedLoadingEvent() 
+    {
+        return new GameSUserFinishedLoadingEvent
+        {   
+        };
+    }
+
+    public GameSUserFinishedLoadingSyncEvent Parse_GameSUserFinishedLoadingSyncEvent() 
+    {
+        return new GameSUserFinishedLoadingSyncEvent
+        {   
+        };
+    }
+
+    public GameSSetGameDurationEvent Parse_GameSSetGameDurationEvent() 
+    {
+        Option<uint32> m_gameDuration = Option.None;
+        if (m_gameDuration is { HasValue: false })                           
+        {
+            var parsed_m_gameDuration = Parse_GameSSetGameDurationEvent_m_gameDuration();
+            m_gameDuration = Option.Some(parsed_m_gameDuration);
+        }
+
+        return new GameSSetGameDurationEvent
+        {   
+            m_gameDuration = Option.OkOrReturnMissingFieldErr(m_gameDuration),
+        };
+    }
+
+    public uint32 Parse_GameSSetGameDurationEvent_m_gameDuration()
+    {                             
+        var m_gameDuration = Parse_uint32();
+        return m_gameDuration;
+    }
+
+    public GameSTurnEvent Parse_GameSTurnEvent() 
+    {
+        return new GameSTurnEvent
+        {   
+        };
+    }
+
+    public GameSPauseGameEvent Parse_GameSPauseGameEvent() 
+    {
+        Option<uint8> m_pauseTypeIndex = Option.None;
+        if (m_pauseTypeIndex is { HasValue: false })                           
+        {
+            var parsed_m_pauseTypeIndex = Parse_GameSPauseGameEvent_m_pauseTypeIndex();
+            m_pauseTypeIndex = Option.Some(parsed_m_pauseTypeIndex);
+        }
+
+        return new GameSPauseGameEvent
+        {   
+            m_pauseTypeIndex = Option.OkOrReturnMissingFieldErr(m_pauseTypeIndex),
+        };
+    }
+
+    public uint8 Parse_GameSPauseGameEvent_m_pauseTypeIndex()
+    {                             
+        var m_pauseTypeIndex = Parse_uint8();
+        return m_pauseTypeIndex;
+    }
+
+    public GameSUnpauseGameEvent Parse_GameSUnpauseGameEvent() 
+    {
+        Option<uint8> m_pauseTypeIndex = Option.None;
+        if (m_pauseTypeIndex is { HasValue: false })                           
+        {
+            var parsed_m_pauseTypeIndex = Parse_GameSUnpauseGameEvent_m_pauseTypeIndex();
+            m_pauseTypeIndex = Option.Some(parsed_m_pauseTypeIndex);
+        }
+
+        return new GameSUnpauseGameEvent
+        {   
+            m_pauseTypeIndex = Option.OkOrReturnMissingFieldErr(m_pauseTypeIndex),
+        };
+    }
+
+    public uint8 Parse_GameSUnpauseGameEvent_m_pauseTypeIndex()
+    {                             
+        var m_pauseTypeIndex = Parse_uint8();
+        return m_pauseTypeIndex;
+    }
+
+    public GameSSingleStepGameEvent Parse_GameSSingleStepGameEvent() 
+    {
+        return new GameSSingleStepGameEvent
+        {   
+        };
+    }
+
+    public GameSSetGameSpeedEvent Parse_GameSSetGameSpeedEvent() 
+    {
+        Option<GameEGameSpeed> m_speed = Option.None;
+        if (m_speed is { HasValue: false })                           
+        {
+            var parsed_m_speed = Parse_GameSSetGameSpeedEvent_m_speed();
+            m_speed = Option.Some(parsed_m_speed);
+        }
+
+        return new GameSSetGameSpeedEvent
+        {   
+            m_speed = Option.OkOrReturnMissingFieldErr(m_speed),
+        };
+    }
+
+    public GameEGameSpeed Parse_GameSSetGameSpeedEvent_m_speed()
+    {                             
+        var m_speed = Parse_GameEGameSpeed();
+        return m_speed;
+    }
+
+    public GameSAddGameSpeedEvent Parse_GameSAddGameSpeedEvent() 
+    {
+        Option<int8> m_delta = Option.None;
+        if (m_delta is { HasValue: false })                           
+        {
+            var parsed_m_delta = Parse_GameSAddGameSpeedEvent_m_delta();
+            m_delta = Option.Some(parsed_m_delta);
+        }
+
+        return new GameSAddGameSpeedEvent
+        {   
+            m_delta = Option.OkOrReturnMissingFieldErr(m_delta),
+        };
+    }
+
+    public int8 Parse_GameSAddGameSpeedEvent_m_delta()
+    {                             
+        var m_delta = Parse_int8();
+        return m_delta;
+    }
+
+    public GameSRestartGameEvent Parse_GameSRestartGameEvent() 
+    {
+        Option<uint32> m_reloadGameLoop = Option.None;
+        if (m_reloadGameLoop is { HasValue: false })                           
+        {
+            var parsed_m_reloadGameLoop = Parse_GameSRestartGameEvent_m_reloadGameLoop();
+            m_reloadGameLoop = Option.Some(parsed_m_reloadGameLoop);
+        }
+
+        return new GameSRestartGameEvent
+        {   
+            m_reloadGameLoop = Option.OkOrReturnMissingFieldErr(m_reloadGameLoop),
+        };
+    }
+
+    public uint32 Parse_GameSRestartGameEvent_m_reloadGameLoop()
+    {                             
+        var m_reloadGameLoop = Parse_uint32();
+        return m_reloadGameLoop;
+    }
+
+    public GameSSaveGameEvent Parse_GameSSaveGameEvent() 
+    {
+        Option<CFilePath> m_fileName = Option.None;
+        Option<bool> m_automatic = Option.None;
+        Option<bool> m_overwrite = Option.None;
+        Option<List<byte>> m_name = Option.None;
+        Option<List<byte>> m_description = Option.None;
+        if (m_fileName is { HasValue: false })                           
+        {
+            var parsed_m_fileName = Parse_GameSSaveGameEvent_m_fileName();
+            m_fileName = Option.Some(parsed_m_fileName);
+        }
+
+        if (m_automatic is { HasValue: false })                           
+        {
+            var parsed_m_automatic = Parse_GameSSaveGameEvent_m_automatic();
+            m_automatic = Option.Some(parsed_m_automatic);
+        }
+
+        if (m_overwrite is { HasValue: false })                           
+        {
+            var parsed_m_overwrite = Parse_GameSSaveGameEvent_m_overwrite();
+            m_overwrite = Option.Some(parsed_m_overwrite);
+        }
+
+        if (m_name is { HasValue: false })                           
+        {
+            var parsed_m_name = Parse_GameSSaveGameEvent_m_name();
+            m_name = Option.Some(parsed_m_name);
+        }
+
+        if (m_description is { HasValue: false })                           
+        {
+            var parsed_m_description = Parse_GameSSaveGameEvent_m_description();
+            m_description = Option.Some(parsed_m_description);
+        }
+
+        return new GameSSaveGameEvent
+        {   
+            m_fileName = Option.OkOrReturnMissingFieldErr(m_fileName),
+            m_automatic = Option.OkOrReturnMissingFieldErr(m_automatic),
+            m_overwrite = Option.OkOrReturnMissingFieldErr(m_overwrite),
+            m_name = Option.OkOrReturnMissingFieldErr(m_name),
+            m_description = Option.OkOrReturnMissingFieldErr(m_description),
+        };
+    }
+
+    public CFilePath Parse_GameSSaveGameEvent_m_fileName()
+    {                             
+        var m_fileName = Parse_CFilePath();
+        return m_fileName;
+    }
+
+    public bool Parse_GameSSaveGameEvent_m_automatic()
+    {                             
+        var m_automatic = parse_bool();
+        return m_automatic;
+    }
+
+    public bool Parse_GameSSaveGameEvent_m_overwrite()
+    {                             
+        var m_overwrite = parse_bool();
+        return m_overwrite;
+    }
+
+    public List<byte> Parse_GameSSaveGameEvent_m_name()
+    {                             
+        var arrayLength = take_n_bits_into_i64(6);
+        var array = new List<byte>();
+
+        for (var i = 0 ; i < arrayLength ; ++i)
+        {
+            var data = take_unaligned_byte();
+            array.Add(data);
+        }
+        return array;
+    }
+
+    public List<byte> Parse_GameSSaveGameEvent_m_description()
+    {                             
+        var arrayLength = take_n_bits_into_i64(9);
+        var array = new List<byte>();
+
+        for (var i = 0 ; i < arrayLength ; ++i)
+        {
+            var data = take_unaligned_byte();
+            array.Add(data);
+        }
+        return array;
+    }
+
+    public GameSSaveGameDoneEvent Parse_GameSSaveGameDoneEvent() 
+    {
+        return new GameSSaveGameDoneEvent
+        {   
+        };
+    }
+
+    public GameSCheatEventData Parse_GameSCheatEventData() 
+    {
+        Option<GameSPoint> m_point = Option.None;
+        Option<int32> m_time = Option.None;
+        Option<GameCCheatString> m_verb = Option.None;
+        Option<GameCCheatString> m_arguments = Option.None;
+        if (m_point is { HasValue: false })                           
+        {
+            var parsed_m_point = Parse_GameSCheatEventData_m_point();
+            m_point = Option.Some(parsed_m_point);
+        }
+
+        if (m_time is { HasValue: false })                           
+        {
+            var parsed_m_time = Parse_GameSCheatEventData_m_time();
+            m_time = Option.Some(parsed_m_time);
+        }
+
+        if (m_verb is { HasValue: false })                           
+        {
+            var parsed_m_verb = Parse_GameSCheatEventData_m_verb();
+            m_verb = Option.Some(parsed_m_verb);
+        }
+
+        if (m_arguments is { HasValue: false })                           
+        {
+            var parsed_m_arguments = Parse_GameSCheatEventData_m_arguments();
+            m_arguments = Option.Some(parsed_m_arguments);
+        }
+
+        return new GameSCheatEventData
+        {   
+            m_point = Option.OkOrReturnMissingFieldErr(m_point),
+            m_time = Option.OkOrReturnMissingFieldErr(m_time),
+            m_verb = Option.OkOrReturnMissingFieldErr(m_verb),
+            m_arguments = Option.OkOrReturnMissingFieldErr(m_arguments),
+        };
+    }
+
+    public GameSPoint Parse_GameSCheatEventData_m_point()
+    {                             
+        var m_point = Parse_GameSPoint();
+        return m_point;
+    }
+
+    public int32 Parse_GameSCheatEventData_m_time()
+    {                             
+        var m_time = Parse_int32();
+        return m_time;
+    }
+
+    public GameCCheatString Parse_GameSCheatEventData_m_verb()
+    {                             
+        var m_verb = Parse_GameCCheatString();
+        return m_verb;
+    }
+
+    public GameCCheatString Parse_GameSCheatEventData_m_arguments()
+    {                             
+        var m_arguments = Parse_GameCCheatString();
+        return m_arguments;
+    }
+
+    public GameSSessionCheatEvent Parse_GameSSessionCheatEvent() 
+    {
+        Option<GameSCheatEventData> m_data = Option.None;
+        if (m_data is { HasValue: false })                           
+        {
+            var parsed_m_data = Parse_GameSSessionCheatEvent_m_data();
+            m_data = Option.Some(parsed_m_data);
+        }
+
+        return new GameSSessionCheatEvent
+        {   
+            m_data = Option.OkOrReturnMissingFieldErr(m_data),
+        };
+    }
+
+    public GameSCheatEventData Parse_GameSSessionCheatEvent_m_data()
+    {                             
+        var m_data = Parse_GameSCheatEventData();
+        return m_data;
+    }
+
+    public GameSPlayerLeaveEvent Parse_GameSPlayerLeaveEvent() 
+    {
+        return new GameSPlayerLeaveEvent
+        {   
+        };
+    }
+
+    public GameSGameCheatEvent Parse_GameSGameCheatEvent() 
+    {
+        Option<GameSCheatEventData> m_data = Option.None;
+        if (m_data is { HasValue: false })                           
+        {
+            var parsed_m_data = Parse_GameSGameCheatEvent_m_data();
+            m_data = Option.Some(parsed_m_data);
+        }
+
+        return new GameSGameCheatEvent
+        {   
+            m_data = Option.OkOrReturnMissingFieldErr(m_data),
+        };
+    }
+
+    public GameSCheatEventData Parse_GameSGameCheatEvent_m_data()
+    {                             
+        var m_data = Parse_GameSCheatEventData();
+        return m_data;
+    }
+
+    public GameSCmdEvent Parse_GameSCmdEvent() 
+    {
+        Option<uint32> m_cmdFlags = Option.None;
+        Option<GameTAbilLink> m_abilLink = Option.None;
+        Option<uint8> m_abilCmdIndex = Option.None;
+        Option<uint8> m_abilCmdData = Option.None;
+        Option<uint8> m_targetUnitFlags = Option.None;
+        Option<uint8> m_targetUnitTimer = Option.None;
+        Option<GameTUnitTag> m_otherUnit = Option.None;
+        Option<GameTUnitTag> m_targetUnitTag = Option.None;
+        Option<GameTUnitLink> m_targetUnitSnapshotUnitLink = Option.None;
+        var m_targetUnitSnapshotPlayerId = Option.Some<Option<GameTPlayerId>>(Option.None);
+        Option<GameSPoint3> m_targetPoint = Option.None;
+        if (m_cmdFlags is { HasValue: false })                           
+        {
+            var parsed_m_cmdFlags = Parse_GameSCmdEvent_m_cmdFlags();
+            m_cmdFlags = Option.Some(parsed_m_cmdFlags);
+        }
+
+        if (m_abilLink is { HasValue: false })                           
+        {
+            var parsed_m_abilLink = Parse_GameSCmdEvent_m_abilLink();
+            m_abilLink = Option.Some(parsed_m_abilLink);
+        }
+
+        if (m_abilCmdIndex is { HasValue: false })                           
+        {
+            var parsed_m_abilCmdIndex = Parse_GameSCmdEvent_m_abilCmdIndex();
+            m_abilCmdIndex = Option.Some(parsed_m_abilCmdIndex);
+        }
+
+        if (m_abilCmdData is { HasValue: false })                           
+        {
+            var parsed_m_abilCmdData = Parse_GameSCmdEvent_m_abilCmdData();
+            m_abilCmdData = Option.Some(parsed_m_abilCmdData);
+        }
+
+        if (m_targetUnitFlags is { HasValue: false })                           
+        {
+            var parsed_m_targetUnitFlags = Parse_GameSCmdEvent_m_targetUnitFlags();
+            m_targetUnitFlags = Option.Some(parsed_m_targetUnitFlags);
+        }
+
+        if (m_targetUnitTimer is { HasValue: false })                           
+        {
+            var parsed_m_targetUnitTimer = Parse_GameSCmdEvent_m_targetUnitTimer();
+            m_targetUnitTimer = Option.Some(parsed_m_targetUnitTimer);
+        }
+
+        if (m_otherUnit is { HasValue: false })                           
+        {
+            var parsed_m_otherUnit = Parse_GameSCmdEvent_m_otherUnit();
+            m_otherUnit = Option.Some(parsed_m_otherUnit);
+        }
+
+        if (m_targetUnitTag is { HasValue: false })                           
+        {
+            var parsed_m_targetUnitTag = Parse_GameSCmdEvent_m_targetUnitTag();
+            m_targetUnitTag = Option.Some(parsed_m_targetUnitTag);
+        }
+
+        if (m_targetUnitSnapshotUnitLink is { HasValue: false })                           
+        {
+            var parsed_m_targetUnitSnapshotUnitLink = Parse_GameSCmdEvent_m_targetUnitSnapshotUnitLink();
+            m_targetUnitSnapshotUnitLink = Option.Some(parsed_m_targetUnitSnapshotUnitLink);
+        }
+
+        if (m_targetUnitSnapshotPlayerId is { HasValue: true, Value.HasValue: false })
+        {
+            var parsed_m_targetUnitSnapshotPlayerId = Parse_GameSCmdEvent_m_targetUnitSnapshotPlayerId();
+            m_targetUnitSnapshotPlayerId = Option.Some(parsed_m_targetUnitSnapshotPlayerId);
+        }
+
+        if (m_targetPoint is { HasValue: false })                           
+        {
+            var parsed_m_targetPoint = Parse_GameSCmdEvent_m_targetPoint();
+            m_targetPoint = Option.Some(parsed_m_targetPoint);
+        }
+
+        return new GameSCmdEvent
+        {   
+            m_cmdFlags = Option.OkOrReturnMissingFieldErr(m_cmdFlags),
+            m_abilLink = Option.OkOrReturnMissingFieldErr(m_abilLink),
+            m_abilCmdIndex = Option.OkOrReturnMissingFieldErr(m_abilCmdIndex),
+            m_abilCmdData = Option.OkOrReturnMissingFieldErr(m_abilCmdData),
+            m_targetUnitFlags = Option.OkOrReturnMissingFieldErr(m_targetUnitFlags),
+            m_targetUnitTimer = Option.OkOrReturnMissingFieldErr(m_targetUnitTimer),
+            m_otherUnit = Option.OkOrReturnMissingFieldErr(m_otherUnit),
+            m_targetUnitTag = Option.OkOrReturnMissingFieldErr(m_targetUnitTag),
+            m_targetUnitSnapshotUnitLink = Option.OkOrReturnMissingFieldErr(m_targetUnitSnapshotUnitLink),
+            m_targetUnitSnapshotPlayerId = Option.OkOrReturnMissingFieldErr(m_targetUnitSnapshotPlayerId),
+            m_targetPoint = Option.OkOrReturnMissingFieldErr(m_targetPoint),
+        };
+    }
+
+    public uint32 Parse_GameSCmdEvent_m_cmdFlags()
+    {                             
+        var m_cmdFlags = Parse_uint32();
+        return m_cmdFlags;
+    }
+
+    public GameTAbilLink Parse_GameSCmdEvent_m_abilLink()
+    {                             
+        var m_abilLink = Parse_GameTAbilLink();
+        return m_abilLink;
+    }
+
+    public uint8 Parse_GameSCmdEvent_m_abilCmdIndex()
+    {                             
+        var m_abilCmdIndex = Parse_uint8();
+        return m_abilCmdIndex;
+    }
+
+    public uint8 Parse_GameSCmdEvent_m_abilCmdData()
+    {                             
+        var m_abilCmdData = Parse_uint8();
+        return m_abilCmdData;
+    }
+
+    public uint8 Parse_GameSCmdEvent_m_targetUnitFlags()
+    {                             
+        var m_targetUnitFlags = Parse_uint8();
+        return m_targetUnitFlags;
+    }
+
+    public uint8 Parse_GameSCmdEvent_m_targetUnitTimer()
+    {                             
+        var m_targetUnitTimer = Parse_uint8();
+        return m_targetUnitTimer;
+    }
+
+    public GameTUnitTag Parse_GameSCmdEvent_m_otherUnit()
+    {                             
+        var m_otherUnit = Parse_GameTUnitTag();
+        return m_otherUnit;
+    }
+
+    public GameTUnitTag Parse_GameSCmdEvent_m_targetUnitTag()
+    {                             
+        var m_targetUnitTag = Parse_GameTUnitTag();
+        return m_targetUnitTag;
+    }
+
+    public GameTUnitLink Parse_GameSCmdEvent_m_targetUnitSnapshotUnitLink()
+    {                             
+        var m_targetUnitSnapshotUnitLink = Parse_GameTUnitLink();
+        return m_targetUnitSnapshotUnitLink;
+    }
+
+    public Option<GameTPlayerId> Parse_GameSCmdEvent_m_targetUnitSnapshotPlayerId()
+    {                             
+            var isProvided = parse_bool();
+
+            if (isProvided)
+            {
+                var res = Parse_GameTPlayerId();
+
+                return Option.Some(res);
+            }
+            else
+            {
+                return Option.None;
+            }
+    }
+
+    public GameSPoint3 Parse_GameSCmdEvent_m_targetPoint()
+    {                             
+        var m_targetPoint = Parse_GameSPoint3();
+        return m_targetPoint;
+    }
+
+    public GameSSelectionDeltaEvent Parse_GameSSelectionDeltaEvent() 
+    {
+        Option<GameTControlGroupId> m_controlGroupId = Option.None;
+        Option<GameSSelectionDelta> m_delta = Option.None;
+        if (m_controlGroupId is { HasValue: false })                           
+        {
+            var parsed_m_controlGroupId = Parse_GameSSelectionDeltaEvent_m_controlGroupId();
+            m_controlGroupId = Option.Some(parsed_m_controlGroupId);
+        }
+
+        if (m_delta is { HasValue: false })                           
+        {
+            var parsed_m_delta = Parse_GameSSelectionDeltaEvent_m_delta();
+            m_delta = Option.Some(parsed_m_delta);
+        }
+
+        return new GameSSelectionDeltaEvent
+        {   
+            m_controlGroupId = Option.OkOrReturnMissingFieldErr(m_controlGroupId),
+            m_delta = Option.OkOrReturnMissingFieldErr(m_delta),
+        };
+    }
+
+    public GameTControlGroupId Parse_GameSSelectionDeltaEvent_m_controlGroupId()
+    {                             
+        var m_controlGroupId = Parse_GameTControlGroupId();
+        return m_controlGroupId;
+    }
+
+    public GameSSelectionDelta Parse_GameSSelectionDeltaEvent_m_delta()
+    {                             
+        var m_delta = Parse_GameSSelectionDelta();
+        return m_delta;
+    }
+
+    public GameSControlGroupUpdateEvent Parse_GameSControlGroupUpdateEvent() 
+    {
+        Option<GameTControlGroupIndex> m_controlGroupIndex = Option.None;
+        Option<GameEControlGroupUpdate> m_controlGroupUpdate = Option.None;
+        Option<GameSSelectionMask> m_mask = Option.None;
+        if (m_controlGroupIndex is { HasValue: false })                           
+        {
+            var parsed_m_controlGroupIndex = Parse_GameSControlGroupUpdateEvent_m_controlGroupIndex();
+            m_controlGroupIndex = Option.Some(parsed_m_controlGroupIndex);
+        }
+
+        if (m_controlGroupUpdate is { HasValue: false })                           
+        {
+            var parsed_m_controlGroupUpdate = Parse_GameSControlGroupUpdateEvent_m_controlGroupUpdate();
+            m_controlGroupUpdate = Option.Some(parsed_m_controlGroupUpdate);
+        }
+
+        if (m_mask is { HasValue: false })                           
+        {
+            var parsed_m_mask = Parse_GameSControlGroupUpdateEvent_m_mask();
+            m_mask = Option.Some(parsed_m_mask);
+        }
+
+        return new GameSControlGroupUpdateEvent
+        {   
+            m_controlGroupIndex = Option.OkOrReturnMissingFieldErr(m_controlGroupIndex),
+            m_controlGroupUpdate = Option.OkOrReturnMissingFieldErr(m_controlGroupUpdate),
+            m_mask = Option.OkOrReturnMissingFieldErr(m_mask),
+        };
+    }
+
+    public GameTControlGroupIndex Parse_GameSControlGroupUpdateEvent_m_controlGroupIndex()
+    {                             
+        var m_controlGroupIndex = Parse_GameTControlGroupIndex();
+        return m_controlGroupIndex;
+    }
+
+    public GameEControlGroupUpdate Parse_GameSControlGroupUpdateEvent_m_controlGroupUpdate()
+    {                             
+        var m_controlGroupUpdate = Parse_GameEControlGroupUpdate();
+        return m_controlGroupUpdate;
+    }
+
+    public GameSSelectionMask Parse_GameSControlGroupUpdateEvent_m_mask()
+    {                             
+        var m_mask = Parse_GameSSelectionMask();
+        return m_mask;
+    }
+
+    public GameSSelectionSyncCheckEvent Parse_GameSSelectionSyncCheckEvent() 
+    {
+        Option<GameTControlGroupId> m_controlGroupId = Option.None;
+        Option<GameSSelectionSyncData> m_selectionSyncData = Option.None;
+        if (m_controlGroupId is { HasValue: false })                           
+        {
+            var parsed_m_controlGroupId = Parse_GameSSelectionSyncCheckEvent_m_controlGroupId();
+            m_controlGroupId = Option.Some(parsed_m_controlGroupId);
+        }
+
+        if (m_selectionSyncData is { HasValue: false })                           
+        {
+            var parsed_m_selectionSyncData = Parse_GameSSelectionSyncCheckEvent_m_selectionSyncData();
+            m_selectionSyncData = Option.Some(parsed_m_selectionSyncData);
+        }
+
+        return new GameSSelectionSyncCheckEvent
+        {   
+            m_controlGroupId = Option.OkOrReturnMissingFieldErr(m_controlGroupId),
+            m_selectionSyncData = Option.OkOrReturnMissingFieldErr(m_selectionSyncData),
+        };
+    }
+
+    public GameTControlGroupId Parse_GameSSelectionSyncCheckEvent_m_controlGroupId()
+    {                             
+        var m_controlGroupId = Parse_GameTControlGroupId();
+        return m_controlGroupId;
+    }
+
+    public GameSSelectionSyncData Parse_GameSSelectionSyncCheckEvent_m_selectionSyncData()
+    {                             
+        var m_selectionSyncData = Parse_GameSSelectionSyncData();
+        return m_selectionSyncData;
+    }
+
+    public GameSResourceTradeEvent Parse_GameSResourceTradeEvent() 
+    {
+        Option<GameTPlayerId> m_recipientId = Option.None;
+        Option<List<int32>> m_resources = Option.None;
+        if (m_recipientId is { HasValue: false })                           
+        {
+            var parsed_m_recipientId = Parse_GameSResourceTradeEvent_m_recipientId();
+            m_recipientId = Option.Some(parsed_m_recipientId);
+        }
+
+        if (m_resources is { HasValue: false })                           
+        {
+            var parsed_m_resources = Parse_GameSResourceTradeEvent_m_resources();
+            m_resources = Option.Some(parsed_m_resources);
+        }
+
+        return new GameSResourceTradeEvent
+        {   
+            m_recipientId = Option.OkOrReturnMissingFieldErr(m_recipientId),
+            m_resources = Option.OkOrReturnMissingFieldErr(m_resources),
+        };
+    }
+
+    public GameTPlayerId Parse_GameSResourceTradeEvent_m_recipientId()
+    {                             
+        var m_recipientId = Parse_GameTPlayerId();
+        return m_recipientId;
+    }
+
+    public List<int32> Parse_GameSResourceTradeEvent_m_resources()
+    {                             
+        var arrayLength = take_n_bits_into_i64(3);
+        var array = new List<int32>();
+
+        for (var i = 0 ; i < arrayLength ; ++i)
+        {
+            var data = Parse_int32();
+            array.Add(data);
+        }
+        return array;
+    }
+
+    public GameSTriggerChatMessageEvent Parse_GameSTriggerChatMessageEvent() 
+    {
+        Option<GameCTriggerChatMessageString> m_chatMessage = Option.None;
+        if (m_chatMessage is { HasValue: false })                           
+        {
+            var parsed_m_chatMessage = Parse_GameSTriggerChatMessageEvent_m_chatMessage();
+            m_chatMessage = Option.Some(parsed_m_chatMessage);
+        }
+
+        return new GameSTriggerChatMessageEvent
+        {   
+            m_chatMessage = Option.OkOrReturnMissingFieldErr(m_chatMessage),
+        };
+    }
+
+    public GameCTriggerChatMessageString Parse_GameSTriggerChatMessageEvent_m_chatMessage()
+    {                             
+        var m_chatMessage = Parse_GameCTriggerChatMessageString();
+        return m_chatMessage;
+    }
+
+    public GameSAICommunicateEvent Parse_GameSAICommunicateEvent() 
+    {
+        Option<int8> m_beacon = Option.None;
+        Option<int8> m_ally = Option.None;
+        Option<int8> m_autocast = Option.None;
+        Option<GameTUnitTag> m_targetUnitTag = Option.None;
+        Option<GameTUnitLink> m_targetUnitSnapshotUnitLink = Option.None;
+        var m_targetUnitSnapshotPlayerId = Option.Some<Option<GameTPlayerId>>(Option.None);
+        Option<GameSPoint3> m_targetPoint = Option.None;
+        if (m_beacon is { HasValue: false })                           
+        {
+            var parsed_m_beacon = Parse_GameSAICommunicateEvent_m_beacon();
+            m_beacon = Option.Some(parsed_m_beacon);
+        }
+
+        if (m_ally is { HasValue: false })                           
+        {
+            var parsed_m_ally = Parse_GameSAICommunicateEvent_m_ally();
+            m_ally = Option.Some(parsed_m_ally);
+        }
+
+        if (m_autocast is { HasValue: false })                           
+        {
+            var parsed_m_autocast = Parse_GameSAICommunicateEvent_m_autocast();
+            m_autocast = Option.Some(parsed_m_autocast);
+        }
+
+        if (m_targetUnitTag is { HasValue: false })                           
+        {
+            var parsed_m_targetUnitTag = Parse_GameSAICommunicateEvent_m_targetUnitTag();
+            m_targetUnitTag = Option.Some(parsed_m_targetUnitTag);
+        }
+
+        if (m_targetUnitSnapshotUnitLink is { HasValue: false })                           
+        {
+            var parsed_m_targetUnitSnapshotUnitLink = Parse_GameSAICommunicateEvent_m_targetUnitSnapshotUnitLink();
+            m_targetUnitSnapshotUnitLink = Option.Some(parsed_m_targetUnitSnapshotUnitLink);
+        }
+
+        if (m_targetUnitSnapshotPlayerId is { HasValue: true, Value.HasValue: false })
+        {
+            var parsed_m_targetUnitSnapshotPlayerId = Parse_GameSAICommunicateEvent_m_targetUnitSnapshotPlayerId();
+            m_targetUnitSnapshotPlayerId = Option.Some(parsed_m_targetUnitSnapshotPlayerId);
+        }
+
+        if (m_targetPoint is { HasValue: false })                           
+        {
+            var parsed_m_targetPoint = Parse_GameSAICommunicateEvent_m_targetPoint();
+            m_targetPoint = Option.Some(parsed_m_targetPoint);
+        }
+
+        return new GameSAICommunicateEvent
+        {   
+            m_beacon = Option.OkOrReturnMissingFieldErr(m_beacon),
+            m_ally = Option.OkOrReturnMissingFieldErr(m_ally),
+            m_autocast = Option.OkOrReturnMissingFieldErr(m_autocast),
+            m_targetUnitTag = Option.OkOrReturnMissingFieldErr(m_targetUnitTag),
+            m_targetUnitSnapshotUnitLink = Option.OkOrReturnMissingFieldErr(m_targetUnitSnapshotUnitLink),
+            m_targetUnitSnapshotPlayerId = Option.OkOrReturnMissingFieldErr(m_targetUnitSnapshotPlayerId),
+            m_targetPoint = Option.OkOrReturnMissingFieldErr(m_targetPoint),
+        };
+    }
+
+    public int8 Parse_GameSAICommunicateEvent_m_beacon()
+    {                             
+        var m_beacon = Parse_int8();
+        return m_beacon;
+    }
+
+    public int8 Parse_GameSAICommunicateEvent_m_ally()
+    {                             
+        var m_ally = Parse_int8();
+        return m_ally;
+    }
+
+    public int8 Parse_GameSAICommunicateEvent_m_autocast()
+    {                             
+        var m_autocast = Parse_int8();
+        return m_autocast;
+    }
+
+    public GameTUnitTag Parse_GameSAICommunicateEvent_m_targetUnitTag()
+    {                             
+        var m_targetUnitTag = Parse_GameTUnitTag();
+        return m_targetUnitTag;
+    }
+
+    public GameTUnitLink Parse_GameSAICommunicateEvent_m_targetUnitSnapshotUnitLink()
+    {                             
+        var m_targetUnitSnapshotUnitLink = Parse_GameTUnitLink();
+        return m_targetUnitSnapshotUnitLink;
+    }
+
+    public Option<GameTPlayerId> Parse_GameSAICommunicateEvent_m_targetUnitSnapshotPlayerId()
+    {                             
+            var isProvided = parse_bool();
+
+            if (isProvided)
+            {
+                var res = Parse_GameTPlayerId();
+
+                return Option.Some(res);
+            }
+            else
+            {
+                return Option.None;
+            }
+    }
+
+    public GameSPoint3 Parse_GameSAICommunicateEvent_m_targetPoint()
+    {                             
+        var m_targetPoint = Parse_GameSPoint3();
+        return m_targetPoint;
+    }
+
+    public GameSSetAbsoluteGameSpeedEvent Parse_GameSSetAbsoluteGameSpeedEvent() 
+    {
+        Option<GameEGameSpeed> m_speed = Option.None;
+        if (m_speed is { HasValue: false })                           
+        {
+            var parsed_m_speed = Parse_GameSSetAbsoluteGameSpeedEvent_m_speed();
+            m_speed = Option.Some(parsed_m_speed);
+        }
+
+        return new GameSSetAbsoluteGameSpeedEvent
+        {   
+            m_speed = Option.OkOrReturnMissingFieldErr(m_speed),
+        };
+    }
+
+    public GameEGameSpeed Parse_GameSSetAbsoluteGameSpeedEvent_m_speed()
+    {                             
+        var m_speed = Parse_GameEGameSpeed();
+        return m_speed;
+    }
+
+    public GameSAddAbsoluteGameSpeedEvent Parse_GameSAddAbsoluteGameSpeedEvent() 
+    {
+        Option<int8> m_delta = Option.None;
+        if (m_delta is { HasValue: false })                           
+        {
+            var parsed_m_delta = Parse_GameSAddAbsoluteGameSpeedEvent_m_delta();
+            m_delta = Option.Some(parsed_m_delta);
+        }
+
+        return new GameSAddAbsoluteGameSpeedEvent
+        {   
+            m_delta = Option.OkOrReturnMissingFieldErr(m_delta),
+        };
+    }
+
+    public int8 Parse_GameSAddAbsoluteGameSpeedEvent_m_delta()
+    {                             
+        var m_delta = Parse_int8();
+        return m_delta;
+    }
+
+    public GameSBroadcastCheatEvent Parse_GameSBroadcastCheatEvent() 
+    {
+        Option<GameCCheatString> m_verb = Option.None;
+        Option<GameCCheatString> m_arguments = Option.None;
+        if (m_verb is { HasValue: false })                           
+        {
+            var parsed_m_verb = Parse_GameSBroadcastCheatEvent_m_verb();
+            m_verb = Option.Some(parsed_m_verb);
+        }
+
+        if (m_arguments is { HasValue: false })                           
+        {
+            var parsed_m_arguments = Parse_GameSBroadcastCheatEvent_m_arguments();
+            m_arguments = Option.Some(parsed_m_arguments);
+        }
+
+        return new GameSBroadcastCheatEvent
+        {   
+            m_verb = Option.OkOrReturnMissingFieldErr(m_verb),
+            m_arguments = Option.OkOrReturnMissingFieldErr(m_arguments),
+        };
+    }
+
+    public GameCCheatString Parse_GameSBroadcastCheatEvent_m_verb()
+    {                             
+        var m_verb = Parse_GameCCheatString();
+        return m_verb;
+    }
+
+    public GameCCheatString Parse_GameSBroadcastCheatEvent_m_arguments()
+    {                             
+        var m_arguments = Parse_GameCCheatString();
+        return m_arguments;
+    }
+
+    public GameSAllianceEvent Parse_GameSAllianceEvent() 
+    {
+        Option<uint32> m_alliance = Option.None;
+        Option<uint32> m_control = Option.None;
+        if (m_alliance is { HasValue: false })                           
+        {
+            var parsed_m_alliance = Parse_GameSAllianceEvent_m_alliance();
+            m_alliance = Option.Some(parsed_m_alliance);
+        }
+
+        if (m_control is { HasValue: false })                           
+        {
+            var parsed_m_control = Parse_GameSAllianceEvent_m_control();
+            m_control = Option.Some(parsed_m_control);
+        }
+
+        return new GameSAllianceEvent
+        {   
+            m_alliance = Option.OkOrReturnMissingFieldErr(m_alliance),
+            m_control = Option.OkOrReturnMissingFieldErr(m_control),
+        };
+    }
+
+    public uint32 Parse_GameSAllianceEvent_m_alliance()
+    {                             
+        var m_alliance = Parse_uint32();
+        return m_alliance;
+    }
+
+    public uint32 Parse_GameSAllianceEvent_m_control()
+    {                             
+        var m_control = Parse_uint32();
+        return m_control;
+    }
+
+    public GameSUnitClickEvent Parse_GameSUnitClickEvent() 
+    {
+        Option<GameTUnitTag> m_unitTag = Option.None;
+        if (m_unitTag is { HasValue: false })                           
+        {
+            var parsed_m_unitTag = Parse_GameSUnitClickEvent_m_unitTag();
+            m_unitTag = Option.Some(parsed_m_unitTag);
+        }
+
+        return new GameSUnitClickEvent
+        {   
+            m_unitTag = Option.OkOrReturnMissingFieldErr(m_unitTag),
+        };
+    }
+
+    public GameTUnitTag Parse_GameSUnitClickEvent_m_unitTag()
+    {                             
+        var m_unitTag = Parse_GameTUnitTag();
+        return m_unitTag;
+    }
+
+    public GameSUnitHighlightEvent Parse_GameSUnitHighlightEvent() 
+    {
+        Option<GameTUnitTag> m_unitTag = Option.None;
+        Option<uint8> m_flags = Option.None;
+        if (m_unitTag is { HasValue: false })                           
+        {
+            var parsed_m_unitTag = Parse_GameSUnitHighlightEvent_m_unitTag();
+            m_unitTag = Option.Some(parsed_m_unitTag);
+        }
+
+        if (m_flags is { HasValue: false })                           
+        {
+            var parsed_m_flags = Parse_GameSUnitHighlightEvent_m_flags();
+            m_flags = Option.Some(parsed_m_flags);
+        }
+
+        return new GameSUnitHighlightEvent
+        {   
+            m_unitTag = Option.OkOrReturnMissingFieldErr(m_unitTag),
+            m_flags = Option.OkOrReturnMissingFieldErr(m_flags),
+        };
+    }
+
+    public GameTUnitTag Parse_GameSUnitHighlightEvent_m_unitTag()
+    {                             
+        var m_unitTag = Parse_GameTUnitTag();
+        return m_unitTag;
+    }
+
+    public uint8 Parse_GameSUnitHighlightEvent_m_flags()
+    {                             
+        var m_flags = Parse_uint8();
+        return m_flags;
+    }
+
+    public GameSTriggerReplySelectedEvent Parse_GameSTriggerReplySelectedEvent() 
+    {
+        Option<int32> m_conversationId = Option.None;
+        Option<int32> m_replyId = Option.None;
+        if (m_conversationId is { HasValue: false })                           
+        {
+            var parsed_m_conversationId = Parse_GameSTriggerReplySelectedEvent_m_conversationId();
+            m_conversationId = Option.Some(parsed_m_conversationId);
+        }
+
+        if (m_replyId is { HasValue: false })                           
+        {
+            var parsed_m_replyId = Parse_GameSTriggerReplySelectedEvent_m_replyId();
+            m_replyId = Option.Some(parsed_m_replyId);
+        }
+
+        return new GameSTriggerReplySelectedEvent
+        {   
+            m_conversationId = Option.OkOrReturnMissingFieldErr(m_conversationId),
+            m_replyId = Option.OkOrReturnMissingFieldErr(m_replyId),
+        };
+    }
+
+    public int32 Parse_GameSTriggerReplySelectedEvent_m_conversationId()
+    {                             
+        var m_conversationId = Parse_int32();
+        return m_conversationId;
+    }
+
+    public int32 Parse_GameSTriggerReplySelectedEvent_m_replyId()
+    {                             
+        var m_replyId = Parse_int32();
+        return m_replyId;
+    }
+
+    public GameSTriggerAbortMissionEvent Parse_GameSTriggerAbortMissionEvent() 
+    {
+        return new GameSTriggerAbortMissionEvent
+        {   
+        };
+    }
+
+    public GameSTriggerPurchaseMadeEvent Parse_GameSTriggerPurchaseMadeEvent() 
+    {
+        Option<int32> m_purchaseItemId = Option.None;
+        if (m_purchaseItemId is { HasValue: false })                           
+        {
+            var parsed_m_purchaseItemId = Parse_GameSTriggerPurchaseMadeEvent_m_purchaseItemId();
+            m_purchaseItemId = Option.Some(parsed_m_purchaseItemId);
+        }
+
+        return new GameSTriggerPurchaseMadeEvent
+        {   
+            m_purchaseItemId = Option.OkOrReturnMissingFieldErr(m_purchaseItemId),
+        };
+    }
+
+    public int32 Parse_GameSTriggerPurchaseMadeEvent_m_purchaseItemId()
+    {                             
+        var m_purchaseItemId = Parse_int32();
+        return m_purchaseItemId;
+    }
+
+    public GameSTriggerPurchaseExitEvent Parse_GameSTriggerPurchaseExitEvent() 
+    {
+        return new GameSTriggerPurchaseExitEvent
+        {   
+        };
+    }
+
+    public GameSTriggerPlanetMissionLaunchedEvent Parse_GameSTriggerPlanetMissionLaunchedEvent() 
+    {
+        Option<int32> m_difficultyLevel = Option.None;
+        if (m_difficultyLevel is { HasValue: false })                           
+        {
+            var parsed_m_difficultyLevel = Parse_GameSTriggerPlanetMissionLaunchedEvent_m_difficultyLevel();
+            m_difficultyLevel = Option.Some(parsed_m_difficultyLevel);
+        }
+
+        return new GameSTriggerPlanetMissionLaunchedEvent
+        {   
+            m_difficultyLevel = Option.OkOrReturnMissingFieldErr(m_difficultyLevel),
+        };
+    }
+
+    public int32 Parse_GameSTriggerPlanetMissionLaunchedEvent_m_difficultyLevel()
+    {                             
+        var m_difficultyLevel = Parse_int32();
+        return m_difficultyLevel;
+    }
+
+    public GameSTriggerPlanetPanelCanceledEvent Parse_GameSTriggerPlanetPanelCanceledEvent() 
+    {
+        return new GameSTriggerPlanetPanelCanceledEvent
+        {   
+        };
+    }
+
+    public GameSTriggerDialogControlEvent Parse_GameSTriggerDialogControlEvent() 
+    {
+        Option<int32> m_controlId = Option.None;
+        Option<int32> m_eventType = Option.None;
+        Option<m_eventData> m_eventData = Option.None;
+        if (m_controlId is { HasValue: false })                           
+        {
+            var parsed_m_controlId = Parse_GameSTriggerDialogControlEvent_m_controlId();
+            m_controlId = Option.Some(parsed_m_controlId);
+        }
+
+        if (m_eventType is { HasValue: false })                           
+        {
+            var parsed_m_eventType = Parse_GameSTriggerDialogControlEvent_m_eventType();
+            m_eventType = Option.Some(parsed_m_eventType);
+        }
+
+        if (m_eventData is { HasValue: false })                           
+        {
+            var parsed_m_eventData = Parse_GameSTriggerDialogControlEvent_m_eventData();
+            m_eventData = Option.Some(parsed_m_eventData);
+        }
+
+        return new GameSTriggerDialogControlEvent
+        {   
+            m_controlId = Option.OkOrReturnMissingFieldErr(m_controlId),
+            m_eventType = Option.OkOrReturnMissingFieldErr(m_eventType),
+            m_eventData = Option.OkOrReturnMissingFieldErr(m_eventData),
+        };
+    }
+
+    public int32 Parse_GameSTriggerDialogControlEvent_m_controlId()
+    {                             
+        var m_controlId = Parse_int32();
+        return m_controlId;
+    }
+
+    public int32 Parse_GameSTriggerDialogControlEvent_m_eventType()
+    {                             
+        var m_eventType = Parse_int32();
+        return m_eventType;
+    }
+
+    public m_eventData Parse_GameSTriggerDialogControlEvent_m_eventData()
+    {                             
+        var m_eventData = Parse_m_eventData();
+        return m_eventData;
+    }
+
+    public GameSTriggerSkippedEvent Parse_GameSTriggerSkippedEvent() 
+    {
+        return new GameSTriggerSkippedEvent
+        {   
+        };
+    }
+
+    public GameSTriggerSoundLengthQueryEvent Parse_GameSTriggerSoundLengthQueryEvent() 
+    {
+        Option<uint32> m_soundHash = Option.None;
+        Option<uint32> m_length = Option.None;
+        if (m_soundHash is { HasValue: false })                           
+        {
+            var parsed_m_soundHash = Parse_GameSTriggerSoundLengthQueryEvent_m_soundHash();
+            m_soundHash = Option.Some(parsed_m_soundHash);
+        }
+
+        if (m_length is { HasValue: false })                           
+        {
+            var parsed_m_length = Parse_GameSTriggerSoundLengthQueryEvent_m_length();
+            m_length = Option.Some(parsed_m_length);
+        }
+
+        return new GameSTriggerSoundLengthQueryEvent
+        {   
+            m_soundHash = Option.OkOrReturnMissingFieldErr(m_soundHash),
+            m_length = Option.OkOrReturnMissingFieldErr(m_length),
+        };
+    }
+
+    public uint32 Parse_GameSTriggerSoundLengthQueryEvent_m_soundHash()
+    {                             
+        var m_soundHash = Parse_uint32();
+        return m_soundHash;
+    }
+
+    public uint32 Parse_GameSTriggerSoundLengthQueryEvent_m_length()
+    {                             
+        var m_length = Parse_uint32();
+        return m_length;
+    }
+
+    public GameSTriggerSoundLengthSyncEvent Parse_GameSTriggerSoundLengthSyncEvent() 
+    {
+        Option<GameSSyncSoundLength> m_syncInfo = Option.None;
+        if (m_syncInfo is { HasValue: false })                           
+        {
+            var parsed_m_syncInfo = Parse_GameSTriggerSoundLengthSyncEvent_m_syncInfo();
+            m_syncInfo = Option.Some(parsed_m_syncInfo);
+        }
+
+        return new GameSTriggerSoundLengthSyncEvent
+        {   
+            m_syncInfo = Option.OkOrReturnMissingFieldErr(m_syncInfo),
+        };
+    }
+
+    public GameSSyncSoundLength Parse_GameSTriggerSoundLengthSyncEvent_m_syncInfo()
+    {                             
+        var m_syncInfo = Parse_GameSSyncSoundLength();
+        return m_syncInfo;
+    }
+
+    public GameSTriggerSoundOffsetEvent Parse_GameSTriggerSoundOffsetEvent() 
+    {
+        Option<GameTTriggerSoundTag> m_sound = Option.None;
+        if (m_sound is { HasValue: false })                           
+        {
+            var parsed_m_sound = Parse_GameSTriggerSoundOffsetEvent_m_sound();
+            m_sound = Option.Some(parsed_m_sound);
+        }
+
+        return new GameSTriggerSoundOffsetEvent
+        {   
+            m_sound = Option.OkOrReturnMissingFieldErr(m_sound),
+        };
+    }
+
+    public GameTTriggerSoundTag Parse_GameSTriggerSoundOffsetEvent_m_sound()
+    {                             
+        var m_sound = Parse_GameTTriggerSoundTag();
+        return m_sound;
+    }
+
+    public GameSTriggerTransmissionOffsetEvent Parse_GameSTriggerTransmissionOffsetEvent() 
+    {
+        Option<int32> m_transmissionId = Option.None;
+        if (m_transmissionId is { HasValue: false })                           
+        {
+            var parsed_m_transmissionId = Parse_GameSTriggerTransmissionOffsetEvent_m_transmissionId();
+            m_transmissionId = Option.Some(parsed_m_transmissionId);
+        }
+
+        return new GameSTriggerTransmissionOffsetEvent
+        {   
+            m_transmissionId = Option.OkOrReturnMissingFieldErr(m_transmissionId),
+        };
+    }
+
+    public int32 Parse_GameSTriggerTransmissionOffsetEvent_m_transmissionId()
+    {                             
+        var m_transmissionId = Parse_int32();
+        return m_transmissionId;
+    }
+
+    public GameSTriggerTransmissionCompleteEvent Parse_GameSTriggerTransmissionCompleteEvent() 
+    {
+        Option<int32> m_transmissionId = Option.None;
+        if (m_transmissionId is { HasValue: false })                           
+        {
+            var parsed_m_transmissionId = Parse_GameSTriggerTransmissionCompleteEvent_m_transmissionId();
+            m_transmissionId = Option.Some(parsed_m_transmissionId);
+        }
+
+        return new GameSTriggerTransmissionCompleteEvent
+        {   
+            m_transmissionId = Option.OkOrReturnMissingFieldErr(m_transmissionId),
+        };
+    }
+
+    public int32 Parse_GameSTriggerTransmissionCompleteEvent_m_transmissionId()
+    {                             
+        var m_transmissionId = Parse_int32();
+        return m_transmissionId;
+    }
+
+    public GameSCameraUpdateEvent Parse_GameSCameraUpdateEvent() 
+    {
+        Option<GameSPoint> m_target = Option.None;
+        Option<GameTFixedBits> m_distance = Option.None;
+        Option<GameTFixedBits> m_pitch = Option.None;
+        Option<GameTFixedBits> m_yaw = Option.None;
+        if (m_target is { HasValue: false })                           
+        {
+            var parsed_m_target = Parse_GameSCameraUpdateEvent_m_target();
+            m_target = Option.Some(parsed_m_target);
+        }
+
+        if (m_distance is { HasValue: false })                           
+        {
+            var parsed_m_distance = Parse_GameSCameraUpdateEvent_m_distance();
+            m_distance = Option.Some(parsed_m_distance);
+        }
+
+        if (m_pitch is { HasValue: false })                           
+        {
+            var parsed_m_pitch = Parse_GameSCameraUpdateEvent_m_pitch();
+            m_pitch = Option.Some(parsed_m_pitch);
+        }
+
+        if (m_yaw is { HasValue: false })                           
+        {
+            var parsed_m_yaw = Parse_GameSCameraUpdateEvent_m_yaw();
+            m_yaw = Option.Some(parsed_m_yaw);
+        }
+
+        return new GameSCameraUpdateEvent
+        {   
+            m_target = Option.OkOrReturnMissingFieldErr(m_target),
+            m_distance = Option.OkOrReturnMissingFieldErr(m_distance),
+            m_pitch = Option.OkOrReturnMissingFieldErr(m_pitch),
+            m_yaw = Option.OkOrReturnMissingFieldErr(m_yaw),
+        };
+    }
+
+    public GameSPoint Parse_GameSCameraUpdateEvent_m_target()
+    {                             
+        var m_target = Parse_GameSPoint();
+        return m_target;
+    }
+
+    public GameTFixedBits Parse_GameSCameraUpdateEvent_m_distance()
+    {                             
+        var m_distance = Parse_GameTFixedBits();
+        return m_distance;
+    }
+
+    public GameTFixedBits Parse_GameSCameraUpdateEvent_m_pitch()
+    {                             
+        var m_pitch = Parse_GameTFixedBits();
+        return m_pitch;
+    }
+
+    public GameTFixedBits Parse_GameSCameraUpdateEvent_m_yaw()
+    {                             
+        var m_yaw = Parse_GameTFixedBits();
+        return m_yaw;
+    }
+
+    public GameSTriggerConversationSkippedEvent Parse_GameSTriggerConversationSkippedEvent() 
+    {
+        Option<GameEConversationSkip> m_skipType = Option.None;
+        if (m_skipType is { HasValue: false })                           
+        {
+            var parsed_m_skipType = Parse_GameSTriggerConversationSkippedEvent_m_skipType();
+            m_skipType = Option.Some(parsed_m_skipType);
+        }
+
+        return new GameSTriggerConversationSkippedEvent
+        {   
+            m_skipType = Option.OkOrReturnMissingFieldErr(m_skipType),
+        };
+    }
+
+    public GameEConversationSkip Parse_GameSTriggerConversationSkippedEvent_m_skipType()
+    {                             
+        var m_skipType = Parse_GameEConversationSkip();
+        return m_skipType;
+    }
+
+    public GameSTriggerMouseClickedEvent Parse_GameSTriggerMouseClickedEvent() 
+    {
+        Option<uint32> m_button = Option.None;
+        Option<bool> m_down = Option.None;
+        Option<uint32> m_posXUI = Option.None;
+        Option<uint32> m_posYUI = Option.None;
+        Option<GameTFixedBits> m_posXWorld = Option.None;
+        Option<GameTFixedBits> m_posYWorld = Option.None;
+        Option<GameTFixedBits> m_posZWorld = Option.None;
+        if (m_button is { HasValue: false })                           
+        {
+            var parsed_m_button = Parse_GameSTriggerMouseClickedEvent_m_button();
+            m_button = Option.Some(parsed_m_button);
+        }
+
+        if (m_down is { HasValue: false })                           
+        {
+            var parsed_m_down = Parse_GameSTriggerMouseClickedEvent_m_down();
+            m_down = Option.Some(parsed_m_down);
+        }
+
+        if (m_posXUI is { HasValue: false })                           
+        {
+            var parsed_m_posXUI = Parse_GameSTriggerMouseClickedEvent_m_posXUI();
+            m_posXUI = Option.Some(parsed_m_posXUI);
+        }
+
+        if (m_posYUI is { HasValue: false })                           
+        {
+            var parsed_m_posYUI = Parse_GameSTriggerMouseClickedEvent_m_posYUI();
+            m_posYUI = Option.Some(parsed_m_posYUI);
+        }
+
+        if (m_posXWorld is { HasValue: false })                           
+        {
+            var parsed_m_posXWorld = Parse_GameSTriggerMouseClickedEvent_m_posXWorld();
+            m_posXWorld = Option.Some(parsed_m_posXWorld);
+        }
+
+        if (m_posYWorld is { HasValue: false })                           
+        {
+            var parsed_m_posYWorld = Parse_GameSTriggerMouseClickedEvent_m_posYWorld();
+            m_posYWorld = Option.Some(parsed_m_posYWorld);
+        }
+
+        if (m_posZWorld is { HasValue: false })                           
+        {
+            var parsed_m_posZWorld = Parse_GameSTriggerMouseClickedEvent_m_posZWorld();
+            m_posZWorld = Option.Some(parsed_m_posZWorld);
+        }
+
+        return new GameSTriggerMouseClickedEvent
+        {   
+            m_button = Option.OkOrReturnMissingFieldErr(m_button),
+            m_down = Option.OkOrReturnMissingFieldErr(m_down),
+            m_posXUI = Option.OkOrReturnMissingFieldErr(m_posXUI),
+            m_posYUI = Option.OkOrReturnMissingFieldErr(m_posYUI),
+            m_posXWorld = Option.OkOrReturnMissingFieldErr(m_posXWorld),
+            m_posYWorld = Option.OkOrReturnMissingFieldErr(m_posYWorld),
+            m_posZWorld = Option.OkOrReturnMissingFieldErr(m_posZWorld),
+        };
+    }
+
+    public uint32 Parse_GameSTriggerMouseClickedEvent_m_button()
+    {                             
+        var m_button = Parse_uint32();
+        return m_button;
+    }
+
+    public bool Parse_GameSTriggerMouseClickedEvent_m_down()
+    {                             
+        var m_down = parse_bool();
+        return m_down;
+    }
+
+    public uint32 Parse_GameSTriggerMouseClickedEvent_m_posXUI()
+    {                             
+        var m_posXUI = Parse_uint32();
+        return m_posXUI;
+    }
+
+    public uint32 Parse_GameSTriggerMouseClickedEvent_m_posYUI()
+    {                             
+        var m_posYUI = Parse_uint32();
+        return m_posYUI;
+    }
+
+    public GameTFixedBits Parse_GameSTriggerMouseClickedEvent_m_posXWorld()
+    {                             
+        var m_posXWorld = Parse_GameTFixedBits();
+        return m_posXWorld;
+    }
+
+    public GameTFixedBits Parse_GameSTriggerMouseClickedEvent_m_posYWorld()
+    {                             
+        var m_posYWorld = Parse_GameTFixedBits();
+        return m_posYWorld;
+    }
+
+    public GameTFixedBits Parse_GameSTriggerMouseClickedEvent_m_posZWorld()
+    {                             
+        var m_posZWorld = Parse_GameTFixedBits();
+        return m_posZWorld;
+    }
+
+    public GameSTriggerPlanetPanelReplayEvent Parse_GameSTriggerPlanetPanelReplayEvent() 
+    {
+        return new GameSTriggerPlanetPanelReplayEvent
+        {   
+        };
+    }
+
+    public GameSTriggerSoundtrackDoneEvent Parse_GameSTriggerSoundtrackDoneEvent() 
+    {
+        Option<uint32> m_soundtrack = Option.None;
+        if (m_soundtrack is { HasValue: false })                           
+        {
+            var parsed_m_soundtrack = Parse_GameSTriggerSoundtrackDoneEvent_m_soundtrack();
+            m_soundtrack = Option.Some(parsed_m_soundtrack);
+        }
+
+        return new GameSTriggerSoundtrackDoneEvent
+        {   
+            m_soundtrack = Option.OkOrReturnMissingFieldErr(m_soundtrack),
+        };
+    }
+
+    public uint32 Parse_GameSTriggerSoundtrackDoneEvent_m_soundtrack()
+    {                             
+        var m_soundtrack = Parse_uint32();
+        return m_soundtrack;
+    }
+
+    public GameSTriggerPlanetMissionSelectedEvent Parse_GameSTriggerPlanetMissionSelectedEvent() 
+    {
+        Option<int32> m_planetId = Option.None;
+        if (m_planetId is { HasValue: false })                           
+        {
+            var parsed_m_planetId = Parse_GameSTriggerPlanetMissionSelectedEvent_m_planetId();
+            m_planetId = Option.Some(parsed_m_planetId);
+        }
+
+        return new GameSTriggerPlanetMissionSelectedEvent
+        {   
+            m_planetId = Option.OkOrReturnMissingFieldErr(m_planetId),
+        };
+    }
+
+    public int32 Parse_GameSTriggerPlanetMissionSelectedEvent_m_planetId()
+    {                             
+        var m_planetId = Parse_int32();
+        return m_planetId;
+    }
+
+    public GameSTriggerKeyPressedEvent Parse_GameSTriggerKeyPressedEvent() 
+    {
+        Option<int8> m_key = Option.None;
+        Option<int8> m_flags = Option.None;
+        if (m_key is { HasValue: false })                           
+        {
+            var parsed_m_key = Parse_GameSTriggerKeyPressedEvent_m_key();
+            m_key = Option.Some(parsed_m_key);
+        }
+
+        if (m_flags is { HasValue: false })                           
+        {
+            var parsed_m_flags = Parse_GameSTriggerKeyPressedEvent_m_flags();
+            m_flags = Option.Some(parsed_m_flags);
+        }
+
+        return new GameSTriggerKeyPressedEvent
+        {   
+            m_key = Option.OkOrReturnMissingFieldErr(m_key),
+            m_flags = Option.OkOrReturnMissingFieldErr(m_flags),
+        };
+    }
+
+    public int8 Parse_GameSTriggerKeyPressedEvent_m_key()
+    {                             
+        var m_key = Parse_int8();
+        return m_key;
+    }
+
+    public int8 Parse_GameSTriggerKeyPressedEvent_m_flags()
+    {                             
+        var m_flags = Parse_int8();
+        return m_flags;
+    }
+
+    public GameSTriggerPlanetPanelBirthCompleteEvent Parse_GameSTriggerPlanetPanelBirthCompleteEvent() 
+    {
+        return new GameSTriggerPlanetPanelBirthCompleteEvent
+        {   
+        };
+    }
+
+    public GameSTriggerPlanetPanelDeathCompleteEvent Parse_GameSTriggerPlanetPanelDeathCompleteEvent() 
+    {
+        return new GameSTriggerPlanetPanelDeathCompleteEvent
+        {   
+        };
+    }
+
+    public GameSResourceRequestEvent Parse_GameSResourceRequestEvent() 
+    {
+        Option<List<int32>> m_resources = Option.None;
+        if (m_resources is { HasValue: false })                           
+        {
+            var parsed_m_resources = Parse_GameSResourceRequestEvent_m_resources();
+            m_resources = Option.Some(parsed_m_resources);
+        }
+
+        return new GameSResourceRequestEvent
+        {   
+            m_resources = Option.OkOrReturnMissingFieldErr(m_resources),
+        };
+    }
+
+    public List<int32> Parse_GameSResourceRequestEvent_m_resources()
+    {                             
+        var arrayLength = take_n_bits_into_i64(3);
+        var array = new List<int32>();
+
+        for (var i = 0 ; i < arrayLength ; ++i)
+        {
+            var data = Parse_int32();
+            array.Add(data);
+        }
+        return array;
+    }
+
+    public GameSResourceRequestFulfillEvent Parse_GameSResourceRequestFulfillEvent() 
+    {
+        Option<int32> m_fulfillRequestId = Option.None;
+        if (m_fulfillRequestId is { HasValue: false })                           
+        {
+            var parsed_m_fulfillRequestId = Parse_GameSResourceRequestFulfillEvent_m_fulfillRequestId();
+            m_fulfillRequestId = Option.Some(parsed_m_fulfillRequestId);
+        }
+
+        return new GameSResourceRequestFulfillEvent
+        {   
+            m_fulfillRequestId = Option.OkOrReturnMissingFieldErr(m_fulfillRequestId),
+        };
+    }
+
+    public int32 Parse_GameSResourceRequestFulfillEvent_m_fulfillRequestId()
+    {                             
+        var m_fulfillRequestId = Parse_int32();
+        return m_fulfillRequestId;
+    }
+
+    public GameSResourceRequestCancelEvent Parse_GameSResourceRequestCancelEvent() 
+    {
+        Option<int32> m_cancelRequestId = Option.None;
+        if (m_cancelRequestId is { HasValue: false })                           
+        {
+            var parsed_m_cancelRequestId = Parse_GameSResourceRequestCancelEvent_m_cancelRequestId();
+            m_cancelRequestId = Option.Some(parsed_m_cancelRequestId);
+        }
+
+        return new GameSResourceRequestCancelEvent
+        {   
+            m_cancelRequestId = Option.OkOrReturnMissingFieldErr(m_cancelRequestId),
+        };
+    }
+
+    public int32 Parse_GameSResourceRequestCancelEvent_m_cancelRequestId()
+    {                             
+        var m_cancelRequestId = Parse_int32();
+        return m_cancelRequestId;
+    }
+
+    public GameSTriggerResearchPanelExitEvent Parse_GameSTriggerResearchPanelExitEvent() 
+    {
+        return new GameSTriggerResearchPanelExitEvent
+        {   
+        };
+    }
+
+    public GameSTriggerResearchPanelPurchaseEvent Parse_GameSTriggerResearchPanelPurchaseEvent() 
+    {
+        return new GameSTriggerResearchPanelPurchaseEvent
+        {   
+        };
+    }
+
+    public GameSTriggerResearchPanelSelectionChangedEvent Parse_GameSTriggerResearchPanelSelectionChangedEvent() 
+    {
+        Option<int32> m_researchItemId = Option.None;
+        if (m_researchItemId is { HasValue: false })                           
+        {
+            var parsed_m_researchItemId = Parse_GameSTriggerResearchPanelSelectionChangedEvent_m_researchItemId();
+            m_researchItemId = Option.Some(parsed_m_researchItemId);
+        }
+
+        return new GameSTriggerResearchPanelSelectionChangedEvent
+        {   
+            m_researchItemId = Option.OkOrReturnMissingFieldErr(m_researchItemId),
+        };
+    }
+
+    public int32 Parse_GameSTriggerResearchPanelSelectionChangedEvent_m_researchItemId()
+    {                             
+        var m_researchItemId = Parse_int32();
+        return m_researchItemId;
+    }
+
+    public GameSLagMessageEvent Parse_GameSLagMessageEvent() 
+    {
+        Option<GameTPlayerId> m_laggingPlayerId = Option.None;
+        if (m_laggingPlayerId is { HasValue: false })                           
+        {
+            var parsed_m_laggingPlayerId = Parse_GameSLagMessageEvent_m_laggingPlayerId();
+            m_laggingPlayerId = Option.Some(parsed_m_laggingPlayerId);
+        }
+
+        return new GameSLagMessageEvent
+        {   
+            m_laggingPlayerId = Option.OkOrReturnMissingFieldErr(m_laggingPlayerId),
+        };
+    }
+
+    public GameTPlayerId Parse_GameSLagMessageEvent_m_laggingPlayerId()
+    {                             
+        var m_laggingPlayerId = Parse_GameTPlayerId();
+        return m_laggingPlayerId;
+    }
+
+    public GameSTriggerMercenaryPanelExitEvent Parse_GameSTriggerMercenaryPanelExitEvent() 
+    {
+        return new GameSTriggerMercenaryPanelExitEvent
+        {   
+        };
+    }
+
+    public GameSTriggerMercenaryPanelPurchaseEvent Parse_GameSTriggerMercenaryPanelPurchaseEvent() 
+    {
+        return new GameSTriggerMercenaryPanelPurchaseEvent
+        {   
+        };
+    }
+
+    public GameSTriggerMercenaryPanelSelectionChangedEvent Parse_GameSTriggerMercenaryPanelSelectionChangedEvent() 
+    {
+        Option<int32> m_mercenaryId = Option.None;
+        if (m_mercenaryId is { HasValue: false })                           
+        {
+            var parsed_m_mercenaryId = Parse_GameSTriggerMercenaryPanelSelectionChangedEvent_m_mercenaryId();
+            m_mercenaryId = Option.Some(parsed_m_mercenaryId);
+        }
+
+        return new GameSTriggerMercenaryPanelSelectionChangedEvent
+        {   
+            m_mercenaryId = Option.OkOrReturnMissingFieldErr(m_mercenaryId),
+        };
+    }
+
+    public int32 Parse_GameSTriggerMercenaryPanelSelectionChangedEvent_m_mercenaryId()
+    {                             
+        var m_mercenaryId = Parse_int32();
+        return m_mercenaryId;
+    }
+
+    public GameSTriggerVictoryPanelExitEvent Parse_GameSTriggerVictoryPanelExitEvent() 
+    {
+        return new GameSTriggerVictoryPanelExitEvent
+        {   
+        };
+    }
+
+    public GameSTriggerBattleReportPanelExitEvent Parse_GameSTriggerBattleReportPanelExitEvent() 
+    {
+        return new GameSTriggerBattleReportPanelExitEvent
+        {   
+        };
+    }
+
+    public GameSTriggerBattleReportPanelPlayMissionEvent Parse_GameSTriggerBattleReportPanelPlayMissionEvent() 
+    {
+        Option<int32> m_battleReportId = Option.None;
+        Option<int32> m_difficultyLevel = Option.None;
+        if (m_battleReportId is { HasValue: false })                           
+        {
+            var parsed_m_battleReportId = Parse_GameSTriggerBattleReportPanelPlayMissionEvent_m_battleReportId();
+            m_battleReportId = Option.Some(parsed_m_battleReportId);
+        }
+
+        if (m_difficultyLevel is { HasValue: false })                           
+        {
+            var parsed_m_difficultyLevel = Parse_GameSTriggerBattleReportPanelPlayMissionEvent_m_difficultyLevel();
+            m_difficultyLevel = Option.Some(parsed_m_difficultyLevel);
+        }
+
+        return new GameSTriggerBattleReportPanelPlayMissionEvent
+        {   
+            m_battleReportId = Option.OkOrReturnMissingFieldErr(m_battleReportId),
+            m_difficultyLevel = Option.OkOrReturnMissingFieldErr(m_difficultyLevel),
+        };
+    }
+
+    public int32 Parse_GameSTriggerBattleReportPanelPlayMissionEvent_m_battleReportId()
+    {                             
+        var m_battleReportId = Parse_int32();
+        return m_battleReportId;
+    }
+
+    public int32 Parse_GameSTriggerBattleReportPanelPlayMissionEvent_m_difficultyLevel()
+    {                             
+        var m_difficultyLevel = Parse_int32();
+        return m_difficultyLevel;
+    }
+
+    public GameSTriggerBattleReportPanelPlaySceneEvent Parse_GameSTriggerBattleReportPanelPlaySceneEvent() 
+    {
+        Option<int32> m_battleReportId = Option.None;
+        if (m_battleReportId is { HasValue: false })                           
+        {
+            var parsed_m_battleReportId = Parse_GameSTriggerBattleReportPanelPlaySceneEvent_m_battleReportId();
+            m_battleReportId = Option.Some(parsed_m_battleReportId);
+        }
+
+        return new GameSTriggerBattleReportPanelPlaySceneEvent
+        {   
+            m_battleReportId = Option.OkOrReturnMissingFieldErr(m_battleReportId),
+        };
+    }
+
+    public int32 Parse_GameSTriggerBattleReportPanelPlaySceneEvent_m_battleReportId()
+    {                             
+        var m_battleReportId = Parse_int32();
+        return m_battleReportId;
+    }
+
+    public GameSTriggerBattleReportPanelSelectionChangedEvent Parse_GameSTriggerBattleReportPanelSelectionChangedEvent() 
+    {
+        Option<int32> m_battleReportId = Option.None;
+        if (m_battleReportId is { HasValue: false })                           
+        {
+            var parsed_m_battleReportId = Parse_GameSTriggerBattleReportPanelSelectionChangedEvent_m_battleReportId();
+            m_battleReportId = Option.Some(parsed_m_battleReportId);
+        }
+
+        return new GameSTriggerBattleReportPanelSelectionChangedEvent
+        {   
+            m_battleReportId = Option.OkOrReturnMissingFieldErr(m_battleReportId),
+        };
+    }
+
+    public int32 Parse_GameSTriggerBattleReportPanelSelectionChangedEvent_m_battleReportId()
+    {                             
+        var m_battleReportId = Parse_int32();
+        return m_battleReportId;
+    }
+
+    public GameSTriggerVictoryPanelPlayMissionAgainEvent Parse_GameSTriggerVictoryPanelPlayMissionAgainEvent() 
+    {
+        Option<int32> m_difficultyLevel = Option.None;
+        if (m_difficultyLevel is { HasValue: false })                           
+        {
+            var parsed_m_difficultyLevel = Parse_GameSTriggerVictoryPanelPlayMissionAgainEvent_m_difficultyLevel();
+            m_difficultyLevel = Option.Some(parsed_m_difficultyLevel);
+        }
+
+        return new GameSTriggerVictoryPanelPlayMissionAgainEvent
+        {   
+            m_difficultyLevel = Option.OkOrReturnMissingFieldErr(m_difficultyLevel),
+        };
+    }
+
+    public int32 Parse_GameSTriggerVictoryPanelPlayMissionAgainEvent_m_difficultyLevel()
+    {                             
+        var m_difficultyLevel = Parse_int32();
+        return m_difficultyLevel;
+    }
+
+    public GameSTriggerMovieStartedEvent Parse_GameSTriggerMovieStartedEvent() 
+    {
+        return new GameSTriggerMovieStartedEvent
+        {   
+        };
+    }
+
+    public GameSTriggerMovieFinishedEvent Parse_GameSTriggerMovieFinishedEvent() 
+    {
+        return new GameSTriggerMovieFinishedEvent
+        {   
+        };
+    }
+
+    public GameSDecrementGameTimeRemainingEvent Parse_GameSDecrementGameTimeRemainingEvent() 
+    {
+        Option<uint32> m_decrementMs = Option.None;
+        if (m_decrementMs is { HasValue: false })                           
+        {
+            var parsed_m_decrementMs = Parse_GameSDecrementGameTimeRemainingEvent_m_decrementMs();
+            m_decrementMs = Option.Some(parsed_m_decrementMs);
+        }
+
+        return new GameSDecrementGameTimeRemainingEvent
+        {   
+            m_decrementMs = Option.OkOrReturnMissingFieldErr(m_decrementMs),
+        };
+    }
+
+    public uint32 Parse_GameSDecrementGameTimeRemainingEvent_m_decrementMs()
+    {                             
+        var m_decrementMs = Parse_uint32();
+        return m_decrementMs;
+    }
+
+    public GameSTriggerPortraitLoadedEvent Parse_GameSTriggerPortraitLoadedEvent() 
+    {
+        Option<int32> m_portraitId = Option.None;
+        if (m_portraitId is { HasValue: false })                           
+        {
+            var parsed_m_portraitId = Parse_GameSTriggerPortraitLoadedEvent_m_portraitId();
+            m_portraitId = Option.Some(parsed_m_portraitId);
+        }
+
+        return new GameSTriggerPortraitLoadedEvent
+        {   
+            m_portraitId = Option.OkOrReturnMissingFieldErr(m_portraitId),
+        };
+    }
+
+    public int32 Parse_GameSTriggerPortraitLoadedEvent_m_portraitId()
+    {                             
+        var m_portraitId = Parse_int32();
+        return m_portraitId;
+    }
+
+    public GameSTriggerMovieFunctionEvent Parse_GameSTriggerMovieFunctionEvent() 
+    {
+        Option<List<byte>> m_functionName = Option.None;
+        if (m_functionName is { HasValue: false })                           
+        {
+            var parsed_m_functionName = Parse_GameSTriggerMovieFunctionEvent_m_functionName();
+            m_functionName = Option.Some(parsed_m_functionName);
+        }
+
+        return new GameSTriggerMovieFunctionEvent
+        {   
+            m_functionName = Option.OkOrReturnMissingFieldErr(m_functionName),
+        };
+    }
+
+    public List<byte> Parse_GameSTriggerMovieFunctionEvent_m_functionName()
+    {                             
+        var arrayLength = take_n_bits_into_i64(7);
+        var array = new List<byte>();
+
+        for (var i = 0 ; i < arrayLength ; ++i)
+        {
+            var data = take_unaligned_byte();
+            array.Add(data);
+        }
+        return array;
+    }
+
+    public GameSTriggerCustomDialogDismissedEvent Parse_GameSTriggerCustomDialogDismissedEvent() 
+    {
+        Option<int32> m_result = Option.None;
+        if (m_result is { HasValue: false })                           
+        {
+            var parsed_m_result = Parse_GameSTriggerCustomDialogDismissedEvent_m_result();
+            m_result = Option.Some(parsed_m_result);
+        }
+
+        return new GameSTriggerCustomDialogDismissedEvent
+        {   
+            m_result = Option.OkOrReturnMissingFieldErr(m_result),
+        };
+    }
+
+    public int32 Parse_GameSTriggerCustomDialogDismissedEvent_m_result()
+    {                             
+        var m_result = Parse_int32();
+        return m_result;
+    }
+
+    public GameSTriggerGameMenuItemSelectedEvent Parse_GameSTriggerGameMenuItemSelectedEvent() 
+    {
+        Option<int32> m_gameMenuItemIndex = Option.None;
+        if (m_gameMenuItemIndex is { HasValue: false })                           
+        {
+            var parsed_m_gameMenuItemIndex = Parse_GameSTriggerGameMenuItemSelectedEvent_m_gameMenuItemIndex();
+            m_gameMenuItemIndex = Option.Some(parsed_m_gameMenuItemIndex);
+        }
+
+        return new GameSTriggerGameMenuItemSelectedEvent
+        {   
+            m_gameMenuItemIndex = Option.OkOrReturnMissingFieldErr(m_gameMenuItemIndex),
+        };
+    }
+
+    public int32 Parse_GameSTriggerGameMenuItemSelectedEvent_m_gameMenuItemIndex()
+    {                             
+        var m_gameMenuItemIndex = Parse_int32();
+        return m_gameMenuItemIndex;
+    }
+
+    public GameSTriggerCameraMoveEvent Parse_GameSTriggerCameraMoveEvent() 
+    {
+        Option<int8> m_reason = Option.None;
+        if (m_reason is { HasValue: false })                           
+        {
+            var parsed_m_reason = Parse_GameSTriggerCameraMoveEvent_m_reason();
+            m_reason = Option.Some(parsed_m_reason);
+        }
+
+        return new GameSTriggerCameraMoveEvent
+        {   
+            m_reason = Option.OkOrReturnMissingFieldErr(m_reason),
+        };
+    }
+
+    public int8 Parse_GameSTriggerCameraMoveEvent_m_reason()
+    {                             
+        var m_reason = Parse_int8();
+        return m_reason;
+    }
+
+    public GameSTriggerPurchasePanelSelectedPurchaseItemChangedEvent Parse_GameSTriggerPurchasePanelSelectedPurchaseItemChangedEvent() 
+    {
+        Option<int32> m_purchaseItemId = Option.None;
+        if (m_purchaseItemId is { HasValue: false })                           
+        {
+            var parsed_m_purchaseItemId = Parse_GameSTriggerPurchasePanelSelectedPurchaseItemChangedEvent_m_purchaseItemId();
+            m_purchaseItemId = Option.Some(parsed_m_purchaseItemId);
+        }
+
+        return new GameSTriggerPurchasePanelSelectedPurchaseItemChangedEvent
+        {   
+            m_purchaseItemId = Option.OkOrReturnMissingFieldErr(m_purchaseItemId),
+        };
+    }
+
+    public int32 Parse_GameSTriggerPurchasePanelSelectedPurchaseItemChangedEvent_m_purchaseItemId()
+    {                             
+        var m_purchaseItemId = Parse_int32();
+        return m_purchaseItemId;
+    }
+
+    public GameSTriggerPurchasePanelSelectedPurchaseCategoryChangedEvent Parse_GameSTriggerPurchasePanelSelectedPurchaseCategoryChangedEvent() 
+    {
+        Option<int32> m_purchaseCategoryId = Option.None;
+        if (m_purchaseCategoryId is { HasValue: false })                           
+        {
+            var parsed_m_purchaseCategoryId = Parse_GameSTriggerPurchasePanelSelectedPurchaseCategoryChangedEvent_m_purchaseCategoryId();
+            m_purchaseCategoryId = Option.Some(parsed_m_purchaseCategoryId);
+        }
+
+        return new GameSTriggerPurchasePanelSelectedPurchaseCategoryChangedEvent
+        {   
+            m_purchaseCategoryId = Option.OkOrReturnMissingFieldErr(m_purchaseCategoryId),
+        };
+    }
+
+    public int32 Parse_GameSTriggerPurchasePanelSelectedPurchaseCategoryChangedEvent_m_purchaseCategoryId()
+    {                             
+        var m_purchaseCategoryId = Parse_int32();
+        return m_purchaseCategoryId;
+    }
+
+    public GameSTriggerButtonPressedEvent Parse_GameSTriggerButtonPressedEvent() 
+    {
+        Option<GameTButtonLink> m_button = Option.None;
+        if (m_button is { HasValue: false })                           
+        {
+            var parsed_m_button = Parse_GameSTriggerButtonPressedEvent_m_button();
+            m_button = Option.Some(parsed_m_button);
+        }
+
+        return new GameSTriggerButtonPressedEvent
+        {   
+            m_button = Option.OkOrReturnMissingFieldErr(m_button),
+        };
+    }
+
+    public GameTButtonLink Parse_GameSTriggerButtonPressedEvent_m_button()
+    {                             
+        var m_button = Parse_GameTButtonLink();
+        return m_button;
+    }
+
+    public GameSTriggerGameCreditsFinishedEvent Parse_GameSTriggerGameCreditsFinishedEvent() 
+    {
+        return new GameSTriggerGameCreditsFinishedEvent
+        {   
+        };
+    }
+
+    public GameSPoint Parse_GameSPoint() 
+    {
+        Option<GameTFixedBits> x = Option.None;
+        Option<GameTFixedBits> y = Option.None;
+        if (x is { HasValue: false })                           
+        {
+            var parsed_x = Parse_GameSPoint_x();
+            x = Option.Some(parsed_x);
+        }
+
+        if (y is { HasValue: false })                           
+        {
+            var parsed_y = Parse_GameSPoint_y();
+            y = Option.Some(parsed_y);
+        }
+
+        return new GameSPoint
+        {   
+            x = Option.OkOrReturnMissingFieldErr(x),
+            y = Option.OkOrReturnMissingFieldErr(y),
+        };
+    }
+
+    public GameTFixedBits Parse_GameSPoint_x()
+    {                             
+        var x = Parse_GameTFixedBits();
+        return x;
+    }
+
+    public GameTFixedBits Parse_GameSPoint_y()
+    {                             
+        var y = Parse_GameTFixedBits();
+        return y;
+    }
+
+    public GameSPoint3 Parse_GameSPoint3() 
+    {
+        Option<GameTFixedBits> x = Option.None;
+        Option<GameTFixedBits> y = Option.None;
+        Option<GameTFixedBits> z = Option.None;
+        if (x is { HasValue: false })                           
+        {
+            var parsed_x = Parse_GameSPoint3_x();
+            x = Option.Some(parsed_x);
+        }
+
+        if (y is { HasValue: false })                           
+        {
+            var parsed_y = Parse_GameSPoint3_y();
+            y = Option.Some(parsed_y);
+        }
+
+        if (z is { HasValue: false })                           
+        {
+            var parsed_z = Parse_GameSPoint3_z();
+            z = Option.Some(parsed_z);
+        }
+
+        return new GameSPoint3
+        {   
+            x = Option.OkOrReturnMissingFieldErr(x),
+            y = Option.OkOrReturnMissingFieldErr(y),
+            z = Option.OkOrReturnMissingFieldErr(z),
+        };
+    }
+
+    public GameTFixedBits Parse_GameSPoint3_x()
+    {                             
+        var x = Parse_GameTFixedBits();
+        return x;
+    }
+
+    public GameTFixedBits Parse_GameSPoint3_y()
+    {                             
+        var y = Parse_GameTFixedBits();
+        return y;
+    }
+
+    public GameTFixedBits Parse_GameSPoint3_z()
+    {                             
+        var z = Parse_GameTFixedBits();
+        return z;
+    }
+
+    public GameSSyncSoundLength Parse_GameSSyncSoundLength() 
+    {
+        Option<List<uint32>> m_soundHash = Option.None;
+        Option<List<uint32>> m_length = Option.None;
+        if (m_soundHash is { HasValue: false })                           
+        {
+            var parsed_m_soundHash = Parse_GameSSyncSoundLength_m_soundHash();
+            m_soundHash = Option.Some(parsed_m_soundHash);
+        }
+
+        if (m_length is { HasValue: false })                           
+        {
+            var parsed_m_length = Parse_GameSSyncSoundLength_m_length();
+            m_length = Option.Some(parsed_m_length);
+        }
+
+        return new GameSSyncSoundLength
+        {   
+            m_soundHash = Option.OkOrReturnMissingFieldErr(m_soundHash),
+            m_length = Option.OkOrReturnMissingFieldErr(m_length),
+        };
+    }
+
+    public List<uint32> Parse_GameSSyncSoundLength_m_soundHash()
+    {                             
+        var arrayLength = take_n_bits_into_i64(8);
+        var array = new List<uint32>();
+
+        for (var i = 0 ; i < arrayLength ; ++i)
+        {
+            var data = Parse_uint32();
+            array.Add(data);
+        }
+        return array;
+    }
+
+    public List<uint32> Parse_GameSSyncSoundLength_m_length()
+    {                             
+        var arrayLength = take_n_bits_into_i64(8);
+        var array = new List<uint32>();
+
+        for (var i = 0 ; i < arrayLength ; ++i)
+        {
+            var data = Parse_uint32();
+            array.Add(data);
+        }
+        return array;
+    }
+
+    public GameSGameOptions Parse_GameSGameOptions() 
+    {
+        Option<bool> m_lockTeams = Option.None;
+        Option<bool> m_teamsTogether = Option.None;
+        Option<bool> m_advancedSharedControl = Option.None;
+        Option<bool> m_randomRaces = Option.None;
+        Option<bool> m_battleNet = Option.None;
+        Option<bool> m_amm = Option.None;
+        Option<bool> m_ranked = Option.None;
+        Option<bool> m_noVictoryOrDefeat = Option.None;
+        Option<GameEOptionFog> m_fog = Option.None;
+        Option<GameEOptionObservers> m_observers = Option.None;
+        Option<GameEOptionUserDifficulty> m_userDifficulty = Option.None;
+        if (m_lockTeams is { HasValue: false })                           
+        {
+            var parsed_m_lockTeams = Parse_GameSGameOptions_m_lockTeams();
+            m_lockTeams = Option.Some(parsed_m_lockTeams);
+        }
+
+        if (m_teamsTogether is { HasValue: false })                           
+        {
+            var parsed_m_teamsTogether = Parse_GameSGameOptions_m_teamsTogether();
+            m_teamsTogether = Option.Some(parsed_m_teamsTogether);
+        }
+
+        if (m_advancedSharedControl is { HasValue: false })                           
+        {
+            var parsed_m_advancedSharedControl = Parse_GameSGameOptions_m_advancedSharedControl();
+            m_advancedSharedControl = Option.Some(parsed_m_advancedSharedControl);
+        }
+
+        if (m_randomRaces is { HasValue: false })                           
+        {
+            var parsed_m_randomRaces = Parse_GameSGameOptions_m_randomRaces();
+            m_randomRaces = Option.Some(parsed_m_randomRaces);
+        }
+
+        if (m_battleNet is { HasValue: false })                           
+        {
+            var parsed_m_battleNet = Parse_GameSGameOptions_m_battleNet();
+            m_battleNet = Option.Some(parsed_m_battleNet);
+        }
+
+        if (m_amm is { HasValue: false })                           
+        {
+            var parsed_m_amm = Parse_GameSGameOptions_m_amm();
+            m_amm = Option.Some(parsed_m_amm);
+        }
+
+        if (m_ranked is { HasValue: false })                           
+        {
+            var parsed_m_ranked = Parse_GameSGameOptions_m_ranked();
+            m_ranked = Option.Some(parsed_m_ranked);
+        }
+
+        if (m_noVictoryOrDefeat is { HasValue: false })                           
+        {
+            var parsed_m_noVictoryOrDefeat = Parse_GameSGameOptions_m_noVictoryOrDefeat();
+            m_noVictoryOrDefeat = Option.Some(parsed_m_noVictoryOrDefeat);
+        }
+
+        if (m_fog is { HasValue: false })                           
+        {
+            var parsed_m_fog = Parse_GameSGameOptions_m_fog();
+            m_fog = Option.Some(parsed_m_fog);
+        }
+
+        if (m_observers is { HasValue: false })                           
+        {
+            var parsed_m_observers = Parse_GameSGameOptions_m_observers();
+            m_observers = Option.Some(parsed_m_observers);
+        }
+
+        if (m_userDifficulty is { HasValue: false })                           
+        {
+            var parsed_m_userDifficulty = Parse_GameSGameOptions_m_userDifficulty();
+            m_userDifficulty = Option.Some(parsed_m_userDifficulty);
+        }
+
+        return new GameSGameOptions
+        {   
+            m_lockTeams = Option.OkOrReturnMissingFieldErr(m_lockTeams),
+            m_teamsTogether = Option.OkOrReturnMissingFieldErr(m_teamsTogether),
+            m_advancedSharedControl = Option.OkOrReturnMissingFieldErr(m_advancedSharedControl),
+            m_randomRaces = Option.OkOrReturnMissingFieldErr(m_randomRaces),
+            m_battleNet = Option.OkOrReturnMissingFieldErr(m_battleNet),
+            m_amm = Option.OkOrReturnMissingFieldErr(m_amm),
+            m_ranked = Option.OkOrReturnMissingFieldErr(m_ranked),
+            m_noVictoryOrDefeat = Option.OkOrReturnMissingFieldErr(m_noVictoryOrDefeat),
+            m_fog = Option.OkOrReturnMissingFieldErr(m_fog),
+            m_observers = Option.OkOrReturnMissingFieldErr(m_observers),
+            m_userDifficulty = Option.OkOrReturnMissingFieldErr(m_userDifficulty),
+        };
+    }
+
+    public bool Parse_GameSGameOptions_m_lockTeams()
+    {                             
+        var m_lockTeams = parse_bool();
+        return m_lockTeams;
+    }
+
+    public bool Parse_GameSGameOptions_m_teamsTogether()
+    {                             
+        var m_teamsTogether = parse_bool();
+        return m_teamsTogether;
+    }
+
+    public bool Parse_GameSGameOptions_m_advancedSharedControl()
+    {                             
+        var m_advancedSharedControl = parse_bool();
+        return m_advancedSharedControl;
+    }
+
+    public bool Parse_GameSGameOptions_m_randomRaces()
+    {                             
+        var m_randomRaces = parse_bool();
+        return m_randomRaces;
+    }
+
+    public bool Parse_GameSGameOptions_m_battleNet()
+    {                             
+        var m_battleNet = parse_bool();
+        return m_battleNet;
+    }
+
+    public bool Parse_GameSGameOptions_m_amm()
+    {                             
+        var m_amm = parse_bool();
+        return m_amm;
+    }
+
+    public bool Parse_GameSGameOptions_m_ranked()
+    {                             
+        var m_ranked = parse_bool();
+        return m_ranked;
+    }
+
+    public bool Parse_GameSGameOptions_m_noVictoryOrDefeat()
+    {                             
+        var m_noVictoryOrDefeat = parse_bool();
+        return m_noVictoryOrDefeat;
+    }
+
+    public GameEOptionFog Parse_GameSGameOptions_m_fog()
+    {                             
+        var m_fog = Parse_GameEOptionFog();
+        return m_fog;
+    }
+
+    public GameEOptionObservers Parse_GameSGameOptions_m_observers()
+    {                             
+        var m_observers = Parse_GameEOptionObservers();
+        return m_observers;
+    }
+
+    public GameEOptionUserDifficulty Parse_GameSGameOptions_m_userDifficulty()
+    {                             
+        var m_userDifficulty = Parse_GameEOptionUserDifficulty();
+        return m_userDifficulty;
+    }
+
+    public GameSSlotDescription Parse_GameSSlotDescription() 
+    {
+        Option<GameCAllowedColors> m_allowedColors = Option.None;
+        Option<CAllowedRaces> m_allowedRaces = Option.None;
+        Option<GameCAllowedDifficulty> m_allowedDifficulty = Option.None;
+        Option<GameCAllowedControls> m_allowedControls = Option.None;
+        Option<CAllowedObserveTypes> m_allowedObserveTypes = Option.None;
+        if (m_allowedColors is { HasValue: false })                           
+        {
+            var parsed_m_allowedColors = Parse_GameSSlotDescription_m_allowedColors();
+            m_allowedColors = Option.Some(parsed_m_allowedColors);
+        }
+
+        if (m_allowedRaces is { HasValue: false })                           
+        {
+            var parsed_m_allowedRaces = Parse_GameSSlotDescription_m_allowedRaces();
+            m_allowedRaces = Option.Some(parsed_m_allowedRaces);
+        }
+
+        if (m_allowedDifficulty is { HasValue: false })                           
+        {
+            var parsed_m_allowedDifficulty = Parse_GameSSlotDescription_m_allowedDifficulty();
+            m_allowedDifficulty = Option.Some(parsed_m_allowedDifficulty);
+        }
+
+        if (m_allowedControls is { HasValue: false })                           
+        {
+            var parsed_m_allowedControls = Parse_GameSSlotDescription_m_allowedControls();
+            m_allowedControls = Option.Some(parsed_m_allowedControls);
+        }
+
+        if (m_allowedObserveTypes is { HasValue: false })                           
+        {
+            var parsed_m_allowedObserveTypes = Parse_GameSSlotDescription_m_allowedObserveTypes();
+            m_allowedObserveTypes = Option.Some(parsed_m_allowedObserveTypes);
+        }
+
+        return new GameSSlotDescription
+        {   
+            m_allowedColors = Option.OkOrReturnMissingFieldErr(m_allowedColors),
+            m_allowedRaces = Option.OkOrReturnMissingFieldErr(m_allowedRaces),
+            m_allowedDifficulty = Option.OkOrReturnMissingFieldErr(m_allowedDifficulty),
+            m_allowedControls = Option.OkOrReturnMissingFieldErr(m_allowedControls),
+            m_allowedObserveTypes = Option.OkOrReturnMissingFieldErr(m_allowedObserveTypes),
+        };
+    }
+
+    public GameCAllowedColors Parse_GameSSlotDescription_m_allowedColors()
+    {                             
+        var m_allowedColors = Parse_GameCAllowedColors();
+        return m_allowedColors;
+    }
+
+    public CAllowedRaces Parse_GameSSlotDescription_m_allowedRaces()
+    {                             
+        var m_allowedRaces = Parse_CAllowedRaces();
+        return m_allowedRaces;
+    }
+
+    public GameCAllowedDifficulty Parse_GameSSlotDescription_m_allowedDifficulty()
+    {                             
+        var m_allowedDifficulty = Parse_GameCAllowedDifficulty();
+        return m_allowedDifficulty;
+    }
+
+    public GameCAllowedControls Parse_GameSSlotDescription_m_allowedControls()
+    {                             
+        var m_allowedControls = Parse_GameCAllowedControls();
+        return m_allowedControls;
+    }
+
+    public CAllowedObserveTypes Parse_GameSSlotDescription_m_allowedObserveTypes()
+    {                             
+        var m_allowedObserveTypes = Parse_CAllowedObserveTypes();
+        return m_allowedObserveTypes;
+    }
+
+    public GameSGameDescription Parse_GameSGameDescription() 
+    {
+        Option<uint32> m_randomValue = Option.None;
+        Option<GameCGameCacheName> m_gameCacheName = Option.None;
+        Option<GameSGameOptions> m_gameOptions = Option.None;
+        Option<GameEGameSpeed> m_gameSpeed = Option.None;
+        Option<GameEGameType> m_gameType = Option.None;
+        Option<TUserCount> m_maxUsers = Option.None;
+        Option<TUserCount> m_maxObservers = Option.None;
+        Option<GameTPlayerCount> m_maxPlayers = Option.None;
+        Option<GameTTeamCount> m_maxTeams = Option.None;
+        Option<GameTColorCount> m_maxColors = Option.None;
+        Option<TRaceCount> m_maxRaces = Option.None;
+        Option<GameTControlCount> m_maxControls = Option.None;
+        Option<uint8> m_mapSizeX = Option.None;
+        Option<uint8> m_mapSizeY = Option.None;
+        Option<GameTSyncChecksum> m_mapFileSyncChecksum = Option.None;
+        Option<CFilePath> m_mapFileName = Option.None;
+        Option<GameTSyncChecksum> m_modFileSyncChecksum = Option.None;
+        Option<GameSSlotDescriptions> m_slotDescriptions = Option.None;
+        Option<GameTDifficulty> m_defaultDifficulty = Option.None;
+        Option<GameCCacheHandles> m_cacheHandles = Option.None;
+        Option<bool> m_isBlizzardMap = Option.None;
+        if (m_randomValue is { HasValue: false })                           
+        {
+            var parsed_m_randomValue = Parse_GameSGameDescription_m_randomValue();
+            m_randomValue = Option.Some(parsed_m_randomValue);
+        }
+
+        if (m_gameCacheName is { HasValue: false })                           
+        {
+            var parsed_m_gameCacheName = Parse_GameSGameDescription_m_gameCacheName();
+            m_gameCacheName = Option.Some(parsed_m_gameCacheName);
+        }
+
+        if (m_gameOptions is { HasValue: false })                           
+        {
+            var parsed_m_gameOptions = Parse_GameSGameDescription_m_gameOptions();
+            m_gameOptions = Option.Some(parsed_m_gameOptions);
+        }
+
+        if (m_gameSpeed is { HasValue: false })                           
+        {
+            var parsed_m_gameSpeed = Parse_GameSGameDescription_m_gameSpeed();
+            m_gameSpeed = Option.Some(parsed_m_gameSpeed);
+        }
+
+        if (m_gameType is { HasValue: false })                           
+        {
+            var parsed_m_gameType = Parse_GameSGameDescription_m_gameType();
+            m_gameType = Option.Some(parsed_m_gameType);
+        }
+
+        if (m_maxUsers is { HasValue: false })                           
+        {
+            var parsed_m_maxUsers = Parse_GameSGameDescription_m_maxUsers();
+            m_maxUsers = Option.Some(parsed_m_maxUsers);
+        }
+
+        if (m_maxObservers is { HasValue: false })                           
+        {
+            var parsed_m_maxObservers = Parse_GameSGameDescription_m_maxObservers();
+            m_maxObservers = Option.Some(parsed_m_maxObservers);
+        }
+
+        if (m_maxPlayers is { HasValue: false })                           
+        {
+            var parsed_m_maxPlayers = Parse_GameSGameDescription_m_maxPlayers();
+            m_maxPlayers = Option.Some(parsed_m_maxPlayers);
+        }
+
+        if (m_maxTeams is { HasValue: false })                           
+        {
+            var parsed_m_maxTeams = Parse_GameSGameDescription_m_maxTeams();
+            m_maxTeams = Option.Some(parsed_m_maxTeams);
+        }
+
+        if (m_maxColors is { HasValue: false })                           
+        {
+            var parsed_m_maxColors = Parse_GameSGameDescription_m_maxColors();
+            m_maxColors = Option.Some(parsed_m_maxColors);
+        }
+
+        if (m_maxRaces is { HasValue: false })                           
+        {
+            var parsed_m_maxRaces = Parse_GameSGameDescription_m_maxRaces();
+            m_maxRaces = Option.Some(parsed_m_maxRaces);
+        }
+
+        if (m_maxControls is { HasValue: false })                           
+        {
+            var parsed_m_maxControls = Parse_GameSGameDescription_m_maxControls();
+            m_maxControls = Option.Some(parsed_m_maxControls);
+        }
+
+        if (m_mapSizeX is { HasValue: false })                           
+        {
+            var parsed_m_mapSizeX = Parse_GameSGameDescription_m_mapSizeX();
+            m_mapSizeX = Option.Some(parsed_m_mapSizeX);
+        }
+
+        if (m_mapSizeY is { HasValue: false })                           
+        {
+            var parsed_m_mapSizeY = Parse_GameSGameDescription_m_mapSizeY();
+            m_mapSizeY = Option.Some(parsed_m_mapSizeY);
+        }
+
+        if (m_mapFileSyncChecksum is { HasValue: false })                           
+        {
+            var parsed_m_mapFileSyncChecksum = Parse_GameSGameDescription_m_mapFileSyncChecksum();
+            m_mapFileSyncChecksum = Option.Some(parsed_m_mapFileSyncChecksum);
+        }
+
+        if (m_mapFileName is { HasValue: false })                           
+        {
+            var parsed_m_mapFileName = Parse_GameSGameDescription_m_mapFileName();
+            m_mapFileName = Option.Some(parsed_m_mapFileName);
+        }
+
+        if (m_modFileSyncChecksum is { HasValue: false })                           
+        {
+            var parsed_m_modFileSyncChecksum = Parse_GameSGameDescription_m_modFileSyncChecksum();
+            m_modFileSyncChecksum = Option.Some(parsed_m_modFileSyncChecksum);
+        }
+
+        if (m_slotDescriptions is { HasValue: false })                           
+        {
+            var parsed_m_slotDescriptions = Parse_GameSGameDescription_m_slotDescriptions();
+            m_slotDescriptions = Option.Some(parsed_m_slotDescriptions);
+        }
+
+        if (m_defaultDifficulty is { HasValue: false })                           
+        {
+            var parsed_m_defaultDifficulty = Parse_GameSGameDescription_m_defaultDifficulty();
+            m_defaultDifficulty = Option.Some(parsed_m_defaultDifficulty);
+        }
+
+        if (m_cacheHandles is { HasValue: false })                           
+        {
+            var parsed_m_cacheHandles = Parse_GameSGameDescription_m_cacheHandles();
+            m_cacheHandles = Option.Some(parsed_m_cacheHandles);
+        }
+
+        if (m_isBlizzardMap is { HasValue: false })                           
+        {
+            var parsed_m_isBlizzardMap = Parse_GameSGameDescription_m_isBlizzardMap();
+            m_isBlizzardMap = Option.Some(parsed_m_isBlizzardMap);
+        }
+
+        return new GameSGameDescription
+        {   
+            m_randomValue = Option.OkOrReturnMissingFieldErr(m_randomValue),
+            m_gameCacheName = Option.OkOrReturnMissingFieldErr(m_gameCacheName),
+            m_gameOptions = Option.OkOrReturnMissingFieldErr(m_gameOptions),
+            m_gameSpeed = Option.OkOrReturnMissingFieldErr(m_gameSpeed),
+            m_gameType = Option.OkOrReturnMissingFieldErr(m_gameType),
+            m_maxUsers = Option.OkOrReturnMissingFieldErr(m_maxUsers),
+            m_maxObservers = Option.OkOrReturnMissingFieldErr(m_maxObservers),
+            m_maxPlayers = Option.OkOrReturnMissingFieldErr(m_maxPlayers),
+            m_maxTeams = Option.OkOrReturnMissingFieldErr(m_maxTeams),
+            m_maxColors = Option.OkOrReturnMissingFieldErr(m_maxColors),
+            m_maxRaces = Option.OkOrReturnMissingFieldErr(m_maxRaces),
+            m_maxControls = Option.OkOrReturnMissingFieldErr(m_maxControls),
+            m_mapSizeX = Option.OkOrReturnMissingFieldErr(m_mapSizeX),
+            m_mapSizeY = Option.OkOrReturnMissingFieldErr(m_mapSizeY),
+            m_mapFileSyncChecksum = Option.OkOrReturnMissingFieldErr(m_mapFileSyncChecksum),
+            m_mapFileName = Option.OkOrReturnMissingFieldErr(m_mapFileName),
+            m_modFileSyncChecksum = Option.OkOrReturnMissingFieldErr(m_modFileSyncChecksum),
+            m_slotDescriptions = Option.OkOrReturnMissingFieldErr(m_slotDescriptions),
+            m_defaultDifficulty = Option.OkOrReturnMissingFieldErr(m_defaultDifficulty),
+            m_cacheHandles = Option.OkOrReturnMissingFieldErr(m_cacheHandles),
+            m_isBlizzardMap = Option.OkOrReturnMissingFieldErr(m_isBlizzardMap),
+        };
+    }
+
+    public uint32 Parse_GameSGameDescription_m_randomValue()
+    {                             
+        var m_randomValue = Parse_uint32();
+        return m_randomValue;
+    }
+
+    public GameCGameCacheName Parse_GameSGameDescription_m_gameCacheName()
+    {                             
+        var m_gameCacheName = Parse_GameCGameCacheName();
+        return m_gameCacheName;
+    }
+
+    public GameSGameOptions Parse_GameSGameDescription_m_gameOptions()
+    {                             
+        var m_gameOptions = Parse_GameSGameOptions();
+        return m_gameOptions;
+    }
+
+    public GameEGameSpeed Parse_GameSGameDescription_m_gameSpeed()
+    {                             
+        var m_gameSpeed = Parse_GameEGameSpeed();
+        return m_gameSpeed;
+    }
+
+    public GameEGameType Parse_GameSGameDescription_m_gameType()
+    {                             
+        var m_gameType = Parse_GameEGameType();
+        return m_gameType;
+    }
+
+    public TUserCount Parse_GameSGameDescription_m_maxUsers()
+    {                             
+        var m_maxUsers = Parse_TUserCount();
+        return m_maxUsers;
+    }
+
+    public TUserCount Parse_GameSGameDescription_m_maxObservers()
+    {                             
+        var m_maxObservers = Parse_TUserCount();
+        return m_maxObservers;
+    }
+
+    public GameTPlayerCount Parse_GameSGameDescription_m_maxPlayers()
+    {                             
+        var m_maxPlayers = Parse_GameTPlayerCount();
+        return m_maxPlayers;
+    }
+
+    public GameTTeamCount Parse_GameSGameDescription_m_maxTeams()
+    {                             
+        var m_maxTeams = Parse_GameTTeamCount();
+        return m_maxTeams;
+    }
+
+    public GameTColorCount Parse_GameSGameDescription_m_maxColors()
+    {                             
+        var m_maxColors = Parse_GameTColorCount();
+        return m_maxColors;
+    }
+
+    public TRaceCount Parse_GameSGameDescription_m_maxRaces()
+    {                             
+        var m_maxRaces = Parse_TRaceCount();
+        return m_maxRaces;
+    }
+
+    public GameTControlCount Parse_GameSGameDescription_m_maxControls()
+    {                             
+        var m_maxControls = Parse_GameTControlCount();
+        return m_maxControls;
+    }
+
+    public uint8 Parse_GameSGameDescription_m_mapSizeX()
+    {                             
+        var m_mapSizeX = Parse_uint8();
+        return m_mapSizeX;
+    }
+
+    public uint8 Parse_GameSGameDescription_m_mapSizeY()
+    {                             
+        var m_mapSizeY = Parse_uint8();
+        return m_mapSizeY;
+    }
+
+    public GameTSyncChecksum Parse_GameSGameDescription_m_mapFileSyncChecksum()
+    {                             
+        var m_mapFileSyncChecksum = Parse_GameTSyncChecksum();
+        return m_mapFileSyncChecksum;
+    }
+
+    public CFilePath Parse_GameSGameDescription_m_mapFileName()
+    {                             
+        var m_mapFileName = Parse_CFilePath();
+        return m_mapFileName;
+    }
+
+    public GameTSyncChecksum Parse_GameSGameDescription_m_modFileSyncChecksum()
+    {                             
+        var m_modFileSyncChecksum = Parse_GameTSyncChecksum();
+        return m_modFileSyncChecksum;
+    }
+
+    public GameSSlotDescriptions Parse_GameSGameDescription_m_slotDescriptions()
+    {                             
+        var m_slotDescriptions = Parse_GameSSlotDescriptions();
+        return m_slotDescriptions;
+    }
+
+    public GameTDifficulty Parse_GameSGameDescription_m_defaultDifficulty()
+    {                             
+        var m_defaultDifficulty = Parse_GameTDifficulty();
+        return m_defaultDifficulty;
+    }
+
+    public GameCCacheHandles Parse_GameSGameDescription_m_cacheHandles()
+    {                             
+        var m_cacheHandles = Parse_GameCCacheHandles();
+        return m_cacheHandles;
+    }
+
+    public bool Parse_GameSGameDescription_m_isBlizzardMap()
+    {                             
+        var m_isBlizzardMap = parse_bool();
+        return m_isBlizzardMap;
+    }
+
+    public GameSLobbySlot Parse_GameSLobbySlot() 
+    {
+        Option<GameTControlId> m_control = Option.None;
+        var m_userId = Option.Some<Option<TUserId>>(Option.None);
+        Option<GameTTeamId> m_teamId = Option.None;
+        Option<GameTColorPreference> m_colorPref = Option.None;
+        Option<TRacePreference> m_racePref = Option.None;
+        Option<GameTDifficulty> m_difficulty = Option.None;
+        Option<GameTHandicap> m_handicap = Option.None;
+        Option<EObserve> m_observe = Option.None;
+        Option<GameCRewardArray> m_rewards = Option.None;
+        if (m_control is { HasValue: false })                           
+        {
+            var parsed_m_control = Parse_GameSLobbySlot_m_control();
+            m_control = Option.Some(parsed_m_control);
+        }
+
+        if (m_userId is { HasValue: true, Value.HasValue: false })
+        {
+            var parsed_m_userId = Parse_GameSLobbySlot_m_userId();
+            m_userId = Option.Some(parsed_m_userId);
+        }
+
+        if (m_teamId is { HasValue: false })                           
+        {
+            var parsed_m_teamId = Parse_GameSLobbySlot_m_teamId();
+            m_teamId = Option.Some(parsed_m_teamId);
+        }
+
+        if (m_colorPref is { HasValue: false })                           
+        {
+            var parsed_m_colorPref = Parse_GameSLobbySlot_m_colorPref();
+            m_colorPref = Option.Some(parsed_m_colorPref);
+        }
+
+        if (m_racePref is { HasValue: false })                           
+        {
+            var parsed_m_racePref = Parse_GameSLobbySlot_m_racePref();
+            m_racePref = Option.Some(parsed_m_racePref);
+        }
+
+        if (m_difficulty is { HasValue: false })                           
+        {
+            var parsed_m_difficulty = Parse_GameSLobbySlot_m_difficulty();
+            m_difficulty = Option.Some(parsed_m_difficulty);
+        }
+
+        if (m_handicap is { HasValue: false })                           
+        {
+            var parsed_m_handicap = Parse_GameSLobbySlot_m_handicap();
+            m_handicap = Option.Some(parsed_m_handicap);
+        }
+
+        if (m_observe is { HasValue: false })                           
+        {
+            var parsed_m_observe = Parse_GameSLobbySlot_m_observe();
+            m_observe = Option.Some(parsed_m_observe);
+        }
+
+        if (m_rewards is { HasValue: false })                           
+        {
+            var parsed_m_rewards = Parse_GameSLobbySlot_m_rewards();
+            m_rewards = Option.Some(parsed_m_rewards);
+        }
+
+        return new GameSLobbySlot
+        {   
+            m_control = Option.OkOrReturnMissingFieldErr(m_control),
+            m_userId = Option.OkOrReturnMissingFieldErr(m_userId),
+            m_teamId = Option.OkOrReturnMissingFieldErr(m_teamId),
+            m_colorPref = Option.OkOrReturnMissingFieldErr(m_colorPref),
+            m_racePref = Option.OkOrReturnMissingFieldErr(m_racePref),
+            m_difficulty = Option.OkOrReturnMissingFieldErr(m_difficulty),
+            m_handicap = Option.OkOrReturnMissingFieldErr(m_handicap),
+            m_observe = Option.OkOrReturnMissingFieldErr(m_observe),
+            m_rewards = Option.OkOrReturnMissingFieldErr(m_rewards),
+        };
+    }
+
+    public GameTControlId Parse_GameSLobbySlot_m_control()
+    {                             
+        var m_control = Parse_GameTControlId();
+        return m_control;
+    }
+
+    public Option<TUserId> Parse_GameSLobbySlot_m_userId()
+    {                             
+            var isProvided = parse_bool();
+
+            if (isProvided)
+            {
+                var res = Parse_TUserId();
+
+                return Option.Some(res);
+            }
+            else
+            {
+                return Option.None;
+            }
+    }
+
+    public GameTTeamId Parse_GameSLobbySlot_m_teamId()
+    {                             
+        var m_teamId = Parse_GameTTeamId();
+        return m_teamId;
+    }
+
+    public GameTColorPreference Parse_GameSLobbySlot_m_colorPref()
+    {                             
+        var m_colorPref = Parse_GameTColorPreference();
+        return m_colorPref;
+    }
+
+    public TRacePreference Parse_GameSLobbySlot_m_racePref()
+    {                             
+        var m_racePref = Parse_TRacePreference();
+        return m_racePref;
+    }
+
+    public GameTDifficulty Parse_GameSLobbySlot_m_difficulty()
+    {                             
+        var m_difficulty = Parse_GameTDifficulty();
+        return m_difficulty;
+    }
+
+    public GameTHandicap Parse_GameSLobbySlot_m_handicap()
+    {                             
+        var m_handicap = Parse_GameTHandicap();
+        return m_handicap;
+    }
+
+    public EObserve Parse_GameSLobbySlot_m_observe()
+    {                             
+        var m_observe = Parse_EObserve();
+        return m_observe;
+    }
+
+    public GameCRewardArray Parse_GameSLobbySlot_m_rewards()
+    {                             
+        var m_rewards = Parse_GameCRewardArray();
+        return m_rewards;
+    }
+
+    public GameSLobbyState Parse_GameSLobbyState() 
+    {
+        Option<GameEPhase> m_phase = Option.None;
+        Option<TUserCount> m_maxUsers = Option.None;
+        Option<TUserCount> m_maxObservers = Option.None;
+        Option<GameCLobbySlotArray> m_slots = Option.None;
+        Option<uint32> m_randomSeed = Option.None;
+        var m_hostUserId = Option.Some<Option<TUserId>>(Option.None);
+        Option<bool> m_isSinglePlayer = Option.None;
+        Option<uint32> m_gameDuration = Option.None;
+        Option<GameTDifficulty> m_defaultDifficulty = Option.None;
+        if (m_phase is { HasValue: false })                           
+        {
+            var parsed_m_phase = Parse_GameSLobbyState_m_phase();
+            m_phase = Option.Some(parsed_m_phase);
+        }
+
+        if (m_maxUsers is { HasValue: false })                           
+        {
+            var parsed_m_maxUsers = Parse_GameSLobbyState_m_maxUsers();
+            m_maxUsers = Option.Some(parsed_m_maxUsers);
+        }
+
+        if (m_maxObservers is { HasValue: false })                           
+        {
+            var parsed_m_maxObservers = Parse_GameSLobbyState_m_maxObservers();
+            m_maxObservers = Option.Some(parsed_m_maxObservers);
+        }
+
+        if (m_slots is { HasValue: false })                           
+        {
+            var parsed_m_slots = Parse_GameSLobbyState_m_slots();
+            m_slots = Option.Some(parsed_m_slots);
+        }
+
+        if (m_randomSeed is { HasValue: false })                           
+        {
+            var parsed_m_randomSeed = Parse_GameSLobbyState_m_randomSeed();
+            m_randomSeed = Option.Some(parsed_m_randomSeed);
+        }
+
+        if (m_hostUserId is { HasValue: true, Value.HasValue: false })
+        {
+            var parsed_m_hostUserId = Parse_GameSLobbyState_m_hostUserId();
+            m_hostUserId = Option.Some(parsed_m_hostUserId);
+        }
+
+        if (m_isSinglePlayer is { HasValue: false })                           
+        {
+            var parsed_m_isSinglePlayer = Parse_GameSLobbyState_m_isSinglePlayer();
+            m_isSinglePlayer = Option.Some(parsed_m_isSinglePlayer);
+        }
+
+        if (m_gameDuration is { HasValue: false })                           
+        {
+            var parsed_m_gameDuration = Parse_GameSLobbyState_m_gameDuration();
+            m_gameDuration = Option.Some(parsed_m_gameDuration);
+        }
+
+        if (m_defaultDifficulty is { HasValue: false })                           
+        {
+            var parsed_m_defaultDifficulty = Parse_GameSLobbyState_m_defaultDifficulty();
+            m_defaultDifficulty = Option.Some(parsed_m_defaultDifficulty);
+        }
+
+        return new GameSLobbyState
+        {   
+            m_phase = Option.OkOrReturnMissingFieldErr(m_phase),
+            m_maxUsers = Option.OkOrReturnMissingFieldErr(m_maxUsers),
+            m_maxObservers = Option.OkOrReturnMissingFieldErr(m_maxObservers),
+            m_slots = Option.OkOrReturnMissingFieldErr(m_slots),
+            m_randomSeed = Option.OkOrReturnMissingFieldErr(m_randomSeed),
+            m_hostUserId = Option.OkOrReturnMissingFieldErr(m_hostUserId),
+            m_isSinglePlayer = Option.OkOrReturnMissingFieldErr(m_isSinglePlayer),
+            m_gameDuration = Option.OkOrReturnMissingFieldErr(m_gameDuration),
+            m_defaultDifficulty = Option.OkOrReturnMissingFieldErr(m_defaultDifficulty),
+        };
+    }
+
+    public GameEPhase Parse_GameSLobbyState_m_phase()
+    {                             
+        var m_phase = Parse_GameEPhase();
+        return m_phase;
+    }
+
+    public TUserCount Parse_GameSLobbyState_m_maxUsers()
+    {                             
+        var m_maxUsers = Parse_TUserCount();
+        return m_maxUsers;
+    }
+
+    public TUserCount Parse_GameSLobbyState_m_maxObservers()
+    {                             
+        var m_maxObservers = Parse_TUserCount();
+        return m_maxObservers;
+    }
+
+    public GameCLobbySlotArray Parse_GameSLobbyState_m_slots()
+    {                             
+        var m_slots = Parse_GameCLobbySlotArray();
+        return m_slots;
+    }
+
+    public uint32 Parse_GameSLobbyState_m_randomSeed()
+    {                             
+        var m_randomSeed = Parse_uint32();
+        return m_randomSeed;
+    }
+
+    public Option<TUserId> Parse_GameSLobbyState_m_hostUserId()
+    {                             
+            var isProvided = parse_bool();
+
+            if (isProvided)
+            {
+                var res = Parse_TUserId();
+
+                return Option.Some(res);
+            }
+            else
+            {
+                return Option.None;
+            }
+    }
+
+    public bool Parse_GameSLobbyState_m_isSinglePlayer()
+    {                             
+        var m_isSinglePlayer = parse_bool();
+        return m_isSinglePlayer;
+    }
+
+    public uint32 Parse_GameSLobbyState_m_gameDuration()
+    {                             
+        var m_gameDuration = Parse_uint32();
+        return m_gameDuration;
+    }
+
+    public GameTDifficulty Parse_GameSLobbyState_m_defaultDifficulty()
+    {                             
+        var m_defaultDifficulty = Parse_GameTDifficulty();
+        return m_defaultDifficulty;
+    }
+
+    public GameSLobbySyncState Parse_GameSLobbySyncState() 
+    {
+        Option<CUserInitialDataArray> m_userInitialData = Option.None;
+        Option<GameSGameDescription> m_gameDescription = Option.None;
+        Option<GameSLobbyState> m_lobbyState = Option.None;
+        if (m_userInitialData is { HasValue: false })                           
+        {
+            var parsed_m_userInitialData = Parse_GameSLobbySyncState_m_userInitialData();
+            m_userInitialData = Option.Some(parsed_m_userInitialData);
+        }
+
+        if (m_gameDescription is { HasValue: false })                           
+        {
+            var parsed_m_gameDescription = Parse_GameSLobbySyncState_m_gameDescription();
+            m_gameDescription = Option.Some(parsed_m_gameDescription);
+        }
+
+        if (m_lobbyState is { HasValue: false })                           
+        {
+            var parsed_m_lobbyState = Parse_GameSLobbySyncState_m_lobbyState();
+            m_lobbyState = Option.Some(parsed_m_lobbyState);
+        }
+
+        return new GameSLobbySyncState
+        {   
+            m_userInitialData = Option.OkOrReturnMissingFieldErr(m_userInitialData),
+            m_gameDescription = Option.OkOrReturnMissingFieldErr(m_gameDescription),
+            m_lobbyState = Option.OkOrReturnMissingFieldErr(m_lobbyState),
+        };
+    }
+
+    public CUserInitialDataArray Parse_GameSLobbySyncState_m_userInitialData()
+    {                             
+        var m_userInitialData = Parse_CUserInitialDataArray();
+        return m_userInitialData;
+    }
+
+    public GameSGameDescription Parse_GameSLobbySyncState_m_gameDescription()
+    {                             
+        var m_gameDescription = Parse_GameSGameDescription();
+        return m_gameDescription;
+    }
+
+    public GameSLobbyState Parse_GameSLobbySyncState_m_lobbyState()
+    {                             
+        var m_lobbyState = Parse_GameSLobbyState();
+        return m_lobbyState;
+    }
+
+    public GameSGameOptions_PublicBeta1 Parse_GameSGameOptions_PublicBeta1() 
+    {
+        Option<bool> m_lockTeams = Option.None;
+        Option<bool> m_teamsTogether = Option.None;
+        Option<bool> m_advancedSharedControl = Option.None;
+        Option<bool> m_randomRaces = Option.None;
+        Option<bool> m_amm = Option.None;
+        Option<bool> m_ranked = Option.None;
+        Option<bool> m_noVictoryOrDefeat = Option.None;
+        Option<GameEGameLaunch> m_launch = Option.None;
+        Option<GameEOptionFog> m_fog = Option.None;
+        Option<GameEOptionObservers> m_observers = Option.None;
+        Option<GameEOptionUserDifficulty> m_userDifficulty = Option.None;
+        if (m_lockTeams is { HasValue: false })                           
+        {
+            var parsed_m_lockTeams = Parse_GameSGameOptions_PublicBeta1_m_lockTeams();
+            m_lockTeams = Option.Some(parsed_m_lockTeams);
+        }
+
+        if (m_teamsTogether is { HasValue: false })                           
+        {
+            var parsed_m_teamsTogether = Parse_GameSGameOptions_PublicBeta1_m_teamsTogether();
+            m_teamsTogether = Option.Some(parsed_m_teamsTogether);
+        }
+
+        if (m_advancedSharedControl is { HasValue: false })                           
+        {
+            var parsed_m_advancedSharedControl = Parse_GameSGameOptions_PublicBeta1_m_advancedSharedControl();
+            m_advancedSharedControl = Option.Some(parsed_m_advancedSharedControl);
+        }
+
+        if (m_randomRaces is { HasValue: false })                           
+        {
+            var parsed_m_randomRaces = Parse_GameSGameOptions_PublicBeta1_m_randomRaces();
+            m_randomRaces = Option.Some(parsed_m_randomRaces);
+        }
+
+        if (m_amm is { HasValue: false })                           
+        {
+            var parsed_m_amm = Parse_GameSGameOptions_PublicBeta1_m_amm();
+            m_amm = Option.Some(parsed_m_amm);
+        }
+
+        if (m_ranked is { HasValue: false })                           
+        {
+            var parsed_m_ranked = Parse_GameSGameOptions_PublicBeta1_m_ranked();
+            m_ranked = Option.Some(parsed_m_ranked);
+        }
+
+        if (m_noVictoryOrDefeat is { HasValue: false })                           
+        {
+            var parsed_m_noVictoryOrDefeat = Parse_GameSGameOptions_PublicBeta1_m_noVictoryOrDefeat();
+            m_noVictoryOrDefeat = Option.Some(parsed_m_noVictoryOrDefeat);
+        }
+
+        if (m_launch is { HasValue: false })                           
+        {
+            var parsed_m_launch = Parse_GameSGameOptions_PublicBeta1_m_launch();
+            m_launch = Option.Some(parsed_m_launch);
+        }
+
+        if (m_fog is { HasValue: false })                           
+        {
+            var parsed_m_fog = Parse_GameSGameOptions_PublicBeta1_m_fog();
+            m_fog = Option.Some(parsed_m_fog);
+        }
+
+        if (m_observers is { HasValue: false })                           
+        {
+            var parsed_m_observers = Parse_GameSGameOptions_PublicBeta1_m_observers();
+            m_observers = Option.Some(parsed_m_observers);
+        }
+
+        if (m_userDifficulty is { HasValue: false })                           
+        {
+            var parsed_m_userDifficulty = Parse_GameSGameOptions_PublicBeta1_m_userDifficulty();
+            m_userDifficulty = Option.Some(parsed_m_userDifficulty);
+        }
+
+        return new GameSGameOptions_PublicBeta1
+        {   
+            m_lockTeams = Option.OkOrReturnMissingFieldErr(m_lockTeams),
+            m_teamsTogether = Option.OkOrReturnMissingFieldErr(m_teamsTogether),
+            m_advancedSharedControl = Option.OkOrReturnMissingFieldErr(m_advancedSharedControl),
+            m_randomRaces = Option.OkOrReturnMissingFieldErr(m_randomRaces),
+            m_amm = Option.OkOrReturnMissingFieldErr(m_amm),
+            m_ranked = Option.OkOrReturnMissingFieldErr(m_ranked),
+            m_noVictoryOrDefeat = Option.OkOrReturnMissingFieldErr(m_noVictoryOrDefeat),
+            m_launch = Option.OkOrReturnMissingFieldErr(m_launch),
+            m_fog = Option.OkOrReturnMissingFieldErr(m_fog),
+            m_observers = Option.OkOrReturnMissingFieldErr(m_observers),
+            m_userDifficulty = Option.OkOrReturnMissingFieldErr(m_userDifficulty),
+        };
+    }
+
+    public bool Parse_GameSGameOptions_PublicBeta1_m_lockTeams()
+    {                             
+        var m_lockTeams = parse_bool();
+        return m_lockTeams;
+    }
+
+    public bool Parse_GameSGameOptions_PublicBeta1_m_teamsTogether()
+    {                             
+        var m_teamsTogether = parse_bool();
+        return m_teamsTogether;
+    }
+
+    public bool Parse_GameSGameOptions_PublicBeta1_m_advancedSharedControl()
+    {                             
+        var m_advancedSharedControl = parse_bool();
+        return m_advancedSharedControl;
+    }
+
+    public bool Parse_GameSGameOptions_PublicBeta1_m_randomRaces()
+    {                             
+        var m_randomRaces = parse_bool();
+        return m_randomRaces;
+    }
+
+    public bool Parse_GameSGameOptions_PublicBeta1_m_amm()
+    {                             
+        var m_amm = parse_bool();
+        return m_amm;
+    }
+
+    public bool Parse_GameSGameOptions_PublicBeta1_m_ranked()
+    {                             
+        var m_ranked = parse_bool();
+        return m_ranked;
+    }
+
+    public bool Parse_GameSGameOptions_PublicBeta1_m_noVictoryOrDefeat()
+    {                             
+        var m_noVictoryOrDefeat = parse_bool();
+        return m_noVictoryOrDefeat;
+    }
+
+    public GameEGameLaunch Parse_GameSGameOptions_PublicBeta1_m_launch()
+    {                             
+        var m_launch = Parse_GameEGameLaunch();
+        return m_launch;
+    }
+
+    public GameEOptionFog Parse_GameSGameOptions_PublicBeta1_m_fog()
+    {                             
+        var m_fog = Parse_GameEOptionFog();
+        return m_fog;
+    }
+
+    public GameEOptionObservers Parse_GameSGameOptions_PublicBeta1_m_observers()
+    {                             
+        var m_observers = Parse_GameEOptionObservers();
+        return m_observers;
+    }
+
+    public GameEOptionUserDifficulty Parse_GameSGameOptions_PublicBeta1_m_userDifficulty()
+    {                             
+        var m_userDifficulty = Parse_GameEOptionUserDifficulty();
+        return m_userDifficulty;
+    }
+
+    public GameSGameDescription_PublicBeta1 Parse_GameSGameDescription_PublicBeta1() 
+    {
+        Option<uint32> m_randomValue = Option.None;
+        Option<GameCGameCacheName> m_gameCacheName = Option.None;
+        Option<GameSGameOptions_PublicBeta1> m_gameOptions = Option.None;
+        Option<GameEGameSpeed> m_gameSpeed = Option.None;
+        Option<GameEGameType> m_gameType = Option.None;
+        Option<TUserCount> m_maxUsers = Option.None;
+        Option<TUserCount> m_maxObservers = Option.None;
+        Option<GameTPlayerCount> m_maxPlayers = Option.None;
+        Option<GameTTeamCount> m_maxTeams = Option.None;
+        Option<GameTColorCount> m_maxColors = Option.None;
+        Option<TRaceCount> m_maxRaces = Option.None;
+        Option<GameTControlCount> m_maxControls = Option.None;
+        Option<uint8> m_mapSizeX = Option.None;
+        Option<uint8> m_mapSizeY = Option.None;
+        Option<GameTSyncChecksum> m_mapFileSyncChecksum = Option.None;
+        Option<CFilePath> m_mapFileName = Option.None;
+        Option<GameTSyncChecksum> m_modFileSyncChecksum = Option.None;
+        Option<CFilePath> m_saveFileName = Option.None;
+        Option<GameSSlotDescriptions> m_slotDescriptions = Option.None;
+        Option<GameTDifficulty> m_defaultDifficulty = Option.None;
+        Option<GameCCacheHandles> m_cacheHandles = Option.None;
+        if (m_randomValue is { HasValue: false })                           
+        {
+            var parsed_m_randomValue = Parse_GameSGameDescription_PublicBeta1_m_randomValue();
+            m_randomValue = Option.Some(parsed_m_randomValue);
+        }
+
+        if (m_gameCacheName is { HasValue: false })                           
+        {
+            var parsed_m_gameCacheName = Parse_GameSGameDescription_PublicBeta1_m_gameCacheName();
+            m_gameCacheName = Option.Some(parsed_m_gameCacheName);
+        }
+
+        if (m_gameOptions is { HasValue: false })                           
+        {
+            var parsed_m_gameOptions = Parse_GameSGameDescription_PublicBeta1_m_gameOptions();
+            m_gameOptions = Option.Some(parsed_m_gameOptions);
+        }
+
+        if (m_gameSpeed is { HasValue: false })                           
+        {
+            var parsed_m_gameSpeed = Parse_GameSGameDescription_PublicBeta1_m_gameSpeed();
+            m_gameSpeed = Option.Some(parsed_m_gameSpeed);
+        }
+
+        if (m_gameType is { HasValue: false })                           
+        {
+            var parsed_m_gameType = Parse_GameSGameDescription_PublicBeta1_m_gameType();
+            m_gameType = Option.Some(parsed_m_gameType);
+        }
+
+        if (m_maxUsers is { HasValue: false })                           
+        {
+            var parsed_m_maxUsers = Parse_GameSGameDescription_PublicBeta1_m_maxUsers();
+            m_maxUsers = Option.Some(parsed_m_maxUsers);
+        }
+
+        if (m_maxObservers is { HasValue: false })                           
+        {
+            var parsed_m_maxObservers = Parse_GameSGameDescription_PublicBeta1_m_maxObservers();
+            m_maxObservers = Option.Some(parsed_m_maxObservers);
+        }
+
+        if (m_maxPlayers is { HasValue: false })                           
+        {
+            var parsed_m_maxPlayers = Parse_GameSGameDescription_PublicBeta1_m_maxPlayers();
+            m_maxPlayers = Option.Some(parsed_m_maxPlayers);
+        }
+
+        if (m_maxTeams is { HasValue: false })                           
+        {
+            var parsed_m_maxTeams = Parse_GameSGameDescription_PublicBeta1_m_maxTeams();
+            m_maxTeams = Option.Some(parsed_m_maxTeams);
+        }
+
+        if (m_maxColors is { HasValue: false })                           
+        {
+            var parsed_m_maxColors = Parse_GameSGameDescription_PublicBeta1_m_maxColors();
+            m_maxColors = Option.Some(parsed_m_maxColors);
+        }
+
+        if (m_maxRaces is { HasValue: false })                           
+        {
+            var parsed_m_maxRaces = Parse_GameSGameDescription_PublicBeta1_m_maxRaces();
+            m_maxRaces = Option.Some(parsed_m_maxRaces);
+        }
+
+        if (m_maxControls is { HasValue: false })                           
+        {
+            var parsed_m_maxControls = Parse_GameSGameDescription_PublicBeta1_m_maxControls();
+            m_maxControls = Option.Some(parsed_m_maxControls);
+        }
+
+        if (m_mapSizeX is { HasValue: false })                           
+        {
+            var parsed_m_mapSizeX = Parse_GameSGameDescription_PublicBeta1_m_mapSizeX();
+            m_mapSizeX = Option.Some(parsed_m_mapSizeX);
+        }
+
+        if (m_mapSizeY is { HasValue: false })                           
+        {
+            var parsed_m_mapSizeY = Parse_GameSGameDescription_PublicBeta1_m_mapSizeY();
+            m_mapSizeY = Option.Some(parsed_m_mapSizeY);
+        }
+
+        if (m_mapFileSyncChecksum is { HasValue: false })                           
+        {
+            var parsed_m_mapFileSyncChecksum = Parse_GameSGameDescription_PublicBeta1_m_mapFileSyncChecksum();
+            m_mapFileSyncChecksum = Option.Some(parsed_m_mapFileSyncChecksum);
+        }
+
+        if (m_mapFileName is { HasValue: false })                           
+        {
+            var parsed_m_mapFileName = Parse_GameSGameDescription_PublicBeta1_m_mapFileName();
+            m_mapFileName = Option.Some(parsed_m_mapFileName);
+        }
+
+        if (m_modFileSyncChecksum is { HasValue: false })                           
+        {
+            var parsed_m_modFileSyncChecksum = Parse_GameSGameDescription_PublicBeta1_m_modFileSyncChecksum();
+            m_modFileSyncChecksum = Option.Some(parsed_m_modFileSyncChecksum);
+        }
+
+        if (m_saveFileName is { HasValue: false })                           
+        {
+            var parsed_m_saveFileName = Parse_GameSGameDescription_PublicBeta1_m_saveFileName();
+            m_saveFileName = Option.Some(parsed_m_saveFileName);
+        }
+
+        if (m_slotDescriptions is { HasValue: false })                           
+        {
+            var parsed_m_slotDescriptions = Parse_GameSGameDescription_PublicBeta1_m_slotDescriptions();
+            m_slotDescriptions = Option.Some(parsed_m_slotDescriptions);
+        }
+
+        if (m_defaultDifficulty is { HasValue: false })                           
+        {
+            var parsed_m_defaultDifficulty = Parse_GameSGameDescription_PublicBeta1_m_defaultDifficulty();
+            m_defaultDifficulty = Option.Some(parsed_m_defaultDifficulty);
+        }
+
+        if (m_cacheHandles is { HasValue: false })                           
+        {
+            var parsed_m_cacheHandles = Parse_GameSGameDescription_PublicBeta1_m_cacheHandles();
+            m_cacheHandles = Option.Some(parsed_m_cacheHandles);
+        }
+
+        return new GameSGameDescription_PublicBeta1
+        {   
+            m_randomValue = Option.OkOrReturnMissingFieldErr(m_randomValue),
+            m_gameCacheName = Option.OkOrReturnMissingFieldErr(m_gameCacheName),
+            m_gameOptions = Option.OkOrReturnMissingFieldErr(m_gameOptions),
+            m_gameSpeed = Option.OkOrReturnMissingFieldErr(m_gameSpeed),
+            m_gameType = Option.OkOrReturnMissingFieldErr(m_gameType),
+            m_maxUsers = Option.OkOrReturnMissingFieldErr(m_maxUsers),
+            m_maxObservers = Option.OkOrReturnMissingFieldErr(m_maxObservers),
+            m_maxPlayers = Option.OkOrReturnMissingFieldErr(m_maxPlayers),
+            m_maxTeams = Option.OkOrReturnMissingFieldErr(m_maxTeams),
+            m_maxColors = Option.OkOrReturnMissingFieldErr(m_maxColors),
+            m_maxRaces = Option.OkOrReturnMissingFieldErr(m_maxRaces),
+            m_maxControls = Option.OkOrReturnMissingFieldErr(m_maxControls),
+            m_mapSizeX = Option.OkOrReturnMissingFieldErr(m_mapSizeX),
+            m_mapSizeY = Option.OkOrReturnMissingFieldErr(m_mapSizeY),
+            m_mapFileSyncChecksum = Option.OkOrReturnMissingFieldErr(m_mapFileSyncChecksum),
+            m_mapFileName = Option.OkOrReturnMissingFieldErr(m_mapFileName),
+            m_modFileSyncChecksum = Option.OkOrReturnMissingFieldErr(m_modFileSyncChecksum),
+            m_saveFileName = Option.OkOrReturnMissingFieldErr(m_saveFileName),
+            m_slotDescriptions = Option.OkOrReturnMissingFieldErr(m_slotDescriptions),
+            m_defaultDifficulty = Option.OkOrReturnMissingFieldErr(m_defaultDifficulty),
+            m_cacheHandles = Option.OkOrReturnMissingFieldErr(m_cacheHandles),
+        };
+    }
+
+    public uint32 Parse_GameSGameDescription_PublicBeta1_m_randomValue()
+    {                             
+        var m_randomValue = Parse_uint32();
+        return m_randomValue;
+    }
+
+    public GameCGameCacheName Parse_GameSGameDescription_PublicBeta1_m_gameCacheName()
+    {                             
+        var m_gameCacheName = Parse_GameCGameCacheName();
+        return m_gameCacheName;
+    }
+
+    public GameSGameOptions_PublicBeta1 Parse_GameSGameDescription_PublicBeta1_m_gameOptions()
+    {                             
+        var m_gameOptions = Parse_GameSGameOptions_PublicBeta1();
+        return m_gameOptions;
+    }
+
+    public GameEGameSpeed Parse_GameSGameDescription_PublicBeta1_m_gameSpeed()
+    {                             
+        var m_gameSpeed = Parse_GameEGameSpeed();
+        return m_gameSpeed;
+    }
+
+    public GameEGameType Parse_GameSGameDescription_PublicBeta1_m_gameType()
+    {                             
+        var m_gameType = Parse_GameEGameType();
+        return m_gameType;
+    }
+
+    public TUserCount Parse_GameSGameDescription_PublicBeta1_m_maxUsers()
+    {                             
+        var m_maxUsers = Parse_TUserCount();
+        return m_maxUsers;
+    }
+
+    public TUserCount Parse_GameSGameDescription_PublicBeta1_m_maxObservers()
+    {                             
+        var m_maxObservers = Parse_TUserCount();
+        return m_maxObservers;
+    }
+
+    public GameTPlayerCount Parse_GameSGameDescription_PublicBeta1_m_maxPlayers()
+    {                             
+        var m_maxPlayers = Parse_GameTPlayerCount();
+        return m_maxPlayers;
+    }
+
+    public GameTTeamCount Parse_GameSGameDescription_PublicBeta1_m_maxTeams()
+    {                             
+        var m_maxTeams = Parse_GameTTeamCount();
+        return m_maxTeams;
+    }
+
+    public GameTColorCount Parse_GameSGameDescription_PublicBeta1_m_maxColors()
+    {                             
+        var m_maxColors = Parse_GameTColorCount();
+        return m_maxColors;
+    }
+
+    public TRaceCount Parse_GameSGameDescription_PublicBeta1_m_maxRaces()
+    {                             
+        var m_maxRaces = Parse_TRaceCount();
+        return m_maxRaces;
+    }
+
+    public GameTControlCount Parse_GameSGameDescription_PublicBeta1_m_maxControls()
+    {                             
+        var m_maxControls = Parse_GameTControlCount();
+        return m_maxControls;
+    }
+
+    public uint8 Parse_GameSGameDescription_PublicBeta1_m_mapSizeX()
+    {                             
+        var m_mapSizeX = Parse_uint8();
+        return m_mapSizeX;
+    }
+
+    public uint8 Parse_GameSGameDescription_PublicBeta1_m_mapSizeY()
+    {                             
+        var m_mapSizeY = Parse_uint8();
+        return m_mapSizeY;
+    }
+
+    public GameTSyncChecksum Parse_GameSGameDescription_PublicBeta1_m_mapFileSyncChecksum()
+    {                             
+        var m_mapFileSyncChecksum = Parse_GameTSyncChecksum();
+        return m_mapFileSyncChecksum;
+    }
+
+    public CFilePath Parse_GameSGameDescription_PublicBeta1_m_mapFileName()
+    {                             
+        var m_mapFileName = Parse_CFilePath();
+        return m_mapFileName;
+    }
+
+    public GameTSyncChecksum Parse_GameSGameDescription_PublicBeta1_m_modFileSyncChecksum()
+    {                             
+        var m_modFileSyncChecksum = Parse_GameTSyncChecksum();
+        return m_modFileSyncChecksum;
+    }
+
+    public CFilePath Parse_GameSGameDescription_PublicBeta1_m_saveFileName()
+    {                             
+        var m_saveFileName = Parse_CFilePath();
+        return m_saveFileName;
+    }
+
+    public GameSSlotDescriptions Parse_GameSGameDescription_PublicBeta1_m_slotDescriptions()
+    {                             
+        var m_slotDescriptions = Parse_GameSSlotDescriptions();
+        return m_slotDescriptions;
+    }
+
+    public GameTDifficulty Parse_GameSGameDescription_PublicBeta1_m_defaultDifficulty()
+    {                             
+        var m_defaultDifficulty = Parse_GameTDifficulty();
+        return m_defaultDifficulty;
+    }
+
+    public GameCCacheHandles Parse_GameSGameDescription_PublicBeta1_m_cacheHandles()
+    {                             
+        var m_cacheHandles = Parse_GameCCacheHandles();
+        return m_cacheHandles;
+    }
+
+    public GameSLobbySlot_PublicBeta1 Parse_GameSLobbySlot_PublicBeta1() 
+    {
+        Option<GameTControlId> m_control = Option.None;
+        var m_userId = Option.Some<Option<TUserId>>(Option.None);
+        Option<GameTTeamId> m_teamId = Option.None;
+        Option<GameTColorPreference> m_colorPref = Option.None;
+        Option<TRacePreference> m_racePref = Option.None;
+        Option<GameTDifficulty> m_difficulty = Option.None;
+        Option<GameTHandicap> m_handicap = Option.None;
+        Option<EObserve> m_observe = Option.None;
+        if (m_control is { HasValue: false })                           
+        {
+            var parsed_m_control = Parse_GameSLobbySlot_PublicBeta1_m_control();
+            m_control = Option.Some(parsed_m_control);
+        }
+
+        if (m_userId is { HasValue: true, Value.HasValue: false })
+        {
+            var parsed_m_userId = Parse_GameSLobbySlot_PublicBeta1_m_userId();
+            m_userId = Option.Some(parsed_m_userId);
+        }
+
+        if (m_teamId is { HasValue: false })                           
+        {
+            var parsed_m_teamId = Parse_GameSLobbySlot_PublicBeta1_m_teamId();
+            m_teamId = Option.Some(parsed_m_teamId);
+        }
+
+        if (m_colorPref is { HasValue: false })                           
+        {
+            var parsed_m_colorPref = Parse_GameSLobbySlot_PublicBeta1_m_colorPref();
+            m_colorPref = Option.Some(parsed_m_colorPref);
+        }
+
+        if (m_racePref is { HasValue: false })                           
+        {
+            var parsed_m_racePref = Parse_GameSLobbySlot_PublicBeta1_m_racePref();
+            m_racePref = Option.Some(parsed_m_racePref);
+        }
+
+        if (m_difficulty is { HasValue: false })                           
+        {
+            var parsed_m_difficulty = Parse_GameSLobbySlot_PublicBeta1_m_difficulty();
+            m_difficulty = Option.Some(parsed_m_difficulty);
+        }
+
+        if (m_handicap is { HasValue: false })                           
+        {
+            var parsed_m_handicap = Parse_GameSLobbySlot_PublicBeta1_m_handicap();
+            m_handicap = Option.Some(parsed_m_handicap);
+        }
+
+        if (m_observe is { HasValue: false })                           
+        {
+            var parsed_m_observe = Parse_GameSLobbySlot_PublicBeta1_m_observe();
+            m_observe = Option.Some(parsed_m_observe);
+        }
+
+        return new GameSLobbySlot_PublicBeta1
+        {   
+            m_control = Option.OkOrReturnMissingFieldErr(m_control),
+            m_userId = Option.OkOrReturnMissingFieldErr(m_userId),
+            m_teamId = Option.OkOrReturnMissingFieldErr(m_teamId),
+            m_colorPref = Option.OkOrReturnMissingFieldErr(m_colorPref),
+            m_racePref = Option.OkOrReturnMissingFieldErr(m_racePref),
+            m_difficulty = Option.OkOrReturnMissingFieldErr(m_difficulty),
+            m_handicap = Option.OkOrReturnMissingFieldErr(m_handicap),
+            m_observe = Option.OkOrReturnMissingFieldErr(m_observe),
+        };
+    }
+
+    public GameTControlId Parse_GameSLobbySlot_PublicBeta1_m_control()
+    {                             
+        var m_control = Parse_GameTControlId();
+        return m_control;
+    }
+
+    public Option<TUserId> Parse_GameSLobbySlot_PublicBeta1_m_userId()
+    {                             
+            var isProvided = parse_bool();
+
+            if (isProvided)
+            {
+                var res = Parse_TUserId();
+
+                return Option.Some(res);
+            }
+            else
+            {
+                return Option.None;
+            }
+    }
+
+    public GameTTeamId Parse_GameSLobbySlot_PublicBeta1_m_teamId()
+    {                             
+        var m_teamId = Parse_GameTTeamId();
+        return m_teamId;
+    }
+
+    public GameTColorPreference Parse_GameSLobbySlot_PublicBeta1_m_colorPref()
+    {                             
+        var m_colorPref = Parse_GameTColorPreference();
+        return m_colorPref;
+    }
+
+    public TRacePreference Parse_GameSLobbySlot_PublicBeta1_m_racePref()
+    {                             
+        var m_racePref = Parse_TRacePreference();
+        return m_racePref;
+    }
+
+    public GameTDifficulty Parse_GameSLobbySlot_PublicBeta1_m_difficulty()
+    {                             
+        var m_difficulty = Parse_GameTDifficulty();
+        return m_difficulty;
+    }
+
+    public GameTHandicap Parse_GameSLobbySlot_PublicBeta1_m_handicap()
+    {                             
+        var m_handicap = Parse_GameTHandicap();
+        return m_handicap;
+    }
+
+    public EObserve Parse_GameSLobbySlot_PublicBeta1_m_observe()
+    {                             
+        var m_observe = Parse_EObserve();
+        return m_observe;
+    }
+
+    public GameSLobbyState_PublicBeta1 Parse_GameSLobbyState_PublicBeta1() 
+    {
+        Option<GameEPhase> m_phase = Option.None;
+        Option<TUserCount> m_maxUsers = Option.None;
+        Option<TUserCount> m_maxObservers = Option.None;
+        Option<GameCLobbySlotArray_PublicBeta1> m_slots = Option.None;
+        Option<uint32> m_randomSeed = Option.None;
+        var m_hostUserId = Option.Some<Option<TUserId>>(Option.None);
+        Option<bool> m_isSinglePlayer = Option.None;
+        Option<uint32> m_gameDuration = Option.None;
+        Option<GameTDifficulty> m_defaultDifficulty = Option.None;
+        if (m_phase is { HasValue: false })                           
+        {
+            var parsed_m_phase = Parse_GameSLobbyState_PublicBeta1_m_phase();
+            m_phase = Option.Some(parsed_m_phase);
+        }
+
+        if (m_maxUsers is { HasValue: false })                           
+        {
+            var parsed_m_maxUsers = Parse_GameSLobbyState_PublicBeta1_m_maxUsers();
+            m_maxUsers = Option.Some(parsed_m_maxUsers);
+        }
+
+        if (m_maxObservers is { HasValue: false })                           
+        {
+            var parsed_m_maxObservers = Parse_GameSLobbyState_PublicBeta1_m_maxObservers();
+            m_maxObservers = Option.Some(parsed_m_maxObservers);
+        }
+
+        if (m_slots is { HasValue: false })                           
+        {
+            var parsed_m_slots = Parse_GameSLobbyState_PublicBeta1_m_slots();
+            m_slots = Option.Some(parsed_m_slots);
+        }
+
+        if (m_randomSeed is { HasValue: false })                           
+        {
+            var parsed_m_randomSeed = Parse_GameSLobbyState_PublicBeta1_m_randomSeed();
+            m_randomSeed = Option.Some(parsed_m_randomSeed);
+        }
+
+        if (m_hostUserId is { HasValue: true, Value.HasValue: false })
+        {
+            var parsed_m_hostUserId = Parse_GameSLobbyState_PublicBeta1_m_hostUserId();
+            m_hostUserId = Option.Some(parsed_m_hostUserId);
+        }
+
+        if (m_isSinglePlayer is { HasValue: false })                           
+        {
+            var parsed_m_isSinglePlayer = Parse_GameSLobbyState_PublicBeta1_m_isSinglePlayer();
+            m_isSinglePlayer = Option.Some(parsed_m_isSinglePlayer);
+        }
+
+        if (m_gameDuration is { HasValue: false })                           
+        {
+            var parsed_m_gameDuration = Parse_GameSLobbyState_PublicBeta1_m_gameDuration();
+            m_gameDuration = Option.Some(parsed_m_gameDuration);
+        }
+
+        if (m_defaultDifficulty is { HasValue: false })                           
+        {
+            var parsed_m_defaultDifficulty = Parse_GameSLobbyState_PublicBeta1_m_defaultDifficulty();
+            m_defaultDifficulty = Option.Some(parsed_m_defaultDifficulty);
+        }
+
+        return new GameSLobbyState_PublicBeta1
+        {   
+            m_phase = Option.OkOrReturnMissingFieldErr(m_phase),
+            m_maxUsers = Option.OkOrReturnMissingFieldErr(m_maxUsers),
+            m_maxObservers = Option.OkOrReturnMissingFieldErr(m_maxObservers),
+            m_slots = Option.OkOrReturnMissingFieldErr(m_slots),
+            m_randomSeed = Option.OkOrReturnMissingFieldErr(m_randomSeed),
+            m_hostUserId = Option.OkOrReturnMissingFieldErr(m_hostUserId),
+            m_isSinglePlayer = Option.OkOrReturnMissingFieldErr(m_isSinglePlayer),
+            m_gameDuration = Option.OkOrReturnMissingFieldErr(m_gameDuration),
+            m_defaultDifficulty = Option.OkOrReturnMissingFieldErr(m_defaultDifficulty),
+        };
+    }
+
+    public GameEPhase Parse_GameSLobbyState_PublicBeta1_m_phase()
+    {                             
+        var m_phase = Parse_GameEPhase();
+        return m_phase;
+    }
+
+    public TUserCount Parse_GameSLobbyState_PublicBeta1_m_maxUsers()
+    {                             
+        var m_maxUsers = Parse_TUserCount();
+        return m_maxUsers;
+    }
+
+    public TUserCount Parse_GameSLobbyState_PublicBeta1_m_maxObservers()
+    {                             
+        var m_maxObservers = Parse_TUserCount();
+        return m_maxObservers;
+    }
+
+    public GameCLobbySlotArray_PublicBeta1 Parse_GameSLobbyState_PublicBeta1_m_slots()
+    {                             
+        var m_slots = Parse_GameCLobbySlotArray_PublicBeta1();
+        return m_slots;
+    }
+
+    public uint32 Parse_GameSLobbyState_PublicBeta1_m_randomSeed()
+    {                             
+        var m_randomSeed = Parse_uint32();
+        return m_randomSeed;
+    }
+
+    public Option<TUserId> Parse_GameSLobbyState_PublicBeta1_m_hostUserId()
+    {                             
+            var isProvided = parse_bool();
+
+            if (isProvided)
+            {
+                var res = Parse_TUserId();
+
+                return Option.Some(res);
+            }
+            else
+            {
+                return Option.None;
+            }
+    }
+
+    public bool Parse_GameSLobbyState_PublicBeta1_m_isSinglePlayer()
+    {                             
+        var m_isSinglePlayer = parse_bool();
+        return m_isSinglePlayer;
+    }
+
+    public uint32 Parse_GameSLobbyState_PublicBeta1_m_gameDuration()
+    {                             
+        var m_gameDuration = Parse_uint32();
+        return m_gameDuration;
+    }
+
+    public GameTDifficulty Parse_GameSLobbyState_PublicBeta1_m_defaultDifficulty()
+    {                             
+        var m_defaultDifficulty = Parse_GameTDifficulty();
+        return m_defaultDifficulty;
+    }
+
+    public GameSLobbySyncState_PublicBeta1 Parse_GameSLobbySyncState_PublicBeta1() 
+    {
+        Option<CUserInitialDataArray> m_userInitialData = Option.None;
+        Option<GameSGameDescription_PublicBeta1> m_gameDescription = Option.None;
+        Option<GameSLobbyState_PublicBeta1> m_lobbyState = Option.None;
+        if (m_userInitialData is { HasValue: false })                           
+        {
+            var parsed_m_userInitialData = Parse_GameSLobbySyncState_PublicBeta1_m_userInitialData();
+            m_userInitialData = Option.Some(parsed_m_userInitialData);
+        }
+
+        if (m_gameDescription is { HasValue: false })                           
+        {
+            var parsed_m_gameDescription = Parse_GameSLobbySyncState_PublicBeta1_m_gameDescription();
+            m_gameDescription = Option.Some(parsed_m_gameDescription);
+        }
+
+        if (m_lobbyState is { HasValue: false })                           
+        {
+            var parsed_m_lobbyState = Parse_GameSLobbySyncState_PublicBeta1_m_lobbyState();
+            m_lobbyState = Option.Some(parsed_m_lobbyState);
+        }
+
+        return new GameSLobbySyncState_PublicBeta1
+        {   
+            m_userInitialData = Option.OkOrReturnMissingFieldErr(m_userInitialData),
+            m_gameDescription = Option.OkOrReturnMissingFieldErr(m_gameDescription),
+            m_lobbyState = Option.OkOrReturnMissingFieldErr(m_lobbyState),
+        };
+    }
+
+    public CUserInitialDataArray Parse_GameSLobbySyncState_PublicBeta1_m_userInitialData()
+    {                             
+        var m_userInitialData = Parse_CUserInitialDataArray();
+        return m_userInitialData;
+    }
+
+    public GameSGameDescription_PublicBeta1 Parse_GameSLobbySyncState_PublicBeta1_m_gameDescription()
+    {                             
+        var m_gameDescription = Parse_GameSGameDescription_PublicBeta1();
+        return m_gameDescription;
+    }
+
+    public GameSLobbyState_PublicBeta1 Parse_GameSLobbySyncState_PublicBeta1_m_lobbyState()
+    {                             
+        var m_lobbyState = Parse_GameSLobbyState_PublicBeta1();
+        return m_lobbyState;
+    }
+
+    public GameSChatMessage Parse_GameSChatMessage() 
+    {
+        Option<GameEMessageRecipient> m_recipient = Option.None;
+        Option<GameCChatString> m_string = Option.None;
+        if (m_recipient is { HasValue: false })                           
+        {
+            var parsed_m_recipient = Parse_GameSChatMessage_m_recipient();
+            m_recipient = Option.Some(parsed_m_recipient);
+        }
+
+        if (m_string is { HasValue: false })                           
+        {
+            var parsed_m_string = Parse_GameSChatMessage_m_string();
+            m_string = Option.Some(parsed_m_string);
+        }
+
+        return new GameSChatMessage
+        {   
+            m_recipient = Option.OkOrReturnMissingFieldErr(m_recipient),
+            m_string = Option.OkOrReturnMissingFieldErr(m_string),
+        };
+    }
+
+    public GameEMessageRecipient Parse_GameSChatMessage_m_recipient()
+    {                             
+        var m_recipient = Parse_GameEMessageRecipient();
+        return m_recipient;
+    }
+
+    public GameCChatString Parse_GameSChatMessage_m_string()
+    {                             
+        var m_string = Parse_GameCChatString();
+        return m_string;
+    }
+
+    public GameSPingMessage Parse_GameSPingMessage() 
+    {
+        Option<GameEMessageRecipient> m_recipient = Option.None;
+        Option<GameSPoint> m_point = Option.None;
+        if (m_recipient is { HasValue: false })                           
+        {
+            var parsed_m_recipient = Parse_GameSPingMessage_m_recipient();
+            m_recipient = Option.Some(parsed_m_recipient);
+        }
+
+        if (m_point is { HasValue: false })                           
+        {
+            var parsed_m_point = Parse_GameSPingMessage_m_point();
+            m_point = Option.Some(parsed_m_point);
+        }
+
+        return new GameSPingMessage
+        {   
+            m_recipient = Option.OkOrReturnMissingFieldErr(m_recipient),
+            m_point = Option.OkOrReturnMissingFieldErr(m_point),
+        };
+    }
+
+    public GameEMessageRecipient Parse_GameSPingMessage_m_recipient()
+    {                             
+        var m_recipient = Parse_GameEMessageRecipient();
+        return m_recipient;
+    }
+
+    public GameSPoint Parse_GameSPingMessage_m_point()
+    {                             
+        var m_point = Parse_GameSPoint();
+        return m_point;
+    }
+
+    public GameSLoadingProgressMessage Parse_GameSLoadingProgressMessage() 
+    {
+        Option<int32> m_progress = Option.None;
+        if (m_progress is { HasValue: false })                           
+        {
+            var parsed_m_progress = Parse_GameSLoadingProgressMessage_m_progress();
+            m_progress = Option.Some(parsed_m_progress);
+        }
+
+        return new GameSLoadingProgressMessage
+        {   
+            m_progress = Option.OkOrReturnMissingFieldErr(m_progress),
+        };
+    }
+
+    public int32 Parse_GameSLoadingProgressMessage_m_progress()
+    {                             
+        var m_progress = Parse_int32();
+        return m_progress;
+    }
+
+    public GameSSelectionDeltaSubgroup Parse_GameSSelectionDeltaSubgroup() 
+    {
+        Option<GameTUnitLink> m_unitLink = Option.None;
+        Option<GameTSubgroupPriority> m_intraSubgroupPriority = Option.None;
+        Option<GameTSelectionCount> m_count = Option.None;
+        if (m_unitLink is { HasValue: false })                           
+        {
+            var parsed_m_unitLink = Parse_GameSSelectionDeltaSubgroup_m_unitLink();
+            m_unitLink = Option.Some(parsed_m_unitLink);
+        }
+
+        if (m_intraSubgroupPriority is { HasValue: false })                           
+        {
+            var parsed_m_intraSubgroupPriority = Parse_GameSSelectionDeltaSubgroup_m_intraSubgroupPriority();
+            m_intraSubgroupPriority = Option.Some(parsed_m_intraSubgroupPriority);
+        }
+
+        if (m_count is { HasValue: false })                           
+        {
+            var parsed_m_count = Parse_GameSSelectionDeltaSubgroup_m_count();
+            m_count = Option.Some(parsed_m_count);
+        }
+
+        return new GameSSelectionDeltaSubgroup
+        {   
+            m_unitLink = Option.OkOrReturnMissingFieldErr(m_unitLink),
+            m_intraSubgroupPriority = Option.OkOrReturnMissingFieldErr(m_intraSubgroupPriority),
+            m_count = Option.OkOrReturnMissingFieldErr(m_count),
+        };
+    }
+
+    public GameTUnitLink Parse_GameSSelectionDeltaSubgroup_m_unitLink()
+    {                             
+        var m_unitLink = Parse_GameTUnitLink();
+        return m_unitLink;
+    }
+
+    public GameTSubgroupPriority Parse_GameSSelectionDeltaSubgroup_m_intraSubgroupPriority()
+    {                             
+        var m_intraSubgroupPriority = Parse_GameTSubgroupPriority();
+        return m_intraSubgroupPriority;
+    }
+
+    public GameTSelectionCount Parse_GameSSelectionDeltaSubgroup_m_count()
+    {                             
+        var m_count = Parse_GameTSelectionCount();
+        return m_count;
+    }
+
+    public GameSSelectionMask Parse_GameSSelectionMask() 
+    {
+        return new GameSSelectionMask
+        {   
+        };
+    }
+
+    public GameSSelectionDelta Parse_GameSSelectionDelta() 
+    {
+        Option<GameTSubgroupIndex> m_subgroupIndex = Option.None;
+        Option<GameSSelectionMask> m_removeMask = Option.None;
+        Option<List<GameSSelectionDeltaSubgroup>> m_addSubgroups = Option.None;
+        Option<List<GameTUnitTag>> m_addUnitTags = Option.None;
+        if (m_subgroupIndex is { HasValue: false })                           
+        {
+            var parsed_m_subgroupIndex = Parse_GameSSelectionDelta_m_subgroupIndex();
+            m_subgroupIndex = Option.Some(parsed_m_subgroupIndex);
+        }
+
+        if (m_removeMask is { HasValue: false })                           
+        {
+            var parsed_m_removeMask = Parse_GameSSelectionDelta_m_removeMask();
+            m_removeMask = Option.Some(parsed_m_removeMask);
+        }
+
+        if (m_addSubgroups is { HasValue: false })                           
+        {
+            var parsed_m_addSubgroups = Parse_GameSSelectionDelta_m_addSubgroups();
+            m_addSubgroups = Option.Some(parsed_m_addSubgroups);
+        }
+
+        if (m_addUnitTags is { HasValue: false })                           
+        {
+            var parsed_m_addUnitTags = Parse_GameSSelectionDelta_m_addUnitTags();
+            m_addUnitTags = Option.Some(parsed_m_addUnitTags);
+        }
+
+        return new GameSSelectionDelta
+        {   
+            m_subgroupIndex = Option.OkOrReturnMissingFieldErr(m_subgroupIndex),
+            m_removeMask = Option.OkOrReturnMissingFieldErr(m_removeMask),
+            m_addSubgroups = Option.OkOrReturnMissingFieldErr(m_addSubgroups),
+            m_addUnitTags = Option.OkOrReturnMissingFieldErr(m_addUnitTags),
+        };
+    }
+
+    public GameTSubgroupIndex Parse_GameSSelectionDelta_m_subgroupIndex()
+    {                             
+        var m_subgroupIndex = Parse_GameTSubgroupIndex();
+        return m_subgroupIndex;
+    }
+
+    public GameSSelectionMask Parse_GameSSelectionDelta_m_removeMask()
+    {                             
+        var m_removeMask = Parse_GameSSelectionMask();
+        return m_removeMask;
+    }
+
+    public List<GameSSelectionDeltaSubgroup> Parse_GameSSelectionDelta_m_addSubgroups()
+    {                             
+        var arrayLength = take_n_bits_into_i64(8);
+        var array = new List<GameSSelectionDeltaSubgroup>();
+
+        for (var i = 0 ; i < arrayLength ; ++i)
+        {
+            var data = Parse_GameSSelectionDeltaSubgroup();
+            array.Add(data);
+        }
+        return array;
+    }
+
+    public List<GameTUnitTag> Parse_GameSSelectionDelta_m_addUnitTags()
+    {                             
+        var arrayLength = take_n_bits_into_i64(8);
+        var array = new List<GameTUnitTag>();
+
+        for (var i = 0 ; i < arrayLength ; ++i)
+        {
+            var data = Parse_GameTUnitTag();
+            array.Add(data);
+        }
+        return array;
+    }
+
+    public GameSSelectionSyncData Parse_GameSSelectionSyncData() 
+    {
+        Option<GameTSelectionCount> m_count = Option.None;
+        Option<GameTSubgroupCount> m_subgroupCount = Option.None;
+        Option<GameTSubgroupIndex> m_activeSubgroupIndex = Option.None;
+        Option<GameTSyncChecksum> m_unitTagsChecksum = Option.None;
+        Option<GameTSyncChecksum> m_subgroupIndicesChecksum = Option.None;
+        Option<GameTSyncChecksum> m_subgroupsChecksum = Option.None;
+        if (m_count is { HasValue: false })                           
+        {
+            var parsed_m_count = Parse_GameSSelectionSyncData_m_count();
+            m_count = Option.Some(parsed_m_count);
+        }
+
+        if (m_subgroupCount is { HasValue: false })                           
+        {
+            var parsed_m_subgroupCount = Parse_GameSSelectionSyncData_m_subgroupCount();
+            m_subgroupCount = Option.Some(parsed_m_subgroupCount);
+        }
+
+        if (m_activeSubgroupIndex is { HasValue: false })                           
+        {
+            var parsed_m_activeSubgroupIndex = Parse_GameSSelectionSyncData_m_activeSubgroupIndex();
+            m_activeSubgroupIndex = Option.Some(parsed_m_activeSubgroupIndex);
+        }
+
+        if (m_unitTagsChecksum is { HasValue: false })                           
+        {
+            var parsed_m_unitTagsChecksum = Parse_GameSSelectionSyncData_m_unitTagsChecksum();
+            m_unitTagsChecksum = Option.Some(parsed_m_unitTagsChecksum);
+        }
+
+        if (m_subgroupIndicesChecksum is { HasValue: false })                           
+        {
+            var parsed_m_subgroupIndicesChecksum = Parse_GameSSelectionSyncData_m_subgroupIndicesChecksum();
+            m_subgroupIndicesChecksum = Option.Some(parsed_m_subgroupIndicesChecksum);
+        }
+
+        if (m_subgroupsChecksum is { HasValue: false })                           
+        {
+            var parsed_m_subgroupsChecksum = Parse_GameSSelectionSyncData_m_subgroupsChecksum();
+            m_subgroupsChecksum = Option.Some(parsed_m_subgroupsChecksum);
+        }
+
+        return new GameSSelectionSyncData
+        {   
+            m_count = Option.OkOrReturnMissingFieldErr(m_count),
+            m_subgroupCount = Option.OkOrReturnMissingFieldErr(m_subgroupCount),
+            m_activeSubgroupIndex = Option.OkOrReturnMissingFieldErr(m_activeSubgroupIndex),
+            m_unitTagsChecksum = Option.OkOrReturnMissingFieldErr(m_unitTagsChecksum),
+            m_subgroupIndicesChecksum = Option.OkOrReturnMissingFieldErr(m_subgroupIndicesChecksum),
+            m_subgroupsChecksum = Option.OkOrReturnMissingFieldErr(m_subgroupsChecksum),
+        };
+    }
+
+    public GameTSelectionCount Parse_GameSSelectionSyncData_m_count()
+    {                             
+        var m_count = Parse_GameTSelectionCount();
+        return m_count;
+    }
+
+    public GameTSubgroupCount Parse_GameSSelectionSyncData_m_subgroupCount()
+    {                             
+        var m_subgroupCount = Parse_GameTSubgroupCount();
+        return m_subgroupCount;
+    }
+
+    public GameTSubgroupIndex Parse_GameSSelectionSyncData_m_activeSubgroupIndex()
+    {                             
+        var m_activeSubgroupIndex = Parse_GameTSubgroupIndex();
+        return m_activeSubgroupIndex;
+    }
+
+    public GameTSyncChecksum Parse_GameSSelectionSyncData_m_unitTagsChecksum()
+    {                             
+        var m_unitTagsChecksum = Parse_GameTSyncChecksum();
+        return m_unitTagsChecksum;
+    }
+
+    public GameTSyncChecksum Parse_GameSSelectionSyncData_m_subgroupIndicesChecksum()
+    {                             
+        var m_subgroupIndicesChecksum = Parse_GameTSyncChecksum();
+        return m_subgroupIndicesChecksum;
+    }
+
+    public GameTSyncChecksum Parse_GameSSelectionSyncData_m_subgroupsChecksum()
+    {                             
+        var m_subgroupsChecksum = Parse_GameTSyncChecksum();
+        return m_subgroupsChecksum;
+    }
+
+    public GameSSessionSyncInfo Parse_GameSSessionSyncInfo() 
+    {
+        Option<uint32> m_gameLoop = Option.None;
+        Option<List<GameTSyncChecksum>> m_checksums = Option.None;
+        if (m_gameLoop is { HasValue: false })                           
+        {
+            var parsed_m_gameLoop = Parse_GameSSessionSyncInfo_m_gameLoop();
+            m_gameLoop = Option.Some(parsed_m_gameLoop);
+        }
+
+        if (m_checksums is { HasValue: false })                           
+        {
+            var parsed_m_checksums = Parse_GameSSessionSyncInfo_m_checksums();
+            m_checksums = Option.Some(parsed_m_checksums);
+        }
+
+        return new GameSSessionSyncInfo
+        {   
+            m_gameLoop = Option.OkOrReturnMissingFieldErr(m_gameLoop),
+            m_checksums = Option.OkOrReturnMissingFieldErr(m_checksums),
+        };
+    }
+
+    public uint32 Parse_GameSSessionSyncInfo_m_gameLoop()
+    {                             
+        var m_gameLoop = Parse_uint32();
+        return m_gameLoop;
+    }
+
+    public List<GameTSyncChecksum> Parse_GameSSessionSyncInfo_m_checksums()
+    {                             
+        var arrayLength = take_n_bits_into_i64(6);
+        var array = new List<GameTSyncChecksum>();
+
+        for (var i = 0 ; i < arrayLength ; ++i)
+        {
+            var data = Parse_GameTSyncChecksum();
+            array.Add(data);
+        }
+        return array;
+    }
+
+    public GameSGameSyncInfo Parse_GameSGameSyncInfo() 
+    {
+        Option<List<GameTSyncChecksum>> m_checksums = Option.None;
+        if (m_checksums is { HasValue: false })                           
+        {
+            var parsed_m_checksums = Parse_GameSGameSyncInfo_m_checksums();
+            m_checksums = Option.Some(parsed_m_checksums);
+        }
+
+        return new GameSGameSyncInfo
+        {   
+            m_checksums = Option.OkOrReturnMissingFieldErr(m_checksums),
+        };
+    }
+
+    public List<GameTSyncChecksum> Parse_GameSGameSyncInfo_m_checksums()
+    {                             
+        var arrayLength = take_n_bits_into_i64(8);
+        var array = new List<GameTSyncChecksum>();
+
+        for (var i = 0 ; i < arrayLength ; ++i)
+        {
+            var data = Parse_GameTSyncChecksum();
+            array.Add(data);
+        }
+        return array;
+    }
+
+    public ReplaySInitData Parse_ReplaySInitData() 
+    {
+        Option<GameSLobbySyncState> m_syncLobbyState = Option.None;
+        if (m_syncLobbyState is { HasValue: false })                           
+        {
+            var parsed_m_syncLobbyState = Parse_ReplaySInitData_m_syncLobbyState();
+            m_syncLobbyState = Option.Some(parsed_m_syncLobbyState);
+        }
+
+        return new ReplaySInitData
+        {   
+            m_syncLobbyState = Option.OkOrReturnMissingFieldErr(m_syncLobbyState),
+        };
+    }
+
+    public GameSLobbySyncState Parse_ReplaySInitData_m_syncLobbyState()
+    {                             
+        var m_syncLobbyState = Parse_GameSLobbySyncState();
+        return m_syncLobbyState;
+    }
 
 }

@@ -11,6 +11,7 @@ public class Sc2JsonTypeConversion
     public bool IsSizedInt = false;
     public bool IsOptional = false;
     public bool ShouldTryFrom = false;
+    public bool IsBitArray = false;
     public string Parser = "unknown type";
 }
 
@@ -122,6 +123,11 @@ public class Sc2TypeConversionBitPacked : ISc2JsonTypeConversionAlignment
             fieldConverted.ShouldTryFrom = enclosedFieldConverted.ShouldTryFrom;
             fieldConverted.IsSizedInt = enclosedFieldConverted.IsSizedInt;
             fieldConverted.IsVector = true;
+
+            if (elementType is "byte")
+            {
+                fieldConverted.IsBitArray = true;
+            }
         }
         
         if (fieldConverted.IsSizedInt)
@@ -167,6 +173,11 @@ public class Sc2TypeConversionBitPacked : ISc2JsonTypeConversionAlignment
             enclosedFieldConverted.CSharpType = $"List<{enclosedFieldConverted.CSharpType}>";
             enclosedFieldConverted.IsVector = true;
             enclosedFieldConverted.IsOptional = true;
+
+            if (elementType is "byte")
+            {
+                enclosedFieldConverted.IsBitArray = true;
+            }
 
             return enclosedFieldConverted;
         }

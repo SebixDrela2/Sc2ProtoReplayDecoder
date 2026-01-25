@@ -1,6 +1,5 @@
 ﻿using Sc2ReplayAnalyzer.Json.Generator;
 using System.Diagnostics;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.Json.Nodes;
 

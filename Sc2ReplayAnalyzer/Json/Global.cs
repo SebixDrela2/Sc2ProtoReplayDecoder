@@ -44,6 +44,47 @@ public static class Option
 
 public struct NoneValue;
 
+
+public class BitReader(BinaryReader reader)
+{
+    private int LeftBits = 0;
+    private byte Bits;
+
+    public int ReadBit()
+    {
+        if (LeftBits is 0)
+        {
+            Bits = reader.ReadByte();
+        }
+
+        LeftBits = (LeftBits - 1) & 7;
+
+        var bit = Bits & 1;
+
+        Bits >>= 1;
+
+        return bit;
+    }
+
+    public byte ReadBits(int count)
+    {
+        var min = int.Min(count, LeftBits);
+        LeftBits -= min;
+        count -= min;
+
+        byte result = Bits;
+
+        if (count is 0)
+        {
+            return (byte)(result & ((1 << LeftBits) - 1));
+        }
+
+        Bits = reader.ReadByte();
+
+        return (byte)(result & ((1 << count) - 1));
+    }
+}
+
 public class ProtocolReader(BinaryReader reader) : IDisposable
 {
     public const byte ARRAY_TAG = 0x00;
@@ -114,6 +155,22 @@ public class ProtocolReader(BinaryReader reader) : IDisposable
         ValidateFourccTag();
 
         return BinaryPrimitives.ReadUInt32BigEndian(ReadBytes(4).ToArray());
+    }
+
+    public long take_n_bits_into_i64(int totalBits)
+    {
+        if (totalBits >= 64)
+        {
+            throw new InvalidOperationException($"Can't be more than 64 bits for processor side.");
+        }
+
+        long res = 0L;
+        var remainingBits = totalBits;
+
+        while(true)
+        {
+            var count = remainingBits > 8
+        }
     }
 
     public void Dispose() => reader.Dispose();

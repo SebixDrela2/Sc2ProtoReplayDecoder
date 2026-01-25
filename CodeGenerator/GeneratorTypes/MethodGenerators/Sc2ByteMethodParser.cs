@@ -239,7 +239,7 @@ internal class Sc2ByteMethodParser(StringBuilder methodBuilder, Sc2GeneratorData
         }
 
         _fieldNameMethodBuilder.AppendLine($$"""
-                    }//1
+                    }
                 """);     
     }
 
