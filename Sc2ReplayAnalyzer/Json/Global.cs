@@ -45,48 +45,164 @@ public static class Option
 public struct NoneValue;
 
 
-public class BitReader(BinaryReader reader)
+public sealed class BitReader
 {
-    private int LeftBits = 0;
-    private byte Bits;
+    private readonly BinaryReader _reader;
+    private byte _currentByte;
+    private int _bitOffset;
 
-    public int ReadBit()
+    public BitReader(BinaryReader reader)
     {
-        if (LeftBits is 0)
+        _reader = reader;
+        _bitOffset = 8;
+    }
+
+    public List<byte> TakeBitArray(int totalBits)
+    {
+        var result = new List<byte>();
+        int remainingBits = totalBits;
+
+        while (remainingBits > 0)
         {
-            Bits = reader.ReadByte();
+            int count = remainingBits > 8 ? 8 : remainingBits;
+            byte bits = ReadBits(count);
+
+            result.Add(bits);
+
+            remainingBits -= count;
         }
 
-        LeftBits = (LeftBits - 1) & 7;
+        return result;
+    }
 
-        var bit = Bits & 1;
+    public byte TakeUnalignedByte() => ReadBits(8);
 
-        Bits >>= 1;
+    public List<byte> TakeFourCC()
+    {
+        var res = new List<byte>(4);
 
-        return bit;
+        for (int i = 0; i < 4; i++)
+        {
+            var value = ReadBits(8);
+
+            res.Add(value);
+        }
+
+        return res;
+    }
+
+    public void TakeNull() { }
+
+    public long ParsePackedInt(long offset, int numBits)
+    {
+        long num = ReadBitsI64(numBits);
+
+        return offset + num;
+    }
+
+    public bool ParseBool()
+    {
+        return ReadBits(1) != 0;
     }
 
     public byte ReadBits(int count)
     {
-        var min = int.Min(count, LeftBits);
-        LeftBits -= min;
-        count -= min;
-
-        byte result = Bits;
-
-        if (count is 0)
+        if (count < 0 || count > 8)
         {
-            return (byte)(result & ((1 << LeftBits) - 1));
+            throw new ArgumentOutOfRangeException(nameof(count));
         }
 
-        Bits = reader.ReadByte();
+        byte result = 0;
 
-        return (byte)(result & ((1 << count) - 1));
+        while (count > 0)
+        {
+            EnsureByte();
+
+            int available = 8 - _bitOffset;
+            int take = Math.Min(count, available);
+
+            int shift = available - take;
+            byte bits = (byte)((_currentByte >> shift) & ((1 << take) - 1));
+
+            result = (byte)((result << take) | bits);
+
+            _bitOffset += take;
+            count -= take;
+        }
+
+        return result;
+    }
+
+    public long ReadBitsI64(int totalBits)
+    {
+        if (totalBits > 64)
+        {
+            throw new InvalidOperationException("More than 64 bits");
+        }
+
+        long result = 0;
+
+        while (totalBits > 0)
+        {
+            int take = totalBits > 8
+                ? (_bitOffset == 8 ? 8 : 8 - _bitOffset)
+                : totalBits;
+
+            byte bits = ReadBits(take);
+            result = (result << take) | bits;
+
+            totalBits -= take;
+        }
+
+        return result;
+    }
+
+    public void ByteAlign()
+    {
+        _bitOffset = 8;
+    }
+
+    private void EnsureByte()
+    {
+        if (_bitOffset == 8)
+        {
+            _currentByte = _reader.ReadByte();
+            _bitOffset = 0;
+        }
     }
 }
 
-public class ProtocolReader(BinaryReader reader) : IDisposable
+public partial class ProtocolReader
 {
+    public void byte_align() => BitReader.ByteAlign();
+
+    public List<byte> take_bit_array(int totalBits) => BitReader.TakeBitArray(totalBits);
+
+    public long take_n_bits_into_i64(int totalBits) => BitReader.ReadBitsI64(totalBits);
+
+    public byte take_unaligned_byte() => BitReader.TakeUnalignedByte();
+
+    public void take_null() => BitReader.TakeNull();
+
+    public List<byte> take_fourcc() => BitReader.TakeFourCC();
+
+    public long parse_packed_int(long offset, int numBits) => BitReader.ParsePackedInt(offset, numBits);
+
+    public bool parse_bool() => BitReader.ParseBool();
+}
+
+public partial class ProtocolReader : IDisposable
+{
+    private readonly BinaryReader _reader;
+    public BitReader BitReader { get; }
+
+    public ProtocolReader(BinaryReader reader)
+    {
+        _reader = reader;
+
+        BitReader = new BitReader(reader);
+    }
+
     public const byte ARRAY_TAG = 0x00;
     public const byte BIT_ARRAY_TAG = 0x01;
     public const byte BLOB_TAG = 0x02;
@@ -157,23 +273,7 @@ public class ProtocolReader(BinaryReader reader) : IDisposable
         return BinaryPrimitives.ReadUInt32BigEndian(ReadBytes(4).ToArray());
     }
 
-    public long take_n_bits_into_i64(int totalBits)
-    {
-        if (totalBits >= 64)
-        {
-            throw new InvalidOperationException($"Can't be more than 64 bits for processor side.");
-        }
-
-        long res = 0L;
-        var remainingBits = totalBits;
-
-        while(true)
-        {
-            var count = remainingBits > 8
-        }
-    }
-
-    public void Dispose() => reader.Dispose();
+    public void Dispose() => _reader.Dispose();
 
     public long ParseVlqInt()
     {
@@ -195,9 +295,23 @@ public class ProtocolReader(BinaryReader reader) : IDisposable
         return isNegative ? -result : result;
     }
 
-    public byte ReadByte() => reader.ReadByte();
-    public List<byte> ReadBytes(long length) => reader.ReadBytes((int)length).ToList();
-    public List<byte> ReadBytes(int length) => reader.ReadBytes(length).ToList();
+    public byte ReadByte()
+    {
+        BitReader.ByteAlign();
+        return _reader.ReadByte();
+    }
+
+    public List<byte> ReadBytes(long length)
+    {
+        BitReader.ByteAlign();
+        return _reader.ReadBytes((int)length).ToList();
+    }
+
+    public List<byte> ReadBytes(int length)
+    {
+        BitReader.ByteAlign();
+        return _reader.ReadBytes(length).ToList();
+    }
 
     public T[] ReadArray<T>(Func<T> parseMethod, long count) =>
         [.. Enumerable.Range(0, (int)count).Select(_ => parseMethod())];

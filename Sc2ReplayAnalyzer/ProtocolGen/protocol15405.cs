@@ -3000,7 +3000,7 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
         return m_slotId;
     }
 
-    public GameSLobbySlotChange Parse_GameSSetLobbySlotEvent_m_slotChange()
+    public IGameSLobbySlotChange Parse_GameSSetLobbySlotEvent_m_slotChange()
     {                             
         var m_slotChange = Parse_GameSLobbySlotChange();
         return m_slotChange;
@@ -4441,7 +4441,7 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
         return m_eventType;
     }
 
-    public m_eventData Parse_GameSTriggerDialogControlEvent_m_eventData()
+    public Im_eventData Parse_GameSTriggerDialogControlEvent_m_eventData()
     {                             
         var m_eventData = Parse_m_eventData();
         return m_eventData;

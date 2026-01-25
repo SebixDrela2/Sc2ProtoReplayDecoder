@@ -34,6 +34,14 @@ internal class Sc2BitMethodParser(StringBuilder methodBuilder, Sc2GeneratorData 
     {
         var typeName = Sc2TypeUtils.GetTypeName(unitTypeName);
         fieldType = Sc2TypeUtils.GetTypeName(fieldType);
+
+        string interfaceType = null;
+
+        if (data.ChoiceMap.TryGetValue(fieldType, out var dictInterfaceType))
+        {
+            interfaceType = dictInterfaceType;
+        }
+
         fieldConverted.Parser = Sc2TypeUtils.GetTypeName(fieldConverted.Parser);
 
         if (fieldConverted.IsOptional)
@@ -72,9 +80,13 @@ internal class Sc2BitMethodParser(StringBuilder methodBuilder, Sc2GeneratorData 
                             {{fieldName}} = Option.OkOrReturnMissingFieldErr({{fieldName}}),
                 """);
 
+        var methodFieldType = interfaceType is not null
+            ? interfaceType
+            : fieldType;
+
         _fieldNameMethodBuilder.AppendLine($$"""
 
-                    public {{fieldType}} Parse_{{typeName}}_{{fieldName}}()
+                    public {{methodFieldType}} Parse_{{typeName}}_{{fieldName}}()
                     {                             
                 """);
 
