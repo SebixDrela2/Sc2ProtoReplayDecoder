@@ -17,10 +17,14 @@ internal class Program
         var jsonParser = new Sc2JsonParser(jsonFiles);
         var dataList = jsonParser.Parse().ToArray();
 
-        foreach (var data in dataList)
+        foreach (var data in dataList[0..1])
         {
             var generator = new Sc2CodeGenerator(new StringBuilder(), data);
             generator.Generate();
+
+            Enumerable.Range(0, 5).Select(x => x).ToArray();
+
+
         }
     }
 }
