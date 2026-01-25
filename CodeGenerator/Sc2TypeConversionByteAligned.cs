@@ -212,7 +212,7 @@ public class Sc2TypeConversionByteAligned : ISc2JsonTypeConversionAlignment
         "NNet.Game.TDifficulty" or
         "NNet.Game.THandicap" => new Sc2JsonTypeConversion
         {
-            CSharpType = "int",
+            CSharpType = "uint",
             ShouldTryFrom = true,
             Parser = "tagged_vlq_int",
         },
@@ -241,7 +241,7 @@ public class Sc2TypeConversionByteAligned : ISc2JsonTypeConversionAlignment
         },
         "FourCCType" => new Sc2JsonTypeConversion
         {
-            CSharpType = "int",
+            CSharpType = "uint",
             Parser = "tagged_fourcc"
         },
         "BlobType" or
