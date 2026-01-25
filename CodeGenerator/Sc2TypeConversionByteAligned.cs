@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Nodes;
+﻿using Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes.TypeGenerators;
+using System.Text.Json.Nodes;
 
 namespace Sc2ReplayAnalyzer.CodeGenerator;
 
@@ -30,7 +31,7 @@ public class Sc2TypeConversionBitPacked : ISc2JsonTypeConversionAlignment
             return new Sc2JsonTypeConversion
             {
                 CSharpType = nnetName,
-                Parser = $"Parse_{nnetName}"
+                Parser = $"Parse_{Sc2TypeUtils.GetTypeName(nnetName)}"
             };
         }
 

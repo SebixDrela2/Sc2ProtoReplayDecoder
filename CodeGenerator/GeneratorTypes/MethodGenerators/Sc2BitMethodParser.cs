@@ -1,6 +1,5 @@
 ﻿using Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes.TypeGenerators;
 using Sc2ReplayAnalyzer.Json.Generator;
-using System.Reflection.Metadata;
 using System.Text;
 using System.Text.Json.Nodes;
 
@@ -16,6 +15,103 @@ internal class Sc2BitMethodParser(StringBuilder methodBuilder, Sc2GeneratorData 
     private readonly StringBuilder _methodStarter = new StringBuilder();
     private readonly StringBuilder _generalMethodBuilder = new StringBuilder();
 
+    public void OpenChoice(string unitTypeName)
+    {
+        var methodCtorBuilder = new StringBuilder();
+        var typeName = Sc2TypeUtils.GetTypeName(unitTypeName);
+
+        _parserBuilder.AppendLine();
+        _parserBuilder.AppendLine($$"""
+                    public {{typeName}} Parse_{{typeName}}() 
+                    {
+                """);
+
+        _generalMethodBuilder.AppendLine($$"""
+                        ValidateChoiceTag();
+                        var variantTag = ParseVlqInt();
+                        
+                        switch (variantTag)
+                        {
+                """);
+    }
+
+    public void ContinueVariantChoice(Sc2JsonTypeConversion fieldConverted, string fieldTypeInfo, string fieldType, string variantName, string fieldTag)
+    {
+        var typeName = Sc2TypeUtils.GetTypeName(variantName);
+        fieldType = Sc2TypeUtils.GetTypeName(fieldType);
+
+        _generalMethodBuilder.AppendLine($$"""
+                            case {{fieldTag}}:
+                            {
+                """);
+
+        if (fieldConverted.IsOptional)
+        {
+            _generalMethodBuilder.AppendLine($$"""
+                                var isProvided = parse_bool();
+                                var res = {{fieldConverted.Parser}}();
+
+                                if (isProvided)
+                                {
+                                    return new {{typeName}}
+                                    {
+                                        Value = Option.Some(res)
+                                    };
+                                }
+                                else
+                                {
+                                    return new {{typeName}}
+                                    {
+                                        Value = Option.None
+                                    };
+                                }
+                """);
+        }
+        else
+        {
+            _generalMethodBuilder.AppendLine($$"""
+                                var res = {{fieldConverted.Parser}}();
+
+                """);
+
+            if (fieldConverted.ShouldTryFrom)
+            {
+                _generalMethodBuilder.AppendLine($$"""
+                                return new {{typeName}}
+                                {
+                                    Value = ProtocolConversion<{{fieldType}}>.From(res)
+                                };
+                """);
+            }
+            else
+            {
+                _generalMethodBuilder.AppendLine($$"""
+                                return new {{typeName}}
+                                {
+                                    Value = res
+                                };
+                """);
+            }
+        }
+
+
+        _generalMethodBuilder.AppendLine("""
+                            }
+                """);
+    }
+
+    public void CloseChoice()
+    {
+        _generalMethodBuilder.AppendLine($$"""
+                            default:
+                            {
+                                throw new Exception("WUT CHOICE");
+                            }
+                        }
+                    }
+                """);
+    }
+
     public void CloseStruct(bool hasTags)
     {
         _methodInitializerBuilder.AppendLine($$"""
@@ -24,23 +120,10 @@ internal class Sc2BitMethodParser(StringBuilder methodBuilder, Sc2GeneratorData 
                 """);
     }
 
-    public void ContinueFieldStruct(
-        JsonNode field, 
-        Sc2JsonTypeConversion fieldConverted, 
-        string fieldName, 
-        string fieldType, 
-        string unitTypeName, 
-        bool hasTags)
+    public void ContinueFieldStruct(JsonNode field, Sc2JsonTypeConversion fieldConverted, string fieldName, string fieldType, string unitTypeName, bool hasTags)
     {
         var typeName = Sc2TypeUtils.GetTypeName(unitTypeName);
         fieldType = Sc2TypeUtils.GetTypeName(fieldType);
-
-        string interfaceType = null;
-
-        if (data.ChoiceMap.TryGetValue(fieldType, out var dictInterfaceType))
-        {
-            interfaceType = dictInterfaceType;
-        }
 
         fieldConverted.Parser = Sc2TypeUtils.GetTypeName(fieldConverted.Parser);
 
@@ -80,13 +163,9 @@ internal class Sc2BitMethodParser(StringBuilder methodBuilder, Sc2GeneratorData 
                             {{fieldName}} = Option.OkOrReturnMissingFieldErr({{fieldName}}),
                 """);
 
-        var methodFieldType = interfaceType is not null
-            ? interfaceType
-            : fieldType;
-
         _fieldNameMethodBuilder.AppendLine($$"""
 
-                    public {{methodFieldType}} Parse_{{typeName}}_{{fieldName}}()
+                    public {{fieldType}} Parse_{{typeName}}_{{fieldName}}()
                     {                             
                 """);
 
@@ -244,20 +323,7 @@ internal class Sc2BitMethodParser(StringBuilder methodBuilder, Sc2GeneratorData 
                     }
                 """);
     }
-
-    public void Finalise()
-    {
-        _parserBuilder.Append(_methodStarter);
-        _parserBuilder.Append(_generalMethodBuilder);
-        _parserBuilder.Append(_methodInitializerBuilder);
-        _parserBuilder.Append(_fieldNameMethodBuilder);
-
-        _methodInitializerBuilder.Clear();
-        _fieldNameMethodBuilder.Clear();
-        _methodStarter.Clear();
-        _generalMethodBuilder.Clear();
-    }
-
+   
     public void OpenStruct(string unitTypeName, bool hasTags)
     {
         var typeName = Sc2TypeUtils.GetTypeName(unitTypeName);
@@ -274,5 +340,18 @@ internal class Sc2BitMethodParser(StringBuilder methodBuilder, Sc2GeneratorData 
                 """);
 
 
+    }
+
+    public void Finalise()
+    {
+        _parserBuilder.Append(_methodStarter);
+        _parserBuilder.Append(_generalMethodBuilder);
+        _parserBuilder.Append(_methodInitializerBuilder);
+        _parserBuilder.Append(_fieldNameMethodBuilder);
+
+        _methodInitializerBuilder.Clear();
+        _fieldNameMethodBuilder.Clear();
+        _methodStarter.Clear();
+        _generalMethodBuilder.Clear();
     }
 }

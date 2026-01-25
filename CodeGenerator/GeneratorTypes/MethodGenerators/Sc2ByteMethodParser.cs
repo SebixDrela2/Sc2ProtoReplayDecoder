@@ -16,6 +16,104 @@ internal class Sc2ByteMethodParser(StringBuilder methodBuilder, Sc2GeneratorData
     private readonly StringBuilder _methodStarter = new StringBuilder();
     private readonly StringBuilder _generalMethodBuilder = new StringBuilder();
 
+    public void OpenChoice(string unitTypeName)
+    {
+        var methodCtorBuilder = new StringBuilder();
+        var typeName = Sc2TypeUtils.GetTypeName(unitTypeName);
+
+        _parserBuilder.AppendLine();
+        _parserBuilder.AppendLine($$"""
+                    public {{typeName}} Parse_{{typeName}}() 
+                    {
+                """);
+
+        _generalMethodBuilder.AppendLine($$"""
+                        ValidateChoiceTag();
+                        var variantTag = ParseVlqInt();
+                        
+                        switch (variantTag)
+                        {
+                """);
+    }
+
+    public void ContinueVariantChoice(Sc2JsonTypeConversion fieldConverted, string fieldTypeInfo, string fieldType, string variantName, string fieldTag)
+    {
+        var typeName = Sc2TypeUtils.GetTypeName(variantName);
+        fieldType = Sc2TypeUtils.GetTypeName(fieldType);
+
+        _generalMethodBuilder.AppendLine($$"""
+                            case {{fieldTag}}:
+                            {
+                """);
+
+        if (fieldConverted.IsOptional)
+        {
+            _generalMethodBuilder.AppendLine($$"""
+                                ValidateOptTag();
+                                var isProvided = ReadByte();
+
+                                if (isProvided != 0)
+                                {
+                                    var res = {{fieldConverted.Parser}}();
+
+                                    return new {{typeName}}
+                                    {
+                                        Value = Option.Some(res)
+                                    };
+                                }
+                                else
+                                {
+                                    return new {{typeName}}
+                                    {
+                                        Value = Option.None
+                                    };
+                                }
+                """);
+        }
+        else
+        {
+            _generalMethodBuilder.AppendLine($$"""
+                                var res = {{fieldConverted.Parser}}();
+                """);
+
+            if (fieldConverted.ShouldTryFrom)
+            {
+                _generalMethodBuilder.AppendLine($$"""
+                                return new {{typeName}}
+                                {
+                                    Value = ProtocolConversion<{{fieldType}}>.From(res)
+                                };
+                """);
+            }
+            else
+            {
+                _generalMethodBuilder.AppendLine($$"""
+                                return new {{typeName}}
+                                {
+                                    Value = res
+                                };
+                """);
+            }
+        }
+
+        _generalMethodBuilder.AppendLine($$"""
+                            }
+                            break;
+                """);
+    }
+
+    public void CloseChoice()
+    {
+        _generalMethodBuilder.AppendLine($$"""
+                            default:
+                            {
+                                throw new Exception("WUT CHOICE");
+                            }
+                        }
+                    }
+                """);
+    }
+
     public void OpenStruct(string unitTypeName, bool hasTags)
     {
         var methodCtorBuilder = new StringBuilder();
@@ -50,13 +148,7 @@ internal class Sc2ByteMethodParser(StringBuilder methodBuilder, Sc2GeneratorData
         }
     }
 
-    public void ContinueFieldStruct(
-        JsonNode field,
-        Sc2JsonTypeConversion fieldConverted, 
-        string fieldName, 
-        string fieldType,
-        string unitTypeName,
-        bool hasTags)
+    public void ContinueFieldStruct(JsonNode field, Sc2JsonTypeConversion fieldConverted, string fieldName, string fieldType, string unitTypeName, bool hasTags)
     {
         var typeName = Sc2TypeUtils.GetTypeName(unitTypeName);
 

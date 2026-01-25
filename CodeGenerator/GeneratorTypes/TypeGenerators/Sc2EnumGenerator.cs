@@ -17,28 +17,39 @@ internal class Sc2EnumGenerator(StringBuilder builder, Sc2GeneratorData data)
         foreach(var node in enumNodes)
         {
             var fullName = node[FullName].ToString();
+            var methodParser = GetAgnosticMethodParser();
 
-            if (OpenEnum(fullName))
-            {
+            if (AddInterfaceEnum(fullName))
+            {           
                 var variantArray = node[TypeInfo][Fields].AsArray();
 
+                methodParser.OpenEnum<T>(fullName, variantArray.Count);
                 foreach (var variant in variantArray)
                 {
                     HandleVariant(node, variant);
                 }
 
-                Close();
+                methodParser.CloseEnum();
+                methodParser.Finalise();
+
+                AddLine();
             }
         }
     }
 
     private void HandleVariant(JsonNode node, JsonNode variant)
     {
+        var fullName = node[FullName].ToString();
         var variantName = variant[Name].ToString();
         var variantValue = variant[Value][Value].ToString();
 
+        var variantValueFullName = $"{Sc2TypeUtils.GetTypeName(fullName)}.{variantName}";
+
         Debug.Assert(variant[Value][Type].ToString() is "IntLiteral");
 
-        AddEnum(variantName, variantValue);
+        AddRecordEnum(variantValueFullName, variantName, fullName);
+
+        var methodParser = GetAgnosticMethodParser();
+        methodParser.ContinueEnumVariant(variantValue, variantValueFullName, fullName, variantName);
     }
 }

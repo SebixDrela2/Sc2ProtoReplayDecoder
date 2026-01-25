@@ -9,26 +9,30 @@ internal abstract class Sc2GeneratorBase
     private readonly StringBuilder _builder;
 
     private readonly HashSet<string> _classDefinitions = [];
-    private readonly HashSet<string> _enumDefinitions = [];
+    private readonly HashSet<string> _interfaceEnumDefinitions = [];
+    private readonly HashSet<string> _classEnumDefinitions = [];
     private readonly HashSet<string> _choiceDefinitions = [];
 
     private readonly Sc2BitMethodParser _bitMethodParser;
     private readonly Sc2ByteMethodParser _byteMethodParser;
+    private readonly Sc2AgnosticParser _agnosticParser;
 
-    private readonly Dictionary<string, string> _choiceMap = [];
+    private readonly Dictionary<string, string> _enumTags = [];
 
 
     public string Data => _builder.ToString();
 
     public Sc2GeneratorBase(StringBuilder builder, Sc2GeneratorData data)
     {
-        _choiceMap = data.ChoiceMap;
+        _enumTags = data.EnumTags;
+
         _builder = builder;
 
         var methodBuilder = new StringBuilder();
 
         _bitMethodParser = new Sc2BitMethodParser(methodBuilder, data);
         _byteMethodParser = new Sc2ByteMethodParser(methodBuilder, data);
+        _agnosticParser = new Sc2AgnosticParser(methodBuilder, data);
     }
 
     protected ISc2MethodParser GetMethodParser<T>()
@@ -46,6 +50,8 @@ internal abstract class Sc2GeneratorBase
         throw new Exception("Wrong parser type.");
     }
 
+    protected ISc2AgnosticParser GetAgnosticMethodParser() => _agnosticParser;
+
     protected bool OpenClass(string className, string choiceType = null)
     {  
         if (_classDefinitions.Contains(className))
@@ -55,30 +61,60 @@ internal abstract class Sc2GeneratorBase
 
         _classDefinitions.Add(className);
 
-        var possibleInterfaceDef = choiceType is not null ? $" : I{Sc2TypeUtils.GetTypeName(choiceType)}" : string.Empty;
+        var possibleAbstractClass = choiceType is not null 
+            ? $" : {Sc2TypeUtils.GetTypeName(choiceType)}" 
+            : string.Empty;
 
         _builder.AppendLine($"// {className}");
         _builder.AppendLine($$"""
-            public class {{Sc2TypeUtils.GetTypeName(className)}}{{possibleInterfaceDef}}
+            public class {{Sc2TypeUtils.GetTypeName(className)}}{{possibleAbstractClass}}
             {
             """);
 
         return true;
     }
 
-    protected bool OpenEnum(string enumName)
+    protected bool AddRecordEnum(string variantValueFullName, string variantName, string fullName)
     {
-        if (_enumDefinitions.Contains(enumName))
+        var typeName = Sc2TypeUtils.GetTypeName(fullName);
+        var uniqueVariantName = $"{typeName}_{variantName}";
+        if (_classEnumDefinitions.Contains(uniqueVariantName))
         {
             return false;
         }
 
-        _enumDefinitions.Add(enumName);
+        _classEnumDefinitions.Add(uniqueVariantName);
+
+        _builder.AppendLine($"// {variantName}");
+
+        if (_enumTags.TryGetValue(variantValueFullName, out var field))
+        {
+            _builder.AppendLine($"""
+            public record class {Sc2TypeUtils.GetTypeName(uniqueVariantName)}({Sc2TypeUtils.GetTypeName(field)} Value) : {typeName};
+            """);
+        }
+        else
+        {
+            _builder.AppendLine($"""
+            public record class {Sc2TypeUtils.GetTypeName(uniqueVariantName)}() : {typeName};
+            """);
+        }
+
+        return true;
+    }
+
+    protected bool AddInterfaceEnum(string enumName)
+    {
+        if (_interfaceEnumDefinitions.Contains(enumName))
+        {
+            return false;
+        }
+
+        _interfaceEnumDefinitions.Add(enumName);
 
         _builder.AppendLine($"// {enumName}");
         _builder.AppendLine($$"""
-            public enum {{Sc2TypeUtils.GetTypeName(enumName)}}
-            {
+            public abstract record class {{Sc2TypeUtils.GetTypeName(enumName)}} { }
             """);
 
         return true;
@@ -93,14 +129,11 @@ internal abstract class Sc2GeneratorBase
 
         _choiceDefinitions.Add(choiceName);
 
-        var nonInterfaceChoiceType = Sc2TypeUtils.GetTypeName(choiceName);
-        var interfaceChoiceType = $"I{nonInterfaceChoiceType}";
-
-        _choiceMap.TryAdd(nonInterfaceChoiceType, interfaceChoiceType);
+        var typeName = Sc2TypeUtils.GetTypeName(choiceName);
 
         _builder.AppendLine($"// {choiceName}");
         _builder.AppendLine($$"""
-            public interface {{interfaceChoiceType}} { }
+            public abstract class {{typeName}} { }
             """);
         _builder.AppendLine();
 
@@ -110,31 +143,17 @@ internal abstract class Sc2GeneratorBase
     protected void Close()
     {
         _builder.AppendLine("}");
-        _builder.AppendLine();
+        AddLine();
     }
 
-    protected void AddEnum(string enumName, string enumValue)
-    {
-        _builder.AppendLine($"""
-                {enumName} = {enumValue},
-            """);
-    }
+    protected void AddLine() => _builder.AppendLine();
 
     protected void AddField(string fieldName, string fieldType)
     {
         var typeName = Sc2TypeUtils.GetTypeName(fieldType);
 
-        if (_choiceMap.TryGetValue(typeName, out var choiceType))
-        {
-            _builder.AppendLine($"""
-                public {choiceType} {fieldName};
-            """);
-        }
-        else
-        {
-            _builder.AppendLine($"""
+        _builder.AppendLine($"""
                 public {typeName} {fieldName};
             """);
-        }
     }
 }

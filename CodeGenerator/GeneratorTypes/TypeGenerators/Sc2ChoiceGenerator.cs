@@ -14,23 +14,29 @@ internal class Sc2ChoiceGenerator(StringBuilder builder, Sc2GeneratorData data)
         where T : ISc2JsonTypeConversionAlignment
     {
         var choiceNodes = nodes.Where(x => x[TypeInfo][Type].ToString() is "ChoiceType");
+        var methodParser = GetMethodParser<T>();
 
         foreach (var node in choiceNodes)
         {
             var variantArray = node[TypeInfo][Fields].AsArray();
-            var fullName = node[FullName]?.ToString() ?? node[Name].ToString();
+            var unitTypeFullName = node[FullName]?.ToString() ?? node[Name].ToString();
 
-            if (OpenChoice(fullName))
+            if (OpenChoice(unitTypeFullName))
             {
+                methodParser.OpenChoice(unitTypeFullName);
+
                 foreach (var variant in variantArray)
                 {
-                    HandleVariant<T>(variant, fullName);
-                }            
+                    HandleVariant<T>(variant, unitTypeFullName);
+                }
+
+                methodParser.CloseChoice();
+                methodParser.Finalise();
             }
         }    
     }
 
-    private void HandleVariant<T>(JsonNode variant, string fullName)
+    private void HandleVariant<T>(JsonNode variant, string unitTypeFullName)
         where T : ISc2JsonTypeConversionAlignment
     {
         if (variant[TypeInfo][Type].ToString() is "NullType")
@@ -57,16 +63,22 @@ internal class Sc2ChoiceGenerator(StringBuilder builder, Sc2GeneratorData data)
 
             fieldConverted.Parser = fieldConverted.Parser.Replace("{}", enclosedType);
             fieldConverted.CSharpType = fieldConverted.CSharpType.Replace("{}", enclosedType);
+            fieldConverted.IsOptional = true;
         }
 
         Debug.Assert(variant[Tag][Type].ToString() == "IntLiteral");
 
         var fieldType = fieldConverted.CSharpType;
 
-        if (OpenClass(variantName, fullName))
+        if (OpenClass(variantName, unitTypeFullName))
         {
             AddField("Value", fieldType);
             Close();
+
+            var methodParser = GetMethodParser<T>();
+
+            var fieldTag = variant[Tag][Value].ToString();
+            methodParser.ContinueVariantChoice(fieldConverted, fieldTypeInfo, fieldType, variantName, fieldTag);
         }       
     }
 }

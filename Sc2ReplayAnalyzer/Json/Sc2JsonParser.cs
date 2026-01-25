@@ -50,7 +50,6 @@ public class Sc2JsonParser(Dictionary<string, string> jsonFiles)
         return enumTags;
     }
 
-
     private Sc2StructDeclaration ProcessModuleDeclaration(JsonNode module, Dictionary<string, string> enumTags)
     {
         var typeDeclarations = module[Declaration].AsArray();
@@ -112,14 +111,21 @@ public class Sc2JsonParser(Dictionary<string, string> jsonFiles)
                 throw new Exception("Unknown value for ConstDecl.");
             }
 
-            var typeKey = field[Value][FullName].ToString();
-            var typeValue = typeDeclaration[FullName].ToString();
+            var typeVariantValue = GetTypeName(field[Value][FullName].ToString().Replace(typeFullName, string.Empty));
+            var typeVariant = GetTypeName(typeFullName);
 
-            enumTags.TryAdd(typeKey, typeValue);
+            var value = GetTypeName(typeDeclaration[FullName].ToString());
+            var key = $"{typeVariant}.{typeVariantValue}";
+
+            enumTags.TryAdd(key, value);
         }
 
         return new Sc2StructDeclaration();
     }
 
     private static bool IsReplayDeclaration(string declaration) => declaration is NNetGame or NNetReplay;
+
+    private static string GetTypeName(string fullName) => fullName
+        .Replace(".", string.Empty)
+        .Replace("NNet", "");
 }

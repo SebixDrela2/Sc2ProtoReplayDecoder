@@ -10,6 +10,5 @@ public class Sc2GeneratorData
     public required IReadOnlyList<JsonNode> ByteAligned;
     public required IReadOnlyList<JsonNode> BitPacked;
 
-    public readonly Dictionary<string, string> ChoiceMap = [];
     public readonly StringBuilder ParserGenerator = new();
 }
