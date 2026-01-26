@@ -193,13 +193,12 @@ public partial class ProtocolReader
 
 public partial class ProtocolReader : IDisposable
 {
-    private readonly BinaryReader _reader;
+    public readonly BinaryReader Reader;
     public BitReader BitReader { get; }
 
     public ProtocolReader(BinaryReader reader)
     {
-        _reader = reader;
-
+        Reader = reader;
         BitReader = new BitReader(reader);
     }
 
@@ -273,7 +272,7 @@ public partial class ProtocolReader : IDisposable
         return BinaryPrimitives.ReadUInt32BigEndian(ReadBytes(4).ToArray());
     }
 
-    public void Dispose() => _reader.Dispose();
+    public void Dispose() => Reader.Dispose();
 
     public int ParseVlqInt()
     {
@@ -296,19 +295,19 @@ public partial class ProtocolReader : IDisposable
     public byte ReadByte()
     {
         BitReader.ByteAlign();
-        return _reader.ReadByte();
+        return Reader.ReadByte();
     }
 
     public List<byte> ReadBytes(long length)
     {
         BitReader.ByteAlign();
-        return _reader.ReadBytes((int)length).ToList();
+        return Reader.ReadBytes((int)length).ToList();
     }
 
     public List<byte> ReadBytes(int length)
     {
         BitReader.ByteAlign();
-        return _reader.ReadBytes(length).ToList();
+        return Reader.ReadBytes(length).ToList();
     }
 
     public T[] ReadArray<T>(Func<T> parseMethod, long count) =>
