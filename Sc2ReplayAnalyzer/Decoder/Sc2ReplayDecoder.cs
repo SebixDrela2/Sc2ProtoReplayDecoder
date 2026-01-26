@@ -1,8 +1,7 @@
 ﻿using MPQArchive.MPQ;
-using Sc2ReplayAnalyzer.Json;
 using Sc2ReplayAnalyzer.Tokenizer;
-
-namespace Sc2ReplayAnalyzer.Parser;
+using Sc2ReplayAnalyzer.Json.protocol95299;
+namespace Sc2ReplayAnalyzer.Decoder;
 
 public class Sc2ReplayDecoder(string path)
 {
@@ -12,10 +11,11 @@ public class Sc2ReplayDecoder(string path)
     {
         using var fileStream = File.Open(path, FileMode.Open);
         var mpqArchive = new MPQReader(fileStream).Read();
+        var userData = mpqArchive.MPQUserData;
 
-        var jsonFiles = _provider.Provide();
+        var binaryReader = new BinaryReader(new MemoryStream(mpqArchive.MPQUserData.Content));
 
-        var jsonParser = new Sc2JsonParser(jsonFiles);
-        var dataList = jsonParser.Parse();
+        var parser = new ProtocolParser(binaryReader);
+        var header = parser.Parse_ReplaySHeader();       
     }
 }

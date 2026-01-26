@@ -1,11 +1,8 @@
 ﻿using Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes.TypeGenerators;
 using Sc2ReplayAnalyzer.Json.Generator;
 using System.Text;
-using System.Text.Json.Nodes;
 
 namespace Sc2ReplayAnalyzer.CodeGenerator.Generators;
-
-using static Sc2ReplayAnalyzer.Json.Sc2JsonType;
 
 public class Sc2CodeGenerator(StringBuilder builder, Sc2GeneratorData data)
 {

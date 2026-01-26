@@ -1,4 +1,4 @@
-﻿using Sc2ReplayAnalyzer.Parser;
+﻿using Sc2ReplayAnalyzer.Decoder;
 
 namespace Sc2ReplayAnalyzer.Tokenizer;
 
