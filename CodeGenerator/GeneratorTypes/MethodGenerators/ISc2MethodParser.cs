@@ -24,7 +24,7 @@ internal interface ISc2MethodParser : ISc2FinaliserParser
 {
     void OpenArray(JsonNode bounds, string unitTypeName, string internalType);
     void OpenInt(JsonNode bounds, string unitTypeName);
-    void OpenChoice(string unitTypeName);
+    void OpenChoice(string unitTypeName, int numFields);
 
     void ContinueVariantChoice(
         Sc2JsonTypeConversion fieldConverted, 

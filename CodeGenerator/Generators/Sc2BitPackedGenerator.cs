@@ -4,10 +4,8 @@ using System.Text;
 
 namespace Sc2ReplayAnalyzer.CodeGenerator.Generators;
 
-public class Sc2CodeGenerator(StringBuilder builder, Sc2GeneratorData data)
+public class Sc2BitPackedGenerator(StringBuilder builder, Sc2GeneratorData data)
 {
-    private const string GenPath = @"C:\Users\Sebastian\source\repos\Sc2ReplayAnalyzer\Sc2ReplayAnalyzer\ProtocolGen";
-
     private readonly Sc2EnumGenerator _enumGenerator = new(builder, data);
     private readonly Sc2StructGenerator _structGenerator = new(builder, data);
     private readonly Sc2IntGenerator _intGenerator = new(builder, data);
@@ -19,33 +17,19 @@ public class Sc2CodeGenerator(StringBuilder builder, Sc2GeneratorData data)
 
     public void Generate()
     {
-        var byteAligned = data.ByteAligned;
         var bitPacked = data.BitPacked;
         var protocolName = data.ProtocolName;
 
         Init(protocolName);
 
-        _choiceGenerator.Generate<Sc2TypeConversionByteAligned>(byteAligned);
         _choiceGenerator.Generate<Sc2TypeConversionBitPacked>(bitPacked);
-
-        _structGenerator.Generate<Sc2TypeConversionByteAligned>(byteAligned);
         _structGenerator.Generate<Sc2TypeConversionBitPacked>(bitPacked);
-
-        _enumGenerator.Generate<Sc2TypeConversionByteAligned>(byteAligned);
         _enumGenerator.Generate<Sc2TypeConversionBitPacked>(bitPacked);
-
-        _intGenerator.Generate<Sc2TypeConversionByteAligned>(byteAligned);
         _intGenerator.Generate<Sc2TypeConversionBitPacked>(bitPacked);
-
         _bitArrayGenerator.Generate<Sc2TypeConversionBitPacked>(bitPacked);
-
         _userTypeGenerator.Generate<Sc2TypeConversionBitPacked>(bitPacked);
-
-        _arrayDynGenerator.Generate<Sc2TypeConversionByteAligned>(byteAligned);
         _arrayDynGenerator.Generate<Sc2TypeConversionBitPacked>(bitPacked);
-
         _blobStringGenerator.Generate<Sc2TypeConversionBitPacked>(bitPacked);
-
 
         Finalise(protocolName);
     }
@@ -54,7 +38,9 @@ public class Sc2CodeGenerator(StringBuilder builder, Sc2GeneratorData data)
     {
         builder.AppendLine();
         builder.AppendLine($"""
-            namespace Sc2ReplayAnalyzer.Json.{protocolName};
+            using Sc2ReplayAnalyzer.Json.Global;
+
+            namespace Sc2ReplayAnalyzer.Json.{protocolName}.BitPacked;
             """);
         builder.AppendLine();
     }
@@ -62,11 +48,11 @@ public class Sc2CodeGenerator(StringBuilder builder, Sc2GeneratorData data)
     private void Finalise(string protocolName)
     {
         builder.AppendLine($$"""
-            public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
+            public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolParserImpl(reader)
             {
             {{data.ParserGenerator}}
             }
             """);
-        File.WriteAllText(@$"{GenPath}\{protocolName}.cs", builder.ToString());
+        File.WriteAllText(@$"{data.GenFolderPath}\{protocolName}\BitPackedProtocolParser.cs", builder.ToString());
     }
 }

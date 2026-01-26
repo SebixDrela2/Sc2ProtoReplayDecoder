@@ -1,7 +1,6 @@
 ﻿using System.Buffers.Binary;
-using System.Drawing;
-using System.Reflection.Metadata;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+
+namespace Sc2ReplayAnalyzer.Json.Global;
 
 public struct Option<T>
 {
@@ -44,8 +43,7 @@ public static class Option
 
 public struct NoneValue;
 
-
-public sealed class BitReader
+public sealed class BitReader : IDisposable
 {
     private readonly BinaryReader _reader;
     private byte _currentByte;
@@ -57,61 +55,17 @@ public sealed class BitReader
         _bitOffset = 8;
     }
 
-    public List<byte> TakeBitArray(int totalBits)
+    private void EnsureByte()
     {
-        var result = new List<byte>();
-        int remainingBits = totalBits;
-
-        while (remainingBits > 0)
+        if (_bitOffset == 8)
         {
-            int count = remainingBits > 8 ? 8 : remainingBits;
-            byte bits = ReadBits(count);
-
-            result.Add(bits);
-
-            remainingBits -= count;
+            _currentByte = _reader.ReadByte();
+            _bitOffset = 0;
         }
-
-        return result;
     }
 
-    public byte TakeUnalignedByte() => ReadBits(8);
-
-    public List<byte> TakeFourCC()
+    private byte TakeBits(int count)
     {
-        var res = new List<byte>(4);
-
-        for (int i = 0; i < 4; i++)
-        {
-            var value = ReadBits(8);
-
-            res.Add(value);
-        }
-
-        return res;
-    }
-
-    public void TakeNull() { }
-
-    public long ParsePackedInt(long offset, int numBits)
-    {
-        long num = ReadBitsI64(numBits);
-
-        return offset + num;
-    }
-
-    public bool ParseBool()
-    {
-        return ReadBits(1) != 0;
-    }
-
-    public byte ReadBits(int count)
-    {
-        if (count < 0 || count > 8)
-        {
-            throw new ArgumentOutOfRangeException(nameof(count));
-        }
-
         byte result = 0;
 
         while (count > 0)
@@ -133,105 +87,182 @@ public sealed class BitReader
         return result;
     }
 
-    public long ReadBitsI64(int totalBits)
+    private readonly struct ReaderState
+    {
+        public readonly long Position;
+        public readonly byte CurrentByte;
+        public readonly int BitOffset;
+
+        public ReaderState(long pos, byte cur, int off)
+        {
+            Position = pos;
+            CurrentByte = cur;
+            BitOffset = off;
+        }
+    }
+
+    private ReaderState SaveState() => new ReaderState(_reader.BaseStream.Position, _currentByte, _bitOffset);
+
+    private void RestoreState(ReaderState s)
+    {
+        _reader.BaseStream.Position = s.Position;
+        _currentByte = s.CurrentByte;
+        _bitOffset = s.BitOffset;
+    }
+
+    private byte RTakeBits(int count)
+    {
+        var state = SaveState();
+        byte res = TakeBits(count);
+        RestoreState(state);
+        return res;
+    }
+
+    public long TakeBitsI64(int totalBits)
     {
         if (totalBits > 64)
         {
             throw new InvalidOperationException("More than 64 bits");
         }
 
-        long result = 0;
+        long res = 0;
+        int remainingBits = totalBits;
 
-        while (totalBits > 0)
+        while (remainingBits > 0)
         {
-            int take = totalBits > 8
-                ? (_bitOffset == 8 ? 8 : 8 - _bitOffset)
-                : totalBits;
+            int count = remainingBits > 8
+                ? (_bitOffset != 0 ? 8 - _bitOffset : 8)
+                : remainingBits;
 
-            byte bits = ReadBits(take);
-            result = (result << take) | bits;
+            byte bits = RTakeBits(count);
+            TakeBits(count);
 
-            totalBits -= take;
+            res |= (long)bits << (remainingBits - count);
+
+            remainingBits -= count;
         }
 
-        return result;
+        return res;
     }
+
+    public List<byte> TakeBitArray(int totalBits)
+    {
+        var res = new List<byte>();
+        int remainingBits = totalBits;
+
+        while (remainingBits > 0)
+        {
+            int count = remainingBits > 8 ? 8 : remainingBits;
+
+            byte bits = RTakeBits(count);
+            TakeBits(count);
+
+            res.Add(bits);
+            remainingBits -= count;
+        }
+
+        return res;
+    }
+
+    /* ============================
+     * byte_align
+     * ============================ */
 
     public void ByteAlign()
     {
-        _bitOffset = 8;
-    }
-
-    private void EnsureByte()
-    {
-        if (_bitOffset == 8)
+        if (_bitOffset != 0)
         {
-            _currentByte = _reader.ReadByte();
-            _bitOffset = 0;
-        }
-    }
-}
-
-public partial class ProtocolReader
-{
-    public void byte_align() => BitReader.ByteAlign();
-
-    public List<byte> take_bit_array(long totalBits) => BitReader.TakeBitArray((int)totalBits);
-
-    public long take_n_bits_into_i64(int totalBits) => BitReader.ReadBitsI64(totalBits);
-
-    public byte take_unaligned_byte() => BitReader.TakeUnalignedByte();
-
-    public void take_null() => BitReader.TakeNull();
-
-    public List<byte> take_fourcc() => BitReader.TakeFourCC();
-
-    public long parse_packed_int(long offset, int numBits) => BitReader.ParsePackedInt(offset, numBits);
-
-    public bool parse_bool() => BitReader.ParseBool();
-}
-
-public partial class ProtocolReader : IDisposable
-{
-    public readonly BinaryReader Reader;
-    public BitReader BitReader { get; }
-
-    public ProtocolReader(BinaryReader reader)
-    {
-        Reader = reader;
-        BitReader = new BitReader(reader);
-    }
-
-    public const byte ARRAY_TAG = 0x00;
-    public const byte BIT_ARRAY_TAG = 0x01;
-    public const byte BLOB_TAG = 0x02;
-    public const byte CHOICE_TAG = 0x03;
-    public const byte OPT_TAG = 0x04;
-    public const byte STRUCT_TAG = 0x05;
-    public const byte BOOL_TAG = 0x06;
-    public const byte FOURCC_TAG = 0x07;
-    public const byte INT_TAG = 0x09;
-
-    public void ValidateTag(byte tag)
-    {
-        var value = ReadByte();
-
-        if (value != tag)
-        {
-            throw new Exception($"Invalid tag: {value}, Expected: {tag}");
+            TakeBits(8 - _bitOffset);
         }
     }
 
-    public void ValidateArrayTag() => ValidateTag(ARRAY_TAG);
-    public void ValidateBitArrayTag() => ValidateTag(BIT_ARRAY_TAG);
-    public void ValidateBlobTag() => ValidateTag(BLOB_TAG);
-    public void ValidateChoiceTag() => ValidateTag(CHOICE_TAG);
-    public void ValidateOptTag() => ValidateTag(OPT_TAG);
-    public void ValidateStructTag() => ValidateTag(STRUCT_TAG);
-    public void ValidateBoolTag() => ValidateTag(BOOL_TAG);
-    public void ValidateFourccTag() => ValidateTag(FOURCC_TAG);
-    public void ValidateIntTag() => ValidateTag(INT_TAG);
+    /* ============================
+     * take_unaligned_byte
+     * ============================ */
 
+    public byte TakeUnalignedByte()
+    {
+        return TakeBitArray(8)[0];
+    }
+
+    /* ============================
+     * take_fourcc
+     * ============================ */
+
+    public List<byte> TakeFourCC()
+    {
+        return TakeBitArray(4 * 8);
+    }
+
+    /* ============================
+     * take_null
+     * ============================ */
+
+    public void TakeNull()
+    {
+        // intentionally does nothing
+    }
+
+    /* ============================
+     * parse_packed_int
+     * ============================ */
+
+    public long ParsePackedInt(long offset, int numBits)
+    {
+        return offset + TakeBitsI64(numBits);
+    }
+
+    /* ============================
+     * parse_bool
+     * ============================ */
+
+    public bool ParseBool()
+    {
+        byte bit = RTakeBits(1);
+        TakeBits(1);
+        return bit != 0;
+    }
+
+    public void Dispose()
+    {
+        _reader.Dispose();
+    }
+}
+
+public abstract class BitPackedProtocolParserImpl : ProtocolReaderBase
+{
+    public BitReader _bitReader { get; }
+
+    public BitPackedProtocolParserImpl(BinaryReader reader)
+        : base(reader)
+    {
+        _bitReader = new BitReader(reader);
+    }
+
+    public void Dispose()
+    {
+        _bitReader.Dispose();
+    }
+
+    public void byte_align() => _bitReader.ByteAlign();
+
+    protected List<byte> take_bit_array(long totalBits) => _bitReader.TakeBitArray((int)totalBits);
+
+    protected long take_n_bits_into_i64(int totalBits) => _bitReader.TakeBitsI64(totalBits);
+
+    protected byte take_unaligned_byte() => _bitReader.TakeUnalignedByte();
+
+    protected void take_null() => _bitReader.TakeNull();
+
+    protected List<byte> take_fourcc() => _bitReader.TakeFourCC();
+
+    protected long parse_packed_int(long offset, int numBits) => _bitReader.ParsePackedInt(offset, numBits);
+
+    protected bool parse_bool() => _bitReader.ParseBool();
+}
+
+public abstract class VersionedProtocolParserImpl(BinaryReader reader) : ProtocolReaderBase(reader)
+{
     public List<byte> tagged_bitarray()
     {
         ValidateBitArrayTag();
@@ -272,7 +303,7 @@ public partial class ProtocolReader : IDisposable
         return BinaryPrimitives.ReadUInt32BigEndian(ReadBytes(4).ToArray());
     }
 
-    public void Dispose() => Reader.Dispose();
+    public void Dispose() => reader.Dispose();
 
     public int ParseVlqInt()
     {
@@ -292,29 +323,59 @@ public partial class ProtocolReader : IDisposable
         return isNegative ? -result : result;
     }
 
-    public byte ReadByte()
-    {
-        BitReader.ByteAlign();
-        return Reader.ReadByte();
-    }
-
     public List<byte> ReadBytes(long length)
     {
-        BitReader.ByteAlign();
-        return Reader.ReadBytes((int)length).ToList();
+        return reader.ReadBytes((int)length).ToList();
     }
 
     public List<byte> ReadBytes(int length)
     {
-        BitReader.ByteAlign();
-        return Reader.ReadBytes(length).ToList();
+        return reader.ReadBytes(length).ToList();
+    }
+}
+
+public abstract class ProtocolReaderBase(BinaryReader reader)
+{
+    private const byte ARRAY_TAG = 0x00;
+    private const byte BIT_ARRAY_TAG = 0x01;
+    private const byte BLOB_TAG = 0x02;
+    private const byte CHOICE_TAG = 0x03;
+    private const byte OPT_TAG = 0x04;
+    private const byte STRUCT_TAG = 0x05;
+    private const byte BOOL_TAG = 0x06;
+    private const byte FOURCC_TAG = 0x07;
+    private const byte INT_TAG = 0x09;
+
+    protected void ValidateArrayTag() => ValidateTag(ARRAY_TAG);
+    protected void ValidateBitArrayTag() => ValidateTag(BIT_ARRAY_TAG);
+    protected void ValidateBlobTag() => ValidateTag(BLOB_TAG);
+    protected void ValidateChoiceTag() => ValidateTag(CHOICE_TAG);
+    protected void ValidateOptTag() => ValidateTag(OPT_TAG);
+    protected void ValidateStructTag() => ValidateTag(STRUCT_TAG);
+    protected void ValidateBoolTag() => ValidateTag(BOOL_TAG);
+    protected void ValidateFourccTag() => ValidateTag(FOURCC_TAG);
+    protected void ValidateIntTag() => ValidateTag(INT_TAG);
+
+    protected byte ReadByte()
+    {
+        return reader.ReadByte();
     }
 
-    public T[] ReadArray<T>(Func<T> parseMethod, long count) =>
+    protected T[] ReadArray<T>(Func<T> parseMethod, long count) =>
         [.. Enumerable.Range(0, (int)count).Select(_ => parseMethod())];
 
-    public List<T> ReadList<T>(Func<T> parseMethod, long count) =>
+    protected List<T> ReadList<T>(Func<T> parseMethod, long count) =>
         [.. Enumerable.Range(0, (int)count).Select(_ => parseMethod())];
+
+    private void ValidateTag(byte tag)
+    {
+        var value = ReadByte();
+
+        if (value != tag)
+        {
+            throw new Exception($"Invalid tag: {value}, Expected: {tag}");
+        }
+    }  
 }
 
 public static class ProtocolConversion<TResult>

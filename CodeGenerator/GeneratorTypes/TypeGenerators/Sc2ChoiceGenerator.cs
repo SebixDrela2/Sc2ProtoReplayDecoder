@@ -23,7 +23,7 @@ internal class Sc2ChoiceGenerator(StringBuilder builder, Sc2GeneratorData data)
 
             if (OpenChoice(unitTypeFullName))
             {
-                methodParser.OpenChoice(unitTypeFullName);
+                methodParser.OpenChoice(unitTypeFullName, variantArray.Count);
 
                 foreach (var variant in variantArray)
                 {

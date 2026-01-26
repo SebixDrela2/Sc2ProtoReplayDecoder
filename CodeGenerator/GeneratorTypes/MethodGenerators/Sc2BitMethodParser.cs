@@ -145,10 +145,11 @@ internal class Sc2BitMethodParser(StringBuilder methodBuilder, Sc2GeneratorData 
                 """);
     }
 
-    public void OpenChoice(string unitTypeName)
+    public void OpenChoice(string unitTypeName, int numFields)
     {
         var methodCtorBuilder = new StringBuilder();
         var typeName = Sc2TypeUtils.GetTypeName(unitTypeName);
+        var numBits = Math.Ceiling(Math.Log2(numFields));
 
         _parserBuilder.AppendLine();
         _parserBuilder.AppendLine($$"""
@@ -157,9 +158,10 @@ internal class Sc2BitMethodParser(StringBuilder methodBuilder, Sc2GeneratorData 
                 """);
 
         _generalMethodBuilder.AppendLine($$"""
-                        ValidateChoiceTag();
-                        var variantTag = ParseVlqInt();
-                        
+                        var offset = 0;
+                        var numBits = {{numBits}};
+                        var variantTag = parse_packed_int(offset, numBits);
+
                         switch (variantTag)
                         {
                 """);
@@ -327,7 +329,7 @@ internal class Sc2BitMethodParser(StringBuilder methodBuilder, Sc2GeneratorData 
                 else
                 {
                     _fieldNameMethodBuilder.AppendLine($$"""
-                                var array = ReadArray({{fieldConverted.Parser}}, arrayLength);
+                                var array = ReadList({{fieldConverted.Parser}}, arrayLength);
                         
                 """);
                 }

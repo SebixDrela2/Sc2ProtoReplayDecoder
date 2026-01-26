@@ -2,7 +2,6 @@
 using Sc2ReplayAnalyzer.Json.Generator;
 using System.Text;
 using System.Text.Json.Nodes;
-using System.Text.RegularExpressions;
 
 namespace Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes.MethodGenerators;
 
@@ -55,7 +54,7 @@ internal class Sc2ByteMethodParser(StringBuilder methodBuilder, Sc2GeneratorData
                 """);
     }
 
-    public void OpenChoice(string unitTypeName)
+    public void OpenChoice(string unitTypeName, int numBits)
     {
         var methodCtorBuilder = new StringBuilder();
         var typeName = Sc2TypeUtils.GetTypeName(unitTypeName);

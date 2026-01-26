@@ -23,11 +23,6 @@ internal class Sc2StructGenerator(StringBuilder builder, Sc2GeneratorData data)
                 || (fields.Count > 1 && fields[0][Tag] is not null);
             var methodParser = GetMethodParser<T>();
 
-            if (hasTags)
-            {
-                Console.WriteLine(Sc2TypeUtils.GetTypeName(unitTypeName));
-            }
-
             if (OpenClass(unitTypeName))
             {
                 methodParser.OpenStruct(unitTypeName, hasTags);
