@@ -58,7 +58,7 @@ internal class Sc2ChoiceGenerator(StringBuilder builder, Sc2GeneratorData data)
 
             if (typeof(T) == typeof(Sc2TypeConversionBitPacked) && enclosedType is "UserType")
             {
-                enclosedType = variant[TypeInfo][TypeInfo][FullName].ToString();
+                enclosedType = Sc2TypeUtils.GetTypeName(variant[TypeInfo][TypeInfo][FullName].ToString());
             }
 
             fieldConverted.Parser = fieldConverted.Parser.Replace("{}", enclosedType);

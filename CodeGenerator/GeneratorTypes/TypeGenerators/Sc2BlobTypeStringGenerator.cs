@@ -15,25 +15,38 @@ internal class Sc2BlobTypeStringGenerator(StringBuilder builder, Sc2GeneratorDat
         var blobNodes = nodes.Where(x => x[TypeInfo][Type].ToString() is "BlobType");
         var stringNodes = nodes.Where(x => x[TypeInfo][Type].ToString() is "StringType");
 
+        var methodParser = GetBitMethodParser();
+
         foreach (var node in stringNodes)
         {
             var fullName = node[FullName].ToString();
+            var bounds = node[TypeInfo][Bounds];
 
             if (OpenClass(fullName))
             {
+                methodParser.OpenString(bounds, fullName);
+
                 AddField("Value", "List<byte>");
                 Close();
+
+                methodParser.Finalise();
+
             }
         }
 
         foreach (var node in blobNodes)
         {
             var fullName = node[FullName].ToString();
+            var bounds = node[TypeInfo][Bounds];
 
             if (OpenClass(fullName))
             {
+                methodParser.OpenBlob(bounds, fullName);
+
                 AddField("Value", "List<byte>");
                 Close();
+
+                methodParser.Finalise();
             }
         }
     }

@@ -10,6 +10,8 @@ internal interface ISc2FinaliserParser
 
 internal interface ISc2AgnosticParser : ISc2FinaliserParser
 {
+    void OpenUserType(string unitTypeName, string typeInfo);
+
     void OpenEnum<T>(string unitTypeName, int numFields)
         where T : ISc2JsonTypeConversionAlignment;
 
@@ -20,6 +22,8 @@ internal interface ISc2AgnosticParser : ISc2FinaliserParser
 
 internal interface ISc2MethodParser : ISc2FinaliserParser
 {
+    void OpenArray(JsonNode bounds, string unitTypeName, string internalType);
+    void OpenInt(JsonNode bounds, string unitTypeName);
     void OpenChoice(string unitTypeName);
 
     void ContinueVariantChoice(

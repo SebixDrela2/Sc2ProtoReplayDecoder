@@ -50,6 +50,8 @@ internal abstract class Sc2GeneratorBase
         throw new Exception("Wrong parser type.");
     }
 
+    protected Sc2BitMethodParser GetBitMethodParser() => _bitMethodParser;
+
     protected ISc2AgnosticParser GetAgnosticMethodParser() => _agnosticParser;
 
     protected bool OpenClass(string className, string choiceType = null)

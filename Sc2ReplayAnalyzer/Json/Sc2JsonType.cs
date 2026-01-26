@@ -15,6 +15,7 @@ public class Sc2JsonType
     public const string Bounds = "bounds";
     public const string Min = "min";
     public const string Max = "max";
+    public const string Rhs = "rhs";
     public const string EValue = "evalue";
     public const string Inclusive = "inclusive";
 }

@@ -176,7 +176,7 @@ public partial class ProtocolReader
 {
     public void byte_align() => BitReader.ByteAlign();
 
-    public List<byte> take_bit_array(int totalBits) => BitReader.TakeBitArray(totalBits);
+    public List<byte> take_bit_array(long totalBits) => BitReader.TakeBitArray((int)totalBits);
 
     public long take_n_bits_into_i64(int totalBits) => BitReader.ReadBitsI64(totalBits);
 

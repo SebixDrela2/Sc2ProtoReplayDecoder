@@ -13,16 +13,23 @@ internal class Sc2ArrayDynGenerator(StringBuilder builder, Sc2GeneratorData data
     {
         // bitpacked
         var arrayNodes = nodes.Where(x => x[TypeInfo][Type].ToString() is "ArrayType" or "DynArrayType");
+        var methodParser = GetMethodParser<T>();
 
         foreach(var node in arrayNodes)
         {
             var fullName = node[FullName].ToString();
             var elementType = node[TypeInfo][ElementType][FullName].ToString();
+            var bounds = node[TypeInfo][Bounds];
+            var internalType = node[TypeInfo][ElementType][FullName].ToString();
 
             if (OpenClass(fullName))
             {
-                AddField("Value", elementType);
+                methodParser.OpenArray(bounds, fullName, internalType);
+
+                AddField("Value", $"List<{elementType}>");
                 Close();
+
+                methodParser.Finalise();
             }
         }
     }

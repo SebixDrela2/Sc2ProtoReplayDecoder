@@ -15,6 +15,136 @@ internal class Sc2BitMethodParser(StringBuilder methodBuilder, Sc2GeneratorData 
     private readonly StringBuilder _methodStarter = new StringBuilder();
     private readonly StringBuilder _generalMethodBuilder = new StringBuilder();
 
+    public void OpenArray(JsonNode bounds, string unitTypeName, string internalType)
+    {
+        var arrayMaxValue = int.Parse(bounds[Max][EValue].ToString());
+
+        if (bounds[Max][Inclusive] is { } inclusiveBounds)
+        {
+            arrayMaxValue += 1;
+        }
+
+        var arrayLengthNumBits =  Math.Floor(Math.Log2(arrayMaxValue + 1));
+        var typeName = Sc2TypeUtils.GetTypeName(unitTypeName);
+        internalType = Sc2TypeUtils.GetTypeName(internalType);
+
+        _generalMethodBuilder.AppendLine($$"""
+                public {{typeName}} Parse_{{typeName}}()
+                {
+                    var arrayLengthNumBits = {{arrayLengthNumBits}};
+                    var arrayLength = parse_packed_int(0, arrayLengthNumBits);
+
+                    var value = ReadList(Parse_{{internalType}}, arrayLength);
+
+                    return new {{typeName}}
+                    {
+                        Value = value
+                    };
+                }
+            """);
+    }
+
+    public void OpenString(JsonNode bounds, string unitTypeName)
+    {
+        var typeName = Sc2TypeUtils.GetTypeName(unitTypeName);
+        var res = int.Parse(bounds[Max][EValue].ToString());
+
+        if (bounds[Max][Inclusive] is { } inclusiveBounds)
+        {
+            res += 1;
+        }
+
+        var stringSizeNumBits = ((long)Math.Floor((Math.Log2(res) + 1))) + 2;
+
+        _generalMethodBuilder.AppendLine($$"""
+                public {{typeName}} Parse_{{typeName}}()
+                {
+                    var strSizeNumBits = {{stringSizeNumBits}};
+                    var strSize = parse_packed_int(0, strSizeNumBits);
+
+                    byte_align();
+
+                    var value = take_bit_array(strSize * 8);
+
+                    return new {{typeName}}
+                    {
+                        Value = value
+                    };
+                }
+            """);
+    }
+
+    public void OpenBlob(JsonNode bounds, string unitTypeName)
+    {
+        var typeName = Sc2TypeUtils.GetTypeName(unitTypeName);
+        var numBits = Sc2TypeConversionBitPacked.BoundsMaxValueToBitSize(bounds);
+
+        _generalMethodBuilder.AppendLine($$"""
+                public {{typeName}} Parse_{{typeName}}()
+                {
+                    byte_align();
+                    var numBits = {{numBits}};
+                    
+                    var value = take_bit_array(numBits);
+
+                    return new {{typeName}}
+                    {
+                        Value = value
+                    };
+                }
+            """);
+    }
+
+    public void OpenBitArray(JsonNode bounds, string unitTypeName)
+    {
+        var numBits = Sc2TypeConversionBitPacked.BoundsMaxValueToBitSize(bounds);
+        var typeName = Sc2TypeUtils.GetTypeName(unitTypeName);
+
+        _generalMethodBuilder.AppendLine($$"""
+                public {{typeName}} Parse_{{typeName}}()
+                {
+                    var bitArrayLengthBits = {{numBits}};
+                    var bitArrayLength = take_n_bits_into_i64(bitArrayLengthBits);
+
+                    var value = take_bit_array(bitArrayLength);
+
+                    return new {{typeName}}
+                    {
+                        Value = value
+                    };
+                }
+            """);
+    }
+
+    public void OpenInt(JsonNode bounds, string unitTypeName)
+    {
+        var offset = bounds[Min][EValue]?.ToString()
+            ?? throw new InvalidOperationException("bounds should have .min.evalue");
+
+        var rhsValue = bounds[Max]?[Value]?[Rhs]?[Value];
+        var boundType = GetBoundType(bounds, rhsValue, out var numBits);
+        var typeName = Sc2TypeUtils.GetTypeName(unitTypeName);
+
+        if (offset.StartsWith("-"))
+        {
+            numBits += 1;
+        }
+
+        _generalMethodBuilder.AppendLine($$"""
+                    public {{typeName}} Parse_{{typeName}}()
+                    {
+                        var offset = {{offset}};
+                        var numBits = {{numBits}};
+                        var res = parse_packed_int(offset, numBits);
+
+                        return new {{typeName}}
+                        {
+                            Value = res
+                        };
+                    }
+                """);
+    }
+
     public void OpenChoice(string unitTypeName)
     {
         var methodCtorBuilder = new StringBuilder();
@@ -49,7 +179,7 @@ internal class Sc2BitMethodParser(StringBuilder methodBuilder, Sc2GeneratorData 
         {
             _generalMethodBuilder.AppendLine($$"""
                                 var isProvided = parse_bool();
-                                var res = {{fieldConverted.Parser}}();
+                                var res = Parse_{{fieldConverted.Parser}}();
 
                                 if (isProvided)
                                 {
@@ -353,5 +483,34 @@ internal class Sc2BitMethodParser(StringBuilder methodBuilder, Sc2GeneratorData 
         _fieldNameMethodBuilder.Clear();
         _methodStarter.Clear();
         _generalMethodBuilder.Clear();
+    }
+
+    private string GetBoundType(JsonNode bounds, JsonNode rhsValue, out nuint numBits)
+    {
+        numBits = 0;
+
+        if (rhsValue is not null)
+        {
+            if (!nuint.TryParse(rhsValue.ToString(), out numBits))
+            {
+                throw new InvalidOperationException(".max.value.rhs.value should be nuint");
+            }
+
+            var maxValueType = bounds[Max]?[Value]?[Type]?.ToString();
+
+            if (maxValueType != "PowExpr")
+            {
+                throw new InvalidOperationException("RHS Bound must be PowExpr expr");
+            }
+
+            return "PowExpr";
+
+        }
+        if (bounds[Max]?[EValue]?.ToString() is not null)
+        {
+            numBits = Sc2TypeConversionBitPacked.BoundsMaxValueToBitSize(bounds);
+        }
+
+        return bounds[Type]?.ToString() ?? throw new InvalidOperationException("bounds should have .type");
     }
 }

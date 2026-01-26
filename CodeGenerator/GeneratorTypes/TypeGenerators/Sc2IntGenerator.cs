@@ -12,16 +12,27 @@ internal class Sc2IntGenerator(StringBuilder builder, Sc2GeneratorData data)
         where T : ISc2JsonTypeConversionAlignment
     {
         var intNodes = nodes.Where(x => x[TypeInfo][Type].ToString() is "IntType" or "InumType");
+        var methodParser = GetMethodParser<T>();
 
         foreach(var node in intNodes)
         {
             var fullName = node[FullName].ToString();
+            var bounds = node[TypeInfo][Bounds];
+
+            if (bounds is null)
+            {
+                continue;
+            }
 
             if (OpenClass(fullName))
             {
+                methodParser.OpenInt(bounds, fullName);
+
                 AddField("Value", "long");
 
                 Close();
+
+                methodParser.Finalise();
             }
         }
     }

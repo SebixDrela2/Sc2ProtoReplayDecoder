@@ -14,6 +14,25 @@ internal class Sc2AgnosticParser(StringBuilder methodBuilder, Sc2GeneratorData d
     private readonly StringBuilder _methodStarter = new StringBuilder();
     private readonly StringBuilder _generalMethodBuilder = new StringBuilder();
 
+
+    public void OpenUserType(string unitTypeName, string typeInfo)
+    {
+        var typeName = Sc2TypeUtils.GetTypeName(unitTypeName);
+        typeInfo = Sc2TypeUtils.GetTypeName(typeInfo);
+
+        _generalMethodBuilder.AppendLine($$"""
+                    public {{typeName}} Parse_{{typeName}}()
+                    {
+                        var value = Parse_{{typeInfo}}();
+
+                        return new {{typeName}}
+                        {
+                            Value = value,
+                        };
+                    }
+                """);
+    }
+
     public void OpenEnum<T>(string unitTypeName, int numFields)
         where T : ISc2JsonTypeConversionAlignment
     {

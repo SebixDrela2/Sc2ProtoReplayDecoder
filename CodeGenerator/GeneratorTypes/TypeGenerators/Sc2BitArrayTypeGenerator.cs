@@ -17,11 +17,17 @@ internal class Sc2BitArrayGenerator(StringBuilder builder, Sc2GeneratorData data
         foreach(var node in arrayNodes)
         {
             var fullName = node[FullName].ToString();
+            var methodParser = GetBitMethodParser();
+            var bounds = node[TypeInfo][Bounds];
 
-            if(OpenClass(fullName))
+            if (OpenClass(fullName))
             {
+                methodParser.OpenBitArray(bounds, fullName);
+
                 AddField("Value", "List<byte>");
                 Close();
+
+                methodParser.Finalise();
             }
         }
     }

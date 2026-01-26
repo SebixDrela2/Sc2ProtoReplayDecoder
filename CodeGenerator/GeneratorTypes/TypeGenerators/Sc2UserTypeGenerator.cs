@@ -13,6 +13,7 @@ internal class Sc2UserTypeGenerator(StringBuilder builder, Sc2GeneratorData data
     {
         // bitpacked
         var userTypeNodes = nodes.Where(x => x[TypeInfo][Type].ToString() is "UserType");
+        var methodParser = GetAgnosticMethodParser();
 
         foreach(var node in userTypeNodes)
         {
@@ -21,8 +22,12 @@ internal class Sc2UserTypeGenerator(StringBuilder builder, Sc2GeneratorData data
 
             if (OpenClass(fullName))
             {
+                methodParser.OpenUserType(fullName, typeInfoFullName);
+
                 AddField("Value", typeInfoFullName);
                 Close();
+
+                methodParser.Finalise();
             }
         }
     }

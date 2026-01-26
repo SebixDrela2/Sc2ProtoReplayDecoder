@@ -16,6 +16,44 @@ internal class Sc2ByteMethodParser(StringBuilder methodBuilder, Sc2GeneratorData
     private readonly StringBuilder _methodStarter = new StringBuilder();
     private readonly StringBuilder _generalMethodBuilder = new StringBuilder();
 
+    public void OpenArray(JsonNode bounds, string unitTypeName, string internalType)
+    {
+        var typeName = Sc2TypeUtils.GetTypeName(unitTypeName);
+        internalType = Sc2TypeUtils.GetTypeName(internalType);
+
+        _generalMethodBuilder.AppendLine($$"""
+                public {{typeName}} Parse_{{typeName}}()
+                {
+                    ValidateArrayTag();
+
+                    var arrayLength = ParseVlqInt();
+                    var value = ReadList(Parse_{{internalType}}, arrayLength);
+
+                    return new {{typeName}}
+                    {
+                        Value = value
+                    };
+                }
+            """);
+    }
+
+    public void OpenInt(JsonNode bounds, string unitTypeName)
+    {
+        var typeName = Sc2TypeUtils.GetTypeName(unitTypeName);
+        _generalMethodBuilder.AppendLine($$"""
+                    public {{typeName}} Parse_{{typeName}}()
+                    {
+                        ValidateIntTag();
+                        var value = ParseVlqInt();
+
+                        return new {{typeName}}
+                        {
+                            Value = value
+                        };
+                    }
+                """);
+    }
+
     public void OpenChoice(string unitTypeName)
     {
         var methodCtorBuilder = new StringBuilder();
