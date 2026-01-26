@@ -24,6 +24,7 @@ internal class Sc2EnumGenerator(StringBuilder builder, Sc2GeneratorData data)
                 var variantArray = node[TypeInfo][Fields].AsArray();
 
                 methodParser.OpenEnum<T>(fullName, variantArray.Count);
+
                 foreach (var variant in variantArray)
                 {
                     HandleVariant(node, variant);

@@ -19,8 +19,14 @@ internal class Sc2StructGenerator(StringBuilder builder, Sc2GeneratorData data)
             var unitTypeName = node[FullName].ToString();
             var unitType = node[TypeInfo][Type].ToString();
             var fields = node[TypeInfo][Fields].AsArray();
-            var hasTags = fields.Count > 1 && fields[0]["tag"] is not null;
+            var hasTags = data.EnumTags.Values.Contains(Sc2TypeUtils.GetTypeName(unitTypeName)) 
+                || (fields.Count > 1 && fields[0][Tag] is not null);
             var methodParser = GetMethodParser<T>();
+
+            if (hasTags)
+            {
+                Console.WriteLine(Sc2TypeUtils.GetTypeName(unitTypeName));
+            }
 
             if (OpenClass(unitTypeName))
             {

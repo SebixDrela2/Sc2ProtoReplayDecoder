@@ -10,13 +10,18 @@ internal class Program
     private static readonly Sc2JsonProvider _provider = new Sc2JsonProvider();
     internal static void Main(string[] args)
     {
-        //var decoder = new Sc2ReplayDecoder(@"C:\\Users\\Sebastian\\Documents\\StarCraft II\\Accounts\\103757627\\1-S2-1-10180166\\Replays\\Multiplayer\\Oh No It's Zombies Arctic Map (10).SC2Replay");
-        //decoder.Decode();
-
         var jsonFiles = _provider.Provide();
 
         var jsonParser = new Sc2JsonParser(jsonFiles);
         var dataList = jsonParser.Parse().ToArray();
+
+        var data = dataList.Last();
+
+        var generator = new Sc2CodeGenerator(new StringBuilder(), data);
+        generator.Generate();
+
+        var decoder = new Sc2ReplayDecoder(@"C:\\Users\\Sebastian\\Documents\\StarCraft II\\Accounts\\103757627\\1-S2-1-10180166\\Replays\\Multiplayer\\Oh No It's Zombies Arctic Map (10).SC2Replay");
+        decoder.Decode();
 
         //foreach (var data in dataList)
         //{
@@ -24,9 +29,9 @@ internal class Program
         //    generator.Generate();
         //}
 
-        var data = dataList.Last();
+        //var data = dataList.Last();
 
-        var generator = new Sc2CodeGenerator(new StringBuilder(), data);
-        generator.Generate();
+        //var generator = new Sc2CodeGenerator(new StringBuilder(), data);
+        //generator.Generate();
     }
 }

@@ -44,9 +44,35 @@ public class Sc2JsonParser(Dictionary<string, string> jsonFiles)
     private Dictionary<string, string> ParseRootModuleForEnumTags(JsonNode moduleDeclaration)
     {
         var enumTags = new Dictionary<string, string>();
+        var typeDeclarations = moduleDeclaration[Declaration] as JsonArray;
+        
+        foreach (var typeDeclaration in typeDeclarations)
+        {
+            var fullName = typeDeclaration[FullName].ToString();
 
-        ProcessModuleDeclaration(moduleDeclaration, enumTags);
+            if (!IsReplayDeclaration(fullName))
+            {
+                continue;
+            }
 
+            var subDeclarations = typeDeclaration[Declaration] as JsonArray;
+
+            foreach(var subDeclaration in subDeclarations)
+            {
+                if (subDeclaration[Declaration] is JsonArray thirdLevelDeclarations)
+                {
+                    foreach(var thirdLevelDeclaration in thirdLevelDeclarations)
+                    {
+                        ProcessStructDeclaration(thirdLevelDeclaration, enumTags);
+                    }
+                }
+                else
+                {
+                    ProcessStructDeclaration(subDeclaration, enumTags);
+                }
+            }
+        } 
+        
         return enumTags;
     }
 
