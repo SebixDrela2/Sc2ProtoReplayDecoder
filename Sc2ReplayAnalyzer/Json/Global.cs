@@ -252,7 +252,7 @@ public partial class ProtocolReader : IDisposable
         return ReadBytes(blobLength);
     }
 
-    public long tagged_vlq_int()
+    public int tagged_vlq_int()
     {
         ValidateIntTag();
 
@@ -275,18 +275,18 @@ public partial class ProtocolReader : IDisposable
 
     public void Dispose() => _reader.Dispose();
 
-    public long ParseVlqInt()
+    public int ParseVlqInt()
     {
         var v_int_value = ReadByte();
         var isNegative = (v_int_value & 1) != 0;
 
-        long result = (v_int_value >> 1) & 0x3f;
+        int result = (v_int_value >> 1) & 0x3f;
 
         for (int bits = 6; (v_int_value & 0x80) != 0; bits += 7)
         {
             var new_v_int_value = ReadByte();
 
-            result |= (new_v_int_value & 0x7fL) << bits;
+            result |= (new_v_int_value & 0x7f) << bits;
             v_int_value = new_v_int_value;
 
             bits += 7;

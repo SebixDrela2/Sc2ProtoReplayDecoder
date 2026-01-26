@@ -109,7 +109,7 @@ public class Sc2TypeConversionBitPacked : ISc2JsonTypeConversionAlignment
                 var offset = field[TypeInfo][TypeInfo][Bounds][Min][EValue].ToString();
                 var bitsNum = BoundsMaxValueToBitSize(field[TypeInfo][TypeInfo][Bounds]);
 
-                fieldConverted.Parser = fieldConverted.Parser.Replace("{}", $"input, {offset}, nuint {bitsNum}");
+                fieldConverted.Parser = fieldConverted.Parser.Replace("{}", $"{offset}, {bitsNum}");
             }
         }
         else if (fieldTypeInfo is "ArrayType" or "BitArrayType" or "DynArrayType")
@@ -136,7 +136,7 @@ public class Sc2TypeConversionBitPacked : ISc2JsonTypeConversionAlignment
             var offset = field[TypeInfo][Bounds][Min][EValue].ToString();
             var bitsNum = BoundsMaxValueToBitSize(field[TypeInfo][Bounds]);
 
-            fieldConverted.Parser = fieldConverted.Parser.Replace("{}", $"input, {offset}, nuint {bitsNum}");
+            fieldConverted.Parser = fieldConverted.Parser.Replace("{}", $"{offset}, {bitsNum}");
         }
 
         var fieldType = fieldConverted.CSharpType;

@@ -346,7 +346,7 @@ internal class Sc2BitMethodParser(StringBuilder methodBuilder, Sc2GeneratorData 
             }
             else
             {
-                if (fieldConverted.Parser.Contains("input,"))
+                if (fieldConverted.Parser.Contains("parse_packed_int"))
                 {
                     _fieldNameMethodBuilder.AppendLine($$"""
                                 var res = {{fieldConverted.Parser}};
@@ -363,7 +363,7 @@ internal class Sc2BitMethodParser(StringBuilder methodBuilder, Sc2GeneratorData 
                 {
                     _fieldNameMethodBuilder.AppendLine($$"""
 
-                                return Option.Some(ProtocolConversion<{{fieldType}}>.From(res);
+                                return Option.Some(ProtocolConversion<{{Sc2TypeUtils.GetUnwrappedOptionTypeName(fieldConverted.CSharpType)}}>.From(res));
                 """);
                 }
                 else
@@ -416,10 +416,10 @@ internal class Sc2BitMethodParser(StringBuilder methodBuilder, Sc2GeneratorData 
         }
         else
         {
-            if (fieldConverted.Parser.Contains("input,"))
+            if (fieldConverted.Parser.Contains("parse_packed_int"))
             {
                 _fieldNameMethodBuilder.AppendLine($$"""
-                        var {{fieldName}} = {{fieldConverted.Parser}}
+                        var {{fieldName}} = {{fieldConverted.Parser}};
                 """);
             }
             else

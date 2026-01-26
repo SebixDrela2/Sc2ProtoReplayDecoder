@@ -1,5 +1,5 @@
 
-namespace Sc2ReplayAnalyzer.Json.protocol15405;
+namespace Sc2ReplayAnalyzer.Json.protocol19679;
 
 // NNet.SVarUint32
 public abstract class SVarUint32 { }
@@ -26,6 +26,27 @@ public class m_uint22 : SVarUint32
 public class m_uint32 : SVarUint32
 {
     public uint Value;
+}
+
+// NNet.Game.SCmdData
+public abstract class GameSCmdData { }
+
+// TargetPoint
+public class TargetPoint : GameSCmdData
+{
+    public GameSMapCoord3D Value;
+}
+
+// TargetUnit
+public class TargetUnit : GameSCmdData
+{
+    public GameSCmdDataTargetUnit Value;
+}
+
+// Data
+public class Data : GameSCmdData
+{
+    public uint32 Value;
 }
 
 // m_eventData
@@ -106,6 +127,33 @@ public class m_observe : GameSLobbySlotChange
     public EObserve Value;
 }
 
+// m_licenses
+public class m_licenses : GameSLobbySlotChange
+{
+    public GameCLicenseArray Value;
+}
+
+// NNet.Game.SSelectionMask
+public abstract class GameSSelectionMask { }
+
+// Mask
+public class Mask : GameSSelectionMask
+{
+    public GameSelectionMaskType Value;
+}
+
+// OneIndices
+public class OneIndices : GameSSelectionMask
+{
+    public GameSelectionIndexArrayType Value;
+}
+
+// ZeroIndices
+public class ZeroIndices : GameSSelectionMask
+{
+    public GameSelectionIndexArrayType Value;
+}
+
 // NNet.SVersion
 public class SVersion
 {
@@ -139,6 +187,7 @@ public class GameSToonNameDetails
     public uint m_programId;
     public uint m_realm;
     public List<byte> m_name;
+    public long m_id;
 }
 
 // NNet.Game.SPlayerDetails
@@ -189,12 +238,19 @@ public class TRacePreference
     public Option<TRaceId> m_race;
 }
 
+// NNet.TTeamPreference
+public class TTeamPreference
+{
+    public Option<uint8> m_team;
+}
+
 // NNet.SUserInitialData
 public class SUserInitialData
 {
     public CUserName m_name;
     public uint32 m_randomSeed;
     public TRacePreference m_racePreference;
+    public TTeamPreference m_teamPreference;
     public bool m_testMap;
     public bool m_testAuto;
     public EObserve m_observe;
@@ -204,6 +260,26 @@ public class SUserInitialData
 public class GameTColorPreference
 {
     public Option<GameTColorId> m_color;
+}
+
+// NNet.Game.SCmdAbil
+public class GameSCmdAbil
+{
+    public GameTAbilLink m_abilLink;
+    public long m_abilCmdIndex;
+    public Option<uint8> m_abilCmdData;
+}
+
+// NNet.Game.SCmdDataTargetUnit
+public class GameSCmdDataTargetUnit
+{
+    public uint8 m_targetUnitFlags;
+    public uint8 m_timer;
+    public GameTUnitTag m_tag;
+    public GameTUnitLink m_snapshotUnitLink;
+    public Option<GameTPlayerId> m_snapshotControlPlayerId;
+    public Option<GameTPlayerId> m_snapshotUpkeepPlayerId;
+    public GameSMapCoord3D m_snapshotPoint;
 }
 
 // NNet.Game.SSetLobbySlotEvent
@@ -256,6 +332,12 @@ public class GameSBankValueEvent
     public uint32 m_type;
     public List<byte> m_name;
     public List<byte> m_data;
+}
+
+// NNet.Game.SBankSignatureEvent
+public class GameSBankSignatureEvent
+{
+    public List<uint8> m_signature;
 }
 
 // NNet.Game.SUserOptionsEvent
@@ -367,17 +449,10 @@ public class GameSGameCheatEvent
 // NNet.Game.SCmdEvent
 public class GameSCmdEvent
 {
-    public uint32 m_cmdFlags;
-    public GameTAbilLink m_abilLink;
-    public uint8 m_abilCmdIndex;
-    public uint8 m_abilCmdData;
-    public uint8 m_targetUnitFlags;
-    public uint8 m_targetUnitTimer;
-    public GameTUnitTag m_otherUnit;
-    public GameTUnitTag m_targetUnitTag;
-    public GameTUnitLink m_targetUnitSnapshotUnitLink;
-    public Option<GameTPlayerId> m_targetUnitSnapshotPlayerId;
-    public GameSPoint3 m_targetPoint;
+    public long m_cmdFlags;
+    public Option<GameSCmdAbil> m_abil;
+    public GameSCmdData m_data;
+    public Option<GameTUnitTag> m_otherUnit;
 }
 
 // NNet.Game.SSelectionDeltaEvent
@@ -423,7 +498,8 @@ public class GameSAICommunicateEvent
     public int8 m_autocast;
     public GameTUnitTag m_targetUnitTag;
     public GameTUnitLink m_targetUnitSnapshotUnitLink;
-    public Option<GameTPlayerId> m_targetUnitSnapshotPlayerId;
+    public Option<GameTPlayerId> m_targetUnitSnapshotUpkeepPlayerId;
+    public Option<GameTPlayerId> m_targetUnitSnapshotControlPlayerId;
     public GameSPoint3 m_targetPoint;
 }
 
@@ -547,10 +623,10 @@ public class GameSTriggerTransmissionCompleteEvent
 // NNet.Game.SCameraUpdateEvent
 public class GameSCameraUpdateEvent
 {
-    public GameSPoint m_target;
-    public GameTFixedBits m_distance;
-    public GameTFixedBits m_pitch;
-    public GameTFixedBits m_yaw;
+    public GameSPointMini m_target;
+    public Option<GameTFixedMiniBits> m_distance;
+    public Option<GameTFixedMiniBits> m_pitch;
+    public Option<GameTFixedMiniBits> m_yaw;
 }
 
 // NNet.Game.STriggerConversationSkippedEvent
@@ -564,11 +640,15 @@ public class GameSTriggerMouseClickedEvent
 {
     public uint32 m_button;
     public bool m_down;
-    public uint32 m_posXUI;
-    public uint32 m_posYUI;
-    public GameTFixedBits m_posXWorld;
-    public GameTFixedBits m_posYWorld;
-    public GameTFixedBits m_posZWorld;
+    public GameSUICoord m_posUI;
+    public GameSMapCoord3D m_posWorld;
+}
+
+// NNet.Game.STriggerMouseMovedEvent
+public class GameSTriggerMouseMovedEvent
+{
+    public GameSUICoord m_posUI;
+    public GameSMapCoord3D m_posWorld;
 }
 
 // NNet.Game.STriggerPlanetPanelReplayEvent
@@ -709,7 +789,7 @@ public class GameSTriggerMovieFinishedEvent
 // NNet.Game.SDecrementGameTimeRemainingEvent
 public class GameSDecrementGameTimeRemainingEvent
 {
-    public uint32 m_decrementMs;
+    public GameTFixedUInt m_decrementMs;
 }
 
 // NNet.Game.STriggerPortraitLoadedEvent
@@ -780,6 +860,35 @@ public class GameSPoint3
     public GameTFixedBits z;
 }
 
+// NNet.Game.SPointMini
+public class GameSPointMini
+{
+    public GameTFixedMiniBits x;
+    public GameTFixedMiniBits y;
+}
+
+// NNet.Game.SMapCoord
+public class GameSMapCoord
+{
+    public GameTMapCoordFixedBits x;
+    public GameTMapCoordFixedBits y;
+}
+
+// NNet.Game.SMapCoord3D
+public class GameSMapCoord3D
+{
+    public GameTMapCoordFixedBits x;
+    public GameTMapCoordFixedBits y;
+    public GameTFixedBits z;
+}
+
+// NNet.Game.SUICoord
+public class GameSUICoord
+{
+    public GameTUICoordX x;
+    public GameTUICoordY y;
+}
+
 // NNet.Game.SSyncSoundLength
 public class GameSSyncSoundLength
 {
@@ -832,11 +941,13 @@ public class GameSGameDescription
     public uint8 m_mapSizeY;
     public GameTSyncChecksum m_mapFileSyncChecksum;
     public CFilePath m_mapFileName;
+    public GameCAuthorName m_mapAuthorName;
     public GameTSyncChecksum m_modFileSyncChecksum;
     public GameSSlotDescriptions m_slotDescriptions;
     public GameTDifficulty m_defaultDifficulty;
     public GameCCacheHandles m_cacheHandles;
     public bool m_isBlizzardMap;
+    public bool m_isPremadeFFA;
 }
 
 // NNet.Game.SLobbySlot
@@ -851,6 +962,8 @@ public class GameSLobbySlot
     public GameTHandicap m_handicap;
     public EObserve m_observe;
     public GameCRewardArray m_rewards;
+    public List<byte> m_toonHandle;
+    public GameCLicenseArray m_licenses;
 }
 
 // NNet.Game.SLobbyState
@@ -875,83 +988,6 @@ public class GameSLobbySyncState
     public GameSLobbyState m_lobbyState;
 }
 
-// NNet.Game.SGameOptions_PublicBeta1
-public class GameSGameOptions_PublicBeta1
-{
-    public bool m_lockTeams;
-    public bool m_teamsTogether;
-    public bool m_advancedSharedControl;
-    public bool m_randomRaces;
-    public bool m_amm;
-    public bool m_ranked;
-    public bool m_noVictoryOrDefeat;
-    public GameEGameLaunch m_launch;
-    public GameEOptionFog m_fog;
-    public GameEOptionObservers m_observers;
-    public GameEOptionUserDifficulty m_userDifficulty;
-}
-
-// NNet.Game.SGameDescription_PublicBeta1
-public class GameSGameDescription_PublicBeta1
-{
-    public uint32 m_randomValue;
-    public GameCGameCacheName m_gameCacheName;
-    public GameSGameOptions_PublicBeta1 m_gameOptions;
-    public GameEGameSpeed m_gameSpeed;
-    public GameEGameType m_gameType;
-    public TUserCount m_maxUsers;
-    public TUserCount m_maxObservers;
-    public GameTPlayerCount m_maxPlayers;
-    public GameTTeamCount m_maxTeams;
-    public GameTColorCount m_maxColors;
-    public TRaceCount m_maxRaces;
-    public GameTControlCount m_maxControls;
-    public uint8 m_mapSizeX;
-    public uint8 m_mapSizeY;
-    public GameTSyncChecksum m_mapFileSyncChecksum;
-    public CFilePath m_mapFileName;
-    public GameTSyncChecksum m_modFileSyncChecksum;
-    public CFilePath m_saveFileName;
-    public GameSSlotDescriptions m_slotDescriptions;
-    public GameTDifficulty m_defaultDifficulty;
-    public GameCCacheHandles m_cacheHandles;
-}
-
-// NNet.Game.SLobbySlot_PublicBeta1
-public class GameSLobbySlot_PublicBeta1
-{
-    public GameTControlId m_control;
-    public Option<TUserId> m_userId;
-    public GameTTeamId m_teamId;
-    public GameTColorPreference m_colorPref;
-    public TRacePreference m_racePref;
-    public GameTDifficulty m_difficulty;
-    public GameTHandicap m_handicap;
-    public EObserve m_observe;
-}
-
-// NNet.Game.SLobbyState_PublicBeta1
-public class GameSLobbyState_PublicBeta1
-{
-    public GameEPhase m_phase;
-    public TUserCount m_maxUsers;
-    public TUserCount m_maxObservers;
-    public GameCLobbySlotArray_PublicBeta1 m_slots;
-    public uint32 m_randomSeed;
-    public Option<TUserId> m_hostUserId;
-    public bool m_isSinglePlayer;
-    public uint32 m_gameDuration;
-    public GameTDifficulty m_defaultDifficulty;
-}
-
-// NNet.Game.SLobbySyncState_PublicBeta1
-public class GameSLobbySyncState_PublicBeta1
-{
-    public CUserInitialDataArray m_userInitialData;
-    public GameSGameDescription_PublicBeta1 m_gameDescription;
-    public GameSLobbyState_PublicBeta1 m_lobbyState;
-}
-
 // NNet.Game.SChatMessage
 public class GameSChatMessage
 {
@@ -972,17 +1008,17 @@ public class GameSLoadingProgressMessage
     public int32 m_progress;
 }
 
+// NNet.Game.SServerPingMessage
+public class GameSServerPingMessage
+{
+}
+
 // NNet.Game.SSelectionDeltaSubgroup
 public class GameSSelectionDeltaSubgroup
 {
     public GameTUnitLink m_unitLink;
     public GameTSubgroupPriority m_intraSubgroupPriority;
     public GameTSelectionCount m_count;
-}
-
-// NNet.Game.SSelectionMask
-public class GameSSelectionMask
-{
 }
 
 // NNet.Game.SSelectionDelta
@@ -1129,6 +1165,8 @@ public record class GameEEventId_e_bankSection(GameSBankSectionEvent Value) : Ga
 public record class GameEEventId_e_bankKey(GameSBankKeyEvent Value) : GameEEventId;
 // e_bankValue
 public record class GameEEventId_e_bankValue(GameSBankValueEvent Value) : GameEEventId;
+// e_bankSignature
+public record class GameEEventId_e_bankSignature(GameSBankSignatureEvent Value) : GameEEventId;
 // e_userOptions
 public record class GameEEventId_e_userOptions(GameSUserOptionsEvent Value) : GameEEventId;
 // e_turn
@@ -1213,6 +1251,8 @@ public record class GameEEventId_e_triggerSoundLengthSync(GameSTriggerSoundLengt
 public record class GameEEventId_e_triggerConversationSkipped(GameSTriggerConversationSkippedEvent Value) : GameEEventId;
 // e_triggerMouseClicked
 public record class GameEEventId_e_triggerMouseClicked(GameSTriggerMouseClickedEvent Value) : GameEEventId;
+// e_triggerMoueMoved
+public record class GameEEventId_e_triggerMoueMoved(GameSTriggerMouseMovedEvent Value) : GameEEventId;
 // e_triggerPlanetPanelPanelReplay
 public record class GameEEventId_e_triggerPlanetPanelPanelReplay(GameSTriggerPlanetPanelReplayEvent Value) : GameEEventId;
 // e_triggerSoundtrackDone
@@ -1395,6 +1435,8 @@ public record class GameEMessageId_e_chat(GameSChatMessage Value) : GameEMessage
 public record class GameEMessageId_e_ping(GameSPingMessage Value) : GameEMessageId;
 // e_loadingProgress
 public record class GameEMessageId_e_loadingProgress(GameSLoadingProgressMessage Value) : GameEMessageId;
+// e_serverPing
+public record class GameEMessageId_e_serverPing(GameSServerPingMessage Value) : GameEMessageId;
 
 // NNet.Game.EResultCode
 public abstract record class GameEResultCode { }
@@ -1520,6 +1562,36 @@ public class GameTColorCount
     public long Value;
 }
 
+// NNet.Game.TFixedInt
+public class GameTFixedInt
+{
+    public long Value;
+}
+
+// NNet.Game.TFixedUInt
+public class GameTFixedUInt
+{
+    public long Value;
+}
+
+// NNet.Game.TMapCoordFixedBits
+public class GameTMapCoordFixedBits
+{
+    public long Value;
+}
+
+// NNet.Game.TUICoordX
+public class GameTUICoordX
+{
+    public long Value;
+}
+
+// NNet.Game.TUICoordY
+public class GameTUICoordY
+{
+    public long Value;
+}
+
 // NNet.Game.THandicap
 public class GameTHandicap
 {
@@ -1544,12 +1616,6 @@ public class GameTControlCount
     public long Value;
 }
 
-// NNet.Game.TPlayerCount
-public class GameTPlayerCount
-{
-    public long Value;
-}
-
 // NNet.Game.TLobbySlotCount
 public class GameTLobbySlotCount
 {
@@ -1564,6 +1630,12 @@ public class GameTLobbySlotId
 
 // NNet.Game.TPlayerId
 public class GameTPlayerId
+{
+    public long Value;
+}
+
+// NNet.Game.TPlayerCount
+public class GameTPlayerCount
 {
     public long Value;
 }
@@ -1712,10 +1784,22 @@ public class GameTFixedBits
     public int32 Value;
 }
 
+// NNet.Game.TFixedMiniBits
+public class GameTFixedMiniBits
+{
+    public uint16 Value;
+}
+
 // NNet.Game.TReward
 public class GameTReward
 {
-    public uint16 Value;
+    public uint32 Value;
+}
+
+// NNet.Game.TLicense
+public class GameTLicense
+{
+    public uint32 Value;
 }
 
 // NNet.Game.TSyncChecksum
@@ -1766,16 +1850,22 @@ public class GameCRewardArray
     public List<GameTReward> Value;
 }
 
+// NNet.Game.CLicenseArray
+public class GameCLicenseArray
+{
+    public List<GameTLicense> Value;
+}
+
 // NNet.Game.CLobbySlotArray
 public class GameCLobbySlotArray
 {
     public List<GameSLobbySlot> Value;
 }
 
-// NNet.Game.CLobbySlotArray_PublicBeta1
-public class GameCLobbySlotArray_PublicBeta1
+// NNet.Game.SelectionIndexArrayType
+public class GameSelectionIndexArrayType
 {
-    public List<GameSLobbySlot_PublicBeta1> Value;
+    public List<GameTSelectionIndex> Value;
 }
 
 // NNet.CFilePath
@@ -1804,6 +1894,12 @@ public class GameCTriggerChatMessageString
 
 // NNet.Game.CGameCacheName
 public class GameCGameCacheName
+{
+    public List<byte> Value;
+}
+
+// NNet.Game.CAuthorName
+public class GameCAuthorName
 {
     public List<byte> Value;
 }
@@ -1866,6 +1962,47 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
                 };
             }
             break;
+            default:
+            {
+                throw new Exception("WUT CHOICE");
+            }
+        }
+    }
+
+    public GameSCmdData Parse_GameSCmdData() 
+    {
+        ValidateChoiceTag();
+        var variantTag = ParseVlqInt();
+        
+        switch (variantTag)
+        {
+            case 1:
+            {
+                var res = Parse_GameSMapCoord3D();
+
+                return new TargetPoint
+                {
+                    Value = res
+                };
+            }
+            case 2:
+            {
+                var res = Parse_GameSCmdDataTargetUnit();
+
+                return new TargetUnit
+                {
+                    Value = res
+                };
+            }
+            case 3:
+            {
+                var res = Parse_uint32();
+
+                return new Data
+                {
+                    Value = res
+                };
+            }
             default:
             {
                 throw new Exception("WUT CHOICE");
@@ -2009,6 +2146,56 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
                 var res = Parse_EObserve();
 
                 return new m_observe
+                {
+                    Value = res
+                };
+            }
+            case 8:
+            {
+                var res = Parse_GameCLicenseArray();
+
+                return new m_licenses
+                {
+                    Value = res
+                };
+            }
+            default:
+            {
+                throw new Exception("WUT CHOICE");
+            }
+        }
+    }
+
+    public GameSSelectionMask Parse_GameSSelectionMask() 
+    {
+        ValidateChoiceTag();
+        var variantTag = ParseVlqInt();
+        
+        switch (variantTag)
+        {
+            case 1:
+            {
+                var res = Parse_GameSelectionMaskType();
+
+                return new Mask
+                {
+                    Value = res
+                };
+            }
+            case 2:
+            {
+                var res = Parse_GameSelectionIndexArrayType();
+
+                return new OneIndices
+                {
+                    Value = res
+                };
+            }
+            case 3:
+            {
+                var res = Parse_GameSelectionIndexArrayType();
+
+                return new ZeroIndices
                 {
                     Value = res
                 };
@@ -2291,6 +2478,7 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
         Option<uint> m_programId = Option.None;
         Option<uint> m_realm = Option.None;
         Option<List<byte>> m_name = Option.None;
+        Option<long> m_id = Option.None;
         ValidateStructTag();
         var structFieldCount = ParseVlqInt();           
         for (var i = 0; i < structFieldCount; i++)
@@ -2355,6 +2543,20 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
                     }
                 }
                 break;
+                case 4:
+                {
+                    if (m_id is { HasValue: false })                           
+                    {
+                        var parsed_m_id = Parse_GameSToonNameDetails_m_id();
+                        m_id = Option.Some(parsed_m_id);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
             }
         }
         return new GameSToonNameDetails
@@ -2363,6 +2565,7 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
             m_programId = Option.OkOrReturnMissingFieldErr(m_programId),
             m_realm = Option.OkOrReturnMissingFieldErr(m_realm),
             m_name = Option.OkOrReturnMissingFieldErr(m_name),
+            m_id = Option.OkOrReturnMissingFieldErr(m_id),
         };
     }
     public byte Parse_GameSToonNameDetails_m_region()
@@ -2384,6 +2587,11 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
     {                             
         var m_name = tagged_blob();
         return m_name;
+    }
+    public long Parse_GameSToonNameDetails_m_id()
+    {                             
+        var m_id = tagged_vlq_int();
+        return ProtocolConversion<long>.From(m_id);
     }
 
     public GameSPlayerDetails Parse_GameSPlayerDetails() 
@@ -3065,11 +3273,43 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
             }
     }
 
+    public TTeamPreference Parse_TTeamPreference() 
+    {
+        var m_team = Option.Some<Option<uint8>>(Option.None);
+        if (m_team is { HasValue: true, Value.HasValue: false })
+        {
+            var parsed_m_team = Parse_TTeamPreference_m_team();
+            m_team = Option.Some(parsed_m_team);
+        }
+
+        return new TTeamPreference
+        {   
+            m_team = Option.OkOrReturnMissingFieldErr(m_team),
+        };
+    }
+
+    public Option<uint8> Parse_TTeamPreference_m_team()
+    {                             
+            var isProvided = parse_bool();
+
+            if (isProvided)
+            {
+                var res = Parse_uint8();
+
+                return Option.Some(res);
+            }
+            else
+            {
+                return Option.None;
+            }
+    }
+
     public SUserInitialData Parse_SUserInitialData() 
     {
         Option<CUserName> m_name = Option.None;
         Option<uint32> m_randomSeed = Option.None;
         Option<TRacePreference> m_racePreference = Option.None;
+        Option<TTeamPreference> m_teamPreference = Option.None;
         Option<bool> m_testMap = Option.None;
         Option<bool> m_testAuto = Option.None;
         Option<EObserve> m_observe = Option.None;
@@ -3089,6 +3329,12 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
         {
             var parsed_m_racePreference = Parse_SUserInitialData_m_racePreference();
             m_racePreference = Option.Some(parsed_m_racePreference);
+        }
+
+        if (m_teamPreference is { HasValue: false })                           
+        {
+            var parsed_m_teamPreference = Parse_SUserInitialData_m_teamPreference();
+            m_teamPreference = Option.Some(parsed_m_teamPreference);
         }
 
         if (m_testMap is { HasValue: false })                           
@@ -3114,6 +3360,7 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
             m_name = Option.OkOrReturnMissingFieldErr(m_name),
             m_randomSeed = Option.OkOrReturnMissingFieldErr(m_randomSeed),
             m_racePreference = Option.OkOrReturnMissingFieldErr(m_racePreference),
+            m_teamPreference = Option.OkOrReturnMissingFieldErr(m_teamPreference),
             m_testMap = Option.OkOrReturnMissingFieldErr(m_testMap),
             m_testAuto = Option.OkOrReturnMissingFieldErr(m_testAuto),
             m_observe = Option.OkOrReturnMissingFieldErr(m_observe),
@@ -3136,6 +3383,12 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
     {                             
         var m_racePreference = Parse_TRacePreference();
         return m_racePreference;
+    }
+
+    public TTeamPreference Parse_SUserInitialData_m_teamPreference()
+    {                             
+        var m_teamPreference = Parse_TTeamPreference();
+        return m_teamPreference;
     }
 
     public bool Parse_SUserInitialData_m_testMap()
@@ -3185,6 +3438,190 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
             {
                 return Option.None;
             }
+    }
+
+    public GameSCmdAbil Parse_GameSCmdAbil() 
+    {
+        Option<GameTAbilLink> m_abilLink = Option.None;
+        Option<long> m_abilCmdIndex = Option.None;
+        var m_abilCmdData = Option.Some<Option<uint8>>(Option.None);
+        if (m_abilLink is { HasValue: false })                           
+        {
+            var parsed_m_abilLink = Parse_GameSCmdAbil_m_abilLink();
+            m_abilLink = Option.Some(parsed_m_abilLink);
+        }
+
+        if (m_abilCmdIndex is { HasValue: false })                           
+        {
+            var parsed_m_abilCmdIndex = Parse_GameSCmdAbil_m_abilCmdIndex();
+            m_abilCmdIndex = Option.Some(parsed_m_abilCmdIndex);
+        }
+
+        if (m_abilCmdData is { HasValue: true, Value.HasValue: false })
+        {
+            var parsed_m_abilCmdData = Parse_GameSCmdAbil_m_abilCmdData();
+            m_abilCmdData = Option.Some(parsed_m_abilCmdData);
+        }
+
+        return new GameSCmdAbil
+        {   
+            m_abilLink = Option.OkOrReturnMissingFieldErr(m_abilLink),
+            m_abilCmdIndex = Option.OkOrReturnMissingFieldErr(m_abilCmdIndex),
+            m_abilCmdData = Option.OkOrReturnMissingFieldErr(m_abilCmdData),
+        };
+    }
+
+    public GameTAbilLink Parse_GameSCmdAbil_m_abilLink()
+    {                             
+        var m_abilLink = Parse_GameTAbilLink();
+        return m_abilLink;
+    }
+
+    public long Parse_GameSCmdAbil_m_abilCmdIndex()
+    {                             
+        var m_abilCmdIndex = parse_packed_int(0, 5);
+        return m_abilCmdIndex;
+    }
+
+    public Option<uint8> Parse_GameSCmdAbil_m_abilCmdData()
+    {                             
+            var isProvided = parse_bool();
+
+            if (isProvided)
+            {
+                var res = Parse_uint8();
+
+                return Option.Some(res);
+            }
+            else
+            {
+                return Option.None;
+            }
+    }
+
+    public GameSCmdDataTargetUnit Parse_GameSCmdDataTargetUnit() 
+    {
+        Option<uint8> m_targetUnitFlags = Option.None;
+        Option<uint8> m_timer = Option.None;
+        Option<GameTUnitTag> m_tag = Option.None;
+        Option<GameTUnitLink> m_snapshotUnitLink = Option.None;
+        var m_snapshotControlPlayerId = Option.Some<Option<GameTPlayerId>>(Option.None);
+        var m_snapshotUpkeepPlayerId = Option.Some<Option<GameTPlayerId>>(Option.None);
+        Option<GameSMapCoord3D> m_snapshotPoint = Option.None;
+        if (m_targetUnitFlags is { HasValue: false })                           
+        {
+            var parsed_m_targetUnitFlags = Parse_GameSCmdDataTargetUnit_m_targetUnitFlags();
+            m_targetUnitFlags = Option.Some(parsed_m_targetUnitFlags);
+        }
+
+        if (m_timer is { HasValue: false })                           
+        {
+            var parsed_m_timer = Parse_GameSCmdDataTargetUnit_m_timer();
+            m_timer = Option.Some(parsed_m_timer);
+        }
+
+        if (m_tag is { HasValue: false })                           
+        {
+            var parsed_m_tag = Parse_GameSCmdDataTargetUnit_m_tag();
+            m_tag = Option.Some(parsed_m_tag);
+        }
+
+        if (m_snapshotUnitLink is { HasValue: false })                           
+        {
+            var parsed_m_snapshotUnitLink = Parse_GameSCmdDataTargetUnit_m_snapshotUnitLink();
+            m_snapshotUnitLink = Option.Some(parsed_m_snapshotUnitLink);
+        }
+
+        if (m_snapshotControlPlayerId is { HasValue: true, Value.HasValue: false })
+        {
+            var parsed_m_snapshotControlPlayerId = Parse_GameSCmdDataTargetUnit_m_snapshotControlPlayerId();
+            m_snapshotControlPlayerId = Option.Some(parsed_m_snapshotControlPlayerId);
+        }
+
+        if (m_snapshotUpkeepPlayerId is { HasValue: true, Value.HasValue: false })
+        {
+            var parsed_m_snapshotUpkeepPlayerId = Parse_GameSCmdDataTargetUnit_m_snapshotUpkeepPlayerId();
+            m_snapshotUpkeepPlayerId = Option.Some(parsed_m_snapshotUpkeepPlayerId);
+        }
+
+        if (m_snapshotPoint is { HasValue: false })                           
+        {
+            var parsed_m_snapshotPoint = Parse_GameSCmdDataTargetUnit_m_snapshotPoint();
+            m_snapshotPoint = Option.Some(parsed_m_snapshotPoint);
+        }
+
+        return new GameSCmdDataTargetUnit
+        {   
+            m_targetUnitFlags = Option.OkOrReturnMissingFieldErr(m_targetUnitFlags),
+            m_timer = Option.OkOrReturnMissingFieldErr(m_timer),
+            m_tag = Option.OkOrReturnMissingFieldErr(m_tag),
+            m_snapshotUnitLink = Option.OkOrReturnMissingFieldErr(m_snapshotUnitLink),
+            m_snapshotControlPlayerId = Option.OkOrReturnMissingFieldErr(m_snapshotControlPlayerId),
+            m_snapshotUpkeepPlayerId = Option.OkOrReturnMissingFieldErr(m_snapshotUpkeepPlayerId),
+            m_snapshotPoint = Option.OkOrReturnMissingFieldErr(m_snapshotPoint),
+        };
+    }
+
+    public uint8 Parse_GameSCmdDataTargetUnit_m_targetUnitFlags()
+    {                             
+        var m_targetUnitFlags = Parse_uint8();
+        return m_targetUnitFlags;
+    }
+
+    public uint8 Parse_GameSCmdDataTargetUnit_m_timer()
+    {                             
+        var m_timer = Parse_uint8();
+        return m_timer;
+    }
+
+    public GameTUnitTag Parse_GameSCmdDataTargetUnit_m_tag()
+    {                             
+        var m_tag = Parse_GameTUnitTag();
+        return m_tag;
+    }
+
+    public GameTUnitLink Parse_GameSCmdDataTargetUnit_m_snapshotUnitLink()
+    {                             
+        var m_snapshotUnitLink = Parse_GameTUnitLink();
+        return m_snapshotUnitLink;
+    }
+
+    public Option<GameTPlayerId> Parse_GameSCmdDataTargetUnit_m_snapshotControlPlayerId()
+    {                             
+            var isProvided = parse_bool();
+
+            if (isProvided)
+            {
+                var res = Parse_GameTPlayerId();
+
+                return Option.Some(res);
+            }
+            else
+            {
+                return Option.None;
+            }
+    }
+
+    public Option<GameTPlayerId> Parse_GameSCmdDataTargetUnit_m_snapshotUpkeepPlayerId()
+    {                             
+            var isProvided = parse_bool();
+
+            if (isProvided)
+            {
+                var res = Parse_GameTPlayerId();
+
+                return Option.Some(res);
+            }
+            else
+            {
+                return Option.None;
+            }
+    }
+
+    public GameSMapCoord3D Parse_GameSCmdDataTargetUnit_m_snapshotPoint()
+    {                             
+        var m_snapshotPoint = Parse_GameSMapCoord3D();
+        return m_snapshotPoint;
     }
 
     public GameSSetLobbySlotEvent Parse_GameSSetLobbySlotEvent() 
@@ -3448,6 +3885,34 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
         for (var i = 0 ; i < arrayLength ; ++i)
         {
             var data = take_unaligned_byte();
+            array.Add(data);
+        }
+        return array;
+    }
+
+    public GameSBankSignatureEvent Parse_GameSBankSignatureEvent() 
+    {
+        Option<List<uint8>> m_signature = Option.None;
+        if (m_signature is { HasValue: false })                           
+        {
+            var parsed_m_signature = Parse_GameSBankSignatureEvent_m_signature();
+            m_signature = Option.Some(parsed_m_signature);
+        }
+
+        return new GameSBankSignatureEvent
+        {   
+            m_signature = Option.OkOrReturnMissingFieldErr(m_signature),
+        };
+    }
+
+    public List<uint8> Parse_GameSBankSignatureEvent_m_signature()
+    {                             
+        var arrayLength = take_n_bits_into_i64(5);
+        var array = new List<uint8>();
+
+        for (var i = 0 ; i < arrayLength ; ++i)
+        {
+            var data = Parse_uint8();
             array.Add(data);
         }
         return array;
@@ -3882,160 +4347,56 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
 
     public GameSCmdEvent Parse_GameSCmdEvent() 
     {
-        Option<uint32> m_cmdFlags = Option.None;
-        Option<GameTAbilLink> m_abilLink = Option.None;
-        Option<uint8> m_abilCmdIndex = Option.None;
-        Option<uint8> m_abilCmdData = Option.None;
-        Option<uint8> m_targetUnitFlags = Option.None;
-        Option<uint8> m_targetUnitTimer = Option.None;
-        Option<GameTUnitTag> m_otherUnit = Option.None;
-        Option<GameTUnitTag> m_targetUnitTag = Option.None;
-        Option<GameTUnitLink> m_targetUnitSnapshotUnitLink = Option.None;
-        var m_targetUnitSnapshotPlayerId = Option.Some<Option<GameTPlayerId>>(Option.None);
-        Option<GameSPoint3> m_targetPoint = Option.None;
+        Option<long> m_cmdFlags = Option.None;
+        var m_abil = Option.Some<Option<GameSCmdAbil>>(Option.None);
+        Option<GameSCmdData> m_data = Option.None;
+        var m_otherUnit = Option.Some<Option<GameTUnitTag>>(Option.None);
         if (m_cmdFlags is { HasValue: false })                           
         {
             var parsed_m_cmdFlags = Parse_GameSCmdEvent_m_cmdFlags();
             m_cmdFlags = Option.Some(parsed_m_cmdFlags);
         }
 
-        if (m_abilLink is { HasValue: false })                           
+        if (m_abil is { HasValue: true, Value.HasValue: false })
         {
-            var parsed_m_abilLink = Parse_GameSCmdEvent_m_abilLink();
-            m_abilLink = Option.Some(parsed_m_abilLink);
+            var parsed_m_abil = Parse_GameSCmdEvent_m_abil();
+            m_abil = Option.Some(parsed_m_abil);
         }
 
-        if (m_abilCmdIndex is { HasValue: false })                           
+        if (m_data is { HasValue: false })                           
         {
-            var parsed_m_abilCmdIndex = Parse_GameSCmdEvent_m_abilCmdIndex();
-            m_abilCmdIndex = Option.Some(parsed_m_abilCmdIndex);
+            var parsed_m_data = Parse_GameSCmdEvent_m_data();
+            m_data = Option.Some(parsed_m_data);
         }
 
-        if (m_abilCmdData is { HasValue: false })                           
-        {
-            var parsed_m_abilCmdData = Parse_GameSCmdEvent_m_abilCmdData();
-            m_abilCmdData = Option.Some(parsed_m_abilCmdData);
-        }
-
-        if (m_targetUnitFlags is { HasValue: false })                           
-        {
-            var parsed_m_targetUnitFlags = Parse_GameSCmdEvent_m_targetUnitFlags();
-            m_targetUnitFlags = Option.Some(parsed_m_targetUnitFlags);
-        }
-
-        if (m_targetUnitTimer is { HasValue: false })                           
-        {
-            var parsed_m_targetUnitTimer = Parse_GameSCmdEvent_m_targetUnitTimer();
-            m_targetUnitTimer = Option.Some(parsed_m_targetUnitTimer);
-        }
-
-        if (m_otherUnit is { HasValue: false })                           
+        if (m_otherUnit is { HasValue: true, Value.HasValue: false })
         {
             var parsed_m_otherUnit = Parse_GameSCmdEvent_m_otherUnit();
             m_otherUnit = Option.Some(parsed_m_otherUnit);
         }
 
-        if (m_targetUnitTag is { HasValue: false })                           
-        {
-            var parsed_m_targetUnitTag = Parse_GameSCmdEvent_m_targetUnitTag();
-            m_targetUnitTag = Option.Some(parsed_m_targetUnitTag);
-        }
-
-        if (m_targetUnitSnapshotUnitLink is { HasValue: false })                           
-        {
-            var parsed_m_targetUnitSnapshotUnitLink = Parse_GameSCmdEvent_m_targetUnitSnapshotUnitLink();
-            m_targetUnitSnapshotUnitLink = Option.Some(parsed_m_targetUnitSnapshotUnitLink);
-        }
-
-        if (m_targetUnitSnapshotPlayerId is { HasValue: true, Value.HasValue: false })
-        {
-            var parsed_m_targetUnitSnapshotPlayerId = Parse_GameSCmdEvent_m_targetUnitSnapshotPlayerId();
-            m_targetUnitSnapshotPlayerId = Option.Some(parsed_m_targetUnitSnapshotPlayerId);
-        }
-
-        if (m_targetPoint is { HasValue: false })                           
-        {
-            var parsed_m_targetPoint = Parse_GameSCmdEvent_m_targetPoint();
-            m_targetPoint = Option.Some(parsed_m_targetPoint);
-        }
-
         return new GameSCmdEvent
         {   
             m_cmdFlags = Option.OkOrReturnMissingFieldErr(m_cmdFlags),
-            m_abilLink = Option.OkOrReturnMissingFieldErr(m_abilLink),
-            m_abilCmdIndex = Option.OkOrReturnMissingFieldErr(m_abilCmdIndex),
-            m_abilCmdData = Option.OkOrReturnMissingFieldErr(m_abilCmdData),
-            m_targetUnitFlags = Option.OkOrReturnMissingFieldErr(m_targetUnitFlags),
-            m_targetUnitTimer = Option.OkOrReturnMissingFieldErr(m_targetUnitTimer),
+            m_abil = Option.OkOrReturnMissingFieldErr(m_abil),
+            m_data = Option.OkOrReturnMissingFieldErr(m_data),
             m_otherUnit = Option.OkOrReturnMissingFieldErr(m_otherUnit),
-            m_targetUnitTag = Option.OkOrReturnMissingFieldErr(m_targetUnitTag),
-            m_targetUnitSnapshotUnitLink = Option.OkOrReturnMissingFieldErr(m_targetUnitSnapshotUnitLink),
-            m_targetUnitSnapshotPlayerId = Option.OkOrReturnMissingFieldErr(m_targetUnitSnapshotPlayerId),
-            m_targetPoint = Option.OkOrReturnMissingFieldErr(m_targetPoint),
         };
     }
 
-    public uint32 Parse_GameSCmdEvent_m_cmdFlags()
+    public long Parse_GameSCmdEvent_m_cmdFlags()
     {                             
-        var m_cmdFlags = Parse_uint32();
+        var m_cmdFlags = parse_packed_int(0, 18);
         return m_cmdFlags;
     }
 
-    public GameTAbilLink Parse_GameSCmdEvent_m_abilLink()
-    {                             
-        var m_abilLink = Parse_GameTAbilLink();
-        return m_abilLink;
-    }
-
-    public uint8 Parse_GameSCmdEvent_m_abilCmdIndex()
-    {                             
-        var m_abilCmdIndex = Parse_uint8();
-        return m_abilCmdIndex;
-    }
-
-    public uint8 Parse_GameSCmdEvent_m_abilCmdData()
-    {                             
-        var m_abilCmdData = Parse_uint8();
-        return m_abilCmdData;
-    }
-
-    public uint8 Parse_GameSCmdEvent_m_targetUnitFlags()
-    {                             
-        var m_targetUnitFlags = Parse_uint8();
-        return m_targetUnitFlags;
-    }
-
-    public uint8 Parse_GameSCmdEvent_m_targetUnitTimer()
-    {                             
-        var m_targetUnitTimer = Parse_uint8();
-        return m_targetUnitTimer;
-    }
-
-    public GameTUnitTag Parse_GameSCmdEvent_m_otherUnit()
-    {                             
-        var m_otherUnit = Parse_GameTUnitTag();
-        return m_otherUnit;
-    }
-
-    public GameTUnitTag Parse_GameSCmdEvent_m_targetUnitTag()
-    {                             
-        var m_targetUnitTag = Parse_GameTUnitTag();
-        return m_targetUnitTag;
-    }
-
-    public GameTUnitLink Parse_GameSCmdEvent_m_targetUnitSnapshotUnitLink()
-    {                             
-        var m_targetUnitSnapshotUnitLink = Parse_GameTUnitLink();
-        return m_targetUnitSnapshotUnitLink;
-    }
-
-    public Option<GameTPlayerId> Parse_GameSCmdEvent_m_targetUnitSnapshotPlayerId()
+    public Option<GameSCmdAbil> Parse_GameSCmdEvent_m_abil()
     {                             
             var isProvided = parse_bool();
 
             if (isProvided)
             {
-                var res = Parse_GameTPlayerId();
+                var res = Parse_GameSCmdAbil();
 
                 return Option.Some(res);
             }
@@ -4045,10 +4406,26 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
             }
     }
 
-    public GameSPoint3 Parse_GameSCmdEvent_m_targetPoint()
+    public GameSCmdData Parse_GameSCmdEvent_m_data()
     {                             
-        var m_targetPoint = Parse_GameSPoint3();
-        return m_targetPoint;
+        var m_data = Parse_GameSCmdData();
+        return m_data;
+    }
+
+    public Option<GameTUnitTag> Parse_GameSCmdEvent_m_otherUnit()
+    {                             
+            var isProvided = parse_bool();
+
+            if (isProvided)
+            {
+                var res = Parse_GameTUnitTag();
+
+                return Option.Some(res);
+            }
+            else
+            {
+                return Option.None;
+            }
     }
 
     public GameSSelectionDeltaEvent Parse_GameSSelectionDeltaEvent() 
@@ -4240,7 +4617,8 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
         Option<int8> m_autocast = Option.None;
         Option<GameTUnitTag> m_targetUnitTag = Option.None;
         Option<GameTUnitLink> m_targetUnitSnapshotUnitLink = Option.None;
-        var m_targetUnitSnapshotPlayerId = Option.Some<Option<GameTPlayerId>>(Option.None);
+        var m_targetUnitSnapshotUpkeepPlayerId = Option.Some<Option<GameTPlayerId>>(Option.None);
+        var m_targetUnitSnapshotControlPlayerId = Option.Some<Option<GameTPlayerId>>(Option.None);
         Option<GameSPoint3> m_targetPoint = Option.None;
         if (m_beacon is { HasValue: false })                           
         {
@@ -4272,10 +4650,16 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
             m_targetUnitSnapshotUnitLink = Option.Some(parsed_m_targetUnitSnapshotUnitLink);
         }
 
-        if (m_targetUnitSnapshotPlayerId is { HasValue: true, Value.HasValue: false })
+        if (m_targetUnitSnapshotUpkeepPlayerId is { HasValue: true, Value.HasValue: false })
         {
-            var parsed_m_targetUnitSnapshotPlayerId = Parse_GameSAICommunicateEvent_m_targetUnitSnapshotPlayerId();
-            m_targetUnitSnapshotPlayerId = Option.Some(parsed_m_targetUnitSnapshotPlayerId);
+            var parsed_m_targetUnitSnapshotUpkeepPlayerId = Parse_GameSAICommunicateEvent_m_targetUnitSnapshotUpkeepPlayerId();
+            m_targetUnitSnapshotUpkeepPlayerId = Option.Some(parsed_m_targetUnitSnapshotUpkeepPlayerId);
+        }
+
+        if (m_targetUnitSnapshotControlPlayerId is { HasValue: true, Value.HasValue: false })
+        {
+            var parsed_m_targetUnitSnapshotControlPlayerId = Parse_GameSAICommunicateEvent_m_targetUnitSnapshotControlPlayerId();
+            m_targetUnitSnapshotControlPlayerId = Option.Some(parsed_m_targetUnitSnapshotControlPlayerId);
         }
 
         if (m_targetPoint is { HasValue: false })                           
@@ -4291,7 +4675,8 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
             m_autocast = Option.OkOrReturnMissingFieldErr(m_autocast),
             m_targetUnitTag = Option.OkOrReturnMissingFieldErr(m_targetUnitTag),
             m_targetUnitSnapshotUnitLink = Option.OkOrReturnMissingFieldErr(m_targetUnitSnapshotUnitLink),
-            m_targetUnitSnapshotPlayerId = Option.OkOrReturnMissingFieldErr(m_targetUnitSnapshotPlayerId),
+            m_targetUnitSnapshotUpkeepPlayerId = Option.OkOrReturnMissingFieldErr(m_targetUnitSnapshotUpkeepPlayerId),
+            m_targetUnitSnapshotControlPlayerId = Option.OkOrReturnMissingFieldErr(m_targetUnitSnapshotControlPlayerId),
             m_targetPoint = Option.OkOrReturnMissingFieldErr(m_targetPoint),
         };
     }
@@ -4326,7 +4711,23 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
         return m_targetUnitSnapshotUnitLink;
     }
 
-    public Option<GameTPlayerId> Parse_GameSAICommunicateEvent_m_targetUnitSnapshotPlayerId()
+    public Option<GameTPlayerId> Parse_GameSAICommunicateEvent_m_targetUnitSnapshotUpkeepPlayerId()
+    {                             
+            var isProvided = parse_bool();
+
+            if (isProvided)
+            {
+                var res = Parse_GameTPlayerId();
+
+                return Option.Some(res);
+            }
+            else
+            {
+                return Option.None;
+            }
+    }
+
+    public Option<GameTPlayerId> Parse_GameSAICommunicateEvent_m_targetUnitSnapshotControlPlayerId()
     {                             
             var isProvided = parse_bool();
 
@@ -4791,29 +5192,29 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
 
     public GameSCameraUpdateEvent Parse_GameSCameraUpdateEvent() 
     {
-        Option<GameSPoint> m_target = Option.None;
-        Option<GameTFixedBits> m_distance = Option.None;
-        Option<GameTFixedBits> m_pitch = Option.None;
-        Option<GameTFixedBits> m_yaw = Option.None;
+        Option<GameSPointMini> m_target = Option.None;
+        var m_distance = Option.Some<Option<GameTFixedMiniBits>>(Option.None);
+        var m_pitch = Option.Some<Option<GameTFixedMiniBits>>(Option.None);
+        var m_yaw = Option.Some<Option<GameTFixedMiniBits>>(Option.None);
         if (m_target is { HasValue: false })                           
         {
             var parsed_m_target = Parse_GameSCameraUpdateEvent_m_target();
             m_target = Option.Some(parsed_m_target);
         }
 
-        if (m_distance is { HasValue: false })                           
+        if (m_distance is { HasValue: true, Value.HasValue: false })
         {
             var parsed_m_distance = Parse_GameSCameraUpdateEvent_m_distance();
             m_distance = Option.Some(parsed_m_distance);
         }
 
-        if (m_pitch is { HasValue: false })                           
+        if (m_pitch is { HasValue: true, Value.HasValue: false })
         {
             var parsed_m_pitch = Parse_GameSCameraUpdateEvent_m_pitch();
             m_pitch = Option.Some(parsed_m_pitch);
         }
 
-        if (m_yaw is { HasValue: false })                           
+        if (m_yaw is { HasValue: true, Value.HasValue: false })
         {
             var parsed_m_yaw = Parse_GameSCameraUpdateEvent_m_yaw();
             m_yaw = Option.Some(parsed_m_yaw);
@@ -4828,28 +5229,58 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
         };
     }
 
-    public GameSPoint Parse_GameSCameraUpdateEvent_m_target()
+    public GameSPointMini Parse_GameSCameraUpdateEvent_m_target()
     {                             
-        var m_target = Parse_GameSPoint();
+        var m_target = Parse_GameSPointMini();
         return m_target;
     }
 
-    public GameTFixedBits Parse_GameSCameraUpdateEvent_m_distance()
+    public Option<GameTFixedMiniBits> Parse_GameSCameraUpdateEvent_m_distance()
     {                             
-        var m_distance = Parse_GameTFixedBits();
-        return m_distance;
+            var isProvided = parse_bool();
+
+            if (isProvided)
+            {
+                var res = Parse_GameTFixedMiniBits();
+
+                return Option.Some(res);
+            }
+            else
+            {
+                return Option.None;
+            }
     }
 
-    public GameTFixedBits Parse_GameSCameraUpdateEvent_m_pitch()
+    public Option<GameTFixedMiniBits> Parse_GameSCameraUpdateEvent_m_pitch()
     {                             
-        var m_pitch = Parse_GameTFixedBits();
-        return m_pitch;
+            var isProvided = parse_bool();
+
+            if (isProvided)
+            {
+                var res = Parse_GameTFixedMiniBits();
+
+                return Option.Some(res);
+            }
+            else
+            {
+                return Option.None;
+            }
     }
 
-    public GameTFixedBits Parse_GameSCameraUpdateEvent_m_yaw()
+    public Option<GameTFixedMiniBits> Parse_GameSCameraUpdateEvent_m_yaw()
     {                             
-        var m_yaw = Parse_GameTFixedBits();
-        return m_yaw;
+            var isProvided = parse_bool();
+
+            if (isProvided)
+            {
+                var res = Parse_GameTFixedMiniBits();
+
+                return Option.Some(res);
+            }
+            else
+            {
+                return Option.None;
+            }
     }
 
     public GameSTriggerConversationSkippedEvent Parse_GameSTriggerConversationSkippedEvent() 
@@ -4877,11 +5308,8 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
     {
         Option<uint32> m_button = Option.None;
         Option<bool> m_down = Option.None;
-        Option<uint32> m_posXUI = Option.None;
-        Option<uint32> m_posYUI = Option.None;
-        Option<GameTFixedBits> m_posXWorld = Option.None;
-        Option<GameTFixedBits> m_posYWorld = Option.None;
-        Option<GameTFixedBits> m_posZWorld = Option.None;
+        Option<GameSUICoord> m_posUI = Option.None;
+        Option<GameSMapCoord3D> m_posWorld = Option.None;
         if (m_button is { HasValue: false })                           
         {
             var parsed_m_button = Parse_GameSTriggerMouseClickedEvent_m_button();
@@ -4894,45 +5322,24 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
             m_down = Option.Some(parsed_m_down);
         }
 
-        if (m_posXUI is { HasValue: false })                           
+        if (m_posUI is { HasValue: false })                           
         {
-            var parsed_m_posXUI = Parse_GameSTriggerMouseClickedEvent_m_posXUI();
-            m_posXUI = Option.Some(parsed_m_posXUI);
+            var parsed_m_posUI = Parse_GameSTriggerMouseClickedEvent_m_posUI();
+            m_posUI = Option.Some(parsed_m_posUI);
         }
 
-        if (m_posYUI is { HasValue: false })                           
+        if (m_posWorld is { HasValue: false })                           
         {
-            var parsed_m_posYUI = Parse_GameSTriggerMouseClickedEvent_m_posYUI();
-            m_posYUI = Option.Some(parsed_m_posYUI);
-        }
-
-        if (m_posXWorld is { HasValue: false })                           
-        {
-            var parsed_m_posXWorld = Parse_GameSTriggerMouseClickedEvent_m_posXWorld();
-            m_posXWorld = Option.Some(parsed_m_posXWorld);
-        }
-
-        if (m_posYWorld is { HasValue: false })                           
-        {
-            var parsed_m_posYWorld = Parse_GameSTriggerMouseClickedEvent_m_posYWorld();
-            m_posYWorld = Option.Some(parsed_m_posYWorld);
-        }
-
-        if (m_posZWorld is { HasValue: false })                           
-        {
-            var parsed_m_posZWorld = Parse_GameSTriggerMouseClickedEvent_m_posZWorld();
-            m_posZWorld = Option.Some(parsed_m_posZWorld);
+            var parsed_m_posWorld = Parse_GameSTriggerMouseClickedEvent_m_posWorld();
+            m_posWorld = Option.Some(parsed_m_posWorld);
         }
 
         return new GameSTriggerMouseClickedEvent
         {   
             m_button = Option.OkOrReturnMissingFieldErr(m_button),
             m_down = Option.OkOrReturnMissingFieldErr(m_down),
-            m_posXUI = Option.OkOrReturnMissingFieldErr(m_posXUI),
-            m_posYUI = Option.OkOrReturnMissingFieldErr(m_posYUI),
-            m_posXWorld = Option.OkOrReturnMissingFieldErr(m_posXWorld),
-            m_posYWorld = Option.OkOrReturnMissingFieldErr(m_posYWorld),
-            m_posZWorld = Option.OkOrReturnMissingFieldErr(m_posZWorld),
+            m_posUI = Option.OkOrReturnMissingFieldErr(m_posUI),
+            m_posWorld = Option.OkOrReturnMissingFieldErr(m_posWorld),
         };
     }
 
@@ -4948,34 +5355,51 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
         return m_down;
     }
 
-    public uint32 Parse_GameSTriggerMouseClickedEvent_m_posXUI()
+    public GameSUICoord Parse_GameSTriggerMouseClickedEvent_m_posUI()
     {                             
-        var m_posXUI = Parse_uint32();
-        return m_posXUI;
+        var m_posUI = Parse_GameSUICoord();
+        return m_posUI;
     }
 
-    public uint32 Parse_GameSTriggerMouseClickedEvent_m_posYUI()
+    public GameSMapCoord3D Parse_GameSTriggerMouseClickedEvent_m_posWorld()
     {                             
-        var m_posYUI = Parse_uint32();
-        return m_posYUI;
+        var m_posWorld = Parse_GameSMapCoord3D();
+        return m_posWorld;
     }
 
-    public GameTFixedBits Parse_GameSTriggerMouseClickedEvent_m_posXWorld()
-    {                             
-        var m_posXWorld = Parse_GameTFixedBits();
-        return m_posXWorld;
+    public GameSTriggerMouseMovedEvent Parse_GameSTriggerMouseMovedEvent() 
+    {
+        Option<GameSUICoord> m_posUI = Option.None;
+        Option<GameSMapCoord3D> m_posWorld = Option.None;
+        if (m_posUI is { HasValue: false })                           
+        {
+            var parsed_m_posUI = Parse_GameSTriggerMouseMovedEvent_m_posUI();
+            m_posUI = Option.Some(parsed_m_posUI);
+        }
+
+        if (m_posWorld is { HasValue: false })                           
+        {
+            var parsed_m_posWorld = Parse_GameSTriggerMouseMovedEvent_m_posWorld();
+            m_posWorld = Option.Some(parsed_m_posWorld);
+        }
+
+        return new GameSTriggerMouseMovedEvent
+        {   
+            m_posUI = Option.OkOrReturnMissingFieldErr(m_posUI),
+            m_posWorld = Option.OkOrReturnMissingFieldErr(m_posWorld),
+        };
     }
 
-    public GameTFixedBits Parse_GameSTriggerMouseClickedEvent_m_posYWorld()
+    public GameSUICoord Parse_GameSTriggerMouseMovedEvent_m_posUI()
     {                             
-        var m_posYWorld = Parse_GameTFixedBits();
-        return m_posYWorld;
+        var m_posUI = Parse_GameSUICoord();
+        return m_posUI;
     }
 
-    public GameTFixedBits Parse_GameSTriggerMouseClickedEvent_m_posZWorld()
+    public GameSMapCoord3D Parse_GameSTriggerMouseMovedEvent_m_posWorld()
     {                             
-        var m_posZWorld = Parse_GameTFixedBits();
-        return m_posZWorld;
+        var m_posWorld = Parse_GameSMapCoord3D();
+        return m_posWorld;
     }
 
     public GameSTriggerPlanetPanelReplayEvent Parse_GameSTriggerPlanetPanelReplayEvent() 
@@ -5365,7 +5789,7 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
 
     public GameSDecrementGameTimeRemainingEvent Parse_GameSDecrementGameTimeRemainingEvent() 
     {
-        Option<uint32> m_decrementMs = Option.None;
+        Option<GameTFixedUInt> m_decrementMs = Option.None;
         if (m_decrementMs is { HasValue: false })                           
         {
             var parsed_m_decrementMs = Parse_GameSDecrementGameTimeRemainingEvent_m_decrementMs();
@@ -5378,9 +5802,9 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
         };
     }
 
-    public uint32 Parse_GameSDecrementGameTimeRemainingEvent_m_decrementMs()
+    public GameTFixedUInt Parse_GameSDecrementGameTimeRemainingEvent_m_decrementMs()
     {                             
-        var m_decrementMs = Parse_uint32();
+        var m_decrementMs = Parse_GameTFixedUInt();
         return m_decrementMs;
     }
 
@@ -5648,6 +6072,160 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
     {                             
         var z = Parse_GameTFixedBits();
         return z;
+    }
+
+    public GameSPointMini Parse_GameSPointMini() 
+    {
+        Option<GameTFixedMiniBits> x = Option.None;
+        Option<GameTFixedMiniBits> y = Option.None;
+        if (x is { HasValue: false })                           
+        {
+            var parsed_x = Parse_GameSPointMini_x();
+            x = Option.Some(parsed_x);
+        }
+
+        if (y is { HasValue: false })                           
+        {
+            var parsed_y = Parse_GameSPointMini_y();
+            y = Option.Some(parsed_y);
+        }
+
+        return new GameSPointMini
+        {   
+            x = Option.OkOrReturnMissingFieldErr(x),
+            y = Option.OkOrReturnMissingFieldErr(y),
+        };
+    }
+
+    public GameTFixedMiniBits Parse_GameSPointMini_x()
+    {                             
+        var x = Parse_GameTFixedMiniBits();
+        return x;
+    }
+
+    public GameTFixedMiniBits Parse_GameSPointMini_y()
+    {                             
+        var y = Parse_GameTFixedMiniBits();
+        return y;
+    }
+
+    public GameSMapCoord Parse_GameSMapCoord() 
+    {
+        Option<GameTMapCoordFixedBits> x = Option.None;
+        Option<GameTMapCoordFixedBits> y = Option.None;
+        if (x is { HasValue: false })                           
+        {
+            var parsed_x = Parse_GameSMapCoord_x();
+            x = Option.Some(parsed_x);
+        }
+
+        if (y is { HasValue: false })                           
+        {
+            var parsed_y = Parse_GameSMapCoord_y();
+            y = Option.Some(parsed_y);
+        }
+
+        return new GameSMapCoord
+        {   
+            x = Option.OkOrReturnMissingFieldErr(x),
+            y = Option.OkOrReturnMissingFieldErr(y),
+        };
+    }
+
+    public GameTMapCoordFixedBits Parse_GameSMapCoord_x()
+    {                             
+        var x = Parse_GameTMapCoordFixedBits();
+        return x;
+    }
+
+    public GameTMapCoordFixedBits Parse_GameSMapCoord_y()
+    {                             
+        var y = Parse_GameTMapCoordFixedBits();
+        return y;
+    }
+
+    public GameSMapCoord3D Parse_GameSMapCoord3D() 
+    {
+        Option<GameTMapCoordFixedBits> x = Option.None;
+        Option<GameTMapCoordFixedBits> y = Option.None;
+        Option<GameTFixedBits> z = Option.None;
+        if (x is { HasValue: false })                           
+        {
+            var parsed_x = Parse_GameSMapCoord3D_x();
+            x = Option.Some(parsed_x);
+        }
+
+        if (y is { HasValue: false })                           
+        {
+            var parsed_y = Parse_GameSMapCoord3D_y();
+            y = Option.Some(parsed_y);
+        }
+
+        if (z is { HasValue: false })                           
+        {
+            var parsed_z = Parse_GameSMapCoord3D_z();
+            z = Option.Some(parsed_z);
+        }
+
+        return new GameSMapCoord3D
+        {   
+            x = Option.OkOrReturnMissingFieldErr(x),
+            y = Option.OkOrReturnMissingFieldErr(y),
+            z = Option.OkOrReturnMissingFieldErr(z),
+        };
+    }
+
+    public GameTMapCoordFixedBits Parse_GameSMapCoord3D_x()
+    {                             
+        var x = Parse_GameTMapCoordFixedBits();
+        return x;
+    }
+
+    public GameTMapCoordFixedBits Parse_GameSMapCoord3D_y()
+    {                             
+        var y = Parse_GameTMapCoordFixedBits();
+        return y;
+    }
+
+    public GameTFixedBits Parse_GameSMapCoord3D_z()
+    {                             
+        var z = Parse_GameTFixedBits();
+        return z;
+    }
+
+    public GameSUICoord Parse_GameSUICoord() 
+    {
+        Option<GameTUICoordX> x = Option.None;
+        Option<GameTUICoordY> y = Option.None;
+        if (x is { HasValue: false })                           
+        {
+            var parsed_x = Parse_GameSUICoord_x();
+            x = Option.Some(parsed_x);
+        }
+
+        if (y is { HasValue: false })                           
+        {
+            var parsed_y = Parse_GameSUICoord_y();
+            y = Option.Some(parsed_y);
+        }
+
+        return new GameSUICoord
+        {   
+            x = Option.OkOrReturnMissingFieldErr(x),
+            y = Option.OkOrReturnMissingFieldErr(y),
+        };
+    }
+
+    public GameTUICoordX Parse_GameSUICoord_x()
+    {                             
+        var x = Parse_GameTUICoordX();
+        return x;
+    }
+
+    public GameTUICoordY Parse_GameSUICoord_y()
+    {                             
+        var y = Parse_GameTUICoordY();
+        return y;
     }
 
     public GameSSyncSoundLength Parse_GameSSyncSoundLength() 
@@ -5955,11 +6533,13 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
         Option<uint8> m_mapSizeY = Option.None;
         Option<GameTSyncChecksum> m_mapFileSyncChecksum = Option.None;
         Option<CFilePath> m_mapFileName = Option.None;
+        Option<GameCAuthorName> m_mapAuthorName = Option.None;
         Option<GameTSyncChecksum> m_modFileSyncChecksum = Option.None;
         Option<GameSSlotDescriptions> m_slotDescriptions = Option.None;
         Option<GameTDifficulty> m_defaultDifficulty = Option.None;
         Option<GameCCacheHandles> m_cacheHandles = Option.None;
         Option<bool> m_isBlizzardMap = Option.None;
+        Option<bool> m_isPremadeFFA = Option.None;
         if (m_randomValue is { HasValue: false })                           
         {
             var parsed_m_randomValue = Parse_GameSGameDescription_m_randomValue();
@@ -6056,6 +6636,12 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
             m_mapFileName = Option.Some(parsed_m_mapFileName);
         }
 
+        if (m_mapAuthorName is { HasValue: false })                           
+        {
+            var parsed_m_mapAuthorName = Parse_GameSGameDescription_m_mapAuthorName();
+            m_mapAuthorName = Option.Some(parsed_m_mapAuthorName);
+        }
+
         if (m_modFileSyncChecksum is { HasValue: false })                           
         {
             var parsed_m_modFileSyncChecksum = Parse_GameSGameDescription_m_modFileSyncChecksum();
@@ -6086,6 +6672,12 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
             m_isBlizzardMap = Option.Some(parsed_m_isBlizzardMap);
         }
 
+        if (m_isPremadeFFA is { HasValue: false })                           
+        {
+            var parsed_m_isPremadeFFA = Parse_GameSGameDescription_m_isPremadeFFA();
+            m_isPremadeFFA = Option.Some(parsed_m_isPremadeFFA);
+        }
+
         return new GameSGameDescription
         {   
             m_randomValue = Option.OkOrReturnMissingFieldErr(m_randomValue),
@@ -6104,11 +6696,13 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
             m_mapSizeY = Option.OkOrReturnMissingFieldErr(m_mapSizeY),
             m_mapFileSyncChecksum = Option.OkOrReturnMissingFieldErr(m_mapFileSyncChecksum),
             m_mapFileName = Option.OkOrReturnMissingFieldErr(m_mapFileName),
+            m_mapAuthorName = Option.OkOrReturnMissingFieldErr(m_mapAuthorName),
             m_modFileSyncChecksum = Option.OkOrReturnMissingFieldErr(m_modFileSyncChecksum),
             m_slotDescriptions = Option.OkOrReturnMissingFieldErr(m_slotDescriptions),
             m_defaultDifficulty = Option.OkOrReturnMissingFieldErr(m_defaultDifficulty),
             m_cacheHandles = Option.OkOrReturnMissingFieldErr(m_cacheHandles),
             m_isBlizzardMap = Option.OkOrReturnMissingFieldErr(m_isBlizzardMap),
+            m_isPremadeFFA = Option.OkOrReturnMissingFieldErr(m_isPremadeFFA),
         };
     }
 
@@ -6208,6 +6802,12 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
         return m_mapFileName;
     }
 
+    public GameCAuthorName Parse_GameSGameDescription_m_mapAuthorName()
+    {                             
+        var m_mapAuthorName = Parse_GameCAuthorName();
+        return m_mapAuthorName;
+    }
+
     public GameTSyncChecksum Parse_GameSGameDescription_m_modFileSyncChecksum()
     {                             
         var m_modFileSyncChecksum = Parse_GameTSyncChecksum();
@@ -6238,6 +6838,12 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
         return m_isBlizzardMap;
     }
 
+    public bool Parse_GameSGameDescription_m_isPremadeFFA()
+    {                             
+        var m_isPremadeFFA = parse_bool();
+        return m_isPremadeFFA;
+    }
+
     public GameSLobbySlot Parse_GameSLobbySlot() 
     {
         Option<GameTControlId> m_control = Option.None;
@@ -6249,6 +6855,8 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
         Option<GameTHandicap> m_handicap = Option.None;
         Option<EObserve> m_observe = Option.None;
         Option<GameCRewardArray> m_rewards = Option.None;
+        Option<List<byte>> m_toonHandle = Option.None;
+        Option<GameCLicenseArray> m_licenses = Option.None;
         if (m_control is { HasValue: false })                           
         {
             var parsed_m_control = Parse_GameSLobbySlot_m_control();
@@ -6303,6 +6911,18 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
             m_rewards = Option.Some(parsed_m_rewards);
         }
 
+        if (m_toonHandle is { HasValue: false })                           
+        {
+            var parsed_m_toonHandle = Parse_GameSLobbySlot_m_toonHandle();
+            m_toonHandle = Option.Some(parsed_m_toonHandle);
+        }
+
+        if (m_licenses is { HasValue: false })                           
+        {
+            var parsed_m_licenses = Parse_GameSLobbySlot_m_licenses();
+            m_licenses = Option.Some(parsed_m_licenses);
+        }
+
         return new GameSLobbySlot
         {   
             m_control = Option.OkOrReturnMissingFieldErr(m_control),
@@ -6314,6 +6934,8 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
             m_handicap = Option.OkOrReturnMissingFieldErr(m_handicap),
             m_observe = Option.OkOrReturnMissingFieldErr(m_observe),
             m_rewards = Option.OkOrReturnMissingFieldErr(m_rewards),
+            m_toonHandle = Option.OkOrReturnMissingFieldErr(m_toonHandle),
+            m_licenses = Option.OkOrReturnMissingFieldErr(m_licenses),
         };
     }
 
@@ -6379,6 +7001,25 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
     {                             
         var m_rewards = Parse_GameCRewardArray();
         return m_rewards;
+    }
+
+    public List<byte> Parse_GameSLobbySlot_m_toonHandle()
+    {                             
+        var arrayLength = take_n_bits_into_i64(5);
+        var array = new List<byte>();
+
+        for (var i = 0 ; i < arrayLength ; ++i)
+        {
+            var data = take_unaligned_byte();
+            array.Add(data);
+        }
+        return array;
+    }
+
+    public GameCLicenseArray Parse_GameSLobbySlot_m_licenses()
+    {                             
+        var m_licenses = Parse_GameCLicenseArray();
+        return m_licenses;
     }
 
     public GameSLobbyState Parse_GameSLobbyState() 
@@ -6573,789 +7214,6 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
         return m_lobbyState;
     }
 
-    public GameSGameOptions_PublicBeta1 Parse_GameSGameOptions_PublicBeta1() 
-    {
-        Option<bool> m_lockTeams = Option.None;
-        Option<bool> m_teamsTogether = Option.None;
-        Option<bool> m_advancedSharedControl = Option.None;
-        Option<bool> m_randomRaces = Option.None;
-        Option<bool> m_amm = Option.None;
-        Option<bool> m_ranked = Option.None;
-        Option<bool> m_noVictoryOrDefeat = Option.None;
-        Option<GameEGameLaunch> m_launch = Option.None;
-        Option<GameEOptionFog> m_fog = Option.None;
-        Option<GameEOptionObservers> m_observers = Option.None;
-        Option<GameEOptionUserDifficulty> m_userDifficulty = Option.None;
-        if (m_lockTeams is { HasValue: false })                           
-        {
-            var parsed_m_lockTeams = Parse_GameSGameOptions_PublicBeta1_m_lockTeams();
-            m_lockTeams = Option.Some(parsed_m_lockTeams);
-        }
-
-        if (m_teamsTogether is { HasValue: false })                           
-        {
-            var parsed_m_teamsTogether = Parse_GameSGameOptions_PublicBeta1_m_teamsTogether();
-            m_teamsTogether = Option.Some(parsed_m_teamsTogether);
-        }
-
-        if (m_advancedSharedControl is { HasValue: false })                           
-        {
-            var parsed_m_advancedSharedControl = Parse_GameSGameOptions_PublicBeta1_m_advancedSharedControl();
-            m_advancedSharedControl = Option.Some(parsed_m_advancedSharedControl);
-        }
-
-        if (m_randomRaces is { HasValue: false })                           
-        {
-            var parsed_m_randomRaces = Parse_GameSGameOptions_PublicBeta1_m_randomRaces();
-            m_randomRaces = Option.Some(parsed_m_randomRaces);
-        }
-
-        if (m_amm is { HasValue: false })                           
-        {
-            var parsed_m_amm = Parse_GameSGameOptions_PublicBeta1_m_amm();
-            m_amm = Option.Some(parsed_m_amm);
-        }
-
-        if (m_ranked is { HasValue: false })                           
-        {
-            var parsed_m_ranked = Parse_GameSGameOptions_PublicBeta1_m_ranked();
-            m_ranked = Option.Some(parsed_m_ranked);
-        }
-
-        if (m_noVictoryOrDefeat is { HasValue: false })                           
-        {
-            var parsed_m_noVictoryOrDefeat = Parse_GameSGameOptions_PublicBeta1_m_noVictoryOrDefeat();
-            m_noVictoryOrDefeat = Option.Some(parsed_m_noVictoryOrDefeat);
-        }
-
-        if (m_launch is { HasValue: false })                           
-        {
-            var parsed_m_launch = Parse_GameSGameOptions_PublicBeta1_m_launch();
-            m_launch = Option.Some(parsed_m_launch);
-        }
-
-        if (m_fog is { HasValue: false })                           
-        {
-            var parsed_m_fog = Parse_GameSGameOptions_PublicBeta1_m_fog();
-            m_fog = Option.Some(parsed_m_fog);
-        }
-
-        if (m_observers is { HasValue: false })                           
-        {
-            var parsed_m_observers = Parse_GameSGameOptions_PublicBeta1_m_observers();
-            m_observers = Option.Some(parsed_m_observers);
-        }
-
-        if (m_userDifficulty is { HasValue: false })                           
-        {
-            var parsed_m_userDifficulty = Parse_GameSGameOptions_PublicBeta1_m_userDifficulty();
-            m_userDifficulty = Option.Some(parsed_m_userDifficulty);
-        }
-
-        return new GameSGameOptions_PublicBeta1
-        {   
-            m_lockTeams = Option.OkOrReturnMissingFieldErr(m_lockTeams),
-            m_teamsTogether = Option.OkOrReturnMissingFieldErr(m_teamsTogether),
-            m_advancedSharedControl = Option.OkOrReturnMissingFieldErr(m_advancedSharedControl),
-            m_randomRaces = Option.OkOrReturnMissingFieldErr(m_randomRaces),
-            m_amm = Option.OkOrReturnMissingFieldErr(m_amm),
-            m_ranked = Option.OkOrReturnMissingFieldErr(m_ranked),
-            m_noVictoryOrDefeat = Option.OkOrReturnMissingFieldErr(m_noVictoryOrDefeat),
-            m_launch = Option.OkOrReturnMissingFieldErr(m_launch),
-            m_fog = Option.OkOrReturnMissingFieldErr(m_fog),
-            m_observers = Option.OkOrReturnMissingFieldErr(m_observers),
-            m_userDifficulty = Option.OkOrReturnMissingFieldErr(m_userDifficulty),
-        };
-    }
-
-    public bool Parse_GameSGameOptions_PublicBeta1_m_lockTeams()
-    {                             
-        var m_lockTeams = parse_bool();
-        return m_lockTeams;
-    }
-
-    public bool Parse_GameSGameOptions_PublicBeta1_m_teamsTogether()
-    {                             
-        var m_teamsTogether = parse_bool();
-        return m_teamsTogether;
-    }
-
-    public bool Parse_GameSGameOptions_PublicBeta1_m_advancedSharedControl()
-    {                             
-        var m_advancedSharedControl = parse_bool();
-        return m_advancedSharedControl;
-    }
-
-    public bool Parse_GameSGameOptions_PublicBeta1_m_randomRaces()
-    {                             
-        var m_randomRaces = parse_bool();
-        return m_randomRaces;
-    }
-
-    public bool Parse_GameSGameOptions_PublicBeta1_m_amm()
-    {                             
-        var m_amm = parse_bool();
-        return m_amm;
-    }
-
-    public bool Parse_GameSGameOptions_PublicBeta1_m_ranked()
-    {                             
-        var m_ranked = parse_bool();
-        return m_ranked;
-    }
-
-    public bool Parse_GameSGameOptions_PublicBeta1_m_noVictoryOrDefeat()
-    {                             
-        var m_noVictoryOrDefeat = parse_bool();
-        return m_noVictoryOrDefeat;
-    }
-
-    public GameEGameLaunch Parse_GameSGameOptions_PublicBeta1_m_launch()
-    {                             
-        var m_launch = Parse_GameEGameLaunch();
-        return m_launch;
-    }
-
-    public GameEOptionFog Parse_GameSGameOptions_PublicBeta1_m_fog()
-    {                             
-        var m_fog = Parse_GameEOptionFog();
-        return m_fog;
-    }
-
-    public GameEOptionObservers Parse_GameSGameOptions_PublicBeta1_m_observers()
-    {                             
-        var m_observers = Parse_GameEOptionObservers();
-        return m_observers;
-    }
-
-    public GameEOptionUserDifficulty Parse_GameSGameOptions_PublicBeta1_m_userDifficulty()
-    {                             
-        var m_userDifficulty = Parse_GameEOptionUserDifficulty();
-        return m_userDifficulty;
-    }
-
-    public GameSGameDescription_PublicBeta1 Parse_GameSGameDescription_PublicBeta1() 
-    {
-        Option<uint32> m_randomValue = Option.None;
-        Option<GameCGameCacheName> m_gameCacheName = Option.None;
-        Option<GameSGameOptions_PublicBeta1> m_gameOptions = Option.None;
-        Option<GameEGameSpeed> m_gameSpeed = Option.None;
-        Option<GameEGameType> m_gameType = Option.None;
-        Option<TUserCount> m_maxUsers = Option.None;
-        Option<TUserCount> m_maxObservers = Option.None;
-        Option<GameTPlayerCount> m_maxPlayers = Option.None;
-        Option<GameTTeamCount> m_maxTeams = Option.None;
-        Option<GameTColorCount> m_maxColors = Option.None;
-        Option<TRaceCount> m_maxRaces = Option.None;
-        Option<GameTControlCount> m_maxControls = Option.None;
-        Option<uint8> m_mapSizeX = Option.None;
-        Option<uint8> m_mapSizeY = Option.None;
-        Option<GameTSyncChecksum> m_mapFileSyncChecksum = Option.None;
-        Option<CFilePath> m_mapFileName = Option.None;
-        Option<GameTSyncChecksum> m_modFileSyncChecksum = Option.None;
-        Option<CFilePath> m_saveFileName = Option.None;
-        Option<GameSSlotDescriptions> m_slotDescriptions = Option.None;
-        Option<GameTDifficulty> m_defaultDifficulty = Option.None;
-        Option<GameCCacheHandles> m_cacheHandles = Option.None;
-        if (m_randomValue is { HasValue: false })                           
-        {
-            var parsed_m_randomValue = Parse_GameSGameDescription_PublicBeta1_m_randomValue();
-            m_randomValue = Option.Some(parsed_m_randomValue);
-        }
-
-        if (m_gameCacheName is { HasValue: false })                           
-        {
-            var parsed_m_gameCacheName = Parse_GameSGameDescription_PublicBeta1_m_gameCacheName();
-            m_gameCacheName = Option.Some(parsed_m_gameCacheName);
-        }
-
-        if (m_gameOptions is { HasValue: false })                           
-        {
-            var parsed_m_gameOptions = Parse_GameSGameDescription_PublicBeta1_m_gameOptions();
-            m_gameOptions = Option.Some(parsed_m_gameOptions);
-        }
-
-        if (m_gameSpeed is { HasValue: false })                           
-        {
-            var parsed_m_gameSpeed = Parse_GameSGameDescription_PublicBeta1_m_gameSpeed();
-            m_gameSpeed = Option.Some(parsed_m_gameSpeed);
-        }
-
-        if (m_gameType is { HasValue: false })                           
-        {
-            var parsed_m_gameType = Parse_GameSGameDescription_PublicBeta1_m_gameType();
-            m_gameType = Option.Some(parsed_m_gameType);
-        }
-
-        if (m_maxUsers is { HasValue: false })                           
-        {
-            var parsed_m_maxUsers = Parse_GameSGameDescription_PublicBeta1_m_maxUsers();
-            m_maxUsers = Option.Some(parsed_m_maxUsers);
-        }
-
-        if (m_maxObservers is { HasValue: false })                           
-        {
-            var parsed_m_maxObservers = Parse_GameSGameDescription_PublicBeta1_m_maxObservers();
-            m_maxObservers = Option.Some(parsed_m_maxObservers);
-        }
-
-        if (m_maxPlayers is { HasValue: false })                           
-        {
-            var parsed_m_maxPlayers = Parse_GameSGameDescription_PublicBeta1_m_maxPlayers();
-            m_maxPlayers = Option.Some(parsed_m_maxPlayers);
-        }
-
-        if (m_maxTeams is { HasValue: false })                           
-        {
-            var parsed_m_maxTeams = Parse_GameSGameDescription_PublicBeta1_m_maxTeams();
-            m_maxTeams = Option.Some(parsed_m_maxTeams);
-        }
-
-        if (m_maxColors is { HasValue: false })                           
-        {
-            var parsed_m_maxColors = Parse_GameSGameDescription_PublicBeta1_m_maxColors();
-            m_maxColors = Option.Some(parsed_m_maxColors);
-        }
-
-        if (m_maxRaces is { HasValue: false })                           
-        {
-            var parsed_m_maxRaces = Parse_GameSGameDescription_PublicBeta1_m_maxRaces();
-            m_maxRaces = Option.Some(parsed_m_maxRaces);
-        }
-
-        if (m_maxControls is { HasValue: false })                           
-        {
-            var parsed_m_maxControls = Parse_GameSGameDescription_PublicBeta1_m_maxControls();
-            m_maxControls = Option.Some(parsed_m_maxControls);
-        }
-
-        if (m_mapSizeX is { HasValue: false })                           
-        {
-            var parsed_m_mapSizeX = Parse_GameSGameDescription_PublicBeta1_m_mapSizeX();
-            m_mapSizeX = Option.Some(parsed_m_mapSizeX);
-        }
-
-        if (m_mapSizeY is { HasValue: false })                           
-        {
-            var parsed_m_mapSizeY = Parse_GameSGameDescription_PublicBeta1_m_mapSizeY();
-            m_mapSizeY = Option.Some(parsed_m_mapSizeY);
-        }
-
-        if (m_mapFileSyncChecksum is { HasValue: false })                           
-        {
-            var parsed_m_mapFileSyncChecksum = Parse_GameSGameDescription_PublicBeta1_m_mapFileSyncChecksum();
-            m_mapFileSyncChecksum = Option.Some(parsed_m_mapFileSyncChecksum);
-        }
-
-        if (m_mapFileName is { HasValue: false })                           
-        {
-            var parsed_m_mapFileName = Parse_GameSGameDescription_PublicBeta1_m_mapFileName();
-            m_mapFileName = Option.Some(parsed_m_mapFileName);
-        }
-
-        if (m_modFileSyncChecksum is { HasValue: false })                           
-        {
-            var parsed_m_modFileSyncChecksum = Parse_GameSGameDescription_PublicBeta1_m_modFileSyncChecksum();
-            m_modFileSyncChecksum = Option.Some(parsed_m_modFileSyncChecksum);
-        }
-
-        if (m_saveFileName is { HasValue: false })                           
-        {
-            var parsed_m_saveFileName = Parse_GameSGameDescription_PublicBeta1_m_saveFileName();
-            m_saveFileName = Option.Some(parsed_m_saveFileName);
-        }
-
-        if (m_slotDescriptions is { HasValue: false })                           
-        {
-            var parsed_m_slotDescriptions = Parse_GameSGameDescription_PublicBeta1_m_slotDescriptions();
-            m_slotDescriptions = Option.Some(parsed_m_slotDescriptions);
-        }
-
-        if (m_defaultDifficulty is { HasValue: false })                           
-        {
-            var parsed_m_defaultDifficulty = Parse_GameSGameDescription_PublicBeta1_m_defaultDifficulty();
-            m_defaultDifficulty = Option.Some(parsed_m_defaultDifficulty);
-        }
-
-        if (m_cacheHandles is { HasValue: false })                           
-        {
-            var parsed_m_cacheHandles = Parse_GameSGameDescription_PublicBeta1_m_cacheHandles();
-            m_cacheHandles = Option.Some(parsed_m_cacheHandles);
-        }
-
-        return new GameSGameDescription_PublicBeta1
-        {   
-            m_randomValue = Option.OkOrReturnMissingFieldErr(m_randomValue),
-            m_gameCacheName = Option.OkOrReturnMissingFieldErr(m_gameCacheName),
-            m_gameOptions = Option.OkOrReturnMissingFieldErr(m_gameOptions),
-            m_gameSpeed = Option.OkOrReturnMissingFieldErr(m_gameSpeed),
-            m_gameType = Option.OkOrReturnMissingFieldErr(m_gameType),
-            m_maxUsers = Option.OkOrReturnMissingFieldErr(m_maxUsers),
-            m_maxObservers = Option.OkOrReturnMissingFieldErr(m_maxObservers),
-            m_maxPlayers = Option.OkOrReturnMissingFieldErr(m_maxPlayers),
-            m_maxTeams = Option.OkOrReturnMissingFieldErr(m_maxTeams),
-            m_maxColors = Option.OkOrReturnMissingFieldErr(m_maxColors),
-            m_maxRaces = Option.OkOrReturnMissingFieldErr(m_maxRaces),
-            m_maxControls = Option.OkOrReturnMissingFieldErr(m_maxControls),
-            m_mapSizeX = Option.OkOrReturnMissingFieldErr(m_mapSizeX),
-            m_mapSizeY = Option.OkOrReturnMissingFieldErr(m_mapSizeY),
-            m_mapFileSyncChecksum = Option.OkOrReturnMissingFieldErr(m_mapFileSyncChecksum),
-            m_mapFileName = Option.OkOrReturnMissingFieldErr(m_mapFileName),
-            m_modFileSyncChecksum = Option.OkOrReturnMissingFieldErr(m_modFileSyncChecksum),
-            m_saveFileName = Option.OkOrReturnMissingFieldErr(m_saveFileName),
-            m_slotDescriptions = Option.OkOrReturnMissingFieldErr(m_slotDescriptions),
-            m_defaultDifficulty = Option.OkOrReturnMissingFieldErr(m_defaultDifficulty),
-            m_cacheHandles = Option.OkOrReturnMissingFieldErr(m_cacheHandles),
-        };
-    }
-
-    public uint32 Parse_GameSGameDescription_PublicBeta1_m_randomValue()
-    {                             
-        var m_randomValue = Parse_uint32();
-        return m_randomValue;
-    }
-
-    public GameCGameCacheName Parse_GameSGameDescription_PublicBeta1_m_gameCacheName()
-    {                             
-        var m_gameCacheName = Parse_GameCGameCacheName();
-        return m_gameCacheName;
-    }
-
-    public GameSGameOptions_PublicBeta1 Parse_GameSGameDescription_PublicBeta1_m_gameOptions()
-    {                             
-        var m_gameOptions = Parse_GameSGameOptions_PublicBeta1();
-        return m_gameOptions;
-    }
-
-    public GameEGameSpeed Parse_GameSGameDescription_PublicBeta1_m_gameSpeed()
-    {                             
-        var m_gameSpeed = Parse_GameEGameSpeed();
-        return m_gameSpeed;
-    }
-
-    public GameEGameType Parse_GameSGameDescription_PublicBeta1_m_gameType()
-    {                             
-        var m_gameType = Parse_GameEGameType();
-        return m_gameType;
-    }
-
-    public TUserCount Parse_GameSGameDescription_PublicBeta1_m_maxUsers()
-    {                             
-        var m_maxUsers = Parse_TUserCount();
-        return m_maxUsers;
-    }
-
-    public TUserCount Parse_GameSGameDescription_PublicBeta1_m_maxObservers()
-    {                             
-        var m_maxObservers = Parse_TUserCount();
-        return m_maxObservers;
-    }
-
-    public GameTPlayerCount Parse_GameSGameDescription_PublicBeta1_m_maxPlayers()
-    {                             
-        var m_maxPlayers = Parse_GameTPlayerCount();
-        return m_maxPlayers;
-    }
-
-    public GameTTeamCount Parse_GameSGameDescription_PublicBeta1_m_maxTeams()
-    {                             
-        var m_maxTeams = Parse_GameTTeamCount();
-        return m_maxTeams;
-    }
-
-    public GameTColorCount Parse_GameSGameDescription_PublicBeta1_m_maxColors()
-    {                             
-        var m_maxColors = Parse_GameTColorCount();
-        return m_maxColors;
-    }
-
-    public TRaceCount Parse_GameSGameDescription_PublicBeta1_m_maxRaces()
-    {                             
-        var m_maxRaces = Parse_TRaceCount();
-        return m_maxRaces;
-    }
-
-    public GameTControlCount Parse_GameSGameDescription_PublicBeta1_m_maxControls()
-    {                             
-        var m_maxControls = Parse_GameTControlCount();
-        return m_maxControls;
-    }
-
-    public uint8 Parse_GameSGameDescription_PublicBeta1_m_mapSizeX()
-    {                             
-        var m_mapSizeX = Parse_uint8();
-        return m_mapSizeX;
-    }
-
-    public uint8 Parse_GameSGameDescription_PublicBeta1_m_mapSizeY()
-    {                             
-        var m_mapSizeY = Parse_uint8();
-        return m_mapSizeY;
-    }
-
-    public GameTSyncChecksum Parse_GameSGameDescription_PublicBeta1_m_mapFileSyncChecksum()
-    {                             
-        var m_mapFileSyncChecksum = Parse_GameTSyncChecksum();
-        return m_mapFileSyncChecksum;
-    }
-
-    public CFilePath Parse_GameSGameDescription_PublicBeta1_m_mapFileName()
-    {                             
-        var m_mapFileName = Parse_CFilePath();
-        return m_mapFileName;
-    }
-
-    public GameTSyncChecksum Parse_GameSGameDescription_PublicBeta1_m_modFileSyncChecksum()
-    {                             
-        var m_modFileSyncChecksum = Parse_GameTSyncChecksum();
-        return m_modFileSyncChecksum;
-    }
-
-    public CFilePath Parse_GameSGameDescription_PublicBeta1_m_saveFileName()
-    {                             
-        var m_saveFileName = Parse_CFilePath();
-        return m_saveFileName;
-    }
-
-    public GameSSlotDescriptions Parse_GameSGameDescription_PublicBeta1_m_slotDescriptions()
-    {                             
-        var m_slotDescriptions = Parse_GameSSlotDescriptions();
-        return m_slotDescriptions;
-    }
-
-    public GameTDifficulty Parse_GameSGameDescription_PublicBeta1_m_defaultDifficulty()
-    {                             
-        var m_defaultDifficulty = Parse_GameTDifficulty();
-        return m_defaultDifficulty;
-    }
-
-    public GameCCacheHandles Parse_GameSGameDescription_PublicBeta1_m_cacheHandles()
-    {                             
-        var m_cacheHandles = Parse_GameCCacheHandles();
-        return m_cacheHandles;
-    }
-
-    public GameSLobbySlot_PublicBeta1 Parse_GameSLobbySlot_PublicBeta1() 
-    {
-        Option<GameTControlId> m_control = Option.None;
-        var m_userId = Option.Some<Option<TUserId>>(Option.None);
-        Option<GameTTeamId> m_teamId = Option.None;
-        Option<GameTColorPreference> m_colorPref = Option.None;
-        Option<TRacePreference> m_racePref = Option.None;
-        Option<GameTDifficulty> m_difficulty = Option.None;
-        Option<GameTHandicap> m_handicap = Option.None;
-        Option<EObserve> m_observe = Option.None;
-        if (m_control is { HasValue: false })                           
-        {
-            var parsed_m_control = Parse_GameSLobbySlot_PublicBeta1_m_control();
-            m_control = Option.Some(parsed_m_control);
-        }
-
-        if (m_userId is { HasValue: true, Value.HasValue: false })
-        {
-            var parsed_m_userId = Parse_GameSLobbySlot_PublicBeta1_m_userId();
-            m_userId = Option.Some(parsed_m_userId);
-        }
-
-        if (m_teamId is { HasValue: false })                           
-        {
-            var parsed_m_teamId = Parse_GameSLobbySlot_PublicBeta1_m_teamId();
-            m_teamId = Option.Some(parsed_m_teamId);
-        }
-
-        if (m_colorPref is { HasValue: false })                           
-        {
-            var parsed_m_colorPref = Parse_GameSLobbySlot_PublicBeta1_m_colorPref();
-            m_colorPref = Option.Some(parsed_m_colorPref);
-        }
-
-        if (m_racePref is { HasValue: false })                           
-        {
-            var parsed_m_racePref = Parse_GameSLobbySlot_PublicBeta1_m_racePref();
-            m_racePref = Option.Some(parsed_m_racePref);
-        }
-
-        if (m_difficulty is { HasValue: false })                           
-        {
-            var parsed_m_difficulty = Parse_GameSLobbySlot_PublicBeta1_m_difficulty();
-            m_difficulty = Option.Some(parsed_m_difficulty);
-        }
-
-        if (m_handicap is { HasValue: false })                           
-        {
-            var parsed_m_handicap = Parse_GameSLobbySlot_PublicBeta1_m_handicap();
-            m_handicap = Option.Some(parsed_m_handicap);
-        }
-
-        if (m_observe is { HasValue: false })                           
-        {
-            var parsed_m_observe = Parse_GameSLobbySlot_PublicBeta1_m_observe();
-            m_observe = Option.Some(parsed_m_observe);
-        }
-
-        return new GameSLobbySlot_PublicBeta1
-        {   
-            m_control = Option.OkOrReturnMissingFieldErr(m_control),
-            m_userId = Option.OkOrReturnMissingFieldErr(m_userId),
-            m_teamId = Option.OkOrReturnMissingFieldErr(m_teamId),
-            m_colorPref = Option.OkOrReturnMissingFieldErr(m_colorPref),
-            m_racePref = Option.OkOrReturnMissingFieldErr(m_racePref),
-            m_difficulty = Option.OkOrReturnMissingFieldErr(m_difficulty),
-            m_handicap = Option.OkOrReturnMissingFieldErr(m_handicap),
-            m_observe = Option.OkOrReturnMissingFieldErr(m_observe),
-        };
-    }
-
-    public GameTControlId Parse_GameSLobbySlot_PublicBeta1_m_control()
-    {                             
-        var m_control = Parse_GameTControlId();
-        return m_control;
-    }
-
-    public Option<TUserId> Parse_GameSLobbySlot_PublicBeta1_m_userId()
-    {                             
-            var isProvided = parse_bool();
-
-            if (isProvided)
-            {
-                var res = Parse_TUserId();
-
-                return Option.Some(res);
-            }
-            else
-            {
-                return Option.None;
-            }
-    }
-
-    public GameTTeamId Parse_GameSLobbySlot_PublicBeta1_m_teamId()
-    {                             
-        var m_teamId = Parse_GameTTeamId();
-        return m_teamId;
-    }
-
-    public GameTColorPreference Parse_GameSLobbySlot_PublicBeta1_m_colorPref()
-    {                             
-        var m_colorPref = Parse_GameTColorPreference();
-        return m_colorPref;
-    }
-
-    public TRacePreference Parse_GameSLobbySlot_PublicBeta1_m_racePref()
-    {                             
-        var m_racePref = Parse_TRacePreference();
-        return m_racePref;
-    }
-
-    public GameTDifficulty Parse_GameSLobbySlot_PublicBeta1_m_difficulty()
-    {                             
-        var m_difficulty = Parse_GameTDifficulty();
-        return m_difficulty;
-    }
-
-    public GameTHandicap Parse_GameSLobbySlot_PublicBeta1_m_handicap()
-    {                             
-        var m_handicap = Parse_GameTHandicap();
-        return m_handicap;
-    }
-
-    public EObserve Parse_GameSLobbySlot_PublicBeta1_m_observe()
-    {                             
-        var m_observe = Parse_EObserve();
-        return m_observe;
-    }
-
-    public GameSLobbyState_PublicBeta1 Parse_GameSLobbyState_PublicBeta1() 
-    {
-        Option<GameEPhase> m_phase = Option.None;
-        Option<TUserCount> m_maxUsers = Option.None;
-        Option<TUserCount> m_maxObservers = Option.None;
-        Option<GameCLobbySlotArray_PublicBeta1> m_slots = Option.None;
-        Option<uint32> m_randomSeed = Option.None;
-        var m_hostUserId = Option.Some<Option<TUserId>>(Option.None);
-        Option<bool> m_isSinglePlayer = Option.None;
-        Option<uint32> m_gameDuration = Option.None;
-        Option<GameTDifficulty> m_defaultDifficulty = Option.None;
-        if (m_phase is { HasValue: false })                           
-        {
-            var parsed_m_phase = Parse_GameSLobbyState_PublicBeta1_m_phase();
-            m_phase = Option.Some(parsed_m_phase);
-        }
-
-        if (m_maxUsers is { HasValue: false })                           
-        {
-            var parsed_m_maxUsers = Parse_GameSLobbyState_PublicBeta1_m_maxUsers();
-            m_maxUsers = Option.Some(parsed_m_maxUsers);
-        }
-
-        if (m_maxObservers is { HasValue: false })                           
-        {
-            var parsed_m_maxObservers = Parse_GameSLobbyState_PublicBeta1_m_maxObservers();
-            m_maxObservers = Option.Some(parsed_m_maxObservers);
-        }
-
-        if (m_slots is { HasValue: false })                           
-        {
-            var parsed_m_slots = Parse_GameSLobbyState_PublicBeta1_m_slots();
-            m_slots = Option.Some(parsed_m_slots);
-        }
-
-        if (m_randomSeed is { HasValue: false })                           
-        {
-            var parsed_m_randomSeed = Parse_GameSLobbyState_PublicBeta1_m_randomSeed();
-            m_randomSeed = Option.Some(parsed_m_randomSeed);
-        }
-
-        if (m_hostUserId is { HasValue: true, Value.HasValue: false })
-        {
-            var parsed_m_hostUserId = Parse_GameSLobbyState_PublicBeta1_m_hostUserId();
-            m_hostUserId = Option.Some(parsed_m_hostUserId);
-        }
-
-        if (m_isSinglePlayer is { HasValue: false })                           
-        {
-            var parsed_m_isSinglePlayer = Parse_GameSLobbyState_PublicBeta1_m_isSinglePlayer();
-            m_isSinglePlayer = Option.Some(parsed_m_isSinglePlayer);
-        }
-
-        if (m_gameDuration is { HasValue: false })                           
-        {
-            var parsed_m_gameDuration = Parse_GameSLobbyState_PublicBeta1_m_gameDuration();
-            m_gameDuration = Option.Some(parsed_m_gameDuration);
-        }
-
-        if (m_defaultDifficulty is { HasValue: false })                           
-        {
-            var parsed_m_defaultDifficulty = Parse_GameSLobbyState_PublicBeta1_m_defaultDifficulty();
-            m_defaultDifficulty = Option.Some(parsed_m_defaultDifficulty);
-        }
-
-        return new GameSLobbyState_PublicBeta1
-        {   
-            m_phase = Option.OkOrReturnMissingFieldErr(m_phase),
-            m_maxUsers = Option.OkOrReturnMissingFieldErr(m_maxUsers),
-            m_maxObservers = Option.OkOrReturnMissingFieldErr(m_maxObservers),
-            m_slots = Option.OkOrReturnMissingFieldErr(m_slots),
-            m_randomSeed = Option.OkOrReturnMissingFieldErr(m_randomSeed),
-            m_hostUserId = Option.OkOrReturnMissingFieldErr(m_hostUserId),
-            m_isSinglePlayer = Option.OkOrReturnMissingFieldErr(m_isSinglePlayer),
-            m_gameDuration = Option.OkOrReturnMissingFieldErr(m_gameDuration),
-            m_defaultDifficulty = Option.OkOrReturnMissingFieldErr(m_defaultDifficulty),
-        };
-    }
-
-    public GameEPhase Parse_GameSLobbyState_PublicBeta1_m_phase()
-    {                             
-        var m_phase = Parse_GameEPhase();
-        return m_phase;
-    }
-
-    public TUserCount Parse_GameSLobbyState_PublicBeta1_m_maxUsers()
-    {                             
-        var m_maxUsers = Parse_TUserCount();
-        return m_maxUsers;
-    }
-
-    public TUserCount Parse_GameSLobbyState_PublicBeta1_m_maxObservers()
-    {                             
-        var m_maxObservers = Parse_TUserCount();
-        return m_maxObservers;
-    }
-
-    public GameCLobbySlotArray_PublicBeta1 Parse_GameSLobbyState_PublicBeta1_m_slots()
-    {                             
-        var m_slots = Parse_GameCLobbySlotArray_PublicBeta1();
-        return m_slots;
-    }
-
-    public uint32 Parse_GameSLobbyState_PublicBeta1_m_randomSeed()
-    {                             
-        var m_randomSeed = Parse_uint32();
-        return m_randomSeed;
-    }
-
-    public Option<TUserId> Parse_GameSLobbyState_PublicBeta1_m_hostUserId()
-    {                             
-            var isProvided = parse_bool();
-
-            if (isProvided)
-            {
-                var res = Parse_TUserId();
-
-                return Option.Some(res);
-            }
-            else
-            {
-                return Option.None;
-            }
-    }
-
-    public bool Parse_GameSLobbyState_PublicBeta1_m_isSinglePlayer()
-    {                             
-        var m_isSinglePlayer = parse_bool();
-        return m_isSinglePlayer;
-    }
-
-    public uint32 Parse_GameSLobbyState_PublicBeta1_m_gameDuration()
-    {                             
-        var m_gameDuration = Parse_uint32();
-        return m_gameDuration;
-    }
-
-    public GameTDifficulty Parse_GameSLobbyState_PublicBeta1_m_defaultDifficulty()
-    {                             
-        var m_defaultDifficulty = Parse_GameTDifficulty();
-        return m_defaultDifficulty;
-    }
-
-    public GameSLobbySyncState_PublicBeta1 Parse_GameSLobbySyncState_PublicBeta1() 
-    {
-        Option<CUserInitialDataArray> m_userInitialData = Option.None;
-        Option<GameSGameDescription_PublicBeta1> m_gameDescription = Option.None;
-        Option<GameSLobbyState_PublicBeta1> m_lobbyState = Option.None;
-        if (m_userInitialData is { HasValue: false })                           
-        {
-            var parsed_m_userInitialData = Parse_GameSLobbySyncState_PublicBeta1_m_userInitialData();
-            m_userInitialData = Option.Some(parsed_m_userInitialData);
-        }
-
-        if (m_gameDescription is { HasValue: false })                           
-        {
-            var parsed_m_gameDescription = Parse_GameSLobbySyncState_PublicBeta1_m_gameDescription();
-            m_gameDescription = Option.Some(parsed_m_gameDescription);
-        }
-
-        if (m_lobbyState is { HasValue: false })                           
-        {
-            var parsed_m_lobbyState = Parse_GameSLobbySyncState_PublicBeta1_m_lobbyState();
-            m_lobbyState = Option.Some(parsed_m_lobbyState);
-        }
-
-        return new GameSLobbySyncState_PublicBeta1
-        {   
-            m_userInitialData = Option.OkOrReturnMissingFieldErr(m_userInitialData),
-            m_gameDescription = Option.OkOrReturnMissingFieldErr(m_gameDescription),
-            m_lobbyState = Option.OkOrReturnMissingFieldErr(m_lobbyState),
-        };
-    }
-
-    public CUserInitialDataArray Parse_GameSLobbySyncState_PublicBeta1_m_userInitialData()
-    {                             
-        var m_userInitialData = Parse_CUserInitialDataArray();
-        return m_userInitialData;
-    }
-
-    public GameSGameDescription_PublicBeta1 Parse_GameSLobbySyncState_PublicBeta1_m_gameDescription()
-    {                             
-        var m_gameDescription = Parse_GameSGameDescription_PublicBeta1();
-        return m_gameDescription;
-    }
-
-    public GameSLobbyState_PublicBeta1 Parse_GameSLobbySyncState_PublicBeta1_m_lobbyState()
-    {                             
-        var m_lobbyState = Parse_GameSLobbyState_PublicBeta1();
-        return m_lobbyState;
-    }
-
     public GameSChatMessage Parse_GameSChatMessage() 
     {
         Option<GameEMessageRecipient> m_recipient = Option.None;
@@ -7447,6 +7305,13 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
         return m_progress;
     }
 
+    public GameSServerPingMessage Parse_GameSServerPingMessage() 
+    {
+        return new GameSServerPingMessage
+        {   
+        };
+    }
+
     public GameSSelectionDeltaSubgroup Parse_GameSSelectionDeltaSubgroup() 
     {
         Option<GameTUnitLink> m_unitLink = Option.None;
@@ -7494,13 +7359,6 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
     {                             
         var m_count = Parse_GameTSelectionCount();
         return m_count;
-    }
-
-    public GameSSelectionMask Parse_GameSSelectionMask() 
-    {
-        return new GameSSelectionMask
-        {   
-        };
     }
 
     public GameSSelectionDelta Parse_GameSSelectionDelta() 
@@ -8028,7 +7886,7 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
     public GameEEventId Parse_GameEEventId()
     {
         ValidateIntTag();
-        var numBits = 87;
+        var numBits = 89;
         var variantTag = parse_packed_int(0, numBits);
 
         switch (variantTag)
@@ -8113,12 +7971,19 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
             break;                  
             case 11:
             {                        
+                var res = Parse_GameSBankSignatureEvent();
+
+                return new GameEEventId_e_bankSignature(res);
+            }
+            break;                  
+            case 12:
+            {                        
                 var res = Parse_GameSUserOptionsEvent();
 
                 return new GameEEventId_e_userOptions(res);
             }
             break;                  
-            case 12:
+            case 13:
             {                        
                 var res = Parse_GameSTurnEvent();
 
@@ -8403,6 +8268,13 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
                 var res = Parse_GameSTriggerMouseClickedEvent();
 
                 return new GameEEventId_e_triggerMouseClicked(res);
+            }
+            break;                  
+            case 59:
+            {                        
+                var res = Parse_GameSTriggerMouseMovedEvent();
+
+                return new GameEEventId_e_triggerMoueMoved(res);
             }
             break;                  
             case 63:
@@ -8982,7 +8854,7 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
     public GameEMessageId Parse_GameEMessageId()
     {
         ValidateIntTag();
-        var numBits = 3;
+        var numBits = 4;
         var variantTag = parse_packed_int(0, numBits);
 
         switch (variantTag)
@@ -9007,6 +8879,13 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
                 var res = Parse_GameSLoadingProgressMessage();
 
                 return new GameEMessageId_e_loadingProgress(res);
+            }
+            break;                  
+            case 3:
+            {                        
+                var res = Parse_GameSServerPingMessage();
+
+                return new GameEMessageId_e_serverPing(res);
             }
             break;                  
             default:
@@ -9263,11 +9142,66 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
     }
     public GameTColorCount Parse_GameTColorCount()
     {
-        var offset = 1;
+        var offset = 0;
         var numBits = 6;
         var res = parse_packed_int(offset, numBits);
 
         return new GameTColorCount
+        {
+            Value = res
+        };
+    }
+    public GameTFixedInt Parse_GameTFixedInt()
+    {
+        var offset = -524288;
+        var numBits = 20;
+        var res = parse_packed_int(offset, numBits);
+
+        return new GameTFixedInt
+        {
+            Value = res
+        };
+    }
+    public GameTFixedUInt Parse_GameTFixedUInt()
+    {
+        var offset = 0;
+        var numBits = 19;
+        var res = parse_packed_int(offset, numBits);
+
+        return new GameTFixedUInt
+        {
+            Value = res
+        };
+    }
+    public GameTMapCoordFixedBits Parse_GameTMapCoordFixedBits()
+    {
+        var offset = 0;
+        var numBits = 20;
+        var res = parse_packed_int(offset, numBits);
+
+        return new GameTMapCoordFixedBits
+        {
+            Value = res
+        };
+    }
+    public GameTUICoordX Parse_GameTUICoordX()
+    {
+        var offset = 0;
+        var numBits = 11;
+        var res = parse_packed_int(offset, numBits);
+
+        return new GameTUICoordX
+        {
+            Value = res
+        };
+    }
+    public GameTUICoordY Parse_GameTUICoordY()
+    {
+        var offset = 0;
+        var numBits = 11;
+        var res = parse_packed_int(offset, numBits);
+
+        return new GameTUICoordY
         {
             Value = res
         };
@@ -9316,17 +9250,6 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
             Value = res
         };
     }
-    public GameTPlayerCount Parse_GameTPlayerCount()
-    {
-        var offset = 0;
-        var numBits = 4;
-        var res = parse_packed_int(offset, numBits);
-
-        return new GameTPlayerCount
-        {
-            Value = res
-        };
-    }
     public GameTLobbySlotCount Parse_GameTLobbySlotCount()
     {
         var offset = 0;
@@ -9356,6 +9279,17 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
         var res = parse_packed_int(offset, numBits);
 
         return new GameTPlayerId
+        {
+            Value = res
+        };
+    }
+    public GameTPlayerCount Parse_GameTPlayerCount()
+    {
+        var offset = 0;
+        var numBits = 5;
+        var res = parse_packed_int(offset, numBits);
+
+        return new GameTPlayerCount
         {
             Value = res
         };
@@ -9614,11 +9548,29 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
             Value = value,
         };
     }
-    public GameTReward Parse_GameTReward()
+    public GameTFixedMiniBits Parse_GameTFixedMiniBits()
     {
         var value = Parse_uint16();
 
+        return new GameTFixedMiniBits
+        {
+            Value = value,
+        };
+    }
+    public GameTReward Parse_GameTReward()
+    {
+        var value = Parse_uint32();
+
         return new GameTReward
+        {
+            Value = value,
+        };
+    }
+    public GameTLicense Parse_GameTLicense()
+    {
+        var value = Parse_uint32();
+
+        return new GameTLicense
         {
             Value = value,
         };
@@ -9710,6 +9662,18 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
             Value = value
         };
     }
+    public GameCLicenseArray Parse_GameCLicenseArray()
+    {
+        var arrayLengthNumBits = 8;
+        var arrayLength = parse_packed_int(0, arrayLengthNumBits);
+
+        var value = ReadList(Parse_GameTLicense, arrayLength);
+
+        return new GameCLicenseArray
+        {
+            Value = value
+        };
+    }
     public GameCLobbySlotArray Parse_GameCLobbySlotArray()
     {
         var arrayLengthNumBits = 4;
@@ -9722,21 +9686,21 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
             Value = value
         };
     }
-    public GameCLobbySlotArray_PublicBeta1 Parse_GameCLobbySlotArray_PublicBeta1()
+    public GameSelectionIndexArrayType Parse_GameSelectionIndexArrayType()
     {
-        var arrayLengthNumBits = 4;
+        var arrayLengthNumBits = 8;
         var arrayLength = parse_packed_int(0, arrayLengthNumBits);
 
-        var value = ReadList(Parse_GameSLobbySlot_PublicBeta1, arrayLength);
+        var value = ReadList(Parse_GameTSelectionIndex, arrayLength);
 
-        return new GameCLobbySlotArray_PublicBeta1
+        return new GameSelectionIndexArrayType
         {
             Value = value
         };
     }
     public CFilePath Parse_CFilePath()
     {
-        var strSizeNumBits = 10;
+        var strSizeNumBits = 11;
         var strSize = parse_packed_int(0, strSizeNumBits);
 
         byte_align();
@@ -9800,6 +9764,20 @@ public class ProtocolParser(BinaryReader reader) : ProtocolReader(reader)
         var value = take_bit_array(strSize * 8);
 
         return new GameCGameCacheName
+        {
+            Value = value
+        };
+    }
+    public GameCAuthorName Parse_GameCAuthorName()
+    {
+        var strSizeNumBits = 8;
+        var strSize = parse_packed_int(0, strSizeNumBits);
+
+        byte_align();
+
+        var value = take_bit_array(strSize * 8);
+
+        return new GameCAuthorName
         {
             Value = value
         };

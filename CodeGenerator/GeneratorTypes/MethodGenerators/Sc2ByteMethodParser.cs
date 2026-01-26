@@ -2,6 +2,7 @@
 using Sc2ReplayAnalyzer.Json.Generator;
 using System.Text;
 using System.Text.Json.Nodes;
+using System.Text.RegularExpressions;
 
 namespace Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes.MethodGenerators;
 
@@ -267,7 +268,7 @@ internal class Sc2ByteMethodParser(StringBuilder methodBuilder, Sc2GeneratorData
         {
             _fieldNameMethodBuilder.AppendLine($$"""
                         ValidateOptTag();
-                        var isProvided = ReadByte(); // nom::number::complete::u8(tail)
+                        var isProvided = ReadByte();
 
                         {{fieldType}} {{fieldName}} = default;
                         if (isProvided != 0)
@@ -285,13 +286,15 @@ internal class Sc2ByteMethodParser(StringBuilder methodBuilder, Sc2GeneratorData
                 if (fieldConverted.ShouldTryFrom)
                 {
                     _fieldNameMethodBuilder.AppendLine($$"""
-                            throw new Exception("WUT ELEMENT"); // "let array = array.iter().map(|val| <_>::try_from(*val)?).collect();\n",                                  
+                            {{fieldName}} = Option.Some(array.Select(x => ProtocolConversion<{{Sc2TypeUtils.GetUnwrappedOptionListTypeName(fieldConverted.CSharpType)}}>.From(x)).ToList());                                 
                 """);
                 }
-
-                _fieldNameMethodBuilder.AppendLine($$"""
+                else
+                {
+                    _fieldNameMethodBuilder.AppendLine($$"""
                             {{fieldName}} = Option.Some(array);
                 """);
+                }
             } 
             else
             {
@@ -303,13 +306,13 @@ internal class Sc2ByteMethodParser(StringBuilder methodBuilder, Sc2GeneratorData
                 if (fieldConverted.ShouldTryFrom)
                 {
                     _fieldNameMethodBuilder.AppendLine($$"""
-                        // "{{fieldName}} = Option.Some(res.TryFrom()); // RUSTIFICATION (tail, Some(<_>::try_from(res)?))\n"
+                            {{fieldName}} = Option.Some(ProtocolConversion<{{Sc2TypeUtils.GetUnwrappedOptionTypeName(fieldConverted.CSharpType)}}>.From(res));
                 """);
                 }
                 else
                 {
                     _fieldNameMethodBuilder.AppendLine($$"""
-                        //"  {{fieldName}} = Option.Some(res);          
+                            {{fieldName}} = Option.Some(res);          
                 """);
                 }
             }
@@ -329,16 +332,20 @@ internal class Sc2ByteMethodParser(StringBuilder methodBuilder, Sc2GeneratorData
             _fieldNameMethodBuilder.AppendLine($$"""
                         ValidateArrayTag();
                         var arrayLength = ParseVlqInt();
-                        var array = ReadArray({{fieldConverted.Parser}}, arrayLength);
+                        var array = ReadList({{fieldConverted.Parser}}, arrayLength);
 
                 """);
 
             if (fieldConverted.ShouldTryFrom)
             {
                 _fieldNameMethodBuilder.AppendLine($$"""
-                         // let array = array.iter().map(|val| <_>::try_from(*val)?).collect();
+                        array = array.Select(x => ProtocolConversion<int>.From(x)).ToList();
                 """);
             }
+
+            _fieldNameMethodBuilder.AppendLine($$"""
+                        return array;
+                """);
         }
         else if (fieldConverted.IsSizedInt)
         {
