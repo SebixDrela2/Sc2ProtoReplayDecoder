@@ -601,10 +601,27 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
         Option<List<byte>> m_file = Option.None;
         ValidateStructTag();
         var structFieldCount = ParseVlqInt();           
-        if (m_file is { HasValue: false })                           
+        for (var i = 0; i < structFieldCount; i++)
         {
-            var parsed_m_file = Parse_GameSThumbnail_m_file();
-            m_file = Option.Some(parsed_m_file);
+            var fieldTag = ParseVlqInt();
+    
+            switch (fieldTag)
+            {
+                case 0:
+                {
+                    if (m_file is { HasValue: false })                           
+                    {
+                        var parsed_m_file = Parse_GameSThumbnail_m_file();
+                        m_file = Option.Some(parsed_m_file);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+            }
         }
         return new GameSThumbnail
         {   
@@ -2604,15 +2621,41 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
         Option<ReplayTrackerSPlayerStats> m_stats = Option.None;
         ValidateStructTag();
         var structFieldCount = ParseVlqInt();           
-        if (m_playerId is { HasValue: false })                           
+        for (var i = 0; i < structFieldCount; i++)
         {
-            var parsed_m_playerId = Parse_ReplayTrackerSPlayerStatsEvent_m_playerId();
-            m_playerId = Option.Some(parsed_m_playerId);
-        }
-        if (m_stats is { HasValue: false })                           
-        {
-            var parsed_m_stats = Parse_ReplayTrackerSPlayerStatsEvent_m_stats();
-            m_stats = Option.Some(parsed_m_stats);
+            var fieldTag = ParseVlqInt();
+    
+            switch (fieldTag)
+            {
+                case 0:
+                {
+                    if (m_playerId is { HasValue: false })                           
+                    {
+                        var parsed_m_playerId = Parse_ReplayTrackerSPlayerStatsEvent_m_playerId();
+                        m_playerId = Option.Some(parsed_m_playerId);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 1:
+                {
+                    if (m_stats is { HasValue: false })                           
+                    {
+                        var parsed_m_stats = Parse_ReplayTrackerSPlayerStatsEvent_m_stats();
+                        m_stats = Option.Some(parsed_m_stats);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+            }
         }
         return new ReplayTrackerSPlayerStatsEvent
         {   
@@ -2645,55 +2688,153 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
         var m_creatorAbilityName = Option.Some<Option<List<byte>>>(Option.None);
         ValidateStructTag();
         var structFieldCount = ParseVlqInt();           
-        if (m_unitTagIndex is { HasValue: false })                           
+        for (var i = 0; i < structFieldCount; i++)
         {
-            var parsed_m_unitTagIndex = Parse_ReplayTrackerSUnitBornEvent_m_unitTagIndex();
-            m_unitTagIndex = Option.Some(parsed_m_unitTagIndex);
-        }
-        if (m_unitTagRecycle is { HasValue: false })                           
-        {
-            var parsed_m_unitTagRecycle = Parse_ReplayTrackerSUnitBornEvent_m_unitTagRecycle();
-            m_unitTagRecycle = Option.Some(parsed_m_unitTagRecycle);
-        }
-        if (m_unitTypeName is { HasValue: false })                           
-        {
-            var parsed_m_unitTypeName = Parse_ReplayTrackerSUnitBornEvent_m_unitTypeName();
-            m_unitTypeName = Option.Some(parsed_m_unitTypeName);
-        }
-        if (m_controlPlayerId is { HasValue: false })                           
-        {
-            var parsed_m_controlPlayerId = Parse_ReplayTrackerSUnitBornEvent_m_controlPlayerId();
-            m_controlPlayerId = Option.Some(parsed_m_controlPlayerId);
-        }
-        if (m_upkeepPlayerId is { HasValue: false })                           
-        {
-            var parsed_m_upkeepPlayerId = Parse_ReplayTrackerSUnitBornEvent_m_upkeepPlayerId();
-            m_upkeepPlayerId = Option.Some(parsed_m_upkeepPlayerId);
-        }
-        if (m_x is { HasValue: false })                           
-        {
-            var parsed_m_x = Parse_ReplayTrackerSUnitBornEvent_m_x();
-            m_x = Option.Some(parsed_m_x);
-        }
-        if (m_y is { HasValue: false })                           
-        {
-            var parsed_m_y = Parse_ReplayTrackerSUnitBornEvent_m_y();
-            m_y = Option.Some(parsed_m_y);
-        }
-        if (m_creatorUnitTagIndex is { HasValue: true, Value.HasValue: false })
-        {
-            var parsed_m_creatorUnitTagIndex = Parse_ReplayTrackerSUnitBornEvent_m_creatorUnitTagIndex();
-            m_creatorUnitTagIndex = Option.Some(parsed_m_creatorUnitTagIndex);
-        }
-        if (m_creatorUnitTagRecycle is { HasValue: true, Value.HasValue: false })
-        {
-            var parsed_m_creatorUnitTagRecycle = Parse_ReplayTrackerSUnitBornEvent_m_creatorUnitTagRecycle();
-            m_creatorUnitTagRecycle = Option.Some(parsed_m_creatorUnitTagRecycle);
-        }
-        if (m_creatorAbilityName is { HasValue: true, Value.HasValue: false })
-        {
-            var parsed_m_creatorAbilityName = Parse_ReplayTrackerSUnitBornEvent_m_creatorAbilityName();
-            m_creatorAbilityName = Option.Some(parsed_m_creatorAbilityName);
+            var fieldTag = ParseVlqInt();
+    
+            switch (fieldTag)
+            {
+                case 0:
+                {
+                    if (m_unitTagIndex is { HasValue: false })                           
+                    {
+                        var parsed_m_unitTagIndex = Parse_ReplayTrackerSUnitBornEvent_m_unitTagIndex();
+                        m_unitTagIndex = Option.Some(parsed_m_unitTagIndex);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 1:
+                {
+                    if (m_unitTagRecycle is { HasValue: false })                           
+                    {
+                        var parsed_m_unitTagRecycle = Parse_ReplayTrackerSUnitBornEvent_m_unitTagRecycle();
+                        m_unitTagRecycle = Option.Some(parsed_m_unitTagRecycle);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 2:
+                {
+                    if (m_unitTypeName is { HasValue: false })                           
+                    {
+                        var parsed_m_unitTypeName = Parse_ReplayTrackerSUnitBornEvent_m_unitTypeName();
+                        m_unitTypeName = Option.Some(parsed_m_unitTypeName);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 3:
+                {
+                    if (m_controlPlayerId is { HasValue: false })                           
+                    {
+                        var parsed_m_controlPlayerId = Parse_ReplayTrackerSUnitBornEvent_m_controlPlayerId();
+                        m_controlPlayerId = Option.Some(parsed_m_controlPlayerId);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 4:
+                {
+                    if (m_upkeepPlayerId is { HasValue: false })                           
+                    {
+                        var parsed_m_upkeepPlayerId = Parse_ReplayTrackerSUnitBornEvent_m_upkeepPlayerId();
+                        m_upkeepPlayerId = Option.Some(parsed_m_upkeepPlayerId);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 5:
+                {
+                    if (m_x is { HasValue: false })                           
+                    {
+                        var parsed_m_x = Parse_ReplayTrackerSUnitBornEvent_m_x();
+                        m_x = Option.Some(parsed_m_x);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 6:
+                {
+                    if (m_y is { HasValue: false })                           
+                    {
+                        var parsed_m_y = Parse_ReplayTrackerSUnitBornEvent_m_y();
+                        m_y = Option.Some(parsed_m_y);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 7:
+                {
+                    if (m_creatorUnitTagIndex is { HasValue: true, Value.HasValue: false })
+                    {
+                        var parsed_m_creatorUnitTagIndex = Parse_ReplayTrackerSUnitBornEvent_m_creatorUnitTagIndex();
+                        m_creatorUnitTagIndex = Option.Some(parsed_m_creatorUnitTagIndex);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 8:
+                {
+                    if (m_creatorUnitTagRecycle is { HasValue: true, Value.HasValue: false })
+                    {
+                        var parsed_m_creatorUnitTagRecycle = Parse_ReplayTrackerSUnitBornEvent_m_creatorUnitTagRecycle();
+                        m_creatorUnitTagRecycle = Option.Some(parsed_m_creatorUnitTagRecycle);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 9:
+                {
+                    if (m_creatorAbilityName is { HasValue: true, Value.HasValue: false })
+                    {
+                        var parsed_m_creatorAbilityName = Parse_ReplayTrackerSUnitBornEvent_m_creatorAbilityName();
+                        m_creatorAbilityName = Option.Some(parsed_m_creatorAbilityName);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+            }
         }
         return new ReplayTrackerSUnitBornEvent
         {   
@@ -2813,40 +2954,111 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
         var m_killerUnitTagRecycle = Option.Some<Option<uint>>(Option.None);
         ValidateStructTag();
         var structFieldCount = ParseVlqInt();           
-        if (m_unitTagIndex is { HasValue: false })                           
+        for (var i = 0; i < structFieldCount; i++)
         {
-            var parsed_m_unitTagIndex = Parse_ReplayTrackerSUnitDiedEvent_m_unitTagIndex();
-            m_unitTagIndex = Option.Some(parsed_m_unitTagIndex);
-        }
-        if (m_unitTagRecycle is { HasValue: false })                           
-        {
-            var parsed_m_unitTagRecycle = Parse_ReplayTrackerSUnitDiedEvent_m_unitTagRecycle();
-            m_unitTagRecycle = Option.Some(parsed_m_unitTagRecycle);
-        }
-        if (m_killerPlayerId is { HasValue: true, Value.HasValue: false })
-        {
-            var parsed_m_killerPlayerId = Parse_ReplayTrackerSUnitDiedEvent_m_killerPlayerId();
-            m_killerPlayerId = Option.Some(parsed_m_killerPlayerId);
-        }
-        if (m_x is { HasValue: false })                           
-        {
-            var parsed_m_x = Parse_ReplayTrackerSUnitDiedEvent_m_x();
-            m_x = Option.Some(parsed_m_x);
-        }
-        if (m_y is { HasValue: false })                           
-        {
-            var parsed_m_y = Parse_ReplayTrackerSUnitDiedEvent_m_y();
-            m_y = Option.Some(parsed_m_y);
-        }
-        if (m_killerUnitTagIndex is { HasValue: true, Value.HasValue: false })
-        {
-            var parsed_m_killerUnitTagIndex = Parse_ReplayTrackerSUnitDiedEvent_m_killerUnitTagIndex();
-            m_killerUnitTagIndex = Option.Some(parsed_m_killerUnitTagIndex);
-        }
-        if (m_killerUnitTagRecycle is { HasValue: true, Value.HasValue: false })
-        {
-            var parsed_m_killerUnitTagRecycle = Parse_ReplayTrackerSUnitDiedEvent_m_killerUnitTagRecycle();
-            m_killerUnitTagRecycle = Option.Some(parsed_m_killerUnitTagRecycle);
+            var fieldTag = ParseVlqInt();
+    
+            switch (fieldTag)
+            {
+                case 0:
+                {
+                    if (m_unitTagIndex is { HasValue: false })                           
+                    {
+                        var parsed_m_unitTagIndex = Parse_ReplayTrackerSUnitDiedEvent_m_unitTagIndex();
+                        m_unitTagIndex = Option.Some(parsed_m_unitTagIndex);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 1:
+                {
+                    if (m_unitTagRecycle is { HasValue: false })                           
+                    {
+                        var parsed_m_unitTagRecycle = Parse_ReplayTrackerSUnitDiedEvent_m_unitTagRecycle();
+                        m_unitTagRecycle = Option.Some(parsed_m_unitTagRecycle);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 2:
+                {
+                    if (m_killerPlayerId is { HasValue: true, Value.HasValue: false })
+                    {
+                        var parsed_m_killerPlayerId = Parse_ReplayTrackerSUnitDiedEvent_m_killerPlayerId();
+                        m_killerPlayerId = Option.Some(parsed_m_killerPlayerId);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 3:
+                {
+                    if (m_x is { HasValue: false })                           
+                    {
+                        var parsed_m_x = Parse_ReplayTrackerSUnitDiedEvent_m_x();
+                        m_x = Option.Some(parsed_m_x);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 4:
+                {
+                    if (m_y is { HasValue: false })                           
+                    {
+                        var parsed_m_y = Parse_ReplayTrackerSUnitDiedEvent_m_y();
+                        m_y = Option.Some(parsed_m_y);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 5:
+                {
+                    if (m_killerUnitTagIndex is { HasValue: true, Value.HasValue: false })
+                    {
+                        var parsed_m_killerUnitTagIndex = Parse_ReplayTrackerSUnitDiedEvent_m_killerUnitTagIndex();
+                        m_killerUnitTagIndex = Option.Some(parsed_m_killerUnitTagIndex);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 6:
+                {
+                    if (m_killerUnitTagRecycle is { HasValue: true, Value.HasValue: false })
+                    {
+                        var parsed_m_killerUnitTagRecycle = Parse_ReplayTrackerSUnitDiedEvent_m_killerUnitTagRecycle();
+                        m_killerUnitTagRecycle = Option.Some(parsed_m_killerUnitTagRecycle);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+            }
         }
         return new ReplayTrackerSUnitDiedEvent
         {   
@@ -2945,25 +3157,69 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
         Option<byte> m_upkeepPlayerId = Option.None;
         ValidateStructTag();
         var structFieldCount = ParseVlqInt();           
-        if (m_unitTagIndex is { HasValue: false })                           
+        for (var i = 0; i < structFieldCount; i++)
         {
-            var parsed_m_unitTagIndex = Parse_ReplayTrackerSUnitOwnerChangeEvent_m_unitTagIndex();
-            m_unitTagIndex = Option.Some(parsed_m_unitTagIndex);
-        }
-        if (m_unitTagRecycle is { HasValue: false })                           
-        {
-            var parsed_m_unitTagRecycle = Parse_ReplayTrackerSUnitOwnerChangeEvent_m_unitTagRecycle();
-            m_unitTagRecycle = Option.Some(parsed_m_unitTagRecycle);
-        }
-        if (m_controlPlayerId is { HasValue: false })                           
-        {
-            var parsed_m_controlPlayerId = Parse_ReplayTrackerSUnitOwnerChangeEvent_m_controlPlayerId();
-            m_controlPlayerId = Option.Some(parsed_m_controlPlayerId);
-        }
-        if (m_upkeepPlayerId is { HasValue: false })                           
-        {
-            var parsed_m_upkeepPlayerId = Parse_ReplayTrackerSUnitOwnerChangeEvent_m_upkeepPlayerId();
-            m_upkeepPlayerId = Option.Some(parsed_m_upkeepPlayerId);
+            var fieldTag = ParseVlqInt();
+    
+            switch (fieldTag)
+            {
+                case 0:
+                {
+                    if (m_unitTagIndex is { HasValue: false })                           
+                    {
+                        var parsed_m_unitTagIndex = Parse_ReplayTrackerSUnitOwnerChangeEvent_m_unitTagIndex();
+                        m_unitTagIndex = Option.Some(parsed_m_unitTagIndex);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 1:
+                {
+                    if (m_unitTagRecycle is { HasValue: false })                           
+                    {
+                        var parsed_m_unitTagRecycle = Parse_ReplayTrackerSUnitOwnerChangeEvent_m_unitTagRecycle();
+                        m_unitTagRecycle = Option.Some(parsed_m_unitTagRecycle);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 2:
+                {
+                    if (m_controlPlayerId is { HasValue: false })                           
+                    {
+                        var parsed_m_controlPlayerId = Parse_ReplayTrackerSUnitOwnerChangeEvent_m_controlPlayerId();
+                        m_controlPlayerId = Option.Some(parsed_m_controlPlayerId);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 3:
+                {
+                    if (m_upkeepPlayerId is { HasValue: false })                           
+                    {
+                        var parsed_m_upkeepPlayerId = Parse_ReplayTrackerSUnitOwnerChangeEvent_m_upkeepPlayerId();
+                        m_upkeepPlayerId = Option.Some(parsed_m_upkeepPlayerId);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+            }
         }
         return new ReplayTrackerSUnitOwnerChangeEvent
         {   
@@ -3001,20 +3257,55 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
         Option<List<byte>> m_unitTypeName = Option.None;
         ValidateStructTag();
         var structFieldCount = ParseVlqInt();           
-        if (m_unitTagIndex is { HasValue: false })                           
+        for (var i = 0; i < structFieldCount; i++)
         {
-            var parsed_m_unitTagIndex = Parse_ReplayTrackerSUnitTypeChangeEvent_m_unitTagIndex();
-            m_unitTagIndex = Option.Some(parsed_m_unitTagIndex);
-        }
-        if (m_unitTagRecycle is { HasValue: false })                           
-        {
-            var parsed_m_unitTagRecycle = Parse_ReplayTrackerSUnitTypeChangeEvent_m_unitTagRecycle();
-            m_unitTagRecycle = Option.Some(parsed_m_unitTagRecycle);
-        }
-        if (m_unitTypeName is { HasValue: false })                           
-        {
-            var parsed_m_unitTypeName = Parse_ReplayTrackerSUnitTypeChangeEvent_m_unitTypeName();
-            m_unitTypeName = Option.Some(parsed_m_unitTypeName);
+            var fieldTag = ParseVlqInt();
+    
+            switch (fieldTag)
+            {
+                case 0:
+                {
+                    if (m_unitTagIndex is { HasValue: false })                           
+                    {
+                        var parsed_m_unitTagIndex = Parse_ReplayTrackerSUnitTypeChangeEvent_m_unitTagIndex();
+                        m_unitTagIndex = Option.Some(parsed_m_unitTagIndex);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 1:
+                {
+                    if (m_unitTagRecycle is { HasValue: false })                           
+                    {
+                        var parsed_m_unitTagRecycle = Parse_ReplayTrackerSUnitTypeChangeEvent_m_unitTagRecycle();
+                        m_unitTagRecycle = Option.Some(parsed_m_unitTagRecycle);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 2:
+                {
+                    if (m_unitTypeName is { HasValue: false })                           
+                    {
+                        var parsed_m_unitTypeName = Parse_ReplayTrackerSUnitTypeChangeEvent_m_unitTypeName();
+                        m_unitTypeName = Option.Some(parsed_m_unitTypeName);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+            }
         }
         return new ReplayTrackerSUnitTypeChangeEvent
         {   
@@ -3046,20 +3337,55 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
         Option<int> m_count = Option.None;
         ValidateStructTag();
         var structFieldCount = ParseVlqInt();           
-        if (m_playerId is { HasValue: false })                           
+        for (var i = 0; i < structFieldCount; i++)
         {
-            var parsed_m_playerId = Parse_ReplayTrackerSUpgradeEvent_m_playerId();
-            m_playerId = Option.Some(parsed_m_playerId);
-        }
-        if (m_upgradeTypeName is { HasValue: false })                           
-        {
-            var parsed_m_upgradeTypeName = Parse_ReplayTrackerSUpgradeEvent_m_upgradeTypeName();
-            m_upgradeTypeName = Option.Some(parsed_m_upgradeTypeName);
-        }
-        if (m_count is { HasValue: false })                           
-        {
-            var parsed_m_count = Parse_ReplayTrackerSUpgradeEvent_m_count();
-            m_count = Option.Some(parsed_m_count);
+            var fieldTag = ParseVlqInt();
+    
+            switch (fieldTag)
+            {
+                case 0:
+                {
+                    if (m_playerId is { HasValue: false })                           
+                    {
+                        var parsed_m_playerId = Parse_ReplayTrackerSUpgradeEvent_m_playerId();
+                        m_playerId = Option.Some(parsed_m_playerId);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 1:
+                {
+                    if (m_upgradeTypeName is { HasValue: false })                           
+                    {
+                        var parsed_m_upgradeTypeName = Parse_ReplayTrackerSUpgradeEvent_m_upgradeTypeName();
+                        m_upgradeTypeName = Option.Some(parsed_m_upgradeTypeName);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 2:
+                {
+                    if (m_count is { HasValue: false })                           
+                    {
+                        var parsed_m_count = Parse_ReplayTrackerSUpgradeEvent_m_count();
+                        m_count = Option.Some(parsed_m_count);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+            }
         }
         return new ReplayTrackerSUpgradeEvent
         {   
@@ -3095,40 +3421,111 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
         Option<byte> m_y = Option.None;
         ValidateStructTag();
         var structFieldCount = ParseVlqInt();           
-        if (m_unitTagIndex is { HasValue: false })                           
+        for (var i = 0; i < structFieldCount; i++)
         {
-            var parsed_m_unitTagIndex = Parse_ReplayTrackerSUnitInitEvent_m_unitTagIndex();
-            m_unitTagIndex = Option.Some(parsed_m_unitTagIndex);
-        }
-        if (m_unitTagRecycle is { HasValue: false })                           
-        {
-            var parsed_m_unitTagRecycle = Parse_ReplayTrackerSUnitInitEvent_m_unitTagRecycle();
-            m_unitTagRecycle = Option.Some(parsed_m_unitTagRecycle);
-        }
-        if (m_unitTypeName is { HasValue: false })                           
-        {
-            var parsed_m_unitTypeName = Parse_ReplayTrackerSUnitInitEvent_m_unitTypeName();
-            m_unitTypeName = Option.Some(parsed_m_unitTypeName);
-        }
-        if (m_controlPlayerId is { HasValue: false })                           
-        {
-            var parsed_m_controlPlayerId = Parse_ReplayTrackerSUnitInitEvent_m_controlPlayerId();
-            m_controlPlayerId = Option.Some(parsed_m_controlPlayerId);
-        }
-        if (m_upkeepPlayerId is { HasValue: false })                           
-        {
-            var parsed_m_upkeepPlayerId = Parse_ReplayTrackerSUnitInitEvent_m_upkeepPlayerId();
-            m_upkeepPlayerId = Option.Some(parsed_m_upkeepPlayerId);
-        }
-        if (m_x is { HasValue: false })                           
-        {
-            var parsed_m_x = Parse_ReplayTrackerSUnitInitEvent_m_x();
-            m_x = Option.Some(parsed_m_x);
-        }
-        if (m_y is { HasValue: false })                           
-        {
-            var parsed_m_y = Parse_ReplayTrackerSUnitInitEvent_m_y();
-            m_y = Option.Some(parsed_m_y);
+            var fieldTag = ParseVlqInt();
+    
+            switch (fieldTag)
+            {
+                case 0:
+                {
+                    if (m_unitTagIndex is { HasValue: false })                           
+                    {
+                        var parsed_m_unitTagIndex = Parse_ReplayTrackerSUnitInitEvent_m_unitTagIndex();
+                        m_unitTagIndex = Option.Some(parsed_m_unitTagIndex);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 1:
+                {
+                    if (m_unitTagRecycle is { HasValue: false })                           
+                    {
+                        var parsed_m_unitTagRecycle = Parse_ReplayTrackerSUnitInitEvent_m_unitTagRecycle();
+                        m_unitTagRecycle = Option.Some(parsed_m_unitTagRecycle);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 2:
+                {
+                    if (m_unitTypeName is { HasValue: false })                           
+                    {
+                        var parsed_m_unitTypeName = Parse_ReplayTrackerSUnitInitEvent_m_unitTypeName();
+                        m_unitTypeName = Option.Some(parsed_m_unitTypeName);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 3:
+                {
+                    if (m_controlPlayerId is { HasValue: false })                           
+                    {
+                        var parsed_m_controlPlayerId = Parse_ReplayTrackerSUnitInitEvent_m_controlPlayerId();
+                        m_controlPlayerId = Option.Some(parsed_m_controlPlayerId);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 4:
+                {
+                    if (m_upkeepPlayerId is { HasValue: false })                           
+                    {
+                        var parsed_m_upkeepPlayerId = Parse_ReplayTrackerSUnitInitEvent_m_upkeepPlayerId();
+                        m_upkeepPlayerId = Option.Some(parsed_m_upkeepPlayerId);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 5:
+                {
+                    if (m_x is { HasValue: false })                           
+                    {
+                        var parsed_m_x = Parse_ReplayTrackerSUnitInitEvent_m_x();
+                        m_x = Option.Some(parsed_m_x);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 6:
+                {
+                    if (m_y is { HasValue: false })                           
+                    {
+                        var parsed_m_y = Parse_ReplayTrackerSUnitInitEvent_m_y();
+                        m_y = Option.Some(parsed_m_y);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+            }
         }
         return new ReplayTrackerSUnitInitEvent
         {   
@@ -3183,15 +3580,41 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
         Option<uint> m_unitTagRecycle = Option.None;
         ValidateStructTag();
         var structFieldCount = ParseVlqInt();           
-        if (m_unitTagIndex is { HasValue: false })                           
+        for (var i = 0; i < structFieldCount; i++)
         {
-            var parsed_m_unitTagIndex = Parse_ReplayTrackerSUnitDoneEvent_m_unitTagIndex();
-            m_unitTagIndex = Option.Some(parsed_m_unitTagIndex);
-        }
-        if (m_unitTagRecycle is { HasValue: false })                           
-        {
-            var parsed_m_unitTagRecycle = Parse_ReplayTrackerSUnitDoneEvent_m_unitTagRecycle();
-            m_unitTagRecycle = Option.Some(parsed_m_unitTagRecycle);
+            var fieldTag = ParseVlqInt();
+    
+            switch (fieldTag)
+            {
+                case 0:
+                {
+                    if (m_unitTagIndex is { HasValue: false })                           
+                    {
+                        var parsed_m_unitTagIndex = Parse_ReplayTrackerSUnitDoneEvent_m_unitTagIndex();
+                        m_unitTagIndex = Option.Some(parsed_m_unitTagIndex);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 1:
+                {
+                    if (m_unitTagRecycle is { HasValue: false })                           
+                    {
+                        var parsed_m_unitTagRecycle = Parse_ReplayTrackerSUnitDoneEvent_m_unitTagRecycle();
+                        m_unitTagRecycle = Option.Some(parsed_m_unitTagRecycle);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+            }
         }
         return new ReplayTrackerSUnitDoneEvent
         {   
@@ -3216,15 +3639,41 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
         Option<List<int>> m_items = Option.None;
         ValidateStructTag();
         var structFieldCount = ParseVlqInt();           
-        if (m_firstUnitIndex is { HasValue: false })                           
+        for (var i = 0; i < structFieldCount; i++)
         {
-            var parsed_m_firstUnitIndex = Parse_ReplayTrackerSUnitPositionsEvent_m_firstUnitIndex();
-            m_firstUnitIndex = Option.Some(parsed_m_firstUnitIndex);
-        }
-        if (m_items is { HasValue: false })                           
-        {
-            var parsed_m_items = Parse_ReplayTrackerSUnitPositionsEvent_m_items();
-            m_items = Option.Some(parsed_m_items);
+            var fieldTag = ParseVlqInt();
+    
+            switch (fieldTag)
+            {
+                case 0:
+                {
+                    if (m_firstUnitIndex is { HasValue: false })                           
+                    {
+                        var parsed_m_firstUnitIndex = Parse_ReplayTrackerSUnitPositionsEvent_m_firstUnitIndex();
+                        m_firstUnitIndex = Option.Some(parsed_m_firstUnitIndex);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 1:
+                {
+                    if (m_items is { HasValue: false })                           
+                    {
+                        var parsed_m_items = Parse_ReplayTrackerSUnitPositionsEvent_m_items();
+                        m_items = Option.Some(parsed_m_items);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+            }
         }
         return new ReplayTrackerSUnitPositionsEvent
         {   
@@ -3255,25 +3704,69 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
         var m_slotId = Option.Some<Option<uint>>(Option.None);
         ValidateStructTag();
         var structFieldCount = ParseVlqInt();           
-        if (m_playerId is { HasValue: false })                           
+        for (var i = 0; i < structFieldCount; i++)
         {
-            var parsed_m_playerId = Parse_ReplayTrackerSPlayerSetupEvent_m_playerId();
-            m_playerId = Option.Some(parsed_m_playerId);
-        }
-        if (m_type is { HasValue: false })                           
-        {
-            var parsed_m_type = Parse_ReplayTrackerSPlayerSetupEvent_m_type();
-            m_type = Option.Some(parsed_m_type);
-        }
-        if (m_userId is { HasValue: true, Value.HasValue: false })
-        {
-            var parsed_m_userId = Parse_ReplayTrackerSPlayerSetupEvent_m_userId();
-            m_userId = Option.Some(parsed_m_userId);
-        }
-        if (m_slotId is { HasValue: true, Value.HasValue: false })
-        {
-            var parsed_m_slotId = Parse_ReplayTrackerSPlayerSetupEvent_m_slotId();
-            m_slotId = Option.Some(parsed_m_slotId);
+            var fieldTag = ParseVlqInt();
+    
+            switch (fieldTag)
+            {
+                case 0:
+                {
+                    if (m_playerId is { HasValue: false })                           
+                    {
+                        var parsed_m_playerId = Parse_ReplayTrackerSPlayerSetupEvent_m_playerId();
+                        m_playerId = Option.Some(parsed_m_playerId);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 1:
+                {
+                    if (m_type is { HasValue: false })                           
+                    {
+                        var parsed_m_type = Parse_ReplayTrackerSPlayerSetupEvent_m_type();
+                        m_type = Option.Some(parsed_m_type);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 2:
+                {
+                    if (m_userId is { HasValue: true, Value.HasValue: false })
+                    {
+                        var parsed_m_userId = Parse_ReplayTrackerSPlayerSetupEvent_m_userId();
+                        m_userId = Option.Some(parsed_m_userId);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+                case 3:
+                {
+                    if (m_slotId is { HasValue: true, Value.HasValue: false })
+                    {
+                        var parsed_m_slotId = Parse_ReplayTrackerSPlayerSetupEvent_m_slotId();
+                        m_slotId = Option.Some(parsed_m_slotId);
+                        continue;
+                    }
+                    else
+                    {
+                        throw new Exception("Duplicate tag!");
+                    }
+                }
+                break;
+            }
         }
         return new ReplayTrackerSPlayerSetupEvent
         {   

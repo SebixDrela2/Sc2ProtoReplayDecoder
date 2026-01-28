@@ -3,6 +3,20 @@ using System.Numerics;
 
 namespace Sc2ReplayAnalyzer.Json.Global;
 
+using u8 = byte;
+using i8 = sbyte;
+using u16 = ushort;
+using i16 = short;
+using u32 = uint;
+using i32 = int;
+using u64 = ulong;
+using i64 = long;
+using f16 = Half;
+using f32 = float;
+using f64 = double;
+using usize = nuint;
+using ssize = nint;
+
 public struct Option<T>
 {
     public bool HasValue;
@@ -13,6 +27,9 @@ public struct Option<T>
         HasValue = true,
         Value = value
     };
+
+    public readonly T DefaultIfNone(T defaultValue) => HasValue ? Value : defaultValue;
+    public readonly T DefaultIfNone() => default;
 
     public readonly void Deconstruct(out bool hasValue, out T value) => (hasValue, value) = (HasValue, Value);
 
@@ -26,7 +43,7 @@ public static class Option
     {
         if (!option.HasValue)
         {
-            throw new Exception("TO DO.");
+            return default;
         }
 
         return option.Value;
@@ -303,6 +320,24 @@ public abstract class VersionedProtocolParserImpl(BinaryReader reader) : Protoco
     {
         return reader.ReadBytes(length).ToList();
     }
+
+    public string DebugView => GetDebugView();
+    public int BytePosition => (int)reader.BaseStream.Position;
+    public int RustSize => (int)reader.BaseStream.Length - BytePosition;
+
+    private string GetDebugView()
+    {
+        var pos = reader.BaseStream.Position;
+
+        var backing = (int)Math.Min(8, reader.BaseStream.Position);
+        reader.BaseStream.Position -= backing;
+
+        var value = reader.ReadBytes(16);
+
+        reader.BaseStream.Position = pos;
+
+        return $"BytePos: {BytePosition} {string.Join(" ", value[..backing].Select(x => $"{x,3}"))} * {string.Join(" ", value[backing..].Select(x => $"{x,3}"))}";
+    }
 }
 
 public abstract class ProtocolReaderBase(BinaryReader reader)
@@ -335,8 +370,19 @@ public abstract class ProtocolReaderBase(BinaryReader reader)
     protected T[] ReadArray<T>(Func<T> parseMethod, long count) =>
         [.. Enumerable.Range(0, (int)count).Select(_ => parseMethod())];
 
-    protected List<T> ReadList<T>(Func<T> parseMethod, long count) =>
-        [.. Enumerable.Range(0, (int)count).Select(_ => parseMethod())];
+    protected List<T> ReadList<T>(Func<T> parseMethod, long count)
+    {
+        var result = new List<T>();
+
+        for (var i = 0; i < count; ++i)
+        {
+            var methodResult = parseMethod();
+
+            result.Add(methodResult);
+        }
+
+        return result;
+    }
 
     private void ValidateTag(byte tag)
     {

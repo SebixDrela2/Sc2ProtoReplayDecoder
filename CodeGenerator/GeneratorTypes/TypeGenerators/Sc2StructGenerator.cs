@@ -1,5 +1,6 @@
 ﻿using Sc2ReplayAnalyzer.Json.Generator;
 using System.Text;
+using System.Text.Json;
 using System.Text.Json.Nodes;
 
 namespace Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes.TypeGenerators;
@@ -17,9 +18,17 @@ internal class Sc2StructGenerator(StringBuilder builder, Sc2GeneratorData data)
         foreach (var node in structNodes)
         {
             var unitTypeName = node[FullName].ToString();
+
+            var typeName = Sc2TypeUtils.GetTypeName(unitTypeName);          
             var unitType = node[TypeInfo][Type].ToString();
             var fields = node[TypeInfo][Fields].AsArray();
             var hasTags = fields.Count > 1 && fields[0][Tag] is not null;
+
+            if (typeof(T) == typeof(Sc2TypeConversionByteAligned))
+            {
+                hasTags = !(fields.Count is 1 && fields[0][Tag].GetValueKind() == JsonValueKind.Null);
+            }
+
             var methodParser = GetMethodParser<T>();
 
             if (OpenClass(unitTypeName))

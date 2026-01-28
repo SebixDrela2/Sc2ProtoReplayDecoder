@@ -33,8 +33,8 @@ public class Sc2ReplayDecoder(string path)
     {
         using var reader = new BinaryReader(new MemoryStream(_listingFiles["replay.details"]));
 
-        var bitPackedParser = new BitPackedProtocolParser(reader);
-        var gameEvents = bitPackedParser.Parse_GameSDetails();
+        var versionedParser = new VersionedProtocolParser(reader);
+        var gameEvents = versionedParser.Parse_GameSDetails();
     }
 
     private void ParseGameEvents()
