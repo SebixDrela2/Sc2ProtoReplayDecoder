@@ -13394,7 +13394,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public CFilePath Parse_CFilePath()
     {
-        var strSizeNumBits = 11;
+        var strSizeNumBits = 10;
         var strSize = parse_packed_int(0, strSizeNumBits);
 
         byte_align();
@@ -13408,7 +13408,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public CUserName Parse_CUserName()
     {
-        var strSizeNumBits = 8;
+        var strSizeNumBits = 7;
         var strSize = parse_packed_int(0, strSizeNumBits);
 
         byte_align();
@@ -13422,7 +13422,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public CClanTag Parse_CClanTag()
     {
-        var strSizeNumBits = 8;
+        var strSizeNumBits = 7;
         var strSize = parse_packed_int(0, strSizeNumBits);
 
         byte_align();
@@ -13436,7 +13436,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public CHeroHandle Parse_CHeroHandle()
     {
-        var strSizeNumBits = 10;
+        var strSizeNumBits = 9;
         var strSize = parse_packed_int(0, strSizeNumBits);
 
         byte_align();
@@ -13450,7 +13450,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public CSkinHandle Parse_CSkinHandle()
     {
-        var strSizeNumBits = 10;
+        var strSizeNumBits = 9;
         var strSize = parse_packed_int(0, strSizeNumBits);
 
         byte_align();
@@ -13464,7 +13464,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public CMountHandle Parse_CMountHandle()
     {
-        var strSizeNumBits = 10;
+        var strSizeNumBits = 9;
         var strSize = parse_packed_int(0, strSizeNumBits);
 
         byte_align();
@@ -13478,7 +13478,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public CArtifactHandle Parse_CArtifactHandle()
     {
-        var strSizeNumBits = 10;
+        var strSizeNumBits = 9;
         var strSize = parse_packed_int(0, strSizeNumBits);
 
         byte_align();
@@ -13492,7 +13492,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public CToonHandle Parse_CToonHandle()
     {
-        var strSizeNumBits = 7;
+        var strSizeNumBits = 6;
         var strSize = parse_packed_int(0, strSizeNumBits);
 
         byte_align();
@@ -13506,7 +13506,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public CCommanderHandle Parse_CCommanderHandle()
     {
-        var strSizeNumBits = 10;
+        var strSizeNumBits = 9;
         var strSize = parse_packed_int(0, strSizeNumBits);
 
         byte_align();
@@ -13520,7 +13520,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public GameCCheatString Parse_GameCCheatString()
     {
-        var strSizeNumBits = 11;
+        var strSizeNumBits = 10;
         var strSize = parse_packed_int(0, strSizeNumBits);
 
         byte_align();
@@ -13534,7 +13534,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public GameCTriggerChatMessageString Parse_GameCTriggerChatMessageString()
     {
-        var strSizeNumBits = 11;
+        var strSizeNumBits = 10;
         var strSize = parse_packed_int(0, strSizeNumBits);
 
         byte_align();
@@ -13548,7 +13548,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public GameCGameCacheName Parse_GameCGameCacheName()
     {
-        var strSizeNumBits = 11;
+        var strSizeNumBits = 10;
         var strSize = parse_packed_int(0, strSizeNumBits);
 
         byte_align();
@@ -13562,7 +13562,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public GameCAuthorName Parse_GameCAuthorName()
     {
-        var strSizeNumBits = 8;
+        var strSizeNumBits = 7;
         var strSize = parse_packed_int(0, strSizeNumBits);
 
         byte_align();
@@ -13576,7 +13576,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public GameTFlexLicenseName Parse_GameTFlexLicenseName()
     {
-        var strSizeNumBits = 8;
+        var strSizeNumBits = 7;
         var strSize = parse_packed_int(0, strSizeNumBits);
 
         byte_align();
@@ -13590,7 +13590,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public GameTFlexLicenseAttributeName Parse_GameTFlexLicenseAttributeName()
     {
-        var strSizeNumBits = 8;
+        var strSizeNumBits = 7;
         var strSize = parse_packed_int(0, strSizeNumBits);
 
         byte_align();
@@ -13604,7 +13604,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public GameTFlexLicenseAttributeValue Parse_GameTFlexLicenseAttributeValue()
     {
-        var strSizeNumBits = 11;
+        var strSizeNumBits = 10;
         var strSize = parse_packed_int(0, strSizeNumBits);
 
         byte_align();
@@ -13618,7 +13618,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public GameCChatString Parse_GameCChatString()
     {
-        var strSizeNumBits = 11;
+        var strSizeNumBits = 10;
         var strSize = parse_packed_int(0, strSizeNumBits);
 
         byte_align();

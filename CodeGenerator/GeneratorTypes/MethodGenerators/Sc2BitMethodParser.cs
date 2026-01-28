@@ -53,12 +53,17 @@ internal class Sc2BitMethodParser(StringBuilder methodBuilder, Sc2GeneratorData 
         var typeName = Sc2TypeUtils.GetTypeName(unitTypeName);
         var res = int.Parse(bounds[Max][EValue].ToString());
 
-        if (bounds[Max][Inclusive] is { } inclusiveBounds)
+        if (typeName == "CSkinHandle")
+        {
+
+        }
+
+        if (bounds[Max][Inclusive] is { } inclusiveBounds && inclusiveBounds.GetValue<bool>())
         {
             res += 1;
         }
 
-        var stringSizeNumBits = ((long)Math.Floor((Math.Log2(res) + 1))) + 2;
+        var stringSizeNumBits = Math.Floor(Math.Log2(res) + 1) + 1;
 
         _generalMethodBuilder.AppendLine($$"""
                 public {{typeName}} Parse_{{typeName}}()

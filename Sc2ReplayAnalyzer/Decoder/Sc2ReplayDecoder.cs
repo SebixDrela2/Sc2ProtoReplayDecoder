@@ -25,12 +25,17 @@ public class Sc2ReplayDecoder(string path)
 
         _listingFiles = mpqArchive.ListingFiles;
 
+        var time = Stopwatch.StartNew();
+
         ParseMetaData();
         ParseReplayInitData();
         ParseMessageEvents();
         ParseReplayDetails();
         ParseTrackerEvents();
         ParseGameEvents();
+
+        time.Stop();
+        Console.WriteLine($"total time parse: {time}");
     }
 
     private void ParseMetaData()
@@ -128,8 +133,14 @@ public class Sc2ReplayDecoder(string path)
     private GameEventTriplet ParseGameEventTriplet(BitPackedProtocolParser bitPackedParser)
     {
         var delta = bitPackedParser.Parse_SVarUint32();
+        Console.WriteLine(DebugLines(bitPackedParser));
+        _operation++;
         var gameUserID = bitPackedParser.Parse_ReplaySGameUserId();
+        Console.WriteLine(DebugLines(bitPackedParser));
+        _operation++;
         var eventID = bitPackedParser.Parse_GameEEventId();
+        Console.WriteLine(DebugLines(bitPackedParser));
+        _operation++;
 
         var realDelta = delta switch
         {
@@ -141,7 +152,7 @@ public class Sc2ReplayDecoder(string path)
         };
 
         bitPackedParser.byte_align();
-
+        _counter++;
         return new GameEventTriplet
         {
             Delta = realDelta,
