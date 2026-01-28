@@ -149,11 +149,11 @@ internal class Sc2BitMethodParser(StringBuilder methodBuilder, Sc2GeneratorData 
                 """);
     }
 
-    public void OpenChoice(string unitTypeName, int numFields)
+    public void OpenChoice(string unitTypeName, int numFields, int? boundsLength)
     {
         var methodCtorBuilder = new StringBuilder();
         var typeName = Sc2TypeUtils.GetTypeName(unitTypeName);
-        var numBits = Math.Ceiling(Math.Log2(numFields));
+        var numBits = boundsLength ?? Math.Ceiling(Math.Log2(numFields));
 
         _parserBuilder.AppendLine();
         _parserBuilder.AppendLine($$"""

@@ -1,4 +1,5 @@
 ﻿using Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes.TypeGenerators;
+using System.Numerics;
 using System.Text.Json.Nodes;
 
 namespace Sc2ReplayAnalyzer.CodeGenerator;
@@ -147,21 +148,52 @@ public class Sc2TypeConversionBitPacked : ISc2JsonTypeConversionAlignment
     }
 
 
-     public static long BoundsMaxValueToBitSize(JsonNode bounds)
-     {       
-        var res = double.Parse(bounds[Max][EValue].ToString());
+     public static int BoundsMaxValueToBitSize(JsonNode bounds)
+     {
+        //var res = double.Parse(bounds[Max][EValue].ToString());
 
-        if (!bool.Parse(bounds[Min][Inclusive].ToString()))
+        //if (!bool.Parse(bounds[Min][Inclusive].ToString()))
+        //{
+        //    res -= 1;
+        //}
+
+        //if (!bool.Parse(bounds[Max][Inclusive].ToString()))
+        //{
+        //    res -= 1;
+        //}
+
+        //return (long)Math.Floor(Math.Log(res, 2) + 1);
+
+        if (bounds[Type].ToString() is "ExactConstraint")
         {
-            res -= 1;
+            return 0;
         }
 
-        if (!bool.Parse(bounds[Max][Inclusive].ToString()))
+        if (bounds[Type].ToString() is not "MinMaxConstraint")
         {
-            res -= 1;
+            throw new InvalidOperationException("WUT CONSTRAINT.");
         }
 
-        return (long)Math.Floor(Math.Log(res, 2) + 1);
+        var min = ulong.Parse(bounds[Min][EValue].ToString());
+        var max = ulong.Parse(bounds[Max][EValue].ToString());
+
+        var minInclusive = bounds[Min][Inclusive].GetValue<bool>();
+        var maxInclusive = bounds[Max][Inclusive].GetValue<bool>();
+
+        ulong length = max;
+        //length -= min;
+
+        if (!maxInclusive)
+        {
+            length -= 1;
+        }
+
+        //if (!minInclusive)
+        //{
+        //    length -= 1;
+        //}
+
+        return 64 - BitOperations.LeadingZeroCount(length);
     }
 
     private static Sc2JsonTypeConversion GetEnclosedFieldConverted(JsonNode field, string typeInfoType)

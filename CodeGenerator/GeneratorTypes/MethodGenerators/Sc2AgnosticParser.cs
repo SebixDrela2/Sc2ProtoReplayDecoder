@@ -33,11 +33,10 @@ internal class Sc2AgnosticParser(StringBuilder methodBuilder, Sc2GeneratorData d
                 """);
     }
 
-    public void OpenEnum<T>(string unitTypeName, int numFields)
+    public void OpenEnum<T>(string unitTypeName, int numFields, int? boundsLength)
         where T : ISc2JsonTypeConversionAlignment
     {
         var typeName = Sc2TypeUtils.GetTypeName(unitTypeName);
-        var numBits = (int)Math.Ceiling(Math.Log2(numFields)); 
 
         if (typeof(T) == typeof(Sc2TypeConversionByteAligned))
         {
@@ -54,6 +53,13 @@ internal class Sc2AgnosticParser(StringBuilder methodBuilder, Sc2GeneratorData d
         }
         else if (typeof(T) == typeof(Sc2TypeConversionBitPacked))
         {
+            var numBits = boundsLength ?? (int)Math.Ceiling(Math.Log2(numFields));
+
+            if (typeName == "GameEMessageId")
+            {
+                numBits += 1;
+            }
+
             _generalMethodBuilder.AppendLine($$"""
                     public {{typeName}} Parse_{{typeName}}()
                     {

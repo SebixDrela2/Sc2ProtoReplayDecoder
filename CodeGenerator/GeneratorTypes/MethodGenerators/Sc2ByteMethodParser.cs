@@ -54,7 +54,7 @@ internal class Sc2ByteMethodParser(StringBuilder methodBuilder, Sc2GeneratorData
                 """);
     }
 
-    public void OpenChoice(string unitTypeName, int numBits)
+    public void OpenChoice(string unitTypeName, int numBits, int? boundsLength)
     {
         var methodCtorBuilder = new StringBuilder();
         var typeName = Sc2TypeUtils.GetTypeName(unitTypeName);

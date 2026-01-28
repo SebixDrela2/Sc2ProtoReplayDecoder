@@ -20,10 +20,15 @@ internal class Sc2ChoiceGenerator(StringBuilder builder, Sc2GeneratorData data)
         {
             var variantArray = node[TypeInfo][Fields].AsArray();
             var unitTypeFullName = node[FullName]?.ToString() ?? node[Name].ToString();
+            var bounds = node[TypeInfo][Bounds];
+
+            int? boundsLength = bounds is { } 
+                ? Sc2TypeConversionBitPacked.BoundsMaxValueToBitSize(bounds) 
+                : null;
 
             if (OpenChoice(unitTypeFullName))
             {
-                methodParser.OpenChoice(unitTypeFullName, variantArray.Count);
+                methodParser.OpenChoice(unitTypeFullName, variantArray.Count, boundsLength);
 
                 foreach (var variant in variantArray)
                 {

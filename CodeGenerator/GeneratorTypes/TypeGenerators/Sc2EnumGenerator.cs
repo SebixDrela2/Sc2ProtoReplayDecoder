@@ -20,10 +20,12 @@ internal class Sc2EnumGenerator(StringBuilder builder, Sc2GeneratorData data)
             var methodParser = GetAgnosticMethodParser();
 
             if (AddInterfaceEnum(fullName))
-            {           
+            {
                 var variantArray = node[TypeInfo][Fields].AsArray();
+                var bounds = node[TypeInfo][Bounds];
 
-                methodParser.OpenEnum<T>(fullName, variantArray.Count);
+                int? boundsLength = bounds is { } ? Sc2TypeConversionBitPacked.BoundsMaxValueToBitSize(bounds) : null;
+                methodParser.OpenEnum<T>(fullName, variantArray.Count, boundsLength);
 
                 foreach (var variant in variantArray)
                 {
