@@ -24,17 +24,17 @@ public class Sc2ReplayDecoder(string path)
 
         _listingFiles = mpqArchive.ListingFiles;
 
-        ParseReplayEvents();
-        //ParseTrackerEvents(trackerListingFile);
-        //ParseGameEvents(trackerListingFile);
+        ParseReplayDetails();
+        ParseTrackerEvents();
+        ParseGameEvents();
     }
 
-    private void ParseReplayEvents()
+    private void ParseReplayDetails()
     {
         using var reader = new BinaryReader(new MemoryStream(_listingFiles["replay.details"]));
 
         var versionedParser = new VersionedProtocolParser(reader);
-        var gameEvents = versionedParser.Parse_GameSDetails();
+        var replayDetails = versionedParser.Parse_GameSDetails();
     }
 
     private void ParseGameEvents()
@@ -55,8 +55,6 @@ public class Sc2ReplayDecoder(string path)
     {
         using var reader = new BinaryReader(new MemoryStream(_listingFiles["replay.tracker.events"]));
         var versionedParser = new VersionedProtocolParser(reader);
-
-        var count = 0;
 
         while (reader.BaseStream.Position < reader.BaseStream.Length)
         {

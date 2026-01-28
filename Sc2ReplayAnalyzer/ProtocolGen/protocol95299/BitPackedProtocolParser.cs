@@ -309,7 +309,7 @@ public class SVersion
 public class SMD5
 {
     public Option<List<uint8>> m_dataDeprecated;
-    public List<byte> m_data;
+    public List<u8> m_data;
 }
 
 // NNet.Game.TColorPreference
@@ -322,7 +322,7 @@ public class GameTColorPreference
 public class GameSCmdAbil
 {
     public GameTAbilLink m_abilLink;
-    public long m_abilCmdIndex;
+    public i64 m_abilCmdIndex;
     public Option<uint8> m_abilCmdData;
 }
 
@@ -365,29 +365,29 @@ public class GameSDropOurselvesEvent
 // NNet.Game.SBankFileEvent
 public class GameSBankFileEvent
 {
-    public List<byte> m_name;
+    public List<u8> m_name;
 }
 
 // NNet.Game.SBankSectionEvent
 public class GameSBankSectionEvent
 {
-    public List<byte> m_name;
+    public List<u8> m_name;
 }
 
 // NNet.Game.SBankKeyEvent
 public class GameSBankKeyEvent
 {
-    public List<byte> m_name;
+    public List<u8> m_name;
     public uint32 m_type;
-    public List<byte> m_data;
+    public List<u8> m_data;
 }
 
 // NNet.Game.SBankValueEvent
 public class GameSBankValueEvent
 {
     public uint32 m_type;
-    public List<byte> m_name;
-    public List<byte> m_data;
+    public List<u8> m_name;
+    public List<u8> m_data;
 }
 
 // NNet.Game.SBankSignatureEvent
@@ -413,7 +413,7 @@ public class GameSUserOptionsEvent
     public uint32 m_baseBuildNum;
     public uint32 m_buildNum;
     public uint32 m_versionFlags;
-    public List<byte> m_hotkeyProfile;
+    public List<u8> m_hotkeyProfile;
 }
 
 // NNet.Game.SPickMapTagEvent
@@ -446,7 +446,7 @@ public class GameSTurnEvent
 // NNet.Game.SCameraSaveEvent
 public class GameSCameraSaveEvent
 {
-    public long m_which;
+    public i64 m_which;
     public GameSPointMini m_target;
 }
 
@@ -491,8 +491,8 @@ public class GameSSaveGameEvent
     public CFilePath m_fileName;
     public bool m_automatic;
     public bool m_overwrite;
-    public List<byte> m_name;
-    public List<byte> m_description;
+    public List<u8> m_name;
+    public List<u8> m_description;
 }
 
 // NNet.Game.SSaveGameDoneEvent
@@ -535,10 +535,10 @@ public class GameSGameCheatEvent
 // NNet.Game.SCmdEvent
 public class GameSCmdEvent
 {
-    public long m_cmdFlags;
+    public i64 m_cmdFlags;
     public Option<GameSCmdAbil> m_abil;
     public GameSCmdData m_data;
-    public long m_sequence;
+    public i64 m_sequence;
     public Option<GameTUnitTag> m_otherUnit;
     public Option<uint32> m_unitGroup;
 }
@@ -830,7 +830,7 @@ public class GameSTriggerHotkeyPressedEvent
 public class GameSTriggerTargetModeUpdateEvent
 {
     public GameTAbilLink m_abilLink;
-    public long m_abilCmdIndex;
+    public i64 m_abilCmdIndex;
     public int8 m_state;
 }
 
@@ -985,7 +985,7 @@ public class GameSTriggerPortraitLoadedEvent
 // NNet.Game.STriggerMovieFunctionEvent
 public class GameSTriggerMovieFunctionEvent
 {
-    public List<byte> m_functionName;
+    public List<u8> m_functionName;
 }
 
 // NNet.Game.STriggerCustomDialogDismissedEvent
@@ -1034,7 +1034,7 @@ public class GameSTriggerGameCreditsFinishedEvent
 public class GameSTriggerCutsceneBookmarkFiredEvent
 {
     public int32 m_cutsceneId;
-    public List<byte> m_bookmarkName;
+    public List<u8> m_bookmarkName;
 }
 
 // NNet.Game.STriggerCutsceneEndSceneFiredEvent
@@ -1047,15 +1047,15 @@ public class GameSTriggerCutsceneEndSceneFiredEvent
 public class GameSTriggerCutsceneConversationLineEvent
 {
     public int32 m_cutsceneId;
-    public List<byte> m_conversationLine;
-    public List<byte> m_altConversationLine;
+    public List<u8> m_conversationLine;
+    public List<u8> m_altConversationLine;
 }
 
 // NNet.Game.STriggerCutsceneConversationLineMissingEvent
 public class GameSTriggerCutsceneConversationLineMissingEvent
 {
     public int32 m_cutsceneId;
-    public List<byte> m_conversationLine;
+    public List<u8> m_conversationLine;
 }
 
 // NNet.Game.SGameUserLeaveEvent
@@ -1080,7 +1080,7 @@ public class GameSGameUserJoinEvent
 public class GameSCommandManagerStateEvent
 {
     public GameECommandManagerState m_state;
-    public Option<long> m_sequence;
+    public Option<i64> m_sequence;
 }
 
 // NNet.Game.SCmdUpdateTargetPointEvent
@@ -1100,8 +1100,8 @@ public class GameSCatalogModifyEvent
 {
     public uint8 m_catalog;
     public uint16 m_entry;
-    public List<byte> m_field;
-    public List<byte> m_value;
+    public List<u8> m_field;
+    public List<u8> m_value;
 }
 
 // NNet.Game.SHeroTalentTreeSelectedEvent
@@ -1212,7 +1212,7 @@ public class GameSSyncSoundLength
 // NNet.Game.SThumbnail
 public class GameSThumbnail
 {
-    public List<byte> m_file;
+    public List<u8> m_file;
 }
 
 // NNet.Game.SColor
@@ -1228,9 +1228,9 @@ public class GameSColor
 public class GameSToonNameDetails
 {
     public uint8 m_region;
-    public List<byte> m_programId;
+    public List<u8> m_programId;
     public uint32 m_realm;
-    public List<byte> m_name;
+    public List<u8> m_name;
     public uint64 m_id;
 }
 
@@ -1239,7 +1239,7 @@ public class GameSPlayerDetails
 {
     public CUserName m_name;
     public GameSToonNameDetails m_toon;
-    public List<byte> m_race;
+    public List<u8> m_race;
     public GameSColor m_color;
     public GameTControlId m_control;
     public GameTTeamId m_teamId;
@@ -1247,22 +1247,22 @@ public class GameSPlayerDetails
     public EObserve m_observe;
     public GameEResultDetails m_result;
     public Option<uint8> m_workingSetSlotId;
-    public List<byte> m_hero;
+    public List<u8> m_hero;
 }
 
 // NNet.Game.SDetails
 public class GameSDetails
 {
     public Option<GameCPlayerDetailsArray> m_playerList;
-    public List<byte> m_title;
-    public List<byte> m_difficulty;
+    public List<u8> m_title;
+    public List<u8> m_difficulty;
     public GameSThumbnail m_thumbnail;
     public bool m_isBlizzardMap;
     public int64 m_timeUTC;
     public int64 m_timeLocalOffset;
     public Option<bool> m_restartAsTransitionMap;
     public bool m_disableRecoverGame;
-    public List<byte> m_description;
+    public List<u8> m_description;
     public CFilePath m_imageFilePath;
     public uint8 m_campaignIndex;
     public CFilePath m_mapFileName;
@@ -1487,7 +1487,7 @@ public class ReplaySInitData
 // NNet.Replay.SGameUserId
 public class ReplaySGameUserId
 {
-    public long m_userId;
+    public i64 m_userId;
 }
 
 // NNet.EObserve
@@ -3579,7 +3579,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     public SMD5 Parse_SMD5() 
     {
         var m_dataDeprecated = Option.Some<Option<List<uint8>>>(Option.None);
-        Option<List<byte>> m_data = Option.None;
+        Option<List<u8>> m_data = Option.None;
         if (m_dataDeprecated is { HasValue: true, Value.HasValue: false })
         {
             var parsed_m_dataDeprecated = Parse_SMD5_m_dataDeprecated();
@@ -3618,10 +3618,10 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
             }
     }
 
-    public List<byte> Parse_SMD5_m_data()
+    public List<u8> Parse_SMD5_m_data()
     {                             
         var arrayLength = take_n_bits_into_i64(5);
-        var array = new List<byte>();
+        var array = new List<u8>();
 
         for (var i = 0 ; i < arrayLength ; ++i)
         {
@@ -3665,7 +3665,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     public GameSCmdAbil Parse_GameSCmdAbil() 
     {
         Option<GameTAbilLink> m_abilLink = Option.None;
-        Option<long> m_abilCmdIndex = Option.None;
+        Option<i64> m_abilCmdIndex = Option.None;
         var m_abilCmdData = Option.Some<Option<uint8>>(Option.None);
         if (m_abilLink is { HasValue: false })                           
         {
@@ -3699,7 +3699,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         return m_abilLink;
     }
 
-    public long Parse_GameSCmdAbil_m_abilCmdIndex()
+    public i64 Parse_GameSCmdAbil_m_abilCmdIndex()
     {                             
         var m_abilCmdIndex = parse_packed_int(0, 5);
         return m_abilCmdIndex;
@@ -3932,7 +3932,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
 
     public GameSBankFileEvent Parse_GameSBankFileEvent() 
     {
-        Option<List<byte>> m_name = Option.None;
+        Option<List<u8>> m_name = Option.None;
         if (m_name is { HasValue: false })                           
         {
             var parsed_m_name = Parse_GameSBankFileEvent_m_name();
@@ -3945,10 +3945,10 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         };
     }
 
-    public List<byte> Parse_GameSBankFileEvent_m_name()
+    public List<u8> Parse_GameSBankFileEvent_m_name()
     {                             
         var arrayLength = take_n_bits_into_i64(7);
-        var array = new List<byte>();
+        var array = new List<u8>();
 
         for (var i = 0 ; i < arrayLength ; ++i)
         {
@@ -3960,7 +3960,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
 
     public GameSBankSectionEvent Parse_GameSBankSectionEvent() 
     {
-        Option<List<byte>> m_name = Option.None;
+        Option<List<u8>> m_name = Option.None;
         if (m_name is { HasValue: false })                           
         {
             var parsed_m_name = Parse_GameSBankSectionEvent_m_name();
@@ -3973,10 +3973,10 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         };
     }
 
-    public List<byte> Parse_GameSBankSectionEvent_m_name()
+    public List<u8> Parse_GameSBankSectionEvent_m_name()
     {                             
         var arrayLength = take_n_bits_into_i64(6);
-        var array = new List<byte>();
+        var array = new List<u8>();
 
         for (var i = 0 ; i < arrayLength ; ++i)
         {
@@ -3988,9 +3988,9 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
 
     public GameSBankKeyEvent Parse_GameSBankKeyEvent() 
     {
-        Option<List<byte>> m_name = Option.None;
+        Option<List<u8>> m_name = Option.None;
         Option<uint32> m_type = Option.None;
-        Option<List<byte>> m_data = Option.None;
+        Option<List<u8>> m_data = Option.None;
         if (m_name is { HasValue: false })                           
         {
             var parsed_m_name = Parse_GameSBankKeyEvent_m_name();
@@ -4017,10 +4017,10 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         };
     }
 
-    public List<byte> Parse_GameSBankKeyEvent_m_name()
+    public List<u8> Parse_GameSBankKeyEvent_m_name()
     {                             
         var arrayLength = take_n_bits_into_i64(6);
-        var array = new List<byte>();
+        var array = new List<u8>();
 
         for (var i = 0 ; i < arrayLength ; ++i)
         {
@@ -4036,10 +4036,10 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         return m_type;
     }
 
-    public List<byte> Parse_GameSBankKeyEvent_m_data()
+    public List<u8> Parse_GameSBankKeyEvent_m_data()
     {                             
         var arrayLength = take_n_bits_into_i64(5);
-        var array = new List<byte>();
+        var array = new List<u8>();
 
         for (var i = 0 ; i < arrayLength ; ++i)
         {
@@ -4052,8 +4052,8 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     public GameSBankValueEvent Parse_GameSBankValueEvent() 
     {
         Option<uint32> m_type = Option.None;
-        Option<List<byte>> m_name = Option.None;
-        Option<List<byte>> m_data = Option.None;
+        Option<List<u8>> m_name = Option.None;
+        Option<List<u8>> m_data = Option.None;
         if (m_type is { HasValue: false })                           
         {
             var parsed_m_type = Parse_GameSBankValueEvent_m_type();
@@ -4086,10 +4086,10 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         return m_type;
     }
 
-    public List<byte> Parse_GameSBankValueEvent_m_name()
+    public List<u8> Parse_GameSBankValueEvent_m_name()
     {                             
         var arrayLength = take_n_bits_into_i64(6);
-        var array = new List<byte>();
+        var array = new List<u8>();
 
         for (var i = 0 ; i < arrayLength ; ++i)
         {
@@ -4099,10 +4099,10 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         return array;
     }
 
-    public List<byte> Parse_GameSBankValueEvent_m_data()
+    public List<u8> Parse_GameSBankValueEvent_m_data()
     {                             
         var arrayLength = take_n_bits_into_i64(10);
-        var array = new List<byte>();
+        var array = new List<u8>();
 
         for (var i = 0 ; i < arrayLength ; ++i)
         {
@@ -4169,7 +4169,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         Option<uint32> m_baseBuildNum = Option.None;
         Option<uint32> m_buildNum = Option.None;
         Option<uint32> m_versionFlags = Option.None;
-        Option<List<byte>> m_hotkeyProfile = Option.None;
+        Option<List<u8>> m_hotkeyProfile = Option.None;
         if (m_gameFullyDownloaded is { HasValue: false })                           
         {
             var parsed_m_gameFullyDownloaded = Parse_GameSUserOptionsEvent_m_gameFullyDownloaded();
@@ -4351,10 +4351,10 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         return m_versionFlags;
     }
 
-    public List<byte> Parse_GameSUserOptionsEvent_m_hotkeyProfile()
+    public List<u8> Parse_GameSUserOptionsEvent_m_hotkeyProfile()
     {                             
         var arrayLength = take_n_bits_into_i64(7);
-        var array = new List<byte>();
+        var array = new List<u8>();
 
         for (var i = 0 ; i < arrayLength ; ++i)
         {
@@ -4429,7 +4429,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
 
     public GameSCameraSaveEvent Parse_GameSCameraSaveEvent() 
     {
-        Option<long> m_which = Option.None;
+        Option<i64> m_which = Option.None;
         Option<GameSPointMini> m_target = Option.None;
         if (m_which is { HasValue: false })                           
         {
@@ -4450,7 +4450,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         };
     }
 
-    public long Parse_GameSCameraSaveEvent_m_which()
+    public i64 Parse_GameSCameraSaveEvent_m_which()
     {                             
         var m_which = parse_packed_int(0, 3);
         return m_which;
@@ -4589,8 +4589,8 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         Option<CFilePath> m_fileName = Option.None;
         Option<bool> m_automatic = Option.None;
         Option<bool> m_overwrite = Option.None;
-        Option<List<byte>> m_name = Option.None;
-        Option<List<byte>> m_description = Option.None;
+        Option<List<u8>> m_name = Option.None;
+        Option<List<u8>> m_description = Option.None;
         if (m_fileName is { HasValue: false })                           
         {
             var parsed_m_fileName = Parse_GameSSaveGameEvent_m_fileName();
@@ -4649,10 +4649,10 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         return m_overwrite;
     }
 
-    public List<byte> Parse_GameSSaveGameEvent_m_name()
+    public List<u8> Parse_GameSSaveGameEvent_m_name()
     {                             
         var arrayLength = take_n_bits_into_i64(6);
-        var array = new List<byte>();
+        var array = new List<u8>();
 
         for (var i = 0 ; i < arrayLength ; ++i)
         {
@@ -4662,10 +4662,10 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         return array;
     }
 
-    public List<byte> Parse_GameSSaveGameEvent_m_description()
+    public List<u8> Parse_GameSSaveGameEvent_m_description()
     {                             
         var arrayLength = take_n_bits_into_i64(9);
-        var array = new List<byte>();
+        var array = new List<u8>();
 
         for (var i = 0 ; i < arrayLength ; ++i)
         {
@@ -4817,10 +4817,10 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
 
     public GameSCmdEvent Parse_GameSCmdEvent() 
     {
-        Option<long> m_cmdFlags = Option.None;
+        Option<i64> m_cmdFlags = Option.None;
         var m_abil = Option.Some<Option<GameSCmdAbil>>(Option.None);
         Option<GameSCmdData> m_data = Option.None;
-        Option<long> m_sequence = Option.None;
+        Option<i64> m_sequence = Option.None;
         var m_otherUnit = Option.Some<Option<GameTUnitTag>>(Option.None);
         var m_unitGroup = Option.Some<Option<uint32>>(Option.None);
         if (m_cmdFlags is { HasValue: false })                           
@@ -4870,7 +4870,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         };
     }
 
-    public long Parse_GameSCmdEvent_m_cmdFlags()
+    public i64 Parse_GameSCmdEvent_m_cmdFlags()
     {                             
         var m_cmdFlags = parse_packed_int(0, 27);
         return m_cmdFlags;
@@ -4898,7 +4898,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         return m_data;
     }
 
-    public long Parse_GameSCmdEvent_m_sequence()
+    public i64 Parse_GameSCmdEvent_m_sequence()
     {                             
         var m_sequence = parse_packed_int(1, 32);
         return m_sequence;
@@ -6565,7 +6565,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     public GameSTriggerTargetModeUpdateEvent Parse_GameSTriggerTargetModeUpdateEvent() 
     {
         Option<GameTAbilLink> m_abilLink = Option.None;
-        Option<long> m_abilCmdIndex = Option.None;
+        Option<i64> m_abilCmdIndex = Option.None;
         Option<int8> m_state = Option.None;
         if (m_abilLink is { HasValue: false })                           
         {
@@ -6599,7 +6599,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         return m_abilLink;
     }
 
-    public long Parse_GameSTriggerTargetModeUpdateEvent_m_abilCmdIndex()
+    public i64 Parse_GameSTriggerTargetModeUpdateEvent_m_abilCmdIndex()
     {                             
         var m_abilCmdIndex = parse_packed_int(0, 5);
         return m_abilCmdIndex;
@@ -7064,7 +7064,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
 
     public GameSTriggerMovieFunctionEvent Parse_GameSTriggerMovieFunctionEvent() 
     {
-        Option<List<byte>> m_functionName = Option.None;
+        Option<List<u8>> m_functionName = Option.None;
         if (m_functionName is { HasValue: false })                           
         {
             var parsed_m_functionName = Parse_GameSTriggerMovieFunctionEvent_m_functionName();
@@ -7077,10 +7077,10 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         };
     }
 
-    public List<byte> Parse_GameSTriggerMovieFunctionEvent_m_functionName()
+    public List<u8> Parse_GameSTriggerMovieFunctionEvent_m_functionName()
     {                             
         var arrayLength = take_n_bits_into_i64(7);
-        var array = new List<byte>();
+        var array = new List<u8>();
 
         for (var i = 0 ; i < arrayLength ; ++i)
         {
@@ -7240,7 +7240,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     public GameSTriggerCutsceneBookmarkFiredEvent Parse_GameSTriggerCutsceneBookmarkFiredEvent() 
     {
         Option<int32> m_cutsceneId = Option.None;
-        Option<List<byte>> m_bookmarkName = Option.None;
+        Option<List<u8>> m_bookmarkName = Option.None;
         if (m_cutsceneId is { HasValue: false })                           
         {
             var parsed_m_cutsceneId = Parse_GameSTriggerCutsceneBookmarkFiredEvent_m_cutsceneId();
@@ -7266,10 +7266,10 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         return m_cutsceneId;
     }
 
-    public List<byte> Parse_GameSTriggerCutsceneBookmarkFiredEvent_m_bookmarkName()
+    public List<u8> Parse_GameSTriggerCutsceneBookmarkFiredEvent_m_bookmarkName()
     {                             
         var arrayLength = take_n_bits_into_i64(7);
-        var array = new List<byte>();
+        var array = new List<u8>();
 
         for (var i = 0 ; i < arrayLength ; ++i)
         {
@@ -7303,8 +7303,8 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     public GameSTriggerCutsceneConversationLineEvent Parse_GameSTriggerCutsceneConversationLineEvent() 
     {
         Option<int32> m_cutsceneId = Option.None;
-        Option<List<byte>> m_conversationLine = Option.None;
-        Option<List<byte>> m_altConversationLine = Option.None;
+        Option<List<u8>> m_conversationLine = Option.None;
+        Option<List<u8>> m_altConversationLine = Option.None;
         if (m_cutsceneId is { HasValue: false })                           
         {
             var parsed_m_cutsceneId = Parse_GameSTriggerCutsceneConversationLineEvent_m_cutsceneId();
@@ -7337,10 +7337,10 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         return m_cutsceneId;
     }
 
-    public List<byte> Parse_GameSTriggerCutsceneConversationLineEvent_m_conversationLine()
+    public List<u8> Parse_GameSTriggerCutsceneConversationLineEvent_m_conversationLine()
     {                             
         var arrayLength = take_n_bits_into_i64(7);
-        var array = new List<byte>();
+        var array = new List<u8>();
 
         for (var i = 0 ; i < arrayLength ; ++i)
         {
@@ -7350,10 +7350,10 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         return array;
     }
 
-    public List<byte> Parse_GameSTriggerCutsceneConversationLineEvent_m_altConversationLine()
+    public List<u8> Parse_GameSTriggerCutsceneConversationLineEvent_m_altConversationLine()
     {                             
         var arrayLength = take_n_bits_into_i64(7);
-        var array = new List<byte>();
+        var array = new List<u8>();
 
         for (var i = 0 ; i < arrayLength ; ++i)
         {
@@ -7366,7 +7366,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     public GameSTriggerCutsceneConversationLineMissingEvent Parse_GameSTriggerCutsceneConversationLineMissingEvent() 
     {
         Option<int32> m_cutsceneId = Option.None;
-        Option<List<byte>> m_conversationLine = Option.None;
+        Option<List<u8>> m_conversationLine = Option.None;
         if (m_cutsceneId is { HasValue: false })                           
         {
             var parsed_m_cutsceneId = Parse_GameSTriggerCutsceneConversationLineMissingEvent_m_cutsceneId();
@@ -7392,10 +7392,10 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         return m_cutsceneId;
     }
 
-    public List<byte> Parse_GameSTriggerCutsceneConversationLineMissingEvent_m_conversationLine()
+    public List<u8> Parse_GameSTriggerCutsceneConversationLineMissingEvent_m_conversationLine()
     {                             
         var arrayLength = take_n_bits_into_i64(7);
-        var array = new List<byte>();
+        var array = new List<u8>();
 
         for (var i = 0 ; i < arrayLength ; ++i)
         {
@@ -7574,7 +7574,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     public GameSCommandManagerStateEvent Parse_GameSCommandManagerStateEvent() 
     {
         Option<GameECommandManagerState> m_state = Option.None;
-        var m_sequence = Option.Some<Option<long>>(Option.None);
+        var m_sequence = Option.Some<Option<i64>>(Option.None);
         if (m_state is { HasValue: false })                           
         {
             var parsed_m_state = Parse_GameSCommandManagerStateEvent_m_state();
@@ -7600,7 +7600,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         return m_state;
     }
 
-    public Option<long> Parse_GameSCommandManagerStateEvent_m_sequence()
+    public Option<i64> Parse_GameSCommandManagerStateEvent_m_sequence()
     {                             
             var isProvided = parse_bool();
 
@@ -7662,8 +7662,8 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     {
         Option<uint8> m_catalog = Option.None;
         Option<uint16> m_entry = Option.None;
-        Option<List<byte>> m_field = Option.None;
-        Option<List<byte>> m_value = Option.None;
+        Option<List<u8>> m_field = Option.None;
+        Option<List<u8>> m_value = Option.None;
         if (m_catalog is { HasValue: false })                           
         {
             var parsed_m_catalog = Parse_GameSCatalogModifyEvent_m_catalog();
@@ -7709,10 +7709,10 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         return m_entry;
     }
 
-    public List<byte> Parse_GameSCatalogModifyEvent_m_field()
+    public List<u8> Parse_GameSCatalogModifyEvent_m_field()
     {                             
         var arrayLength = take_n_bits_into_i64(9);
-        var array = new List<byte>();
+        var array = new List<u8>();
 
         for (var i = 0 ; i < arrayLength ; ++i)
         {
@@ -7722,10 +7722,10 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         return array;
     }
 
-    public List<byte> Parse_GameSCatalogModifyEvent_m_value()
+    public List<u8> Parse_GameSCatalogModifyEvent_m_value()
     {                             
         var arrayLength = take_n_bits_into_i64(9);
-        var array = new List<byte>();
+        var array = new List<u8>();
 
         for (var i = 0 ; i < arrayLength ; ++i)
         {
@@ -8223,7 +8223,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
 
     public GameSThumbnail Parse_GameSThumbnail() 
     {
-        Option<List<byte>> m_file = Option.None;
+        Option<List<u8>> m_file = Option.None;
         if (m_file is { HasValue: false })                           
         {
             var parsed_m_file = Parse_GameSThumbnail_m_file();
@@ -8236,10 +8236,10 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         };
     }
 
-    public List<byte> Parse_GameSThumbnail_m_file()
+    public List<u8> Parse_GameSThumbnail_m_file()
     {                             
         var arrayLength = take_n_bits_into_i64(10);
-        var array = new List<byte>();
+        var array = new List<u8>();
 
         for (var i = 0 ; i < arrayLength ; ++i)
         {
@@ -8315,9 +8315,9 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     public GameSToonNameDetails Parse_GameSToonNameDetails() 
     {
         Option<uint8> m_region = Option.None;
-        Option<List<byte>> m_programId = Option.None;
+        Option<List<u8>> m_programId = Option.None;
         Option<uint32> m_realm = Option.None;
-        Option<List<byte>> m_name = Option.None;
+        Option<List<u8>> m_name = Option.None;
         Option<uint64> m_id = Option.None;
         if (m_region is { HasValue: false })                           
         {
@@ -8365,7 +8365,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         return m_region;
     }
 
-    public List<byte> Parse_GameSToonNameDetails_m_programId()
+    public List<u8> Parse_GameSToonNameDetails_m_programId()
     {                             
         var m_programId = take_fourcc();
         return m_programId;
@@ -8377,10 +8377,10 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         return m_realm;
     }
 
-    public List<byte> Parse_GameSToonNameDetails_m_name()
+    public List<u8> Parse_GameSToonNameDetails_m_name()
     {                             
         var arrayLength = take_n_bits_into_i64(5);
-        var array = new List<byte>();
+        var array = new List<u8>();
 
         for (var i = 0 ; i < arrayLength ; ++i)
         {
@@ -8400,7 +8400,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     {
         Option<CUserName> m_name = Option.None;
         Option<GameSToonNameDetails> m_toon = Option.None;
-        Option<List<byte>> m_race = Option.None;
+        Option<List<u8>> m_race = Option.None;
         Option<GameSColor> m_color = Option.None;
         Option<GameTControlId> m_control = Option.None;
         Option<GameTTeamId> m_teamId = Option.None;
@@ -8408,7 +8408,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         Option<EObserve> m_observe = Option.None;
         Option<GameEResultDetails> m_result = Option.None;
         var m_workingSetSlotId = Option.Some<Option<uint8>>(Option.None);
-        Option<List<byte>> m_hero = Option.None;
+        Option<List<u8>> m_hero = Option.None;
         if (m_name is { HasValue: false })                           
         {
             var parsed_m_name = Parse_GameSPlayerDetails_m_name();
@@ -8503,10 +8503,10 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         return m_toon;
     }
 
-    public List<byte> Parse_GameSPlayerDetails_m_race()
+    public List<u8> Parse_GameSPlayerDetails_m_race()
     {                             
         var arrayLength = take_n_bits_into_i64(7);
-        var array = new List<byte>();
+        var array = new List<u8>();
 
         for (var i = 0 ; i < arrayLength ; ++i)
         {
@@ -8568,10 +8568,10 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
             }
     }
 
-    public List<byte> Parse_GameSPlayerDetails_m_hero()
+    public List<u8> Parse_GameSPlayerDetails_m_hero()
     {                             
         var arrayLength = take_n_bits_into_i64(7);
-        var array = new List<byte>();
+        var array = new List<u8>();
 
         for (var i = 0 ; i < arrayLength ; ++i)
         {
@@ -8584,15 +8584,15 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     public GameSDetails Parse_GameSDetails() 
     {
         var m_playerList = Option.Some<Option<GameCPlayerDetailsArray>>(Option.None);
-        Option<List<byte>> m_title = Option.None;
-        Option<List<byte>> m_difficulty = Option.None;
+        Option<List<u8>> m_title = Option.None;
+        Option<List<u8>> m_difficulty = Option.None;
         Option<GameSThumbnail> m_thumbnail = Option.None;
         Option<bool> m_isBlizzardMap = Option.None;
         Option<int64> m_timeUTC = Option.None;
         Option<int64> m_timeLocalOffset = Option.None;
         var m_restartAsTransitionMap = Option.Some<Option<bool>>(Option.None);
         Option<bool> m_disableRecoverGame = Option.None;
-        Option<List<byte>> m_description = Option.None;
+        Option<List<u8>> m_description = Option.None;
         Option<CFilePath> m_imageFilePath = Option.None;
         Option<uint8> m_campaignIndex = Option.None;
         Option<CFilePath> m_mapFileName = Option.None;
@@ -8748,10 +8748,10 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
             }
     }
 
-    public List<byte> Parse_GameSDetails_m_title()
+    public List<u8> Parse_GameSDetails_m_title()
     {                             
         var arrayLength = take_n_bits_into_i64(9);
-        var array = new List<byte>();
+        var array = new List<u8>();
 
         for (var i = 0 ; i < arrayLength ; ++i)
         {
@@ -8761,10 +8761,10 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         return array;
     }
 
-    public List<byte> Parse_GameSDetails_m_difficulty()
+    public List<u8> Parse_GameSDetails_m_difficulty()
     {                             
         var arrayLength = take_n_bits_into_i64(7);
-        var array = new List<byte>();
+        var array = new List<u8>();
 
         for (var i = 0 ; i < arrayLength ; ++i)
         {
@@ -8820,10 +8820,10 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         return m_disableRecoverGame;
     }
 
-    public List<byte> Parse_GameSDetails_m_description()
+    public List<u8> Parse_GameSDetails_m_description()
     {                             
         var arrayLength = take_n_bits_into_i64(11);
-        var array = new List<byte>();
+        var array = new List<u8>();
 
         for (var i = 0 ; i < arrayLength ; ++i)
         {
@@ -10801,7 +10801,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
 
     public ReplaySGameUserId Parse_ReplaySGameUserId() 
     {
-        Option<long> m_userId = Option.None;
+        Option<i64> m_userId = Option.None;
         if (m_userId is { HasValue: false })                           
         {
             var parsed_m_userId = Parse_ReplaySGameUserId_m_userId();
@@ -10814,7 +10814,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         };
     }
 
-    public long Parse_ReplaySGameUserId_m_userId()
+    public i64 Parse_ReplaySGameUserId_m_userId()
     {                             
         var m_userId = parse_packed_int(0, 5);
         return m_userId;

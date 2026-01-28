@@ -1,21 +1,21 @@
-﻿using System.Buffers.Binary;
+﻿global using u8 = byte;
+global using i8 = sbyte;
+global using u16 = ushort;
+global using i16 = short;
+global using u32 = uint;
+global using i32 = int;
+global using u64 = ulong;
+global using i64 = long;
+global using f16 = System.Half;
+global using f32 = float;
+global using f64 = double;
+global using usize = nuint;
+global using ssize = nint;
+
+using System.Buffers.Binary;
 using System.Numerics;
 
 namespace Sc2ReplayAnalyzer.Json.Global;
-
-using u8 = byte;
-using i8 = sbyte;
-using u16 = ushort;
-using i16 = short;
-using u32 = uint;
-using i32 = int;
-using u64 = ulong;
-using i64 = long;
-using f16 = Half;
-using f32 = float;
-using f64 = double;
-using usize = nuint;
-using ssize = nint;
 
 public struct Option<T>
 {
@@ -270,7 +270,7 @@ public abstract class VersionedProtocolParserImpl(BinaryReader reader) : Protoco
         return ReadBytes(blobLength);
     }
 
-    public int tagged_vlq_int()
+    public long tagged_vlq_int()
     {
         ValidateIntTag();
 
@@ -293,16 +293,16 @@ public abstract class VersionedProtocolParserImpl(BinaryReader reader) : Protoco
 
     public void Dispose() => reader.Dispose();
 
-    public int ParseVlqInt()
+    public long ParseVlqInt()
     {
-        var v_int_value = ReadByte();
-        var isNegative = (v_int_value & 1) != 0;
+        long v_int_value = ReadByte();
+        bool isNegative = (v_int_value & 1) != 0;
 
-        int result = (v_int_value >> 1) & 0x3f;
+        long result = (v_int_value >> 1) & 0x3f;
 
         for (int bits = 6; (v_int_value & 0x80) != 0; bits += 7)
         {
-            var new_v_int_value = ReadByte();
+            long new_v_int_value = ReadByte();
 
             result |= (new_v_int_value & 0x7f) << bits;
             v_int_value = new_v_int_value;
@@ -437,13 +437,23 @@ public static class ProtocolConversion<TResult>
         return false;
     }
 
-    public static TResult From<TFrom>(TFrom source)
-    {
-        if (!TryFrom(source, out var result))
-        {
-            throw new InvalidCastException($"Invalid cast");
-        }
+    //public static TResult From<TFrom>(TFrom source)
+    //{
+    //    if (!TryFrom(source, out var result))
+    //    {
+    //        throw new InvalidCastException($"Invalid cast");
+    //    }
 
-        return result;
+    //    return result;
+    //}
+}
+
+public static class Extensions
+{
+    extension<TResult>(ProtocolConversion<TResult>)
+        where TResult : unmanaged, IBinaryInteger<TResult>
+    {
+        public static TResult From<TFrom>(TFrom source)
+            where TFrom : unmanaged, IBinaryInteger<TFrom> => TResult.CreateTruncating<TFrom>(source);
     }
 }

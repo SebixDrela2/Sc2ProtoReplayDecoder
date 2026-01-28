@@ -9,42 +9,42 @@ public abstract class SVarUint32 { }
 // m_uint6
 public class m_uint6 : SVarUint32
 {
-    public byte Value;
+    public u8 Value;
 }
 
 // m_uint14
 public class m_uint14 : SVarUint32
 {
-    public uint Value;
+    public u32 Value;
 }
 
 // m_uint22
 public class m_uint22 : SVarUint32
 {
-    public uint Value;
+    public u32 Value;
 }
 
 // m_uint32
 public class m_uint32 : SVarUint32
 {
-    public uint Value;
+    public u32 Value;
 }
 
 // NNet.SVersion
 public class SVersion
 {
-    public byte m_flags;
-    public byte m_major;
-    public byte m_minor;
-    public byte m_revision;
-    public uint m_build;
-    public uint m_baseBuild;
+    public u8 m_flags;
+    public u8 m_major;
+    public u8 m_minor;
+    public u8 m_revision;
+    public u32 m_build;
+    public u32 m_baseBuild;
 }
 
 // NNet.SMD5
 public class SMD5
 {
-    public Option<List<byte>> m_dataDeprecated;
+    public Option<List<u8>> m_dataDeprecated;
     public List<byte> m_data;
 }
 
@@ -57,20 +57,20 @@ public class GameSThumbnail
 // NNet.Game.SColor
 public class GameSColor
 {
-    public byte m_a;
-    public byte m_r;
-    public byte m_g;
-    public byte m_b;
+    public u8 m_a;
+    public u8 m_r;
+    public u8 m_g;
+    public u8 m_b;
 }
 
 // NNet.Game.SToonNameDetails
 public class GameSToonNameDetails
 {
-    public byte m_region;
+    public u8 m_region;
     public uint m_programId;
-    public uint m_realm;
+    public u32 m_realm;
     public List<byte> m_name;
-    public long m_id;
+    public u64 m_id;
 }
 
 // NNet.Game.SPlayerDetails
@@ -80,12 +80,12 @@ public class GameSPlayerDetails
     public GameSToonNameDetails m_toon;
     public List<byte> m_race;
     public GameSColor m_color;
-    public byte m_control;
-    public byte m_teamId;
-    public uint m_handicap;
+    public u8 m_control;
+    public u8 m_teamId;
+    public u32 m_handicap;
     public EObserve m_observe;
     public GameEResultDetails m_result;
-    public Option<byte> m_workingSetSlotId;
+    public Option<u8> m_workingSetSlotId;
     public List<byte> m_hero;
 }
 
@@ -97,18 +97,18 @@ public class GameSDetails
     public List<byte> m_difficulty;
     public GameSThumbnail m_thumbnail;
     public bool m_isBlizzardMap;
-    public long m_timeUTC;
-    public long m_timeLocalOffset;
+    public i64 m_timeUTC;
+    public i64 m_timeLocalOffset;
     public Option<bool> m_restartAsTransitionMap;
     public bool m_disableRecoverGame;
     public List<byte> m_description;
     public List<byte> m_imageFilePath;
-    public byte m_campaignIndex;
+    public u8 m_campaignIndex;
     public List<byte> m_mapFileName;
     public Option<List<List<byte>>> m_cacheHandles;
     public bool m_miniSave;
     public GameEGameSpeed m_gameSpeed;
-    public uint m_defaultDifficulty;
+    public u32 m_defaultDifficulty;
     public Option<List<List<byte>>> m_modPaths;
 }
 
@@ -117,11 +117,11 @@ public class ReplaySHeader
 {
     public List<byte> m_signature;
     public SVersion m_version;
-    public byte m_type;
-    public uint m_elapsedGameLoops;
+    public u8 m_type;
+    public u32 m_elapsedGameLoops;
     public bool m_useScaledTime;
     public SMD5 m_ngdpRootKey;
-    public uint m_dataBuildNum;
+    public u32 m_dataBuildNum;
     public SMD5 m_replayCompatibilityHash;
     public bool m_ngdpRootKeyIsDevData;
 }
@@ -129,139 +129,139 @@ public class ReplaySHeader
 // NNet.Replay.Tracker.SPlayerStats
 public class ReplayTrackerSPlayerStats
 {
-    public int m_scoreValueMineralsCurrent;
-    public int m_scoreValueVespeneCurrent;
-    public int m_scoreValueMineralsCollectionRate;
-    public int m_scoreValueVespeneCollectionRate;
-    public int m_scoreValueWorkersActiveCount;
-    public int m_scoreValueMineralsUsedInProgressArmy;
-    public int m_scoreValueMineralsUsedInProgressEconomy;
-    public int m_scoreValueMineralsUsedInProgressTechnology;
-    public int m_scoreValueVespeneUsedInProgressArmy;
-    public int m_scoreValueVespeneUsedInProgressEconomy;
-    public int m_scoreValueVespeneUsedInProgressTechnology;
-    public int m_scoreValueMineralsUsedCurrentArmy;
-    public int m_scoreValueMineralsUsedCurrentEconomy;
-    public int m_scoreValueMineralsUsedCurrentTechnology;
-    public int m_scoreValueVespeneUsedCurrentArmy;
-    public int m_scoreValueVespeneUsedCurrentEconomy;
-    public int m_scoreValueVespeneUsedCurrentTechnology;
-    public int m_scoreValueMineralsLostArmy;
-    public int m_scoreValueMineralsLostEconomy;
-    public int m_scoreValueMineralsLostTechnology;
-    public int m_scoreValueVespeneLostArmy;
-    public int m_scoreValueVespeneLostEconomy;
-    public int m_scoreValueVespeneLostTechnology;
-    public int m_scoreValueMineralsKilledArmy;
-    public int m_scoreValueMineralsKilledEconomy;
-    public int m_scoreValueMineralsKilledTechnology;
-    public int m_scoreValueVespeneKilledArmy;
-    public int m_scoreValueVespeneKilledEconomy;
-    public int m_scoreValueVespeneKilledTechnology;
-    public int m_scoreValueFoodUsed;
-    public int m_scoreValueFoodMade;
-    public int m_scoreValueMineralsUsedActiveForces;
-    public int m_scoreValueVespeneUsedActiveForces;
-    public int m_scoreValueMineralsFriendlyFireArmy;
-    public int m_scoreValueMineralsFriendlyFireEconomy;
-    public int m_scoreValueMineralsFriendlyFireTechnology;
-    public int m_scoreValueVespeneFriendlyFireArmy;
-    public int m_scoreValueVespeneFriendlyFireEconomy;
-    public int m_scoreValueVespeneFriendlyFireTechnology;
+    public i32 m_scoreValueMineralsCurrent;
+    public i32 m_scoreValueVespeneCurrent;
+    public i32 m_scoreValueMineralsCollectionRate;
+    public i32 m_scoreValueVespeneCollectionRate;
+    public i32 m_scoreValueWorkersActiveCount;
+    public i32 m_scoreValueMineralsUsedInProgressArmy;
+    public i32 m_scoreValueMineralsUsedInProgressEconomy;
+    public i32 m_scoreValueMineralsUsedInProgressTechnology;
+    public i32 m_scoreValueVespeneUsedInProgressArmy;
+    public i32 m_scoreValueVespeneUsedInProgressEconomy;
+    public i32 m_scoreValueVespeneUsedInProgressTechnology;
+    public i32 m_scoreValueMineralsUsedCurrentArmy;
+    public i32 m_scoreValueMineralsUsedCurrentEconomy;
+    public i32 m_scoreValueMineralsUsedCurrentTechnology;
+    public i32 m_scoreValueVespeneUsedCurrentArmy;
+    public i32 m_scoreValueVespeneUsedCurrentEconomy;
+    public i32 m_scoreValueVespeneUsedCurrentTechnology;
+    public i32 m_scoreValueMineralsLostArmy;
+    public i32 m_scoreValueMineralsLostEconomy;
+    public i32 m_scoreValueMineralsLostTechnology;
+    public i32 m_scoreValueVespeneLostArmy;
+    public i32 m_scoreValueVespeneLostEconomy;
+    public i32 m_scoreValueVespeneLostTechnology;
+    public i32 m_scoreValueMineralsKilledArmy;
+    public i32 m_scoreValueMineralsKilledEconomy;
+    public i32 m_scoreValueMineralsKilledTechnology;
+    public i32 m_scoreValueVespeneKilledArmy;
+    public i32 m_scoreValueVespeneKilledEconomy;
+    public i32 m_scoreValueVespeneKilledTechnology;
+    public i32 m_scoreValueFoodUsed;
+    public i32 m_scoreValueFoodMade;
+    public i32 m_scoreValueMineralsUsedActiveForces;
+    public i32 m_scoreValueVespeneUsedActiveForces;
+    public i32 m_scoreValueMineralsFriendlyFireArmy;
+    public i32 m_scoreValueMineralsFriendlyFireEconomy;
+    public i32 m_scoreValueMineralsFriendlyFireTechnology;
+    public i32 m_scoreValueVespeneFriendlyFireArmy;
+    public i32 m_scoreValueVespeneFriendlyFireEconomy;
+    public i32 m_scoreValueVespeneFriendlyFireTechnology;
 }
 
 // NNet.Replay.Tracker.SPlayerStatsEvent
 public class ReplayTrackerSPlayerStatsEvent
 {
-    public byte m_playerId;
+    public u8 m_playerId;
     public ReplayTrackerSPlayerStats m_stats;
 }
 
 // NNet.Replay.Tracker.SUnitBornEvent
 public class ReplayTrackerSUnitBornEvent
 {
-    public uint m_unitTagIndex;
-    public uint m_unitTagRecycle;
+    public u32 m_unitTagIndex;
+    public u32 m_unitTagRecycle;
     public List<byte> m_unitTypeName;
-    public byte m_controlPlayerId;
-    public byte m_upkeepPlayerId;
-    public byte m_x;
-    public byte m_y;
-    public Option<uint> m_creatorUnitTagIndex;
-    public Option<uint> m_creatorUnitTagRecycle;
+    public u8 m_controlPlayerId;
+    public u8 m_upkeepPlayerId;
+    public u8 m_x;
+    public u8 m_y;
+    public Option<u32> m_creatorUnitTagIndex;
+    public Option<u32> m_creatorUnitTagRecycle;
     public Option<List<byte>> m_creatorAbilityName;
 }
 
 // NNet.Replay.Tracker.SUnitDiedEvent
 public class ReplayTrackerSUnitDiedEvent
 {
-    public uint m_unitTagIndex;
-    public uint m_unitTagRecycle;
-    public Option<byte> m_killerPlayerId;
-    public byte m_x;
-    public byte m_y;
-    public Option<uint> m_killerUnitTagIndex;
-    public Option<uint> m_killerUnitTagRecycle;
+    public u32 m_unitTagIndex;
+    public u32 m_unitTagRecycle;
+    public Option<u8> m_killerPlayerId;
+    public u8 m_x;
+    public u8 m_y;
+    public Option<u32> m_killerUnitTagIndex;
+    public Option<u32> m_killerUnitTagRecycle;
 }
 
 // NNet.Replay.Tracker.SUnitOwnerChangeEvent
 public class ReplayTrackerSUnitOwnerChangeEvent
 {
-    public uint m_unitTagIndex;
-    public uint m_unitTagRecycle;
-    public byte m_controlPlayerId;
-    public byte m_upkeepPlayerId;
+    public u32 m_unitTagIndex;
+    public u32 m_unitTagRecycle;
+    public u8 m_controlPlayerId;
+    public u8 m_upkeepPlayerId;
 }
 
 // NNet.Replay.Tracker.SUnitTypeChangeEvent
 public class ReplayTrackerSUnitTypeChangeEvent
 {
-    public uint m_unitTagIndex;
-    public uint m_unitTagRecycle;
+    public u32 m_unitTagIndex;
+    public u32 m_unitTagRecycle;
     public List<byte> m_unitTypeName;
 }
 
 // NNet.Replay.Tracker.SUpgradeEvent
 public class ReplayTrackerSUpgradeEvent
 {
-    public byte m_playerId;
+    public u8 m_playerId;
     public List<byte> m_upgradeTypeName;
-    public int m_count;
+    public i32 m_count;
 }
 
 // NNet.Replay.Tracker.SUnitInitEvent
 public class ReplayTrackerSUnitInitEvent
 {
-    public uint m_unitTagIndex;
-    public uint m_unitTagRecycle;
+    public u32 m_unitTagIndex;
+    public u32 m_unitTagRecycle;
     public List<byte> m_unitTypeName;
-    public byte m_controlPlayerId;
-    public byte m_upkeepPlayerId;
-    public byte m_x;
-    public byte m_y;
+    public u8 m_controlPlayerId;
+    public u8 m_upkeepPlayerId;
+    public u8 m_x;
+    public u8 m_y;
 }
 
 // NNet.Replay.Tracker.SUnitDoneEvent
 public class ReplayTrackerSUnitDoneEvent
 {
-    public uint m_unitTagIndex;
-    public uint m_unitTagRecycle;
+    public u32 m_unitTagIndex;
+    public u32 m_unitTagRecycle;
 }
 
 // NNet.Replay.Tracker.SUnitPositionsEvent
 public class ReplayTrackerSUnitPositionsEvent
 {
-    public uint m_firstUnitIndex;
-    public List<int> m_items;
+    public u32 m_firstUnitIndex;
+    public List<i32> m_items;
 }
 
 // NNet.Replay.Tracker.SPlayerSetupEvent
 public class ReplayTrackerSPlayerSetupEvent
 {
-    public byte m_playerId;
-    public uint m_type;
-    public Option<uint> m_userId;
-    public Option<uint> m_slotId;
+    public u8 m_playerId;
+    public u32 m_type;
+    public Option<u32> m_userId;
+    public Option<u32> m_slotId;
 }
 
 // NNet.EObserve
@@ -341,7 +341,7 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
                 var res = tagged_vlq_int();
                 return new m_uint6
                 {
-                    Value = ProtocolConversion<byte>.From(res)
+                    Value = ProtocolConversion<u8>.From(res)
                 };
             }
             break;
@@ -350,7 +350,7 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
                 var res = tagged_vlq_int();
                 return new m_uint14
                 {
-                    Value = ProtocolConversion<uint>.From(res)
+                    Value = ProtocolConversion<u32>.From(res)
                 };
             }
             break;
@@ -359,7 +359,7 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
                 var res = tagged_vlq_int();
                 return new m_uint22
                 {
-                    Value = ProtocolConversion<uint>.From(res)
+                    Value = ProtocolConversion<u32>.From(res)
                 };
             }
             break;
@@ -368,7 +368,7 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
                 var res = tagged_vlq_int();
                 return new m_uint32
                 {
-                    Value = ProtocolConversion<uint>.From(res)
+                    Value = ProtocolConversion<u32>.From(res)
                 };
             }
             break;
@@ -381,12 +381,12 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
 
     public SVersion Parse_SVersion() 
     {
-        Option<byte> m_flags = Option.None;
-        Option<byte> m_major = Option.None;
-        Option<byte> m_minor = Option.None;
-        Option<byte> m_revision = Option.None;
-        Option<uint> m_build = Option.None;
-        Option<uint> m_baseBuild = Option.None;
+        Option<u8> m_flags = Option.None;
+        Option<u8> m_major = Option.None;
+        Option<u8> m_minor = Option.None;
+        Option<u8> m_revision = Option.None;
+        Option<u32> m_build = Option.None;
+        Option<u32> m_baseBuild = Option.None;
         ValidateStructTag();
         var structFieldCount = ParseVlqInt();           
         for (var i = 0; i < structFieldCount; i++)
@@ -491,40 +491,40 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
             m_baseBuild = Option.OkOrReturnMissingFieldErr(m_baseBuild),
         };
     }
-    public byte Parse_SVersion_m_flags()
+    public u8 Parse_SVersion_m_flags()
     {                             
         var m_flags = tagged_vlq_int();
-        return ProtocolConversion<byte>.From(m_flags);
+        return ProtocolConversion<u8>.From(m_flags);
     }
-    public byte Parse_SVersion_m_major()
+    public u8 Parse_SVersion_m_major()
     {                             
         var m_major = tagged_vlq_int();
-        return ProtocolConversion<byte>.From(m_major);
+        return ProtocolConversion<u8>.From(m_major);
     }
-    public byte Parse_SVersion_m_minor()
+    public u8 Parse_SVersion_m_minor()
     {                             
         var m_minor = tagged_vlq_int();
-        return ProtocolConversion<byte>.From(m_minor);
+        return ProtocolConversion<u8>.From(m_minor);
     }
-    public byte Parse_SVersion_m_revision()
+    public u8 Parse_SVersion_m_revision()
     {                             
         var m_revision = tagged_vlq_int();
-        return ProtocolConversion<byte>.From(m_revision);
+        return ProtocolConversion<u8>.From(m_revision);
     }
-    public uint Parse_SVersion_m_build()
+    public u32 Parse_SVersion_m_build()
     {                             
         var m_build = tagged_vlq_int();
-        return ProtocolConversion<uint>.From(m_build);
+        return ProtocolConversion<u32>.From(m_build);
     }
-    public uint Parse_SVersion_m_baseBuild()
+    public u32 Parse_SVersion_m_baseBuild()
     {                             
         var m_baseBuild = tagged_vlq_int();
-        return ProtocolConversion<uint>.From(m_baseBuild);
+        return ProtocolConversion<u32>.From(m_baseBuild);
     }
 
     public SMD5 Parse_SMD5() 
     {
-        var m_dataDeprecated = Option.Some<Option<List<byte>>>(Option.None);
+        var m_dataDeprecated = Option.Some<Option<List<u8>>>(Option.None);
         Option<List<byte>> m_data = Option.None;
         ValidateStructTag();
         var structFieldCount = ParseVlqInt();           
@@ -570,18 +570,18 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
             m_data = Option.OkOrReturnMissingFieldErr(m_data),
         };
     }
-    public Option<List<byte>> Parse_SMD5_m_dataDeprecated()
+    public Option<List<u8>> Parse_SMD5_m_dataDeprecated()
     {                             
         ValidateOptTag();
         var isProvided = ReadByte();
 
-        Option<List<byte>> m_dataDeprecated = default;
+        Option<List<u8>> m_dataDeprecated = default;
         if (isProvided != 0)
         {                                   
             ValidateArrayTag();
             var arrayLength = ParseVlqInt();
             var array = ReadList(tagged_vlq_int, arrayLength);
-            m_dataDeprecated = Option.Some(array.Select(x => ProtocolConversion<byte>.From(x)).ToList());                                 
+            m_dataDeprecated = Option.Some(array.Select(x => ProtocolConversion<u8>.From(x)).ToList());                                 
         }
         else
         {
@@ -636,10 +636,10 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
 
     public GameSColor Parse_GameSColor() 
     {
-        Option<byte> m_a = Option.None;
-        Option<byte> m_r = Option.None;
-        Option<byte> m_g = Option.None;
-        Option<byte> m_b = Option.None;
+        Option<u8> m_a = Option.None;
+        Option<u8> m_r = Option.None;
+        Option<u8> m_g = Option.None;
+        Option<u8> m_b = Option.None;
         ValidateStructTag();
         var structFieldCount = ParseVlqInt();           
         for (var i = 0; i < structFieldCount; i++)
@@ -714,34 +714,34 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
             m_b = Option.OkOrReturnMissingFieldErr(m_b),
         };
     }
-    public byte Parse_GameSColor_m_a()
+    public u8 Parse_GameSColor_m_a()
     {                             
         var m_a = tagged_vlq_int();
-        return ProtocolConversion<byte>.From(m_a);
+        return ProtocolConversion<u8>.From(m_a);
     }
-    public byte Parse_GameSColor_m_r()
+    public u8 Parse_GameSColor_m_r()
     {                             
         var m_r = tagged_vlq_int();
-        return ProtocolConversion<byte>.From(m_r);
+        return ProtocolConversion<u8>.From(m_r);
     }
-    public byte Parse_GameSColor_m_g()
+    public u8 Parse_GameSColor_m_g()
     {                             
         var m_g = tagged_vlq_int();
-        return ProtocolConversion<byte>.From(m_g);
+        return ProtocolConversion<u8>.From(m_g);
     }
-    public byte Parse_GameSColor_m_b()
+    public u8 Parse_GameSColor_m_b()
     {                             
         var m_b = tagged_vlq_int();
-        return ProtocolConversion<byte>.From(m_b);
+        return ProtocolConversion<u8>.From(m_b);
     }
 
     public GameSToonNameDetails Parse_GameSToonNameDetails() 
     {
-        Option<byte> m_region = Option.None;
+        Option<u8> m_region = Option.None;
         Option<uint> m_programId = Option.None;
-        Option<uint> m_realm = Option.None;
+        Option<u32> m_realm = Option.None;
         Option<List<byte>> m_name = Option.None;
-        Option<long> m_id = Option.None;
+        Option<u64> m_id = Option.None;
         ValidateStructTag();
         var structFieldCount = ParseVlqInt();           
         for (var i = 0; i < structFieldCount; i++)
@@ -831,30 +831,30 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
             m_id = Option.OkOrReturnMissingFieldErr(m_id),
         };
     }
-    public byte Parse_GameSToonNameDetails_m_region()
+    public u8 Parse_GameSToonNameDetails_m_region()
     {                             
         var m_region = tagged_vlq_int();
-        return ProtocolConversion<byte>.From(m_region);
+        return ProtocolConversion<u8>.From(m_region);
     }
     public uint Parse_GameSToonNameDetails_m_programId()
     {                             
         var m_programId = tagged_fourcc();
         return m_programId;
     }
-    public uint Parse_GameSToonNameDetails_m_realm()
+    public u32 Parse_GameSToonNameDetails_m_realm()
     {                             
         var m_realm = tagged_vlq_int();
-        return ProtocolConversion<uint>.From(m_realm);
+        return ProtocolConversion<u32>.From(m_realm);
     }
     public List<byte> Parse_GameSToonNameDetails_m_name()
     {                             
         var m_name = tagged_blob();
         return m_name;
     }
-    public long Parse_GameSToonNameDetails_m_id()
+    public u64 Parse_GameSToonNameDetails_m_id()
     {                             
         var m_id = tagged_vlq_int();
-        return ProtocolConversion<long>.From(m_id);
+        return ProtocolConversion<u64>.From(m_id);
     }
 
     public GameSPlayerDetails Parse_GameSPlayerDetails() 
@@ -863,12 +863,12 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
         Option<GameSToonNameDetails> m_toon = Option.None;
         Option<List<byte>> m_race = Option.None;
         Option<GameSColor> m_color = Option.None;
-        Option<byte> m_control = Option.None;
-        Option<byte> m_teamId = Option.None;
-        Option<uint> m_handicap = Option.None;
+        Option<u8> m_control = Option.None;
+        Option<u8> m_teamId = Option.None;
+        Option<u32> m_handicap = Option.None;
         Option<EObserve> m_observe = Option.None;
         Option<GameEResultDetails> m_result = Option.None;
-        var m_workingSetSlotId = Option.Some<Option<byte>>(Option.None);
+        var m_workingSetSlotId = Option.Some<Option<u8>>(Option.None);
         Option<List<byte>> m_hero = Option.None;
         ValidateStructTag();
         var structFieldCount = ParseVlqInt();           
@@ -1069,20 +1069,20 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
         var m_color = Parse_GameSColor();
         return m_color;
     }
-    public byte Parse_GameSPlayerDetails_m_control()
+    public u8 Parse_GameSPlayerDetails_m_control()
     {                             
         var m_control = tagged_vlq_int();
-        return ProtocolConversion<byte>.From(m_control);
+        return ProtocolConversion<u8>.From(m_control);
     }
-    public byte Parse_GameSPlayerDetails_m_teamId()
+    public u8 Parse_GameSPlayerDetails_m_teamId()
     {                             
         var m_teamId = tagged_vlq_int();
-        return ProtocolConversion<byte>.From(m_teamId);
+        return ProtocolConversion<u8>.From(m_teamId);
     }
-    public uint Parse_GameSPlayerDetails_m_handicap()
+    public u32 Parse_GameSPlayerDetails_m_handicap()
     {                             
         var m_handicap = tagged_vlq_int();
-        return ProtocolConversion<uint>.From(m_handicap);
+        return ProtocolConversion<u32>.From(m_handicap);
     }
     public EObserve Parse_GameSPlayerDetails_m_observe()
     {                             
@@ -1094,17 +1094,17 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
         var m_result = Parse_GameEResultDetails();
         return m_result;
     }
-    public Option<byte> Parse_GameSPlayerDetails_m_workingSetSlotId()
+    public Option<u8> Parse_GameSPlayerDetails_m_workingSetSlotId()
     {                             
         ValidateOptTag();
         var isProvided = ReadByte();
 
-        Option<byte> m_workingSetSlotId = default;
+        Option<u8> m_workingSetSlotId = default;
         if (isProvided != 0)
         {                                   
             var res = tagged_vlq_int();
 
-            m_workingSetSlotId = Option.Some(ProtocolConversion<byte>.From(res));
+            m_workingSetSlotId = Option.Some(ProtocolConversion<u8>.From(res));
         }
         else
         {
@@ -1126,18 +1126,18 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
         Option<List<byte>> m_difficulty = Option.None;
         Option<GameSThumbnail> m_thumbnail = Option.None;
         Option<bool> m_isBlizzardMap = Option.None;
-        Option<long> m_timeUTC = Option.None;
-        Option<long> m_timeLocalOffset = Option.None;
+        Option<i64> m_timeUTC = Option.None;
+        Option<i64> m_timeLocalOffset = Option.None;
         var m_restartAsTransitionMap = Option.Some<Option<bool>>(Option.None);
         Option<bool> m_disableRecoverGame = Option.None;
         Option<List<byte>> m_description = Option.None;
         Option<List<byte>> m_imageFilePath = Option.None;
-        Option<byte> m_campaignIndex = Option.None;
+        Option<u8> m_campaignIndex = Option.None;
         Option<List<byte>> m_mapFileName = Option.None;
         var m_cacheHandles = Option.Some<Option<List<List<byte>>>>(Option.None);
         Option<bool> m_miniSave = Option.None;
         Option<GameEGameSpeed> m_gameSpeed = Option.None;
-        Option<uint> m_defaultDifficulty = Option.None;
+        Option<u32> m_defaultDifficulty = Option.None;
         var m_modPaths = Option.Some<Option<List<List<byte>>>>(Option.None);
         ValidateStructTag();
         var structFieldCount = ParseVlqInt();           
@@ -1463,15 +1463,15 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
         var m_isBlizzardMap = tagged_bool();
         return m_isBlizzardMap;
     }
-    public long Parse_GameSDetails_m_timeUTC()
+    public i64 Parse_GameSDetails_m_timeUTC()
     {                             
         var m_timeUTC = tagged_vlq_int();
-        return ProtocolConversion<long>.From(m_timeUTC);
+        return ProtocolConversion<i64>.From(m_timeUTC);
     }
-    public long Parse_GameSDetails_m_timeLocalOffset()
+    public i64 Parse_GameSDetails_m_timeLocalOffset()
     {                             
         var m_timeLocalOffset = tagged_vlq_int();
-        return ProtocolConversion<long>.From(m_timeLocalOffset);
+        return ProtocolConversion<i64>.From(m_timeLocalOffset);
     }
     public Option<bool> Parse_GameSDetails_m_restartAsTransitionMap()
     {                             
@@ -1507,10 +1507,10 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
         var m_imageFilePath = tagged_blob();
         return m_imageFilePath;
     }
-    public byte Parse_GameSDetails_m_campaignIndex()
+    public u8 Parse_GameSDetails_m_campaignIndex()
     {                             
         var m_campaignIndex = tagged_vlq_int();
-        return ProtocolConversion<byte>.From(m_campaignIndex);
+        return ProtocolConversion<u8>.From(m_campaignIndex);
     }
     public List<byte> Parse_GameSDetails_m_mapFileName()
     {                             
@@ -1547,10 +1547,10 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
         var m_gameSpeed = Parse_GameEGameSpeed();
         return m_gameSpeed;
     }
-    public uint Parse_GameSDetails_m_defaultDifficulty()
+    public u32 Parse_GameSDetails_m_defaultDifficulty()
     {                             
         var m_defaultDifficulty = tagged_vlq_int();
-        return ProtocolConversion<uint>.From(m_defaultDifficulty);
+        return ProtocolConversion<u32>.From(m_defaultDifficulty);
     }
     public Option<List<List<byte>>> Parse_GameSDetails_m_modPaths()
     {                             
@@ -1577,11 +1577,11 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
     {
         Option<List<byte>> m_signature = Option.None;
         Option<SVersion> m_version = Option.None;
-        Option<byte> m_type = Option.None;
-        Option<uint> m_elapsedGameLoops = Option.None;
+        Option<u8> m_type = Option.None;
+        Option<u32> m_elapsedGameLoops = Option.None;
         Option<bool> m_useScaledTime = Option.None;
         Option<SMD5> m_ngdpRootKey = Option.None;
-        Option<uint> m_dataBuildNum = Option.None;
+        Option<u32> m_dataBuildNum = Option.None;
         Option<SMD5> m_replayCompatibilityHash = Option.None;
         Option<bool> m_ngdpRootKeyIsDevData = Option.None;
         ValidateStructTag();
@@ -1743,15 +1743,15 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
         var m_version = Parse_SVersion();
         return m_version;
     }
-    public byte Parse_ReplaySHeader_m_type()
+    public u8 Parse_ReplaySHeader_m_type()
     {                             
         var m_type = tagged_vlq_int();
-        return ProtocolConversion<byte>.From(m_type);
+        return ProtocolConversion<u8>.From(m_type);
     }
-    public uint Parse_ReplaySHeader_m_elapsedGameLoops()
+    public u32 Parse_ReplaySHeader_m_elapsedGameLoops()
     {                             
         var m_elapsedGameLoops = tagged_vlq_int();
-        return ProtocolConversion<uint>.From(m_elapsedGameLoops);
+        return ProtocolConversion<u32>.From(m_elapsedGameLoops);
     }
     public bool Parse_ReplaySHeader_m_useScaledTime()
     {                             
@@ -1763,10 +1763,10 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
         var m_ngdpRootKey = Parse_SMD5();
         return m_ngdpRootKey;
     }
-    public uint Parse_ReplaySHeader_m_dataBuildNum()
+    public u32 Parse_ReplaySHeader_m_dataBuildNum()
     {                             
         var m_dataBuildNum = tagged_vlq_int();
-        return ProtocolConversion<uint>.From(m_dataBuildNum);
+        return ProtocolConversion<u32>.From(m_dataBuildNum);
     }
     public SMD5 Parse_ReplaySHeader_m_replayCompatibilityHash()
     {                             
@@ -1781,45 +1781,45 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
 
     public ReplayTrackerSPlayerStats Parse_ReplayTrackerSPlayerStats() 
     {
-        Option<int> m_scoreValueMineralsCurrent = Option.None;
-        Option<int> m_scoreValueVespeneCurrent = Option.None;
-        Option<int> m_scoreValueMineralsCollectionRate = Option.None;
-        Option<int> m_scoreValueVespeneCollectionRate = Option.None;
-        Option<int> m_scoreValueWorkersActiveCount = Option.None;
-        Option<int> m_scoreValueMineralsUsedInProgressArmy = Option.None;
-        Option<int> m_scoreValueMineralsUsedInProgressEconomy = Option.None;
-        Option<int> m_scoreValueMineralsUsedInProgressTechnology = Option.None;
-        Option<int> m_scoreValueVespeneUsedInProgressArmy = Option.None;
-        Option<int> m_scoreValueVespeneUsedInProgressEconomy = Option.None;
-        Option<int> m_scoreValueVespeneUsedInProgressTechnology = Option.None;
-        Option<int> m_scoreValueMineralsUsedCurrentArmy = Option.None;
-        Option<int> m_scoreValueMineralsUsedCurrentEconomy = Option.None;
-        Option<int> m_scoreValueMineralsUsedCurrentTechnology = Option.None;
-        Option<int> m_scoreValueVespeneUsedCurrentArmy = Option.None;
-        Option<int> m_scoreValueVespeneUsedCurrentEconomy = Option.None;
-        Option<int> m_scoreValueVespeneUsedCurrentTechnology = Option.None;
-        Option<int> m_scoreValueMineralsLostArmy = Option.None;
-        Option<int> m_scoreValueMineralsLostEconomy = Option.None;
-        Option<int> m_scoreValueMineralsLostTechnology = Option.None;
-        Option<int> m_scoreValueVespeneLostArmy = Option.None;
-        Option<int> m_scoreValueVespeneLostEconomy = Option.None;
-        Option<int> m_scoreValueVespeneLostTechnology = Option.None;
-        Option<int> m_scoreValueMineralsKilledArmy = Option.None;
-        Option<int> m_scoreValueMineralsKilledEconomy = Option.None;
-        Option<int> m_scoreValueMineralsKilledTechnology = Option.None;
-        Option<int> m_scoreValueVespeneKilledArmy = Option.None;
-        Option<int> m_scoreValueVespeneKilledEconomy = Option.None;
-        Option<int> m_scoreValueVespeneKilledTechnology = Option.None;
-        Option<int> m_scoreValueFoodUsed = Option.None;
-        Option<int> m_scoreValueFoodMade = Option.None;
-        Option<int> m_scoreValueMineralsUsedActiveForces = Option.None;
-        Option<int> m_scoreValueVespeneUsedActiveForces = Option.None;
-        Option<int> m_scoreValueMineralsFriendlyFireArmy = Option.None;
-        Option<int> m_scoreValueMineralsFriendlyFireEconomy = Option.None;
-        Option<int> m_scoreValueMineralsFriendlyFireTechnology = Option.None;
-        Option<int> m_scoreValueVespeneFriendlyFireArmy = Option.None;
-        Option<int> m_scoreValueVespeneFriendlyFireEconomy = Option.None;
-        Option<int> m_scoreValueVespeneFriendlyFireTechnology = Option.None;
+        Option<i32> m_scoreValueMineralsCurrent = Option.None;
+        Option<i32> m_scoreValueVespeneCurrent = Option.None;
+        Option<i32> m_scoreValueMineralsCollectionRate = Option.None;
+        Option<i32> m_scoreValueVespeneCollectionRate = Option.None;
+        Option<i32> m_scoreValueWorkersActiveCount = Option.None;
+        Option<i32> m_scoreValueMineralsUsedInProgressArmy = Option.None;
+        Option<i32> m_scoreValueMineralsUsedInProgressEconomy = Option.None;
+        Option<i32> m_scoreValueMineralsUsedInProgressTechnology = Option.None;
+        Option<i32> m_scoreValueVespeneUsedInProgressArmy = Option.None;
+        Option<i32> m_scoreValueVespeneUsedInProgressEconomy = Option.None;
+        Option<i32> m_scoreValueVespeneUsedInProgressTechnology = Option.None;
+        Option<i32> m_scoreValueMineralsUsedCurrentArmy = Option.None;
+        Option<i32> m_scoreValueMineralsUsedCurrentEconomy = Option.None;
+        Option<i32> m_scoreValueMineralsUsedCurrentTechnology = Option.None;
+        Option<i32> m_scoreValueVespeneUsedCurrentArmy = Option.None;
+        Option<i32> m_scoreValueVespeneUsedCurrentEconomy = Option.None;
+        Option<i32> m_scoreValueVespeneUsedCurrentTechnology = Option.None;
+        Option<i32> m_scoreValueMineralsLostArmy = Option.None;
+        Option<i32> m_scoreValueMineralsLostEconomy = Option.None;
+        Option<i32> m_scoreValueMineralsLostTechnology = Option.None;
+        Option<i32> m_scoreValueVespeneLostArmy = Option.None;
+        Option<i32> m_scoreValueVespeneLostEconomy = Option.None;
+        Option<i32> m_scoreValueVespeneLostTechnology = Option.None;
+        Option<i32> m_scoreValueMineralsKilledArmy = Option.None;
+        Option<i32> m_scoreValueMineralsKilledEconomy = Option.None;
+        Option<i32> m_scoreValueMineralsKilledTechnology = Option.None;
+        Option<i32> m_scoreValueVespeneKilledArmy = Option.None;
+        Option<i32> m_scoreValueVespeneKilledEconomy = Option.None;
+        Option<i32> m_scoreValueVespeneKilledTechnology = Option.None;
+        Option<i32> m_scoreValueFoodUsed = Option.None;
+        Option<i32> m_scoreValueFoodMade = Option.None;
+        Option<i32> m_scoreValueMineralsUsedActiveForces = Option.None;
+        Option<i32> m_scoreValueVespeneUsedActiveForces = Option.None;
+        Option<i32> m_scoreValueMineralsFriendlyFireArmy = Option.None;
+        Option<i32> m_scoreValueMineralsFriendlyFireEconomy = Option.None;
+        Option<i32> m_scoreValueMineralsFriendlyFireTechnology = Option.None;
+        Option<i32> m_scoreValueVespeneFriendlyFireArmy = Option.None;
+        Option<i32> m_scoreValueVespeneFriendlyFireEconomy = Option.None;
+        Option<i32> m_scoreValueVespeneFriendlyFireTechnology = Option.None;
         ValidateStructTag();
         var structFieldCount = ParseVlqInt();           
         for (var i = 0; i < structFieldCount; i++)
@@ -2419,205 +2419,205 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
             m_scoreValueVespeneFriendlyFireTechnology = Option.OkOrReturnMissingFieldErr(m_scoreValueVespeneFriendlyFireTechnology),
         };
     }
-    public int Parse_ReplayTrackerSPlayerStats_m_scoreValueMineralsCurrent()
+    public i32 Parse_ReplayTrackerSPlayerStats_m_scoreValueMineralsCurrent()
     {                             
         var m_scoreValueMineralsCurrent = tagged_vlq_int();
-        return ProtocolConversion<int>.From(m_scoreValueMineralsCurrent);
+        return ProtocolConversion<i32>.From(m_scoreValueMineralsCurrent);
     }
-    public int Parse_ReplayTrackerSPlayerStats_m_scoreValueVespeneCurrent()
+    public i32 Parse_ReplayTrackerSPlayerStats_m_scoreValueVespeneCurrent()
     {                             
         var m_scoreValueVespeneCurrent = tagged_vlq_int();
-        return ProtocolConversion<int>.From(m_scoreValueVespeneCurrent);
+        return ProtocolConversion<i32>.From(m_scoreValueVespeneCurrent);
     }
-    public int Parse_ReplayTrackerSPlayerStats_m_scoreValueMineralsCollectionRate()
+    public i32 Parse_ReplayTrackerSPlayerStats_m_scoreValueMineralsCollectionRate()
     {                             
         var m_scoreValueMineralsCollectionRate = tagged_vlq_int();
-        return ProtocolConversion<int>.From(m_scoreValueMineralsCollectionRate);
+        return ProtocolConversion<i32>.From(m_scoreValueMineralsCollectionRate);
     }
-    public int Parse_ReplayTrackerSPlayerStats_m_scoreValueVespeneCollectionRate()
+    public i32 Parse_ReplayTrackerSPlayerStats_m_scoreValueVespeneCollectionRate()
     {                             
         var m_scoreValueVespeneCollectionRate = tagged_vlq_int();
-        return ProtocolConversion<int>.From(m_scoreValueVespeneCollectionRate);
+        return ProtocolConversion<i32>.From(m_scoreValueVespeneCollectionRate);
     }
-    public int Parse_ReplayTrackerSPlayerStats_m_scoreValueWorkersActiveCount()
+    public i32 Parse_ReplayTrackerSPlayerStats_m_scoreValueWorkersActiveCount()
     {                             
         var m_scoreValueWorkersActiveCount = tagged_vlq_int();
-        return ProtocolConversion<int>.From(m_scoreValueWorkersActiveCount);
+        return ProtocolConversion<i32>.From(m_scoreValueWorkersActiveCount);
     }
-    public int Parse_ReplayTrackerSPlayerStats_m_scoreValueMineralsUsedInProgressArmy()
+    public i32 Parse_ReplayTrackerSPlayerStats_m_scoreValueMineralsUsedInProgressArmy()
     {                             
         var m_scoreValueMineralsUsedInProgressArmy = tagged_vlq_int();
-        return ProtocolConversion<int>.From(m_scoreValueMineralsUsedInProgressArmy);
+        return ProtocolConversion<i32>.From(m_scoreValueMineralsUsedInProgressArmy);
     }
-    public int Parse_ReplayTrackerSPlayerStats_m_scoreValueMineralsUsedInProgressEconomy()
+    public i32 Parse_ReplayTrackerSPlayerStats_m_scoreValueMineralsUsedInProgressEconomy()
     {                             
         var m_scoreValueMineralsUsedInProgressEconomy = tagged_vlq_int();
-        return ProtocolConversion<int>.From(m_scoreValueMineralsUsedInProgressEconomy);
+        return ProtocolConversion<i32>.From(m_scoreValueMineralsUsedInProgressEconomy);
     }
-    public int Parse_ReplayTrackerSPlayerStats_m_scoreValueMineralsUsedInProgressTechnology()
+    public i32 Parse_ReplayTrackerSPlayerStats_m_scoreValueMineralsUsedInProgressTechnology()
     {                             
         var m_scoreValueMineralsUsedInProgressTechnology = tagged_vlq_int();
-        return ProtocolConversion<int>.From(m_scoreValueMineralsUsedInProgressTechnology);
+        return ProtocolConversion<i32>.From(m_scoreValueMineralsUsedInProgressTechnology);
     }
-    public int Parse_ReplayTrackerSPlayerStats_m_scoreValueVespeneUsedInProgressArmy()
+    public i32 Parse_ReplayTrackerSPlayerStats_m_scoreValueVespeneUsedInProgressArmy()
     {                             
         var m_scoreValueVespeneUsedInProgressArmy = tagged_vlq_int();
-        return ProtocolConversion<int>.From(m_scoreValueVespeneUsedInProgressArmy);
+        return ProtocolConversion<i32>.From(m_scoreValueVespeneUsedInProgressArmy);
     }
-    public int Parse_ReplayTrackerSPlayerStats_m_scoreValueVespeneUsedInProgressEconomy()
+    public i32 Parse_ReplayTrackerSPlayerStats_m_scoreValueVespeneUsedInProgressEconomy()
     {                             
         var m_scoreValueVespeneUsedInProgressEconomy = tagged_vlq_int();
-        return ProtocolConversion<int>.From(m_scoreValueVespeneUsedInProgressEconomy);
+        return ProtocolConversion<i32>.From(m_scoreValueVespeneUsedInProgressEconomy);
     }
-    public int Parse_ReplayTrackerSPlayerStats_m_scoreValueVespeneUsedInProgressTechnology()
+    public i32 Parse_ReplayTrackerSPlayerStats_m_scoreValueVespeneUsedInProgressTechnology()
     {                             
         var m_scoreValueVespeneUsedInProgressTechnology = tagged_vlq_int();
-        return ProtocolConversion<int>.From(m_scoreValueVespeneUsedInProgressTechnology);
+        return ProtocolConversion<i32>.From(m_scoreValueVespeneUsedInProgressTechnology);
     }
-    public int Parse_ReplayTrackerSPlayerStats_m_scoreValueMineralsUsedCurrentArmy()
+    public i32 Parse_ReplayTrackerSPlayerStats_m_scoreValueMineralsUsedCurrentArmy()
     {                             
         var m_scoreValueMineralsUsedCurrentArmy = tagged_vlq_int();
-        return ProtocolConversion<int>.From(m_scoreValueMineralsUsedCurrentArmy);
+        return ProtocolConversion<i32>.From(m_scoreValueMineralsUsedCurrentArmy);
     }
-    public int Parse_ReplayTrackerSPlayerStats_m_scoreValueMineralsUsedCurrentEconomy()
+    public i32 Parse_ReplayTrackerSPlayerStats_m_scoreValueMineralsUsedCurrentEconomy()
     {                             
         var m_scoreValueMineralsUsedCurrentEconomy = tagged_vlq_int();
-        return ProtocolConversion<int>.From(m_scoreValueMineralsUsedCurrentEconomy);
+        return ProtocolConversion<i32>.From(m_scoreValueMineralsUsedCurrentEconomy);
     }
-    public int Parse_ReplayTrackerSPlayerStats_m_scoreValueMineralsUsedCurrentTechnology()
+    public i32 Parse_ReplayTrackerSPlayerStats_m_scoreValueMineralsUsedCurrentTechnology()
     {                             
         var m_scoreValueMineralsUsedCurrentTechnology = tagged_vlq_int();
-        return ProtocolConversion<int>.From(m_scoreValueMineralsUsedCurrentTechnology);
+        return ProtocolConversion<i32>.From(m_scoreValueMineralsUsedCurrentTechnology);
     }
-    public int Parse_ReplayTrackerSPlayerStats_m_scoreValueVespeneUsedCurrentArmy()
+    public i32 Parse_ReplayTrackerSPlayerStats_m_scoreValueVespeneUsedCurrentArmy()
     {                             
         var m_scoreValueVespeneUsedCurrentArmy = tagged_vlq_int();
-        return ProtocolConversion<int>.From(m_scoreValueVespeneUsedCurrentArmy);
+        return ProtocolConversion<i32>.From(m_scoreValueVespeneUsedCurrentArmy);
     }
-    public int Parse_ReplayTrackerSPlayerStats_m_scoreValueVespeneUsedCurrentEconomy()
+    public i32 Parse_ReplayTrackerSPlayerStats_m_scoreValueVespeneUsedCurrentEconomy()
     {                             
         var m_scoreValueVespeneUsedCurrentEconomy = tagged_vlq_int();
-        return ProtocolConversion<int>.From(m_scoreValueVespeneUsedCurrentEconomy);
+        return ProtocolConversion<i32>.From(m_scoreValueVespeneUsedCurrentEconomy);
     }
-    public int Parse_ReplayTrackerSPlayerStats_m_scoreValueVespeneUsedCurrentTechnology()
+    public i32 Parse_ReplayTrackerSPlayerStats_m_scoreValueVespeneUsedCurrentTechnology()
     {                             
         var m_scoreValueVespeneUsedCurrentTechnology = tagged_vlq_int();
-        return ProtocolConversion<int>.From(m_scoreValueVespeneUsedCurrentTechnology);
+        return ProtocolConversion<i32>.From(m_scoreValueVespeneUsedCurrentTechnology);
     }
-    public int Parse_ReplayTrackerSPlayerStats_m_scoreValueMineralsLostArmy()
+    public i32 Parse_ReplayTrackerSPlayerStats_m_scoreValueMineralsLostArmy()
     {                             
         var m_scoreValueMineralsLostArmy = tagged_vlq_int();
-        return ProtocolConversion<int>.From(m_scoreValueMineralsLostArmy);
+        return ProtocolConversion<i32>.From(m_scoreValueMineralsLostArmy);
     }
-    public int Parse_ReplayTrackerSPlayerStats_m_scoreValueMineralsLostEconomy()
+    public i32 Parse_ReplayTrackerSPlayerStats_m_scoreValueMineralsLostEconomy()
     {                             
         var m_scoreValueMineralsLostEconomy = tagged_vlq_int();
-        return ProtocolConversion<int>.From(m_scoreValueMineralsLostEconomy);
+        return ProtocolConversion<i32>.From(m_scoreValueMineralsLostEconomy);
     }
-    public int Parse_ReplayTrackerSPlayerStats_m_scoreValueMineralsLostTechnology()
+    public i32 Parse_ReplayTrackerSPlayerStats_m_scoreValueMineralsLostTechnology()
     {                             
         var m_scoreValueMineralsLostTechnology = tagged_vlq_int();
-        return ProtocolConversion<int>.From(m_scoreValueMineralsLostTechnology);
+        return ProtocolConversion<i32>.From(m_scoreValueMineralsLostTechnology);
     }
-    public int Parse_ReplayTrackerSPlayerStats_m_scoreValueVespeneLostArmy()
+    public i32 Parse_ReplayTrackerSPlayerStats_m_scoreValueVespeneLostArmy()
     {                             
         var m_scoreValueVespeneLostArmy = tagged_vlq_int();
-        return ProtocolConversion<int>.From(m_scoreValueVespeneLostArmy);
+        return ProtocolConversion<i32>.From(m_scoreValueVespeneLostArmy);
     }
-    public int Parse_ReplayTrackerSPlayerStats_m_scoreValueVespeneLostEconomy()
+    public i32 Parse_ReplayTrackerSPlayerStats_m_scoreValueVespeneLostEconomy()
     {                             
         var m_scoreValueVespeneLostEconomy = tagged_vlq_int();
-        return ProtocolConversion<int>.From(m_scoreValueVespeneLostEconomy);
+        return ProtocolConversion<i32>.From(m_scoreValueVespeneLostEconomy);
     }
-    public int Parse_ReplayTrackerSPlayerStats_m_scoreValueVespeneLostTechnology()
+    public i32 Parse_ReplayTrackerSPlayerStats_m_scoreValueVespeneLostTechnology()
     {                             
         var m_scoreValueVespeneLostTechnology = tagged_vlq_int();
-        return ProtocolConversion<int>.From(m_scoreValueVespeneLostTechnology);
+        return ProtocolConversion<i32>.From(m_scoreValueVespeneLostTechnology);
     }
-    public int Parse_ReplayTrackerSPlayerStats_m_scoreValueMineralsKilledArmy()
+    public i32 Parse_ReplayTrackerSPlayerStats_m_scoreValueMineralsKilledArmy()
     {                             
         var m_scoreValueMineralsKilledArmy = tagged_vlq_int();
-        return ProtocolConversion<int>.From(m_scoreValueMineralsKilledArmy);
+        return ProtocolConversion<i32>.From(m_scoreValueMineralsKilledArmy);
     }
-    public int Parse_ReplayTrackerSPlayerStats_m_scoreValueMineralsKilledEconomy()
+    public i32 Parse_ReplayTrackerSPlayerStats_m_scoreValueMineralsKilledEconomy()
     {                             
         var m_scoreValueMineralsKilledEconomy = tagged_vlq_int();
-        return ProtocolConversion<int>.From(m_scoreValueMineralsKilledEconomy);
+        return ProtocolConversion<i32>.From(m_scoreValueMineralsKilledEconomy);
     }
-    public int Parse_ReplayTrackerSPlayerStats_m_scoreValueMineralsKilledTechnology()
+    public i32 Parse_ReplayTrackerSPlayerStats_m_scoreValueMineralsKilledTechnology()
     {                             
         var m_scoreValueMineralsKilledTechnology = tagged_vlq_int();
-        return ProtocolConversion<int>.From(m_scoreValueMineralsKilledTechnology);
+        return ProtocolConversion<i32>.From(m_scoreValueMineralsKilledTechnology);
     }
-    public int Parse_ReplayTrackerSPlayerStats_m_scoreValueVespeneKilledArmy()
+    public i32 Parse_ReplayTrackerSPlayerStats_m_scoreValueVespeneKilledArmy()
     {                             
         var m_scoreValueVespeneKilledArmy = tagged_vlq_int();
-        return ProtocolConversion<int>.From(m_scoreValueVespeneKilledArmy);
+        return ProtocolConversion<i32>.From(m_scoreValueVespeneKilledArmy);
     }
-    public int Parse_ReplayTrackerSPlayerStats_m_scoreValueVespeneKilledEconomy()
+    public i32 Parse_ReplayTrackerSPlayerStats_m_scoreValueVespeneKilledEconomy()
     {                             
         var m_scoreValueVespeneKilledEconomy = tagged_vlq_int();
-        return ProtocolConversion<int>.From(m_scoreValueVespeneKilledEconomy);
+        return ProtocolConversion<i32>.From(m_scoreValueVespeneKilledEconomy);
     }
-    public int Parse_ReplayTrackerSPlayerStats_m_scoreValueVespeneKilledTechnology()
+    public i32 Parse_ReplayTrackerSPlayerStats_m_scoreValueVespeneKilledTechnology()
     {                             
         var m_scoreValueVespeneKilledTechnology = tagged_vlq_int();
-        return ProtocolConversion<int>.From(m_scoreValueVespeneKilledTechnology);
+        return ProtocolConversion<i32>.From(m_scoreValueVespeneKilledTechnology);
     }
-    public int Parse_ReplayTrackerSPlayerStats_m_scoreValueFoodUsed()
+    public i32 Parse_ReplayTrackerSPlayerStats_m_scoreValueFoodUsed()
     {                             
         var m_scoreValueFoodUsed = tagged_vlq_int();
-        return ProtocolConversion<int>.From(m_scoreValueFoodUsed);
+        return ProtocolConversion<i32>.From(m_scoreValueFoodUsed);
     }
-    public int Parse_ReplayTrackerSPlayerStats_m_scoreValueFoodMade()
+    public i32 Parse_ReplayTrackerSPlayerStats_m_scoreValueFoodMade()
     {                             
         var m_scoreValueFoodMade = tagged_vlq_int();
-        return ProtocolConversion<int>.From(m_scoreValueFoodMade);
+        return ProtocolConversion<i32>.From(m_scoreValueFoodMade);
     }
-    public int Parse_ReplayTrackerSPlayerStats_m_scoreValueMineralsUsedActiveForces()
+    public i32 Parse_ReplayTrackerSPlayerStats_m_scoreValueMineralsUsedActiveForces()
     {                             
         var m_scoreValueMineralsUsedActiveForces = tagged_vlq_int();
-        return ProtocolConversion<int>.From(m_scoreValueMineralsUsedActiveForces);
+        return ProtocolConversion<i32>.From(m_scoreValueMineralsUsedActiveForces);
     }
-    public int Parse_ReplayTrackerSPlayerStats_m_scoreValueVespeneUsedActiveForces()
+    public i32 Parse_ReplayTrackerSPlayerStats_m_scoreValueVespeneUsedActiveForces()
     {                             
         var m_scoreValueVespeneUsedActiveForces = tagged_vlq_int();
-        return ProtocolConversion<int>.From(m_scoreValueVespeneUsedActiveForces);
+        return ProtocolConversion<i32>.From(m_scoreValueVespeneUsedActiveForces);
     }
-    public int Parse_ReplayTrackerSPlayerStats_m_scoreValueMineralsFriendlyFireArmy()
+    public i32 Parse_ReplayTrackerSPlayerStats_m_scoreValueMineralsFriendlyFireArmy()
     {                             
         var m_scoreValueMineralsFriendlyFireArmy = tagged_vlq_int();
-        return ProtocolConversion<int>.From(m_scoreValueMineralsFriendlyFireArmy);
+        return ProtocolConversion<i32>.From(m_scoreValueMineralsFriendlyFireArmy);
     }
-    public int Parse_ReplayTrackerSPlayerStats_m_scoreValueMineralsFriendlyFireEconomy()
+    public i32 Parse_ReplayTrackerSPlayerStats_m_scoreValueMineralsFriendlyFireEconomy()
     {                             
         var m_scoreValueMineralsFriendlyFireEconomy = tagged_vlq_int();
-        return ProtocolConversion<int>.From(m_scoreValueMineralsFriendlyFireEconomy);
+        return ProtocolConversion<i32>.From(m_scoreValueMineralsFriendlyFireEconomy);
     }
-    public int Parse_ReplayTrackerSPlayerStats_m_scoreValueMineralsFriendlyFireTechnology()
+    public i32 Parse_ReplayTrackerSPlayerStats_m_scoreValueMineralsFriendlyFireTechnology()
     {                             
         var m_scoreValueMineralsFriendlyFireTechnology = tagged_vlq_int();
-        return ProtocolConversion<int>.From(m_scoreValueMineralsFriendlyFireTechnology);
+        return ProtocolConversion<i32>.From(m_scoreValueMineralsFriendlyFireTechnology);
     }
-    public int Parse_ReplayTrackerSPlayerStats_m_scoreValueVespeneFriendlyFireArmy()
+    public i32 Parse_ReplayTrackerSPlayerStats_m_scoreValueVespeneFriendlyFireArmy()
     {                             
         var m_scoreValueVespeneFriendlyFireArmy = tagged_vlq_int();
-        return ProtocolConversion<int>.From(m_scoreValueVespeneFriendlyFireArmy);
+        return ProtocolConversion<i32>.From(m_scoreValueVespeneFriendlyFireArmy);
     }
-    public int Parse_ReplayTrackerSPlayerStats_m_scoreValueVespeneFriendlyFireEconomy()
+    public i32 Parse_ReplayTrackerSPlayerStats_m_scoreValueVespeneFriendlyFireEconomy()
     {                             
         var m_scoreValueVespeneFriendlyFireEconomy = tagged_vlq_int();
-        return ProtocolConversion<int>.From(m_scoreValueVespeneFriendlyFireEconomy);
+        return ProtocolConversion<i32>.From(m_scoreValueVespeneFriendlyFireEconomy);
     }
-    public int Parse_ReplayTrackerSPlayerStats_m_scoreValueVespeneFriendlyFireTechnology()
+    public i32 Parse_ReplayTrackerSPlayerStats_m_scoreValueVespeneFriendlyFireTechnology()
     {                             
         var m_scoreValueVespeneFriendlyFireTechnology = tagged_vlq_int();
-        return ProtocolConversion<int>.From(m_scoreValueVespeneFriendlyFireTechnology);
+        return ProtocolConversion<i32>.From(m_scoreValueVespeneFriendlyFireTechnology);
     }
 
     public ReplayTrackerSPlayerStatsEvent Parse_ReplayTrackerSPlayerStatsEvent() 
     {
-        Option<byte> m_playerId = Option.None;
+        Option<u8> m_playerId = Option.None;
         Option<ReplayTrackerSPlayerStats> m_stats = Option.None;
         ValidateStructTag();
         var structFieldCount = ParseVlqInt();           
@@ -2663,10 +2663,10 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
             m_stats = Option.OkOrReturnMissingFieldErr(m_stats),
         };
     }
-    public byte Parse_ReplayTrackerSPlayerStatsEvent_m_playerId()
+    public u8 Parse_ReplayTrackerSPlayerStatsEvent_m_playerId()
     {                             
         var m_playerId = tagged_vlq_int();
-        return ProtocolConversion<byte>.From(m_playerId);
+        return ProtocolConversion<u8>.From(m_playerId);
     }
     public ReplayTrackerSPlayerStats Parse_ReplayTrackerSPlayerStatsEvent_m_stats()
     {                             
@@ -2676,15 +2676,15 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
 
     public ReplayTrackerSUnitBornEvent Parse_ReplayTrackerSUnitBornEvent() 
     {
-        Option<uint> m_unitTagIndex = Option.None;
-        Option<uint> m_unitTagRecycle = Option.None;
+        Option<u32> m_unitTagIndex = Option.None;
+        Option<u32> m_unitTagRecycle = Option.None;
         Option<List<byte>> m_unitTypeName = Option.None;
-        Option<byte> m_controlPlayerId = Option.None;
-        Option<byte> m_upkeepPlayerId = Option.None;
-        Option<byte> m_x = Option.None;
-        Option<byte> m_y = Option.None;
-        var m_creatorUnitTagIndex = Option.Some<Option<uint>>(Option.None);
-        var m_creatorUnitTagRecycle = Option.Some<Option<uint>>(Option.None);
+        Option<u8> m_controlPlayerId = Option.None;
+        Option<u8> m_upkeepPlayerId = Option.None;
+        Option<u8> m_x = Option.None;
+        Option<u8> m_y = Option.None;
+        var m_creatorUnitTagIndex = Option.Some<Option<u32>>(Option.None);
+        var m_creatorUnitTagRecycle = Option.Some<Option<u32>>(Option.None);
         var m_creatorAbilityName = Option.Some<Option<List<byte>>>(Option.None);
         ValidateStructTag();
         var structFieldCount = ParseVlqInt();           
@@ -2850,52 +2850,52 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
             m_creatorAbilityName = Option.OkOrReturnMissingFieldErr(m_creatorAbilityName),
         };
     }
-    public uint Parse_ReplayTrackerSUnitBornEvent_m_unitTagIndex()
+    public u32 Parse_ReplayTrackerSUnitBornEvent_m_unitTagIndex()
     {                             
         var m_unitTagIndex = tagged_vlq_int();
-        return ProtocolConversion<uint>.From(m_unitTagIndex);
+        return ProtocolConversion<u32>.From(m_unitTagIndex);
     }
-    public uint Parse_ReplayTrackerSUnitBornEvent_m_unitTagRecycle()
+    public u32 Parse_ReplayTrackerSUnitBornEvent_m_unitTagRecycle()
     {                             
         var m_unitTagRecycle = tagged_vlq_int();
-        return ProtocolConversion<uint>.From(m_unitTagRecycle);
+        return ProtocolConversion<u32>.From(m_unitTagRecycle);
     }
     public List<byte> Parse_ReplayTrackerSUnitBornEvent_m_unitTypeName()
     {                             
         var m_unitTypeName = tagged_blob();
         return m_unitTypeName;
     }
-    public byte Parse_ReplayTrackerSUnitBornEvent_m_controlPlayerId()
+    public u8 Parse_ReplayTrackerSUnitBornEvent_m_controlPlayerId()
     {                             
         var m_controlPlayerId = tagged_vlq_int();
-        return ProtocolConversion<byte>.From(m_controlPlayerId);
+        return ProtocolConversion<u8>.From(m_controlPlayerId);
     }
-    public byte Parse_ReplayTrackerSUnitBornEvent_m_upkeepPlayerId()
+    public u8 Parse_ReplayTrackerSUnitBornEvent_m_upkeepPlayerId()
     {                             
         var m_upkeepPlayerId = tagged_vlq_int();
-        return ProtocolConversion<byte>.From(m_upkeepPlayerId);
+        return ProtocolConversion<u8>.From(m_upkeepPlayerId);
     }
-    public byte Parse_ReplayTrackerSUnitBornEvent_m_x()
+    public u8 Parse_ReplayTrackerSUnitBornEvent_m_x()
     {                             
         var m_x = tagged_vlq_int();
-        return ProtocolConversion<byte>.From(m_x);
+        return ProtocolConversion<u8>.From(m_x);
     }
-    public byte Parse_ReplayTrackerSUnitBornEvent_m_y()
+    public u8 Parse_ReplayTrackerSUnitBornEvent_m_y()
     {                             
         var m_y = tagged_vlq_int();
-        return ProtocolConversion<byte>.From(m_y);
+        return ProtocolConversion<u8>.From(m_y);
     }
-    public Option<uint> Parse_ReplayTrackerSUnitBornEvent_m_creatorUnitTagIndex()
+    public Option<u32> Parse_ReplayTrackerSUnitBornEvent_m_creatorUnitTagIndex()
     {                             
         ValidateOptTag();
         var isProvided = ReadByte();
 
-        Option<uint> m_creatorUnitTagIndex = default;
+        Option<u32> m_creatorUnitTagIndex = default;
         if (isProvided != 0)
         {                                   
             var res = tagged_vlq_int();
 
-            m_creatorUnitTagIndex = Option.Some(ProtocolConversion<uint>.From(res));
+            m_creatorUnitTagIndex = Option.Some(ProtocolConversion<u32>.From(res));
         }
         else
         {
@@ -2904,17 +2904,17 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
 
         return m_creatorUnitTagIndex;
     }
-    public Option<uint> Parse_ReplayTrackerSUnitBornEvent_m_creatorUnitTagRecycle()
+    public Option<u32> Parse_ReplayTrackerSUnitBornEvent_m_creatorUnitTagRecycle()
     {                             
         ValidateOptTag();
         var isProvided = ReadByte();
 
-        Option<uint> m_creatorUnitTagRecycle = default;
+        Option<u32> m_creatorUnitTagRecycle = default;
         if (isProvided != 0)
         {                                   
             var res = tagged_vlq_int();
 
-            m_creatorUnitTagRecycle = Option.Some(ProtocolConversion<uint>.From(res));
+            m_creatorUnitTagRecycle = Option.Some(ProtocolConversion<u32>.From(res));
         }
         else
         {
@@ -2945,13 +2945,13 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
 
     public ReplayTrackerSUnitDiedEvent Parse_ReplayTrackerSUnitDiedEvent() 
     {
-        Option<uint> m_unitTagIndex = Option.None;
-        Option<uint> m_unitTagRecycle = Option.None;
-        var m_killerPlayerId = Option.Some<Option<byte>>(Option.None);
-        Option<byte> m_x = Option.None;
-        Option<byte> m_y = Option.None;
-        var m_killerUnitTagIndex = Option.Some<Option<uint>>(Option.None);
-        var m_killerUnitTagRecycle = Option.Some<Option<uint>>(Option.None);
+        Option<u32> m_unitTagIndex = Option.None;
+        Option<u32> m_unitTagRecycle = Option.None;
+        var m_killerPlayerId = Option.Some<Option<u8>>(Option.None);
+        Option<u8> m_x = Option.None;
+        Option<u8> m_y = Option.None;
+        var m_killerUnitTagIndex = Option.Some<Option<u32>>(Option.None);
+        var m_killerUnitTagRecycle = Option.Some<Option<u32>>(Option.None);
         ValidateStructTag();
         var structFieldCount = ParseVlqInt();           
         for (var i = 0; i < structFieldCount; i++)
@@ -3071,27 +3071,27 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
             m_killerUnitTagRecycle = Option.OkOrReturnMissingFieldErr(m_killerUnitTagRecycle),
         };
     }
-    public uint Parse_ReplayTrackerSUnitDiedEvent_m_unitTagIndex()
+    public u32 Parse_ReplayTrackerSUnitDiedEvent_m_unitTagIndex()
     {                             
         var m_unitTagIndex = tagged_vlq_int();
-        return ProtocolConversion<uint>.From(m_unitTagIndex);
+        return ProtocolConversion<u32>.From(m_unitTagIndex);
     }
-    public uint Parse_ReplayTrackerSUnitDiedEvent_m_unitTagRecycle()
+    public u32 Parse_ReplayTrackerSUnitDiedEvent_m_unitTagRecycle()
     {                             
         var m_unitTagRecycle = tagged_vlq_int();
-        return ProtocolConversion<uint>.From(m_unitTagRecycle);
+        return ProtocolConversion<u32>.From(m_unitTagRecycle);
     }
-    public Option<byte> Parse_ReplayTrackerSUnitDiedEvent_m_killerPlayerId()
+    public Option<u8> Parse_ReplayTrackerSUnitDiedEvent_m_killerPlayerId()
     {                             
         ValidateOptTag();
         var isProvided = ReadByte();
 
-        Option<byte> m_killerPlayerId = default;
+        Option<u8> m_killerPlayerId = default;
         if (isProvided != 0)
         {                                   
             var res = tagged_vlq_int();
 
-            m_killerPlayerId = Option.Some(ProtocolConversion<byte>.From(res));
+            m_killerPlayerId = Option.Some(ProtocolConversion<u8>.From(res));
         }
         else
         {
@@ -3100,27 +3100,27 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
 
         return m_killerPlayerId;
     }
-    public byte Parse_ReplayTrackerSUnitDiedEvent_m_x()
+    public u8 Parse_ReplayTrackerSUnitDiedEvent_m_x()
     {                             
         var m_x = tagged_vlq_int();
-        return ProtocolConversion<byte>.From(m_x);
+        return ProtocolConversion<u8>.From(m_x);
     }
-    public byte Parse_ReplayTrackerSUnitDiedEvent_m_y()
+    public u8 Parse_ReplayTrackerSUnitDiedEvent_m_y()
     {                             
         var m_y = tagged_vlq_int();
-        return ProtocolConversion<byte>.From(m_y);
+        return ProtocolConversion<u8>.From(m_y);
     }
-    public Option<uint> Parse_ReplayTrackerSUnitDiedEvent_m_killerUnitTagIndex()
+    public Option<u32> Parse_ReplayTrackerSUnitDiedEvent_m_killerUnitTagIndex()
     {                             
         ValidateOptTag();
         var isProvided = ReadByte();
 
-        Option<uint> m_killerUnitTagIndex = default;
+        Option<u32> m_killerUnitTagIndex = default;
         if (isProvided != 0)
         {                                   
             var res = tagged_vlq_int();
 
-            m_killerUnitTagIndex = Option.Some(ProtocolConversion<uint>.From(res));
+            m_killerUnitTagIndex = Option.Some(ProtocolConversion<u32>.From(res));
         }
         else
         {
@@ -3129,17 +3129,17 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
 
         return m_killerUnitTagIndex;
     }
-    public Option<uint> Parse_ReplayTrackerSUnitDiedEvent_m_killerUnitTagRecycle()
+    public Option<u32> Parse_ReplayTrackerSUnitDiedEvent_m_killerUnitTagRecycle()
     {                             
         ValidateOptTag();
         var isProvided = ReadByte();
 
-        Option<uint> m_killerUnitTagRecycle = default;
+        Option<u32> m_killerUnitTagRecycle = default;
         if (isProvided != 0)
         {                                   
             var res = tagged_vlq_int();
 
-            m_killerUnitTagRecycle = Option.Some(ProtocolConversion<uint>.From(res));
+            m_killerUnitTagRecycle = Option.Some(ProtocolConversion<u32>.From(res));
         }
         else
         {
@@ -3151,10 +3151,10 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
 
     public ReplayTrackerSUnitOwnerChangeEvent Parse_ReplayTrackerSUnitOwnerChangeEvent() 
     {
-        Option<uint> m_unitTagIndex = Option.None;
-        Option<uint> m_unitTagRecycle = Option.None;
-        Option<byte> m_controlPlayerId = Option.None;
-        Option<byte> m_upkeepPlayerId = Option.None;
+        Option<u32> m_unitTagIndex = Option.None;
+        Option<u32> m_unitTagRecycle = Option.None;
+        Option<u8> m_controlPlayerId = Option.None;
+        Option<u8> m_upkeepPlayerId = Option.None;
         ValidateStructTag();
         var structFieldCount = ParseVlqInt();           
         for (var i = 0; i < structFieldCount; i++)
@@ -3229,31 +3229,31 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
             m_upkeepPlayerId = Option.OkOrReturnMissingFieldErr(m_upkeepPlayerId),
         };
     }
-    public uint Parse_ReplayTrackerSUnitOwnerChangeEvent_m_unitTagIndex()
+    public u32 Parse_ReplayTrackerSUnitOwnerChangeEvent_m_unitTagIndex()
     {                             
         var m_unitTagIndex = tagged_vlq_int();
-        return ProtocolConversion<uint>.From(m_unitTagIndex);
+        return ProtocolConversion<u32>.From(m_unitTagIndex);
     }
-    public uint Parse_ReplayTrackerSUnitOwnerChangeEvent_m_unitTagRecycle()
+    public u32 Parse_ReplayTrackerSUnitOwnerChangeEvent_m_unitTagRecycle()
     {                             
         var m_unitTagRecycle = tagged_vlq_int();
-        return ProtocolConversion<uint>.From(m_unitTagRecycle);
+        return ProtocolConversion<u32>.From(m_unitTagRecycle);
     }
-    public byte Parse_ReplayTrackerSUnitOwnerChangeEvent_m_controlPlayerId()
+    public u8 Parse_ReplayTrackerSUnitOwnerChangeEvent_m_controlPlayerId()
     {                             
         var m_controlPlayerId = tagged_vlq_int();
-        return ProtocolConversion<byte>.From(m_controlPlayerId);
+        return ProtocolConversion<u8>.From(m_controlPlayerId);
     }
-    public byte Parse_ReplayTrackerSUnitOwnerChangeEvent_m_upkeepPlayerId()
+    public u8 Parse_ReplayTrackerSUnitOwnerChangeEvent_m_upkeepPlayerId()
     {                             
         var m_upkeepPlayerId = tagged_vlq_int();
-        return ProtocolConversion<byte>.From(m_upkeepPlayerId);
+        return ProtocolConversion<u8>.From(m_upkeepPlayerId);
     }
 
     public ReplayTrackerSUnitTypeChangeEvent Parse_ReplayTrackerSUnitTypeChangeEvent() 
     {
-        Option<uint> m_unitTagIndex = Option.None;
-        Option<uint> m_unitTagRecycle = Option.None;
+        Option<u32> m_unitTagIndex = Option.None;
+        Option<u32> m_unitTagRecycle = Option.None;
         Option<List<byte>> m_unitTypeName = Option.None;
         ValidateStructTag();
         var structFieldCount = ParseVlqInt();           
@@ -3314,15 +3314,15 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
             m_unitTypeName = Option.OkOrReturnMissingFieldErr(m_unitTypeName),
         };
     }
-    public uint Parse_ReplayTrackerSUnitTypeChangeEvent_m_unitTagIndex()
+    public u32 Parse_ReplayTrackerSUnitTypeChangeEvent_m_unitTagIndex()
     {                             
         var m_unitTagIndex = tagged_vlq_int();
-        return ProtocolConversion<uint>.From(m_unitTagIndex);
+        return ProtocolConversion<u32>.From(m_unitTagIndex);
     }
-    public uint Parse_ReplayTrackerSUnitTypeChangeEvent_m_unitTagRecycle()
+    public u32 Parse_ReplayTrackerSUnitTypeChangeEvent_m_unitTagRecycle()
     {                             
         var m_unitTagRecycle = tagged_vlq_int();
-        return ProtocolConversion<uint>.From(m_unitTagRecycle);
+        return ProtocolConversion<u32>.From(m_unitTagRecycle);
     }
     public List<byte> Parse_ReplayTrackerSUnitTypeChangeEvent_m_unitTypeName()
     {                             
@@ -3332,9 +3332,9 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
 
     public ReplayTrackerSUpgradeEvent Parse_ReplayTrackerSUpgradeEvent() 
     {
-        Option<byte> m_playerId = Option.None;
+        Option<u8> m_playerId = Option.None;
         Option<List<byte>> m_upgradeTypeName = Option.None;
-        Option<int> m_count = Option.None;
+        Option<i32> m_count = Option.None;
         ValidateStructTag();
         var structFieldCount = ParseVlqInt();           
         for (var i = 0; i < structFieldCount; i++)
@@ -3394,31 +3394,31 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
             m_count = Option.OkOrReturnMissingFieldErr(m_count),
         };
     }
-    public byte Parse_ReplayTrackerSUpgradeEvent_m_playerId()
+    public u8 Parse_ReplayTrackerSUpgradeEvent_m_playerId()
     {                             
         var m_playerId = tagged_vlq_int();
-        return ProtocolConversion<byte>.From(m_playerId);
+        return ProtocolConversion<u8>.From(m_playerId);
     }
     public List<byte> Parse_ReplayTrackerSUpgradeEvent_m_upgradeTypeName()
     {                             
         var m_upgradeTypeName = tagged_blob();
         return m_upgradeTypeName;
     }
-    public int Parse_ReplayTrackerSUpgradeEvent_m_count()
+    public i32 Parse_ReplayTrackerSUpgradeEvent_m_count()
     {                             
         var m_count = tagged_vlq_int();
-        return ProtocolConversion<int>.From(m_count);
+        return ProtocolConversion<i32>.From(m_count);
     }
 
     public ReplayTrackerSUnitInitEvent Parse_ReplayTrackerSUnitInitEvent() 
     {
-        Option<uint> m_unitTagIndex = Option.None;
-        Option<uint> m_unitTagRecycle = Option.None;
+        Option<u32> m_unitTagIndex = Option.None;
+        Option<u32> m_unitTagRecycle = Option.None;
         Option<List<byte>> m_unitTypeName = Option.None;
-        Option<byte> m_controlPlayerId = Option.None;
-        Option<byte> m_upkeepPlayerId = Option.None;
-        Option<byte> m_x = Option.None;
-        Option<byte> m_y = Option.None;
+        Option<u8> m_controlPlayerId = Option.None;
+        Option<u8> m_upkeepPlayerId = Option.None;
+        Option<u8> m_x = Option.None;
+        Option<u8> m_y = Option.None;
         ValidateStructTag();
         var structFieldCount = ParseVlqInt();           
         for (var i = 0; i < structFieldCount; i++)
@@ -3538,46 +3538,46 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
             m_y = Option.OkOrReturnMissingFieldErr(m_y),
         };
     }
-    public uint Parse_ReplayTrackerSUnitInitEvent_m_unitTagIndex()
+    public u32 Parse_ReplayTrackerSUnitInitEvent_m_unitTagIndex()
     {                             
         var m_unitTagIndex = tagged_vlq_int();
-        return ProtocolConversion<uint>.From(m_unitTagIndex);
+        return ProtocolConversion<u32>.From(m_unitTagIndex);
     }
-    public uint Parse_ReplayTrackerSUnitInitEvent_m_unitTagRecycle()
+    public u32 Parse_ReplayTrackerSUnitInitEvent_m_unitTagRecycle()
     {                             
         var m_unitTagRecycle = tagged_vlq_int();
-        return ProtocolConversion<uint>.From(m_unitTagRecycle);
+        return ProtocolConversion<u32>.From(m_unitTagRecycle);
     }
     public List<byte> Parse_ReplayTrackerSUnitInitEvent_m_unitTypeName()
     {                             
         var m_unitTypeName = tagged_blob();
         return m_unitTypeName;
     }
-    public byte Parse_ReplayTrackerSUnitInitEvent_m_controlPlayerId()
+    public u8 Parse_ReplayTrackerSUnitInitEvent_m_controlPlayerId()
     {                             
         var m_controlPlayerId = tagged_vlq_int();
-        return ProtocolConversion<byte>.From(m_controlPlayerId);
+        return ProtocolConversion<u8>.From(m_controlPlayerId);
     }
-    public byte Parse_ReplayTrackerSUnitInitEvent_m_upkeepPlayerId()
+    public u8 Parse_ReplayTrackerSUnitInitEvent_m_upkeepPlayerId()
     {                             
         var m_upkeepPlayerId = tagged_vlq_int();
-        return ProtocolConversion<byte>.From(m_upkeepPlayerId);
+        return ProtocolConversion<u8>.From(m_upkeepPlayerId);
     }
-    public byte Parse_ReplayTrackerSUnitInitEvent_m_x()
+    public u8 Parse_ReplayTrackerSUnitInitEvent_m_x()
     {                             
         var m_x = tagged_vlq_int();
-        return ProtocolConversion<byte>.From(m_x);
+        return ProtocolConversion<u8>.From(m_x);
     }
-    public byte Parse_ReplayTrackerSUnitInitEvent_m_y()
+    public u8 Parse_ReplayTrackerSUnitInitEvent_m_y()
     {                             
         var m_y = tagged_vlq_int();
-        return ProtocolConversion<byte>.From(m_y);
+        return ProtocolConversion<u8>.From(m_y);
     }
 
     public ReplayTrackerSUnitDoneEvent Parse_ReplayTrackerSUnitDoneEvent() 
     {
-        Option<uint> m_unitTagIndex = Option.None;
-        Option<uint> m_unitTagRecycle = Option.None;
+        Option<u32> m_unitTagIndex = Option.None;
+        Option<u32> m_unitTagRecycle = Option.None;
         ValidateStructTag();
         var structFieldCount = ParseVlqInt();           
         for (var i = 0; i < structFieldCount; i++)
@@ -3622,21 +3622,21 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
             m_unitTagRecycle = Option.OkOrReturnMissingFieldErr(m_unitTagRecycle),
         };
     }
-    public uint Parse_ReplayTrackerSUnitDoneEvent_m_unitTagIndex()
+    public u32 Parse_ReplayTrackerSUnitDoneEvent_m_unitTagIndex()
     {                             
         var m_unitTagIndex = tagged_vlq_int();
-        return ProtocolConversion<uint>.From(m_unitTagIndex);
+        return ProtocolConversion<u32>.From(m_unitTagIndex);
     }
-    public uint Parse_ReplayTrackerSUnitDoneEvent_m_unitTagRecycle()
+    public u32 Parse_ReplayTrackerSUnitDoneEvent_m_unitTagRecycle()
     {                             
         var m_unitTagRecycle = tagged_vlq_int();
-        return ProtocolConversion<uint>.From(m_unitTagRecycle);
+        return ProtocolConversion<u32>.From(m_unitTagRecycle);
     }
 
     public ReplayTrackerSUnitPositionsEvent Parse_ReplayTrackerSUnitPositionsEvent() 
     {
-        Option<uint> m_firstUnitIndex = Option.None;
-        Option<List<int>> m_items = Option.None;
+        Option<u32> m_firstUnitIndex = Option.None;
+        Option<List<i32>> m_items = Option.None;
         ValidateStructTag();
         var structFieldCount = ParseVlqInt();           
         for (var i = 0; i < structFieldCount; i++)
@@ -3681,27 +3681,26 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
             m_items = Option.OkOrReturnMissingFieldErr(m_items),
         };
     }
-    public uint Parse_ReplayTrackerSUnitPositionsEvent_m_firstUnitIndex()
+    public u32 Parse_ReplayTrackerSUnitPositionsEvent_m_firstUnitIndex()
     {                             
         var m_firstUnitIndex = tagged_vlq_int();
-        return ProtocolConversion<uint>.From(m_firstUnitIndex);
+        return ProtocolConversion<u32>.From(m_firstUnitIndex);
     }
-    public List<int> Parse_ReplayTrackerSUnitPositionsEvent_m_items()
+    public List<i32> Parse_ReplayTrackerSUnitPositionsEvent_m_items()
     {                             
         ValidateArrayTag();
         var arrayLength = ParseVlqInt();
         var array = ReadList(tagged_vlq_int, arrayLength);
 
-        array = array.Select(x => ProtocolConversion<int>.From(x)).ToList();
-        return array;
+        return array.Select(x => ProtocolConversion<i32>.From(x)).ToList();
     }
 
     public ReplayTrackerSPlayerSetupEvent Parse_ReplayTrackerSPlayerSetupEvent() 
     {
-        Option<byte> m_playerId = Option.None;
-        Option<uint> m_type = Option.None;
-        var m_userId = Option.Some<Option<uint>>(Option.None);
-        var m_slotId = Option.Some<Option<uint>>(Option.None);
+        Option<u8> m_playerId = Option.None;
+        Option<u32> m_type = Option.None;
+        var m_userId = Option.Some<Option<u32>>(Option.None);
+        var m_slotId = Option.Some<Option<u32>>(Option.None);
         ValidateStructTag();
         var structFieldCount = ParseVlqInt();           
         for (var i = 0; i < structFieldCount; i++)
@@ -3776,27 +3775,27 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
             m_slotId = Option.OkOrReturnMissingFieldErr(m_slotId),
         };
     }
-    public byte Parse_ReplayTrackerSPlayerSetupEvent_m_playerId()
+    public u8 Parse_ReplayTrackerSPlayerSetupEvent_m_playerId()
     {                             
         var m_playerId = tagged_vlq_int();
-        return ProtocolConversion<byte>.From(m_playerId);
+        return ProtocolConversion<u8>.From(m_playerId);
     }
-    public uint Parse_ReplayTrackerSPlayerSetupEvent_m_type()
+    public u32 Parse_ReplayTrackerSPlayerSetupEvent_m_type()
     {                             
         var m_type = tagged_vlq_int();
-        return ProtocolConversion<uint>.From(m_type);
+        return ProtocolConversion<u32>.From(m_type);
     }
-    public Option<uint> Parse_ReplayTrackerSPlayerSetupEvent_m_userId()
+    public Option<u32> Parse_ReplayTrackerSPlayerSetupEvent_m_userId()
     {                             
         ValidateOptTag();
         var isProvided = ReadByte();
 
-        Option<uint> m_userId = default;
+        Option<u32> m_userId = default;
         if (isProvided != 0)
         {                                   
             var res = tagged_vlq_int();
 
-            m_userId = Option.Some(ProtocolConversion<uint>.From(res));
+            m_userId = Option.Some(ProtocolConversion<u32>.From(res));
         }
         else
         {
@@ -3805,17 +3804,17 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
 
         return m_userId;
     }
-    public Option<uint> Parse_ReplayTrackerSPlayerSetupEvent_m_slotId()
+    public Option<u32> Parse_ReplayTrackerSPlayerSetupEvent_m_slotId()
     {                             
         ValidateOptTag();
         var isProvided = ReadByte();
 
-        Option<uint> m_slotId = default;
+        Option<u32> m_slotId = default;
         if (isProvided != 0)
         {                                   
             var res = tagged_vlq_int();
 
-            m_slotId = Option.Some(ProtocolConversion<uint>.From(res));
+            m_slotId = Option.Some(ProtocolConversion<u32>.From(res));
         }
         else
         {

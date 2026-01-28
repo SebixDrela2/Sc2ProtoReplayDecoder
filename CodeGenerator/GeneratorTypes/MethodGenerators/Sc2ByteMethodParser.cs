@@ -338,13 +338,16 @@ internal class Sc2ByteMethodParser(StringBuilder methodBuilder, Sc2GeneratorData
             if (fieldConverted.ShouldTryFrom)
             {
                 _fieldNameMethodBuilder.AppendLine($$"""
-                        array = array.Select(x => ProtocolConversion<int>.From(x)).ToList();
+                        return array.Select(x => ProtocolConversion<i32>.From(x)).ToList();
                 """);
             }
+            else
+            {
 
-            _fieldNameMethodBuilder.AppendLine($$"""
+                _fieldNameMethodBuilder.AppendLine($$"""
                         return array;
                 """);
+            }
         }
         else if (fieldConverted.IsSizedInt)
         {

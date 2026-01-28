@@ -1,9 +1,7 @@
-﻿using Sc2ReplayAnalyzer.CodeGenerator;
-using Sc2ReplayAnalyzer.CodeGenerator.Generators;
+﻿using Sc2ReplayAnalyzer.CodeGenerator.Generators;
 using Sc2ReplayAnalyzer.Decoder;
 using Sc2ReplayAnalyzer.Json;
 using Sc2ReplayAnalyzer.Tokenizer;
-using System.Text;
 
 internal class Program
 {

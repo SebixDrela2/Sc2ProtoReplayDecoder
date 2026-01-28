@@ -59,19 +59,19 @@ public class Sc2TypeConversionBitPacked : ISc2JsonTypeConversionAlignment
             "AsciiStringType" or 
             "StringType" => new Sc2JsonTypeConversion
             {
-                CSharpType = $"List<byte>",
+                CSharpType = $"List<u8>",
                 Parser = "take_unaligned_byte",
                 IsVector = true,
             },
             "IntType" => new Sc2JsonTypeConversion
             {
-                CSharpType = "long",
+                CSharpType = "i64",
                 Parser = "parse_packed_int({})",
                 IsSizedInt = true,
             },
             "FourCCType" => new Sc2JsonTypeConversion
             {
-                CSharpType = "List<byte>",
+                CSharpType = "List<u8>",
                 Parser = "take_fourcc",
             },
             "NullType" => new Sc2JsonTypeConversion
@@ -214,7 +214,7 @@ public class Sc2TypeConversionByteAligned : ISc2JsonTypeConversionAlignment
         "NNet.Game.TTeamId" or
         "NNet.Replay.Tracker.TUIntMiniBits" => new Sc2JsonTypeConversion
         {
-            CSharpType = "byte",
+            CSharpType = "u8",
             ShouldTryFrom = true,
             Parser = "tagged_vlq_int",
         },
@@ -224,13 +224,13 @@ public class Sc2TypeConversionByteAligned : ISc2JsonTypeConversionAlignment
         "NNet.Game.TDifficulty" or
         "NNet.Game.THandicap" => new Sc2JsonTypeConversion
         {
-            CSharpType = "uint",
+            CSharpType = "u32",
             ShouldTryFrom = true,
             Parser = "tagged_vlq_int",
         },
         "NNet.int32" or "NNet.Game.TFixedBits" => new Sc2JsonTypeConversion
         {
-            CSharpType = "int",
+            CSharpType = "i32",
             ShouldTryFrom = true,
             Parser = "tagged_vlq_int",
         },
@@ -241,13 +241,13 @@ public class Sc2TypeConversionByteAligned : ISc2JsonTypeConversionAlignment
         },
         "NNet.Game.TColorId" or "NNet.int64" => new Sc2JsonTypeConversion
         {
-            CSharpType = "long",
+            CSharpType = "i64",
             ShouldTryFrom = true,
             Parser = "tagged_vlq_int",
         },
         "NNet.uint64" => new Sc2JsonTypeConversion
         {
-            CSharpType = "long",
+            CSharpType = "u64",
             ShouldTryFrom = true,
             Parser = "tagged_vlq_int"
         },
