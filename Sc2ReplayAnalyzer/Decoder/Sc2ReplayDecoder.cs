@@ -24,9 +24,33 @@ public class Sc2ReplayDecoder(string path)
 
         _listingFiles = mpqArchive.ListingFiles;
 
+        ParseReplayInitData();
+        ParseMessageEvents();
         ParseReplayDetails();
         ParseTrackerEvents();
         ParseGameEvents();
+    }
+
+    private void ParseReplayInitData()
+    {
+        using var reader = new BinaryReader(new MemoryStream(_listingFiles["replay.initData"]));
+
+        var bitPackedParser = new BitPackedProtocolParser(reader);
+        var initData = bitPackedParser.Parse_ReplaySInitData();
+    }
+
+    private void ParseMessageEvents()
+    {
+        using var reader = new BinaryReader(new MemoryStream(_listingFiles["replay.message.events"]));
+
+        var bitPackedParser = new BitPackedProtocolParser(reader);
+        
+        while(reader.BaseStream.Position < reader.BaseStream.Length)
+        {
+            var messageTriples = ParseMessageEventTriplet(bitPackedParser);
+
+            Console.WriteLine($"Event#{_counter} Delta: {messageTriples.Delta} Event:{messageTriples.EventID.GetType().Name.ToUpper()}");
+        }
     }
 
     private void ParseReplayDetails()
@@ -45,7 +69,7 @@ public class Sc2ReplayDecoder(string path)
 
         while (reader.BaseStream.Position < reader.BaseStream.Length)
         {
-            var gameTriples = ParseEventTriplet(bitPackedParser);
+            var gameTriples = ParseGameEventTriplet(bitPackedParser);
 
             Console.WriteLine($"Event#{_counter} Delta: {gameTriples.Delta} Event:{gameTriples.EventID.GetType().Name.ToUpper()}");
         }
@@ -93,7 +117,7 @@ public class Sc2ReplayDecoder(string path)
     private static int _counter = 0;
     private static int _operation = 0;
 
-    private EventTriplet ParseEventTriplet(BitPackedProtocolParser bitPackedParser)
+    private GameEventTriplet ParseGameEventTriplet(BitPackedProtocolParser bitPackedParser)
     {
         var delta = bitPackedParser.Parse_SVarUint32();
         var gameUserID = bitPackedParser.Parse_ReplaySGameUserId();
@@ -110,7 +134,32 @@ public class Sc2ReplayDecoder(string path)
 
         bitPackedParser.byte_align();
 
-        return new EventTriplet
+        return new GameEventTriplet
+        {
+            Delta = realDelta,
+            UserID = gameUserID.m_userId,
+            EventID = eventID
+        };
+    }
+
+    private MessageEventTriplet ParseMessageEventTriplet(BitPackedProtocolParser bitPackedParser)
+    {
+        var delta = bitPackedParser.Parse_SVarUint32();
+        var gameUserID = bitPackedParser.Parse_ReplaySGameUserId();
+        var eventID = bitPackedParser.Parse_GameEMessageId();
+
+        var realDelta = delta switch
+        {
+            Json.protocol95299.BitPacked.m_uint6 val => val.Value.Value,
+            Json.protocol95299.BitPacked.m_uint14 val => val.Value.Value,
+            Json.protocol95299.BitPacked.m_uint22 val => val.Value.Value,
+            Json.protocol95299.BitPacked.m_uint32 val => val.Value.Value,
+            _ => throw new NotImplementedException(),
+        };
+
+        bitPackedParser.byte_align();
+
+        return new MessageEventTriplet
         {
             Delta = realDelta,
             UserID = gameUserID.m_userId,
@@ -134,10 +183,17 @@ public class Sc2ReplayDecoder(string path)
         public ReplayTrackerEEventId TrackerEventID;
     }
 
-    private record class EventTriplet
+    private record class GameEventTriplet
     {
         public long Delta;
         public long UserID;
         public GameEEventId EventID;
+    }
+
+    private record class MessageEventTriplet
+    {
+        public long Delta;
+        public long UserID;
+        public GameEMessageId EventID;
     }
 }

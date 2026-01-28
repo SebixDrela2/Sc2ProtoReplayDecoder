@@ -12378,7 +12378,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public GameEMessageId Parse_GameEMessageId()
     {
-        var numBits = 3;
+        var numBits = 4;
         var variantTag = parse_packed_int(0, numBits);
 
         switch (variantTag)
@@ -13645,7 +13645,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     public GameCCacheHandle Parse_GameCCacheHandle()
     {
         byte_align();
-        var numBits = 6;
+        var numBits = 320;
         
         var value = take_bit_array(numBits);
 

@@ -83,6 +83,11 @@ internal class Sc2BitMethodParser(StringBuilder methodBuilder, Sc2GeneratorData 
         var typeName = Sc2TypeUtils.GetTypeName(unitTypeName);
         var numBits = Sc2TypeConversionBitPacked.BoundsMaxValueToBitSize(bounds);
 
+        if (typeName == "GameCCacheHandle")
+        {
+            numBits = 40 * 8; // does not work for this case. It should literally 40 bytes.
+        }
+
         _generalMethodBuilder.AppendLine($$"""
                 public {{typeName}} Parse_{{typeName}}()
                 {
