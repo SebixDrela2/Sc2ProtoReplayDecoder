@@ -8,10 +8,7 @@ internal abstract class Sc2GeneratorBase
 {
     private readonly StringBuilder _builder;
 
-    private readonly HashSet<string> _classDefinitions = [];
     private readonly HashSet<string> _interfaceEnumDefinitions = [];
-    private readonly HashSet<string> _classEnumDefinitions = [];
-    private readonly HashSet<string> _choiceDefinitions = [];
 
     private readonly Sc2BitMethodParser _bitMethodParser;
     private readonly Sc2ByteMethodParser _byteMethodParser;
@@ -55,13 +52,13 @@ internal abstract class Sc2GeneratorBase
     protected ISc2AgnosticParser GetAgnosticMethodParser() => _agnosticParser;
 
     protected bool OpenClass(string className, string choiceType = null)
-    {  
-        if (_classDefinitions.Contains(className))
+    {
+        var typeName = Sc2TypeUtils.GetTypeName(className);
+
+        if (typeName is "None")
         {
             return false;
         }
-
-        _classDefinitions.Add(className);
 
         var possibleAbstractClass = choiceType is not null 
             ? $" : {Sc2TypeUtils.GetTypeName(choiceType)}" 
@@ -69,7 +66,7 @@ internal abstract class Sc2GeneratorBase
 
         _builder.AppendLine($"// {className}");
         _builder.AppendLine($$"""
-            public class {{Sc2TypeUtils.GetTypeName(className)}}{{possibleAbstractClass}}
+            public class {{typeName}}{{possibleAbstractClass}}
             {
             """);
 
@@ -80,12 +77,6 @@ internal abstract class Sc2GeneratorBase
     {
         var typeName = Sc2TypeUtils.GetTypeName(fullName);
         var uniqueVariantName = $"{typeName}_{variantName}";
-        if (_classEnumDefinitions.Contains(uniqueVariantName))
-        {
-            return false;
-        }
-
-        _classEnumDefinitions.Add(uniqueVariantName);
 
         _builder.AppendLine($"// {variantName}");
 
@@ -124,13 +115,6 @@ internal abstract class Sc2GeneratorBase
 
     protected bool OpenChoice(string choiceName)
     {
-        if (_choiceDefinitions.Contains(choiceName))
-        {
-            return false;
-        }
-
-        _choiceDefinitions.Add(choiceName);
-
         var typeName = Sc2TypeUtils.GetTypeName(choiceName);
 
         _builder.AppendLine($"// {choiceName}");

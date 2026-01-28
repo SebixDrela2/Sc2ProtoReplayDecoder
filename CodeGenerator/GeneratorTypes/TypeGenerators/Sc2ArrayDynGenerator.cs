@@ -24,13 +24,12 @@ internal class Sc2ArrayDynGenerator(StringBuilder builder, Sc2GeneratorData data
 
             if (OpenClass(fullName))
             {
-                methodParser.OpenArray(bounds, fullName, internalType);
-
                 AddField("Value", $"List<{elementType}>");
                 Close();
-
-                methodParser.Finalise();
             }
+
+            methodParser.OpenArray(bounds, fullName, internalType);
+            methodParser.Finalise();
         }
     }
 }

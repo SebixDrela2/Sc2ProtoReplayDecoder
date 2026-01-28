@@ -1,6 +1,4 @@
-﻿using Sc2ReplayAnalyzer.Decoder;
-
-namespace Sc2ReplayAnalyzer.Tokenizer;
+﻿namespace Sc2ReplayAnalyzer.Tokenizer;
 
 public class Sc2JsonProvider
 {
@@ -8,7 +6,7 @@ public class Sc2JsonProvider
 
     public Dictionary<string, string> Provide()
     {
-        var assembly = typeof(Sc2ReplayDecoder).Assembly;
+        var assembly = typeof(Sc2JsonProvider).Assembly;
         var resourceNames = assembly.GetManifestResourceNames();
         var jsonDict = new Dictionary<string, string>();
 

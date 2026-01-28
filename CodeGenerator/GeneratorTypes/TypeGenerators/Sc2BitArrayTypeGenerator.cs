@@ -22,13 +22,12 @@ internal class Sc2BitArrayGenerator(StringBuilder builder, Sc2GeneratorData data
 
             if (OpenClass(fullName))
             {
-                methodParser.OpenBitArray(bounds, fullName);
-
                 AddField("Value", "List<byte>");
                 Close();
-
-                methodParser.Finalise();
             }
+
+            methodParser.OpenBitArray(bounds, fullName);
+            methodParser.Finalise();
         }
     }
 }

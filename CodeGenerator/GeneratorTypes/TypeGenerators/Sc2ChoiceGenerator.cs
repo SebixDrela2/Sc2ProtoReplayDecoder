@@ -39,7 +39,9 @@ internal class Sc2ChoiceGenerator(StringBuilder builder, Sc2GeneratorData data)
     private void HandleVariant<T>(JsonNode variant, string unitTypeFullName)
         where T : ISc2JsonTypeConversionAlignment
     {
-        if (variant[TypeInfo][Type].ToString() is "NullType")
+        var variantTypeInfoType = variant[TypeInfo][Type].ToString();
+        
+        if (typeof(T) == typeof(Sc2TypeConversionByteAligned) && variantTypeInfoType is "NullType")
         {
             return;
         }
@@ -48,7 +50,7 @@ internal class Sc2ChoiceGenerator(StringBuilder builder, Sc2GeneratorData data)
         var variantName = variant[Name].ToString();
         var fieldTypeInfo = fieldTypeInfoFullName is not null
             ? fieldTypeInfoFullName
-            : variant[TypeInfo][Type].ToString();
+            : variantTypeInfoType.ToString();
 
         var fieldConverted = T.FromNnetName(fieldTypeInfo);
 
@@ -74,11 +76,11 @@ internal class Sc2ChoiceGenerator(StringBuilder builder, Sc2GeneratorData data)
         {
             AddField("Value", fieldType);
             Close();
+        }
 
-            var methodParser = GetMethodParser<T>();
+        var methodParser = GetMethodParser<T>();
 
-            var fieldTag = variant[Tag][Value].ToString();
-            methodParser.ContinueVariantChoice(fieldConverted, fieldTypeInfo, fieldType, variantName, fieldTag);
-        }       
+        var fieldTag = variant[Tag][Value].ToString();
+        methodParser.ContinueVariantChoice(fieldConverted, fieldTypeInfo, fieldType, variantName, fieldTag);
     }
 }

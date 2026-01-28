@@ -24,14 +24,12 @@ internal class Sc2BlobTypeStringGenerator(StringBuilder builder, Sc2GeneratorDat
 
             if (OpenClass(fullName))
             {
-                methodParser.OpenString(bounds, fullName);
-
                 AddField("Value", "List<byte>");
                 Close();
-
-                methodParser.Finalise();
-
             }
+
+            methodParser.OpenString(bounds, fullName);
+            methodParser.Finalise();
         }
 
         foreach (var node in blobNodes)
@@ -41,13 +39,12 @@ internal class Sc2BlobTypeStringGenerator(StringBuilder builder, Sc2GeneratorDat
 
             if (OpenClass(fullName))
             {
-                methodParser.OpenBlob(bounds, fullName);
-
                 AddField("Value", "List<byte>");
                 Close();
-
-                methodParser.Finalise();
             }
+
+            methodParser.OpenBlob(bounds, fullName);
+            methodParser.Finalise();
         }
     }
 }

@@ -26,14 +26,12 @@ internal class Sc2IntGenerator(StringBuilder builder, Sc2GeneratorData data)
 
             if (OpenClass(fullName))
             {
-                methodParser.OpenInt(bounds, fullName);
-
                 AddField("Value", "long");
-
                 Close();
-
-                methodParser.Finalise();
             }
+
+            methodParser.OpenInt(bounds, fullName);
+            methodParser.Finalise();
         }
     }
 }

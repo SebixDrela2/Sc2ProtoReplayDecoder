@@ -37,6 +37,7 @@ internal class Sc2AgnosticParser(StringBuilder methodBuilder, Sc2GeneratorData d
         where T : ISc2JsonTypeConversionAlignment
     {
         var typeName = Sc2TypeUtils.GetTypeName(unitTypeName);
+        var numBits = (int)Math.Ceiling(Math.Log2(numFields)); 
 
         if (typeof(T) == typeof(Sc2TypeConversionByteAligned))
         {
@@ -56,8 +57,7 @@ internal class Sc2AgnosticParser(StringBuilder methodBuilder, Sc2GeneratorData d
             _generalMethodBuilder.AppendLine($$"""
                     public {{typeName}} Parse_{{typeName}}()
                     {
-                        ValidateIntTag();
-                        var numBits = {{numFields}};
+                        var numBits = {{numBits}};
                         var variantTag = parse_packed_int(0, numBits);
 
                         switch (variantTag)

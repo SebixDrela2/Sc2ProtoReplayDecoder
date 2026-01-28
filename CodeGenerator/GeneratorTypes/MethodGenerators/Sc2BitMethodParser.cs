@@ -18,14 +18,18 @@ internal class Sc2BitMethodParser(StringBuilder methodBuilder, Sc2GeneratorData 
     public void OpenArray(JsonNode bounds, string unitTypeName, string internalType)
     {
         var arrayMaxValue = int.Parse(bounds[Max][EValue].ToString());
+        var typeName = Sc2TypeUtils.GetTypeName(unitTypeName);
+        if (typeName == "GameSelectionIndexArrayType")
+        {
 
-        if (bounds[Max][Inclusive] is { } inclusiveBounds)
+        }
+
+        if (bounds[Max][Inclusive] is { } inclusiveBounds && inclusiveBounds.GetValue<bool>())
         {
             arrayMaxValue += 1;
         }
 
-        var arrayLengthNumBits =  Math.Floor(Math.Log2(arrayMaxValue + 1));
-        var typeName = Sc2TypeUtils.GetTypeName(unitTypeName);
+        var arrayLengthNumBits =  Math.Floor(Math.Log2(arrayMaxValue) + 1);
         internalType = Sc2TypeUtils.GetTypeName(internalType);
 
         _generalMethodBuilder.AppendLine($$"""
@@ -118,12 +122,12 @@ internal class Sc2BitMethodParser(StringBuilder methodBuilder, Sc2GeneratorData 
 
     public void OpenInt(JsonNode bounds, string unitTypeName)
     {
+        var typeName = Sc2TypeUtils.GetTypeName(unitTypeName);
         var offset = bounds[Min][EValue]?.ToString()
             ?? throw new InvalidOperationException("bounds should have .min.evalue");
 
         var rhsValue = bounds[Max]?[Value]?[Rhs]?[Value];
         var boundType = GetBoundType(bounds, rhsValue, out var numBits);
-        var typeName = Sc2TypeUtils.GetTypeName(unitTypeName);
 
         if (offset.StartsWith("-"))
         {
@@ -213,6 +217,12 @@ internal class Sc2BitMethodParser(StringBuilder methodBuilder, Sc2GeneratorData 
                                 {
                                     Value = ProtocolConversion<{{fieldType}}>.From(res)
                                 };
+                """);
+            }
+            else if (typeName == "None")
+            {
+                _generalMethodBuilder.AppendLine($$"""
+                                return default;
                 """);
             }
             else
@@ -487,13 +497,13 @@ internal class Sc2BitMethodParser(StringBuilder methodBuilder, Sc2GeneratorData 
         _generalMethodBuilder.Clear();
     }
 
-    private string GetBoundType(JsonNode bounds, JsonNode rhsValue, out nuint numBits)
+    private string GetBoundType(JsonNode bounds, JsonNode rhsValue, out long numBits)
     {
         numBits = 0;
 
         if (rhsValue is not null)
         {
-            if (!nuint.TryParse(rhsValue.ToString(), out numBits))
+            if (!long.TryParse(rhsValue.ToString(), out numBits))
             {
                 throw new InvalidOperationException(".max.value.rhs.value should be nuint");
             }

@@ -76,7 +76,7 @@ public class Sc2TypeConversionBitPacked : ISc2JsonTypeConversionAlignment
             },
             "NullType" => new Sc2JsonTypeConversion
             {
-                CSharpType = "()",
+                CSharpType = "object",
                 Parser = "take_null",
             },
             var x => throw new NotSupportedException($"WTF TYPE {x}")
@@ -147,7 +147,7 @@ public class Sc2TypeConversionBitPacked : ISc2JsonTypeConversionAlignment
     }
 
 
-     public static nuint BoundsMaxValueToBitSize(JsonNode bounds)
+     public static long BoundsMaxValueToBitSize(JsonNode bounds)
      {       
         var res = double.Parse(bounds[Max][EValue].ToString());
 
@@ -161,7 +161,7 @@ public class Sc2TypeConversionBitPacked : ISc2JsonTypeConversionAlignment
             res -= 1;
         }
 
-        return (nuint)Math.Floor((Math.Log2(res)) + 1);
+        return (long)Math.Floor(Math.Log(res, 2) + 1);
     }
 
     private static Sc2JsonTypeConversion GetEnclosedFieldConverted(JsonNode field, string typeInfoType)

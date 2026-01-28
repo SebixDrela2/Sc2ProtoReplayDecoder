@@ -2667,12 +2667,18 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
 
     public GameSCmdData Parse_GameSCmdData() 
     {
-        var offset = 4;
+        var offset = 0;
         var numBits = 2;
         var variantTag = parse_packed_int(offset, numBits);
 
         switch (variantTag)
         {
+            case 0:
+            {
+                var res = take_null();
+
+                return default;
+            }
             case 1:
             {
                 var res = Parse_GameSMapCoord3D();
@@ -2709,12 +2715,18 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
 
     public m_eventData Parse_m_eventData() 
     {
-        var offset = 6;
+        var offset = 0;
         var numBits = 3;
         var variantTag = parse_packed_int(offset, numBits);
 
         switch (variantTag)
         {
+            case 0:
+            {
+                var res = take_null();
+
+                return default;
+            }
             case 1:
             {
                 var res = parse_bool();
@@ -2769,7 +2781,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
 
     public GameSLobbySlotChange Parse_GameSLobbySlotChange() 
     {
-        var offset = 25;
+        var offset = 0;
         var numBits = 5;
         var variantTag = parse_packed_int(offset, numBits);
 
@@ -3042,12 +3054,18 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
 
     public GameSSelectionMask Parse_GameSSelectionMask() 
     {
-        var offset = 4;
+        var offset = 0;
         var numBits = 2;
         var variantTag = parse_packed_int(offset, numBits);
 
         switch (variantTag)
         {
+            case 0:
+            {
+                var res = take_null();
+
+                return default;
+            }
             case 1:
             {
                 var res = Parse_GameSelectionMaskType();
@@ -10803,8 +10821,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public EObserve Parse_EObserve()
     {
-        ValidateIntTag();
-        var numBits = 3;
+        var numBits = 2;
         var variantTag = parse_packed_int(0, numBits);
 
         switch (variantTag)
@@ -10833,8 +10850,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public ELeaveReason Parse_ELeaveReason()
     {
-        ValidateIntTag();
-        var numBits = 16;
+        var numBits = 4;
         var variantTag = parse_packed_int(0, numBits);
 
         switch (variantTag)
@@ -10928,8 +10944,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public EReconnectStatus Parse_EReconnectStatus()
     {
-        ValidateIntTag();
-        var numBits = 4;
+        var numBits = 2;
         var variantTag = parse_packed_int(0, numBits);
 
         switch (variantTag)
@@ -10963,8 +10978,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public GameESynchronous Parse_GameESynchronous()
     {
-        ValidateIntTag();
-        var numBits = 3;
+        var numBits = 2;
         var variantTag = parse_packed_int(0, numBits);
 
         switch (variantTag)
@@ -10997,8 +11011,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public GameESynthesized Parse_GameESynthesized()
     {
-        ValidateIntTag();
-        var numBits = 2;
+        var numBits = 1;
         var variantTag = parse_packed_int(0, numBits);
 
         switch (variantTag)
@@ -11026,8 +11039,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public GameEDebug Parse_GameEDebug()
     {
-        ValidateIntTag();
-        var numBits = 2;
+        var numBits = 1;
         var variantTag = parse_packed_int(0, numBits);
 
         switch (variantTag)
@@ -11055,8 +11067,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public GameEHijackMethod Parse_GameEHijackMethod()
     {
-        ValidateIntTag();
-        var numBits = 2;
+        var numBits = 1;
         var variantTag = parse_packed_int(0, numBits);
 
         switch (variantTag)
@@ -11080,8 +11091,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public GameEEventId Parse_GameEEventId()
     {
-        ValidateIntTag();
-        var numBits = 120;
+        var numBits = 7;
         var variantTag = parse_packed_int(0, numBits);
 
         switch (variantTag)
@@ -11935,8 +11945,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public GameECommandManagerState Parse_GameECommandManagerState()
     {
-        ValidateIntTag();
-        var numBits = 3;
+        var numBits = 2;
         var variantTag = parse_packed_int(0, numBits);
 
         switch (variantTag)
@@ -11965,8 +11974,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public GameEGameSpeed Parse_GameEGameSpeed()
     {
-        ValidateIntTag();
-        var numBits = 5;
+        var numBits = 3;
         var variantTag = parse_packed_int(0, numBits);
 
         switch (variantTag)
@@ -12005,8 +12013,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public GameEPhase Parse_GameEPhase()
     {
-        ValidateIntTag();
-        var numBits = 6;
+        var numBits = 3;
         var variantTag = parse_packed_int(0, numBits);
 
         switch (variantTag)
@@ -12050,8 +12057,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public GameEConversationSkip Parse_GameEConversationSkip()
     {
-        ValidateIntTag();
-        var numBits = 2;
+        var numBits = 1;
         var variantTag = parse_packed_int(0, numBits);
 
         switch (variantTag)
@@ -12075,8 +12081,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public GameEResultDetails Parse_GameEResultDetails()
     {
-        ValidateIntTag();
-        var numBits = 4;
+        var numBits = 2;
         var variantTag = parse_packed_int(0, numBits);
 
         switch (variantTag)
@@ -12110,8 +12115,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public GameEOptionFog Parse_GameEOptionFog()
     {
-        ValidateIntTag();
-        var numBits = 4;
+        var numBits = 2;
         var variantTag = parse_packed_int(0, numBits);
 
         switch (variantTag)
@@ -12145,8 +12149,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public GameEOptionObservers Parse_GameEOptionObservers()
     {
-        ValidateIntTag();
-        var numBits = 4;
+        var numBits = 2;
         var variantTag = parse_packed_int(0, numBits);
 
         switch (variantTag)
@@ -12180,8 +12183,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public GameEOptionUserDifficulty Parse_GameEOptionUserDifficulty()
     {
-        ValidateIntTag();
-        var numBits = 3;
+        var numBits = 2;
         var variantTag = parse_packed_int(0, numBits);
 
         switch (variantTag)
@@ -12210,8 +12212,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public GameEGameLaunch Parse_GameEGameLaunch()
     {
-        ValidateIntTag();
-        var numBits = 6;
+        var numBits = 3;
         var variantTag = parse_packed_int(0, numBits);
 
         switch (variantTag)
@@ -12255,8 +12256,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public GameEGameType Parse_GameEGameType()
     {
-        ValidateIntTag();
-        var numBits = 7;
+        var numBits = 3;
         var variantTag = parse_packed_int(0, numBits);
 
         switch (variantTag)
@@ -12305,8 +12305,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public GameEControl Parse_GameEControl()
     {
-        ValidateIntTag();
-        var numBits = 4;
+        var numBits = 2;
         var variantTag = parse_packed_int(0, numBits);
 
         switch (variantTag)
@@ -12340,8 +12339,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public GameEMessageRecipient Parse_GameEMessageRecipient()
     {
-        ValidateIntTag();
-        var numBits = 5;
+        var numBits = 3;
         var variantTag = parse_packed_int(0, numBits);
 
         switch (variantTag)
@@ -12380,8 +12378,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public GameEMessageId Parse_GameEMessageId()
     {
-        ValidateIntTag();
-        var numBits = 5;
+        var numBits = 3;
         var variantTag = parse_packed_int(0, numBits);
 
         switch (variantTag)
@@ -12430,8 +12427,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public GameEResultCode Parse_GameEResultCode()
     {
-        ValidateIntTag();
-        var numBits = 4;
+        var numBits = 2;
         var variantTag = parse_packed_int(0, numBits);
 
         switch (variantTag)
@@ -12465,8 +12461,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public GameEControlGroupUpdate Parse_GameEControlGroupUpdate()
     {
-        ValidateIntTag();
-        var numBits = 6;
+        var numBits = 3;
         var variantTag = parse_packed_int(0, numBits);
 
         switch (variantTag)
@@ -13243,7 +13238,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public CUserInitialDataArray Parse_CUserInitialDataArray()
     {
-        var arrayLengthNumBits = 4;
+        var arrayLengthNumBits = 5;
         var arrayLength = parse_packed_int(0, arrayLengthNumBits);
 
         var value = ReadList(Parse_SUserInitialData, arrayLength);
@@ -13255,7 +13250,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public GameCPlayerDetailsArray Parse_GameCPlayerDetailsArray()
     {
-        var arrayLengthNumBits = 4;
+        var arrayLengthNumBits = 5;
         var arrayLength = parse_packed_int(0, arrayLengthNumBits);
 
         var value = ReadList(Parse_GameSPlayerDetails, arrayLength);
@@ -13267,7 +13262,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public GameCModPaths Parse_GameCModPaths()
     {
-        var arrayLengthNumBits = 5;
+        var arrayLengthNumBits = 6;
         var arrayLength = parse_packed_int(0, arrayLengthNumBits);
 
         var value = ReadList(Parse_CFilePath, arrayLength);
@@ -13279,7 +13274,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public GameCCacheHandles Parse_GameCCacheHandles()
     {
-        var arrayLengthNumBits = 5;
+        var arrayLengthNumBits = 6;
         var arrayLength = parse_packed_int(0, arrayLengthNumBits);
 
         var value = ReadList(Parse_GameCCacheHandle, arrayLength);
@@ -13291,7 +13286,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public GameSSlotDescriptions Parse_GameSSlotDescriptions()
     {
-        var arrayLengthNumBits = 4;
+        var arrayLengthNumBits = 5;
         var arrayLength = parse_packed_int(0, arrayLengthNumBits);
 
         var value = ReadList(Parse_GameSSlotDescription, arrayLength);
@@ -13303,7 +13298,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public GameCArtifactArray Parse_GameCArtifactArray()
     {
-        var arrayLengthNumBits = 3;
+        var arrayLengthNumBits = 4;
         var arrayLength = parse_packed_int(0, arrayLengthNumBits);
 
         var value = ReadList(Parse_CArtifactHandle, arrayLength);
@@ -13327,7 +13322,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public GameCRetryMutationIndexArray Parse_GameCRetryMutationIndexArray()
     {
-        var arrayLengthNumBits = 2;
+        var arrayLengthNumBits = 3;
         var arrayLength = parse_packed_int(0, arrayLengthNumBits);
 
         var value = ReadList(Parse_uint32, arrayLength);
@@ -13339,7 +13334,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public GameCRewardArray Parse_GameCRewardArray()
     {
-        var arrayLengthNumBits = 16;
+        var arrayLengthNumBits = 17;
         var arrayLength = parse_packed_int(0, arrayLengthNumBits);
 
         var value = ReadList(Parse_GameTReward, arrayLength);
@@ -13351,7 +13346,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public GameCRewardOverrideArray Parse_GameCRewardOverrideArray()
     {
-        var arrayLengthNumBits = 16;
+        var arrayLengthNumBits = 17;
         var arrayLength = parse_packed_int(0, arrayLengthNumBits);
 
         var value = ReadList(Parse_GameCRewardOverride, arrayLength);
@@ -13363,7 +13358,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public GameCLicenseArray Parse_GameCLicenseArray()
     {
-        var arrayLengthNumBits = 15;
+        var arrayLengthNumBits = 16;
         var arrayLength = parse_packed_int(0, arrayLengthNumBits);
 
         var value = ReadList(Parse_GameTLicense, arrayLength);
@@ -13375,7 +13370,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public GameCLobbySlotArray Parse_GameCLobbySlotArray()
     {
-        var arrayLengthNumBits = 4;
+        var arrayLengthNumBits = 5;
         var arrayLength = parse_packed_int(0, arrayLengthNumBits);
 
         var value = ReadList(Parse_GameSLobbySlot, arrayLength);
@@ -13387,7 +13382,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public GameSelectionIndexArrayType Parse_GameSelectionIndexArrayType()
     {
-        var arrayLengthNumBits = 8;
+        var arrayLengthNumBits = 9;
         var arrayLength = parse_packed_int(0, arrayLengthNumBits);
 
         var value = ReadList(Parse_GameTSelectionIndex, arrayLength);

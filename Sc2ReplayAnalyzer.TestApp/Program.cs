@@ -11,6 +11,7 @@ internal class Program
     private const string GenPath = @"C:\Users\Sebastian\source\repos\Sc2ReplayAnalyzer\Sc2ReplayAnalyzer\ProtocolGen";
     internal static void Main(string[] args)
     {
+        //Generate();
         Decode();
     }
 
@@ -30,7 +31,7 @@ internal class Program
 
     private static void Decode()
     {
-        var decoder = new Sc2ReplayDecoder(@"C:\\Users\\Sebastian\\Documents\\StarCraft II\\Accounts\\103757627\\1-S2-1-10180166\\Replays\\Multiplayer\\Oh No It's Zombies Arctic Map (10).SC2Replay");
+        var decoder = new Sc2ReplayDecoder(@"C:\Users\Sebastian\RustroverProjects\s2protocol-rs\assets\SC2-Patch_4.12-2v2AI.SC2Replay");
         decoder.Decode();
     }
 }

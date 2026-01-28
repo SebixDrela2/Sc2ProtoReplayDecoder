@@ -1,4 +1,5 @@
 ﻿using System.Buffers.Binary;
+using System.Numerics;
 
 namespace Sc2ReplayAnalyzer.Json.Global;
 
@@ -21,7 +22,6 @@ public struct Option<T>
 
 public static class Option
 {
-    // // ok_or_return_missing_field_err!
     public static T OkOrReturnMissingFieldErr<T>(Option<T> option)
     {
         if (!option.HasValue)
@@ -43,189 +43,157 @@ public static class Option
 
 public struct NoneValue;
 
-public sealed class BitReader : IDisposable
+public sealed class BitReader(BinaryReader reader) : IDisposable
 {
-    private readonly BinaryReader _reader;
     private byte _currentByte;
-    private int _bitOffset;
+    private int _available;
 
-    public BitReader(BinaryReader reader)
+    public string DebugView => GetDebugView();
+    public int BytePosition => (int)reader.BaseStream.Position;
+    public int BitPosition => 8 - _available;
+    public int RustSize => (int)reader.BaseStream.Length - BytePosition;
+
+    private string GetDebugView()
     {
-        _reader = reader;
-        _bitOffset = 8;
+        var pos = reader.BaseStream.Position;
+
+        var backing = (int)Math.Min(8, reader.BaseStream.Position);
+        reader.BaseStream.Position -= backing;
+
+        var value = reader.ReadBytes(16);
+
+        reader.BaseStream.Position = pos;
+
+        return $"Pos: {BytePosition}:{BitPosition} {string.Join(" ", value[..backing].Select(x => $"{x,3}"))} * {string.Join(" ", value[backing..].Select(x => $"{x,3}"))}";
     }
 
-    private void EnsureByte()
+    public int AvailableBits => _available;
+
+    public long TakeBitsI64(int totalBits)
     {
-        if (_bitOffset == 8)
+        long result = 0L;
+        var remainingBits = totalBits;
+
+        while (true)
         {
-            _currentByte = _reader.ReadByte();
-            _bitOffset = 0;
-        }
-    }
+            var count = remainingBits > 8
+                ? (_available != 0 ? _available : 8)
+                : remainingBits;
 
-    private byte TakeBits(int count)
-    {
-        byte result = 0;
+            long bits = RTakeNBits(count);
 
-        while (count > 0)
-        {
-            EnsureByte();
+            result |= bits << (remainingBits - count);                     
 
-            int available = 8 - _bitOffset;
-            int take = Math.Min(count, available);
+            remainingBits -= count;
 
-            int shift = available - take;
-            byte bits = (byte)((_currentByte >> shift) & ((1 << take) - 1));
-
-            result = (byte)((result << take) | bits);
-
-            _bitOffset += take;
-            count -= take;
+            if (remainingBits is 0)
+            {
+                break;
+            }
         }
 
         return result;
     }
 
-    private readonly struct ReaderState
-    {
-        public readonly long Position;
-        public readonly byte CurrentByte;
-        public readonly int BitOffset;
-
-        public ReaderState(long pos, byte cur, int off)
-        {
-            Position = pos;
-            CurrentByte = cur;
-            BitOffset = off;
-        }
-    }
-
-    private ReaderState SaveState() => new ReaderState(_reader.BaseStream.Position, _currentByte, _bitOffset);
-
-    private void RestoreState(ReaderState s)
-    {
-        _reader.BaseStream.Position = s.Position;
-        _currentByte = s.CurrentByte;
-        _bitOffset = s.BitOffset;
-    }
-
-    private byte RTakeBits(int count)
-    {
-        var state = SaveState();
-        byte res = TakeBits(count);
-        RestoreState(state);
-        return res;
-    }
-
-    public long TakeBitsI64(int totalBits)
-    {
-        if (totalBits > 64)
-        {
-            throw new InvalidOperationException("More than 64 bits");
-        }
-
-        long res = 0;
-        int remainingBits = totalBits;
-
-        while (remainingBits > 0)
-        {
-            int count = remainingBits > 8
-                ? (_bitOffset != 0 ? 8 - _bitOffset : 8)
-                : remainingBits;
-
-            byte bits = RTakeBits(count);
-            TakeBits(count);
-
-            res |= (long)bits << (remainingBits - count);
-
-            remainingBits -= count;
-        }
-
-        return res;
-    }
-
     public List<byte> TakeBitArray(int totalBits)
     {
-        var res = new List<byte>();
-        int remainingBits = totalBits;
+        var result = new List<byte>();
+        var remainingBits = totalBits;
 
-        while (remainingBits > 0)
+        while(true)
         {
-            int count = remainingBits > 8 ? 8 : remainingBits;
+            var count = remainingBits > 8 
+                ? 8 
+                : remainingBits;
 
-            byte bits = RTakeBits(count);
-            TakeBits(count);
+            var bits = RTakeNBits(count);
 
-            res.Add(bits);
+            result.Add(bits);
+
             remainingBits -= count;
+
+            if (remainingBits is 0)
+            {
+                break;
+            }
         }
 
-        return res;
+        return result;
     }
-
-    /* ============================
-     * byte_align
-     * ============================ */
 
     public void ByteAlign()
     {
-        if (_bitOffset != 0)
+        if (_available is (0 or 8))
         {
-            TakeBits(8 - _bitOffset);
+            return;
         }
-    }
 
-    /* ============================
-     * take_unaligned_byte
-     * ============================ */
+        _currentByte = reader.ReadByte();
+        _available = 8;
+    }
 
     public byte TakeUnalignedByte()
     {
-        return TakeBitArray(8)[0];
-    }
+        var result = TakeBitArray(8);
 
-    /* ============================
-     * take_fourcc
-     * ============================ */
+        return result[0];
+    }
 
     public List<byte> TakeFourCC()
     {
-        return TakeBitArray(4 * 8);
+        var bitArray = TakeBitArray(4 * 8);
+
+        return bitArray;
     }
 
-    /* ============================
-     * take_null
-     * ============================ */
-
-    public void TakeNull()
-    {
-        // intentionally does nothing
-    }
-
-    /* ============================
-     * parse_packed_int
-     * ============================ */
+    public object TakeNull() => new();
 
     public long ParsePackedInt(long offset, int numBits)
     {
-        return offset + TakeBitsI64(numBits);
-    }
+        var num = TakeBitsI64(numBits);
+        var res = offset + num;
 
-    /* ============================
-     * parse_bool
-     * ============================ */
+        return res;
+    }
 
     public bool ParseBool()
     {
-        byte bit = RTakeBits(1);
-        TakeBits(1);
-        return bit != 0;
+        var val = RTakeNBits(1);
+
+        return val != 0;
     }
 
-    public void Dispose()
+    public void Dispose() => reader.Dispose();
+
+    private byte RTakeNBits(int count)
     {
-        _reader.Dispose();
+        byte result;
+
+        if (_available >= count)
+        {
+            var mask = (1 << count) - 1;
+            result = (byte)(_currentByte & mask);
+        }
+        else
+        {
+            result = _currentByte;
+            count -= _available;
+
+            var mask = (1 << count) - 1;
+            _currentByte = reader.ReadByte();
+
+            var result2 = (byte)(_currentByte & mask);
+
+            result <<= count;
+            result |= result2;
+
+            _available = 8;
+        }
+
+        _currentByte >>= count;
+        _available -= count;
+
+        return result;
     }
 }
 
@@ -244,6 +212,9 @@ public abstract class BitPackedProtocolParserImpl : ProtocolReaderBase
         _bitReader.Dispose();
     }
 
+    public int RustSize => _bitReader.RustSize;
+    public int AvailableBits => _bitReader.AvailableBits;
+
     public void byte_align() => _bitReader.ByteAlign();
 
     protected List<byte> take_bit_array(long totalBits) => _bitReader.TakeBitArray((int)totalBits);
@@ -252,7 +223,7 @@ public abstract class BitPackedProtocolParserImpl : ProtocolReaderBase
 
     protected byte take_unaligned_byte() => _bitReader.TakeUnalignedByte();
 
-    protected void take_null() => _bitReader.TakeNull();
+    protected object take_null() => _bitReader.TakeNull();
 
     protected List<byte> take_fourcc() => _bitReader.TakeFourCC();
 

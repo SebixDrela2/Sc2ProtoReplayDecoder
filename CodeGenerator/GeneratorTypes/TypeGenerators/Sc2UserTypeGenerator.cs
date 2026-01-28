@@ -11,7 +11,6 @@ internal class Sc2UserTypeGenerator(StringBuilder builder, Sc2GeneratorData data
     public void Generate<T>(IReadOnlyList<JsonNode> nodes)
         where T : ISc2JsonTypeConversionAlignment
     {
-        // bitpacked
         var userTypeNodes = nodes.Where(x => x[TypeInfo][Type].ToString() is "UserType");
         var methodParser = GetAgnosticMethodParser();
 
@@ -22,13 +21,12 @@ internal class Sc2UserTypeGenerator(StringBuilder builder, Sc2GeneratorData data
 
             if (OpenClass(fullName))
             {
-                methodParser.OpenUserType(fullName, typeInfoFullName);
-
                 AddField("Value", typeInfoFullName);
                 Close();
-
-                methodParser.Finalise();
             }
+
+            methodParser.OpenUserType(fullName, typeInfoFullName);
+            methodParser.Finalise();
         }
     }
 }
