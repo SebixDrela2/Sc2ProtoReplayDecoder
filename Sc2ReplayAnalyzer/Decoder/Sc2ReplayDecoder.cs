@@ -1,4 +1,5 @@
 ﻿using MPQArchive.MPQ;
+using Sc2ReplayAnalyzer.Json.MetaData;
 using Sc2ReplayAnalyzer.Json.protocol95299.BitPacked;
 using Sc2ReplayAnalyzer.Json.protocol95299.Versioned;
 using Sc2ReplayAnalyzer.Tokenizer;
@@ -24,11 +25,18 @@ public class Sc2ReplayDecoder(string path)
 
         _listingFiles = mpqArchive.ListingFiles;
 
+        ParseMetaData();
         ParseReplayInitData();
         ParseMessageEvents();
         ParseReplayDetails();
         ParseTrackerEvents();
         ParseGameEvents();
+    }
+
+    private void ParseMetaData()
+    {
+        using var stream = new MemoryStream(_listingFiles["replay.gamemetadata.json"]);
+        var metaData = System.Text.Json.JsonSerializer.Deserialize<ReplayMetadata>(stream);
     }
 
     private void ParseReplayInitData()
