@@ -60,7 +60,7 @@ public class Sc2TypeConversionBitPacked : ISc2JsonTypeConversionAlignment
             "StringType" => new Sc2JsonTypeConversion
             {
                 CSharpType = $"List<u8>",
-                Parser = "take_unaligned_byte",
+                Parser = "take_aligned_byte",
                 IsVector = true,
             },
             "IntType" => new Sc2JsonTypeConversion

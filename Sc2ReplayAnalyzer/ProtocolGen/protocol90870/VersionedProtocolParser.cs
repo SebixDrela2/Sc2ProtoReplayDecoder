@@ -1,7 +1,7 @@
 
 using Sc2ReplayAnalyzer.Json.Global;
 
-namespace Sc2ReplayAnalyzer.Json.protocol95299.Versioned;
+namespace Sc2ReplayAnalyzer.Json.protocol90870.Versioned;
 
 // NNet.SVarUint32
 public abstract class SVarUint32 { }

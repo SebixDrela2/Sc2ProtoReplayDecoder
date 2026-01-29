@@ -140,17 +140,17 @@ public sealed class BitReader(BinaryReader reader) : IDisposable
 
     public void ByteAlign()
     {
-        if (_available is (0 or 8))
+        if (_available is 8)
         {
-            return;
+            throw new Exception();
         }
-
-        _currentByte = reader.ReadByte();
-        _available = 8;
+        
+        _available = 0;
     }
 
-    public byte TakeUnalignedByte()
+    public byte TakeAlignedByte()
     {
+        ByteAlign();
         var result = TakeBitArray(8);
 
         return result[0];
@@ -238,7 +238,7 @@ public abstract class BitPackedProtocolParserImpl : ProtocolReaderBase
 
     protected long take_n_bits_into_i64(int totalBits) => _bitReader.TakeBitsI64(totalBits);
 
-    protected byte take_unaligned_byte() => _bitReader.TakeUnalignedByte();
+    protected byte take_aligned_byte() => _bitReader.TakeAlignedByte();
 
     protected object take_null() => _bitReader.TakeNull();
 

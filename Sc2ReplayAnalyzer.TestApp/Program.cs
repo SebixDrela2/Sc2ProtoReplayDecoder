@@ -20,7 +20,7 @@ internal class Program
         var jsonParser = new Sc2JsonParser(jsonFiles);
         var dataList = jsonParser.Parse().ToArray();
 
-        var data = dataList.Last();
+        var data = dataList.First(x => x.ProtocolName is "protocol90870");
         data.GenFolderPath = GenPath;
 
         var generator = new Sc2SharedCodeGenerator(data);
@@ -29,7 +29,7 @@ internal class Program
 
     private static void Decode()
     {
-        var decoder = new Sc2ReplayDecoder(@"C:\Users\Sebastian\RustroverProjects\s2protocol-rs\assets\SC2-Patch_4.12-2v2AI.SC2Replay");
+        var decoder = new Sc2ReplayDecoder(@"C:\Users\Sebastian\Desktop\Blizurd\225.SC2Replay");
         decoder.Decode();
     }
 }
