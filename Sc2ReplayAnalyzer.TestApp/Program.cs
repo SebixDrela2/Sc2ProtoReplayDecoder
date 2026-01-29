@@ -2,6 +2,7 @@
 using Sc2ReplayAnalyzer.Decoder;
 using Sc2ReplayAnalyzer.Json;
 using Sc2ReplayAnalyzer.Tokenizer;
+using System.Diagnostics;
 
 internal class Program
 {
@@ -29,7 +30,20 @@ internal class Program
 
     private static void Decode()
     {
-        var decoder = new Sc2ReplayDecoder(@"C:\Users\Sebastian\Desktop\Blizurd\225.SC2Replay");
-        decoder.Decode();
+        var count = 0;
+        var files = Directory.GetFiles(@"C:\Users\Sebastian\Documents\StarCraft II\Accounts\103757627\1-S2-1-10180166\Replays\Multiplayer");
+        var length = files.Count();
+
+        foreach (var file in files)
+        {
+            var time = Stopwatch.StartNew();
+            var decoder = new Sc2ReplayDecoder(file);
+            decoder.Decode();
+
+            time.Stop();
+            Console.WriteLine($"total time parse: {time}");
+
+            Console.WriteLine($"Time:{time} {++count}/{length}");
+        }
     }
 }

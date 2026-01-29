@@ -75,7 +75,7 @@ public class Sc2ReplayDecoder(string path)
         }
         finally
         {
-            File.WriteAllLines("generated_message_events.txt", info);
+            
         }
     }
 
@@ -106,7 +106,7 @@ public class Sc2ReplayDecoder(string path)
         }
         catch
         {
-            File.WriteAllLines("generated_game_events.txt", info);
+            
         }
     }
 
@@ -123,7 +123,7 @@ public class Sc2ReplayDecoder(string path)
             {
                 var sUpgradeEvent = born.Value;
 
-                Console.WriteLine($"{Encoding.UTF8.GetString([.. sUpgradeEvent.m_unitTypeName])} {sUpgradeEvent.m_upkeepPlayerId} {sUpgradeEvent.m_unitTagIndex}");
+                //Console.WriteLine($"{Encoding.UTF8.GetString([.. sUpgradeEvent.m_unitTypeName])} {sUpgradeEvent.m_upkeepPlayerId} {sUpgradeEvent.m_unitTagIndex}");
             }
         }
     }
@@ -223,8 +223,7 @@ public class Sc2ReplayDecoder(string path)
 
         var debug = $"Op:{operation}: (RS:{rustSize}, OS:{offset})";
 
-        Console.WriteLine(debug);
-        info.Add(debug);
+        //Console.WriteLine(debug);    
 
         _operation++;
 

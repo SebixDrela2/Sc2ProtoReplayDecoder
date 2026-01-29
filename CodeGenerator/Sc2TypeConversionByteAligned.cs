@@ -24,7 +24,7 @@ internal interface ISc2JsonTypeConversionAlignment
 
 public class Sc2TypeConversionBitPacked : ISc2JsonTypeConversionAlignment
 {
-    public static Sc2JsonTypeConversion FromNnetName(string nnetName) 
+    public static Sc2JsonTypeConversion FromNnetName(string nnetName)
     {
         if (nnetName.StartsWith("NNet"))
         {
@@ -54,9 +54,9 @@ public class Sc2TypeConversionBitPacked : ISc2JsonTypeConversionAlignment
                 Parser = "{}",
                 IsVector = true,
             },
-            "BlobType" or 
-            "BitArrayType" or 
-            "AsciiStringType" or 
+            "BlobType" or
+            "BitArrayType" or
+            "AsciiStringType" or
             "StringType" => new Sc2JsonTypeConversion
             {
                 CSharpType = $"List<u8>",
@@ -80,7 +80,7 @@ public class Sc2TypeConversionBitPacked : ISc2JsonTypeConversionAlignment
                 Parser = "take_null",
             },
             var x => throw new NotSupportedException($"WTF TYPE {x}")
-        };     
+        };
     }
 
     public static Sc2JsonTypeConversion GetFieldConverted(JsonNode field, string fieldTypeInfo)
@@ -130,7 +130,7 @@ public class Sc2TypeConversionBitPacked : ISc2JsonTypeConversionAlignment
                 fieldConverted.IsBitArray = true;
             }
         }
-        
+
         if (fieldConverted.IsSizedInt)
         {
             var offset = field[TypeInfo][Bounds][Min][EValue].ToString();
@@ -146,9 +146,23 @@ public class Sc2TypeConversionBitPacked : ISc2JsonTypeConversionAlignment
         return fieldConverted;
     }
 
+    public static int GetBoundsCCacheHandle(JsonNode bounds)
+    {
+        var boundType = bounds[Type].ToString();
 
-     public static long BoundsMaxValueToBitSize(JsonNode bounds)
-     {       
+        if (boundType is "ExactConstraint")
+        {
+            if (bounds[Max][Inclusive].GetValue<bool>())
+            {
+                return int.Parse(bounds[Max][EValue].ToString());
+            }
+        }
+
+        throw new InvalidOperationException("OOGA BOOGA WUT");
+    }
+
+    public static long BoundsMaxValueToBitSize(JsonNode bounds)
+    {
         var res = double.Parse(bounds[Max][EValue].ToString());
 
         if (!bool.Parse(bounds[Min][Inclusive].ToString()))
@@ -190,7 +204,7 @@ public class Sc2TypeConversionBitPacked : ISc2JsonTypeConversionAlignment
 
         return FromNnetName(enclosedType);
     }
-    
+
     private static string GetElementType(JsonNode field, string typeInfoType)
     {
         if (typeInfoType is "ArrayType" or "DynArrayType")

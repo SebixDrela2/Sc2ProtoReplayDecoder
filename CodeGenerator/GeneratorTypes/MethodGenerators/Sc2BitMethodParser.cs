@@ -81,20 +81,15 @@ internal class Sc2BitMethodParser(StringBuilder methodBuilder, Sc2GeneratorData 
     public void OpenBlob(JsonNode bounds, string unitTypeName)
     {
         var typeName = Sc2TypeUtils.GetTypeName(unitTypeName);
-        var numBits = Sc2TypeConversionBitPacked.BoundsMaxValueToBitSize(bounds);
-
-        if (typeName == "GameCCacheHandle")
-        {
-            numBits = 40 * 8; // does not work for this case. It should literally 40 bytes.
-        }
+        var numBytes = Sc2TypeConversionBitPacked.GetBoundsCCacheHandle(bounds);
 
         _generalMethodBuilder.AppendLine($$"""
                 public {{typeName}} Parse_{{typeName}}()
                 {
                     byte_align();
-                    var numBits = {{numBits}};
+                    var numBytes = {{numBytes}};
                     
-                    var value = take_bit_array(numBits);
+                    var value = ReadBytes(numBytes);
 
                     return new {{typeName}}
                     {
@@ -521,8 +516,8 @@ internal class Sc2BitMethodParser(StringBuilder methodBuilder, Sc2GeneratorData 
             }
 
             return "PowExpr";
-
         }
+
         if (bounds[Max]?[EValue]?.ToString() is not null)
         {
             numBits = Sc2TypeConversionBitPacked.BoundsMaxValueToBitSize(bounds);

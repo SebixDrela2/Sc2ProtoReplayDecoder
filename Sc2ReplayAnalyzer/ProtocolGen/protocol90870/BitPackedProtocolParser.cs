@@ -13633,9 +13633,9 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     public CCacheHandle Parse_CCacheHandle()
     {
         byte_align();
-        var numBits = 6;
+        var numBytes = 40;
         
-        var value = take_bit_array(numBits);
+        var value = ReadBytes(numBytes);
 
         return new CCacheHandle
         {
@@ -13645,9 +13645,9 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     public GameCCacheHandle Parse_GameCCacheHandle()
     {
         byte_align();
-        var numBits = 320;
+        var numBytes = 40;
         
-        var value = take_bit_array(numBits);
+        var value = ReadBytes(numBytes);
 
         return new GameCCacheHandle
         {

@@ -367,6 +367,11 @@ public abstract class ProtocolReaderBase(BinaryReader reader)
         return reader.ReadByte();
     }
 
+    protected List<byte> ReadBytes(int count)
+    {
+        return reader.ReadBytes(count).ToList();
+    }
+
     protected T[] ReadArray<T>(Func<T> parseMethod, long count) =>
         [.. Enumerable.Range(0, (int)count).Select(_ => parseMethod())];
 

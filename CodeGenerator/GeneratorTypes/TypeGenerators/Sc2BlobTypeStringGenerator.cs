@@ -24,6 +24,8 @@ internal class Sc2BlobTypeStringGenerator(StringBuilder builder, Sc2GeneratorDat
 
             if (OpenClass(fullName))
             {
+                Console.WriteLine(fullName);
+
                 AddField("Value", "List<byte>");
                 Close();
             }
@@ -32,13 +34,22 @@ internal class Sc2BlobTypeStringGenerator(StringBuilder builder, Sc2GeneratorDat
             methodParser.Finalise();
         }
 
+        Console.WriteLine();
+
         foreach (var node in blobNodes)
         {
             var fullName = node[FullName].ToString();
             var bounds = node[TypeInfo][Bounds];
 
+            if (bounds is null)
+            {
+                throw new Exception("OOGA");
+            }
+
             if (OpenClass(fullName))
             {
+                Console.WriteLine(fullName);
+
                 AddField("Value", "List<byte>");
                 Close();
             }
