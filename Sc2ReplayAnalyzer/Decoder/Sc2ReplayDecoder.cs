@@ -25,17 +25,12 @@ public class Sc2ReplayDecoder(string path)
 
         _listingFiles = mpqArchive.ListingFiles;
 
-        var time = Stopwatch.StartNew();
-
         ParseMetaData();
         ParseReplayInitData();
         ParseMessageEvents();
         ParseReplayDetails();
         ParseTrackerEvents();
         ParseGameEvents();
-
-        time.Stop();
-        Console.WriteLine($"total time parse: {time}");
     }
 
     private void ParseMetaData()

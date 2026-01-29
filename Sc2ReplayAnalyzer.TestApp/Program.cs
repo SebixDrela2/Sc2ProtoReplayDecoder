@@ -31,19 +31,19 @@ internal class Program
     private static void Decode()
     {
         var count = 0;
-        var files = Directory.GetFiles(@"C:\Users\Sebastian\Documents\StarCraft II\Accounts\103757627\1-S2-1-10180166\Replays\Multiplayer");
+        var files = Directory.GetFiles(@"C:\Users\Sebastian\Documents\StarCraft II\Accounts\103757627\1-S2-1-10180166\Replays\Multiplayer").ToArray();
         var length = files.Count();
+
+        var totalTime = Stopwatch.StartNew();
 
         foreach (var file in files)
         {
-            var time = Stopwatch.StartNew();
             var decoder = new Sc2ReplayDecoder(file);
             decoder.Decode();
-
-            time.Stop();
-            Console.WriteLine($"total time parse: {time}");
-
-            Console.WriteLine($"Time:{time} {++count}/{length}");
         }
+
+        totalTime.Stop();
+
+        Console.WriteLine($"Total Time: {totalTime}");
     }
 }
