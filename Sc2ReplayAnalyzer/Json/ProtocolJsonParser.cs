@@ -3,15 +3,15 @@ using System.Text.Json.Nodes;
 
 namespace Sc2ReplayAnalyzer.Json;
 
-using static Sc2JsonType;
+using static ProtocolJsonType;
 
-public class Sc2JsonParser(Dictionary<string, string> jsonFiles)
+public class ProtocolJsonParser(Dictionary<string, string> jsonFiles)
 {
     private const string NNetReplay = "NNet.Replay";
     private const string NNetGame = "NNet.Game";
 
-    private readonly Sc2ByteAlignedProcessor _byteAlignedProcessor = new Sc2ByteAlignedProcessor();
-    private readonly Sc2BitPackedProcessor _bitPackedProcessor = new Sc2BitPackedProcessor();
+    private readonly ByteAlignedProtocolProcessor _byteAlignedProcessor = new ByteAlignedProtocolProcessor();
+    private readonly BitPackedProtocolProcessor _bitPackedProcessor = new BitPackedProtocolProcessor();
 
     public IReadOnlyList<Sc2GeneratorData> Parse()
     {
@@ -75,40 +75,11 @@ public class Sc2JsonParser(Dictionary<string, string> jsonFiles)
         
         return enumTags;
     }
-
-    private Sc2StructDeclaration ProcessModuleDeclaration(JsonNode module, Dictionary<string, string> enumTags)
-    {
-        var typeDeclarations = module[Declaration].AsArray();
-
-        foreach(var typeDeclaration in typeDeclarations)
-        {
-            var type = typeDeclaration[Type].ToString();
-
-            switch(type)
-            {
-                case "Module":
-                    ProcessModuleDeclaration(typeDeclaration, enumTags);
-                    break;
-
-                case "TypeDecl":
-                    if (!IsReplayDeclaration(module[FullName].ToString()))
-                    {
-                        continue;
-                    }
-
-                    ProcessStructDeclaration(typeDeclaration, enumTags);
-                    break;
-            }
-        }
-
-        return default;
-    }
-
-    private Sc2StructDeclaration ProcessStructDeclaration(JsonNode typeDeclaration, Dictionary<string, string> enumTags)
+    private void ProcessStructDeclaration(JsonNode typeDeclaration, Dictionary<string, string> enumTags)
     {
         if (typeDeclaration[TypeInfo][Type].ToString() != "StructType")
         {
-            return default;
+            return;
         }
 
         if (typeDeclaration[Declaration] is JsonArray typeDeclarationArray)
@@ -144,9 +115,7 @@ public class Sc2JsonParser(Dictionary<string, string> jsonFiles)
             var key = $"{typeVariant}.{typeVariantValue}";
 
             enumTags.TryAdd(key, value);
-        }
-
-        return new Sc2StructDeclaration();
+        }    
     }
 
     private static bool IsReplayDeclaration(string declaration) => declaration is NNetGame or NNetReplay;

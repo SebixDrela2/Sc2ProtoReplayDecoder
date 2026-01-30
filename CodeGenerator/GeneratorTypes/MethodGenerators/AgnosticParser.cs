@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes.MethodGenerators;
 
-internal class Sc2AgnosticParser(StringBuilder methodBuilder, Sc2GeneratorData data) : ISc2AgnosticParser
+internal class AgnosticParser(StringBuilder methodBuilder, Sc2GeneratorData data) : IProtocolAgnosticParser
 {
     public string DebugView => GetDebugView();
 
@@ -17,8 +17,8 @@ internal class Sc2AgnosticParser(StringBuilder methodBuilder, Sc2GeneratorData d
 
     public void OpenUserType(string unitTypeName, string typeInfo)
     {
-        var typeName = Sc2TypeUtils.GetTypeName(unitTypeName);
-        typeInfo = Sc2TypeUtils.GetTypeName(typeInfo);
+        var typeName = ProtocolTypeUtils.GetTypeName(unitTypeName);
+        typeInfo = ProtocolTypeUtils.GetTypeName(typeInfo);
 
         _generalMethodBuilder.AppendLine($$"""
                     public {{typeName}} Parse_{{typeName}}()
@@ -34,9 +34,9 @@ internal class Sc2AgnosticParser(StringBuilder methodBuilder, Sc2GeneratorData d
     }
 
     public void OpenEnum<T>(string unitTypeName, int numFields)
-        where T : ISc2JsonTypeConversionAlignment
+        where T : IProtocolTypeConversionAlignment
     {
-        var typeName = Sc2TypeUtils.GetTypeName(unitTypeName);
+        var typeName = ProtocolTypeUtils.GetTypeName(unitTypeName);
         var numBits = (int)Math.Ceiling(Math.Log2(numFields)); 
 
         if (typeof(T) == typeof(Sc2TypeConversionByteAligned))
@@ -75,7 +75,7 @@ internal class Sc2AgnosticParser(StringBuilder methodBuilder, Sc2GeneratorData d
 
     public void ContinueEnumVariant(string variantValue, string variantValueFullName, string fullName, string variantName)
     {
-        var typeName = Sc2TypeUtils.GetTypeName(fullName);
+        var typeName = ProtocolTypeUtils.GetTypeName(fullName);
         var uniqueVariantName = $"{typeName}_{variantName}";
         var tags = data.EnumTags;
 

@@ -4,13 +4,13 @@ using System.Text;
 using System.Text.Json.Nodes;
 
 namespace Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes.TypeGenerators;
-using static Sc2ReplayAnalyzer.Json.Sc2JsonType;
+using static Sc2ReplayAnalyzer.Json.ProtocolJsonType;
 
-internal class Sc2EnumGenerator(StringBuilder builder, Sc2GeneratorData data)
-    : Sc2GeneratorBase(builder, data)
+internal class EnumGenerator(StringBuilder builder, Sc2GeneratorData data)
+    : CodeGeneratorBase(builder, data)
 {
     public void Generate<T>(IReadOnlyList<JsonNode> nodes)
-        where T : ISc2JsonTypeConversionAlignment
+        where T : IProtocolTypeConversionAlignment
     {
         var enumNodes = nodes.Where(x => x[TypeInfo][Type].ToString() is "EnumType");
 
@@ -44,7 +44,7 @@ internal class Sc2EnumGenerator(StringBuilder builder, Sc2GeneratorData data)
         var variantName = variant[Name].ToString();
         var variantValue = variant[Value][Value].ToString();
 
-        var variantValueFullName = $"{Sc2TypeUtils.GetTypeName(fullName)}.{variantName}";
+        var variantValueFullName = $"{ProtocolTypeUtils.GetTypeName(fullName)}.{variantName}";
 
         Debug.Assert(variant[Value][Type].ToString() is "IntLiteral");
 

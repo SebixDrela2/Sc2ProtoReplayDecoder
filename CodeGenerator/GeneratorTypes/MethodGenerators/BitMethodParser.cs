@@ -5,9 +5,9 @@ using System.Text.Json.Nodes;
 
 namespace Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes.MethodGenerators;
 
-using static Sc2ReplayAnalyzer.Json.Sc2JsonType;
+using static Sc2ReplayAnalyzer.Json.ProtocolJsonType;
 
-internal class Sc2BitMethodParser(StringBuilder methodBuilder, Sc2GeneratorData data) : ISc2MethodParser
+internal class BitMethodParser(StringBuilder methodBuilder, Sc2GeneratorData data) : IProtocolMethodParser
 {
     private readonly StringBuilder _parserBuilder = data.ParserGenerator;
     private readonly StringBuilder _methodInitializerBuilder = new StringBuilder();
@@ -18,7 +18,7 @@ internal class Sc2BitMethodParser(StringBuilder methodBuilder, Sc2GeneratorData 
     public void OpenArray(JsonNode bounds, string unitTypeName, string internalType)
     {
         var arrayMaxValue = int.Parse(bounds[Max][EValue].ToString());
-        var typeName = Sc2TypeUtils.GetTypeName(unitTypeName);
+        var typeName = ProtocolTypeUtils.GetTypeName(unitTypeName);
         if (typeName == "GameSelectionIndexArrayType")
         {
 
@@ -30,7 +30,7 @@ internal class Sc2BitMethodParser(StringBuilder methodBuilder, Sc2GeneratorData 
         }
 
         var arrayLengthNumBits =  Math.Floor(Math.Log2(arrayMaxValue) + 1);
-        internalType = Sc2TypeUtils.GetTypeName(internalType);
+        internalType = ProtocolTypeUtils.GetTypeName(internalType);
 
         _generalMethodBuilder.AppendLine($$"""
                 public {{typeName}} Parse_{{typeName}}()
@@ -50,7 +50,7 @@ internal class Sc2BitMethodParser(StringBuilder methodBuilder, Sc2GeneratorData 
 
     public void OpenString(JsonNode bounds, string unitTypeName)
     {
-        var typeName = Sc2TypeUtils.GetTypeName(unitTypeName);
+        var typeName = ProtocolTypeUtils.GetTypeName(unitTypeName);
         var res = int.Parse(bounds[Max][EValue].ToString());
         
         if (bounds[Max][Inclusive] is { } inclusiveBounds && inclusiveBounds.GetValue<bool>())
@@ -90,7 +90,7 @@ internal class Sc2BitMethodParser(StringBuilder methodBuilder, Sc2GeneratorData 
 
     public void OpenBlob(JsonNode bounds, string unitTypeName)
     {
-        var typeName = Sc2TypeUtils.GetTypeName(unitTypeName);
+        var typeName = ProtocolTypeUtils.GetTypeName(unitTypeName);
         var numBytes = Sc2TypeConversionBitPacked.GetBoundsCCacheHandle(bounds);
 
         _generalMethodBuilder.AppendLine($$"""
@@ -112,7 +112,7 @@ internal class Sc2BitMethodParser(StringBuilder methodBuilder, Sc2GeneratorData 
     public void OpenBitArray(JsonNode bounds, string unitTypeName)
     {
         var numBits = Sc2TypeConversionBitPacked.BoundsMaxValueToBitSize(bounds);
-        var typeName = Sc2TypeUtils.GetTypeName(unitTypeName);
+        var typeName = ProtocolTypeUtils.GetTypeName(unitTypeName);
 
         _generalMethodBuilder.AppendLine($$"""
                 public {{typeName}} Parse_{{typeName}}()
@@ -132,7 +132,7 @@ internal class Sc2BitMethodParser(StringBuilder methodBuilder, Sc2GeneratorData 
 
     public void OpenInt(JsonNode bounds, string unitTypeName)
     {
-        var typeName = Sc2TypeUtils.GetTypeName(unitTypeName);
+        var typeName = ProtocolTypeUtils.GetTypeName(unitTypeName);
         var offset = bounds[Min][EValue]?.ToString()
             ?? throw new InvalidOperationException("bounds should have .min.evalue");
 
@@ -162,7 +162,7 @@ internal class Sc2BitMethodParser(StringBuilder methodBuilder, Sc2GeneratorData 
     public void OpenChoice(string unitTypeName, int numFields)
     {
         var methodCtorBuilder = new StringBuilder();
-        var typeName = Sc2TypeUtils.GetTypeName(unitTypeName);
+        var typeName = ProtocolTypeUtils.GetTypeName(unitTypeName);
         var numBits = Math.Ceiling(Math.Log2(numFields));
 
         _parserBuilder.AppendLine();
@@ -183,8 +183,8 @@ internal class Sc2BitMethodParser(StringBuilder methodBuilder, Sc2GeneratorData 
 
     public void ContinueVariantChoice(Sc2JsonTypeConversion fieldConverted, string fieldTypeInfo, string fieldType, string variantName, string fieldTag)
     {
-        var typeName = Sc2TypeUtils.GetTypeName(variantName);
-        fieldType = Sc2TypeUtils.GetTypeName(fieldType);
+        var typeName = ProtocolTypeUtils.GetTypeName(variantName);
+        fieldType = ProtocolTypeUtils.GetTypeName(fieldType);
 
         _generalMethodBuilder.AppendLine($$"""
                             case {{fieldTag}}:
@@ -274,10 +274,10 @@ internal class Sc2BitMethodParser(StringBuilder methodBuilder, Sc2GeneratorData 
 
     public void ContinueFieldStruct(JsonNode field, Sc2JsonTypeConversion fieldConverted, string fieldName, string fieldType, string unitTypeName, bool hasTags)
     {
-        var typeName = Sc2TypeUtils.GetTypeName(unitTypeName);
-        fieldType = Sc2TypeUtils.GetTypeName(fieldType);
+        var typeName = ProtocolTypeUtils.GetTypeName(unitTypeName);
+        fieldType = ProtocolTypeUtils.GetTypeName(fieldType);
 
-        fieldConverted.Parser = Sc2TypeUtils.GetTypeName(fieldConverted.Parser);
+        fieldConverted.Parser = ProtocolTypeUtils.GetTypeName(fieldConverted.Parser);
 
         if (fieldConverted.IsOptional)
         {
@@ -385,7 +385,7 @@ internal class Sc2BitMethodParser(StringBuilder methodBuilder, Sc2GeneratorData 
                 {
                     _fieldNameMethodBuilder.AppendLine($$"""
 
-                                return Option.Some(ProtocolConversion<{{Sc2TypeUtils.GetUnwrappedOptionTypeName(fieldConverted.CSharpType)}}>.From(res));
+                                return Option.Some(ProtocolConversion<{{ProtocolTypeUtils.GetUnwrappedOptionTypeName(fieldConverted.CSharpType)}}>.From(res));
                 """);
                 }
                 else
@@ -478,7 +478,7 @@ internal class Sc2BitMethodParser(StringBuilder methodBuilder, Sc2GeneratorData 
    
     public void OpenStruct(string unitTypeName, bool hasTags)
     {
-        var typeName = Sc2TypeUtils.GetTypeName(unitTypeName);
+        var typeName = ProtocolTypeUtils.GetTypeName(unitTypeName);
 
         _parserBuilder.AppendLine();
         _parserBuilder.AppendLine($$"""

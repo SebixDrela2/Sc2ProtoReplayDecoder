@@ -3,13 +3,13 @@
 using Sc2ReplayAnalyzer.Json.Generator;
 using System.Text;
 using System.Text.Json.Nodes;
-using static Sc2ReplayAnalyzer.Json.Sc2JsonType;
+using static Sc2ReplayAnalyzer.Json.ProtocolJsonType;
 
-internal class Sc2UserTypeGenerator(StringBuilder builder, Sc2GeneratorData data)
-    : Sc2GeneratorBase(builder, data)
+internal class UserTypeGenerator(StringBuilder builder, Sc2GeneratorData data)
+    : CodeGeneratorBase(builder, data)
 {
     public void Generate<T>(IReadOnlyList<JsonNode> nodes)
-        where T : ISc2JsonTypeConversionAlignment
+        where T : IProtocolTypeConversionAlignment
     {
         var userTypeNodes = nodes.Where(x => x[TypeInfo][Type].ToString() is "UserType");
         var methodParser = GetAgnosticMethodParser();

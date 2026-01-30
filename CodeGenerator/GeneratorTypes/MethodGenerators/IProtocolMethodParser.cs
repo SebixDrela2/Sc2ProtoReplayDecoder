@@ -3,24 +3,7 @@ using System.Text.Json.Nodes;
 
 namespace Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes.MethodGenerators;
 
-internal interface ISc2FinaliserParser
-{
-    void Finalise();
-}
-
-internal interface ISc2AgnosticParser : ISc2FinaliserParser
-{
-    void OpenUserType(string unitTypeName, string typeInfo);
-
-    void OpenEnum<T>(string unitTypeName, int numFields)
-        where T : ISc2JsonTypeConversionAlignment;
-
-    void ContinueEnumVariant(string variantValue, string variantValueFullName, string fullName, string variantName);
-
-    void CloseEnum();
-}
-
-internal interface ISc2MethodParser : ISc2FinaliserParser
+internal interface IProtocolMethodParser : IProtocolFinaliserParser
 {
     void OpenArray(JsonNode bounds, string unitTypeName, string internalType);
     void OpenInt(JsonNode bounds, string unitTypeName);

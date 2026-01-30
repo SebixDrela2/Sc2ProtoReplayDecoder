@@ -1,5 +1,5 @@
 
-using Sc2ReplayAnalyzer.Json.Global;
+using Sc2ReplayAnalyzer.Global;
 
 namespace Sc2ReplayAnalyzer.Json.protocol90870.BitPacked;
 

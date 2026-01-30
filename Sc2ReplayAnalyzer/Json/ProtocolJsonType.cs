@@ -1,6 +1,6 @@
 ﻿namespace Sc2ReplayAnalyzer.Json;
 
-public class Sc2JsonType
+public class ProtocolJsonType
 {
     public const string FullName = "fullname";
     public const string Modules = "modules";

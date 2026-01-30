@@ -3,9 +3,9 @@ using System.Xml.Linq;
 
 namespace Sc2ReplayAnalyzer.Json;
 
-using static Sc2JsonType;
+using static ProtocolJsonType;
 
-internal class Sc2ByteAlignedProcessor
+internal class ByteAlignedProtocolProcessor
 {
     public IReadOnlyList<JsonNode> ProcessByteAligned(JsonNode rootModule)
     {

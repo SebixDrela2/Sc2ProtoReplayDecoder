@@ -2,9 +2,9 @@
 
 namespace Sc2ReplayAnalyzer.Json;
 
-using static Sc2JsonType;
+using static ProtocolJsonType;
 
-internal class Sc2BitPackedProcessor
+internal class BitPackedProtocolProcessor
 {
     public IReadOnlyList<JsonNode> ProcessBitPacked(JsonNode rootModule)
     {

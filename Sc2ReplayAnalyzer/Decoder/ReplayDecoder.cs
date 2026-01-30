@@ -5,7 +5,7 @@ using Sc2ReplayAnalyzer.Json.protocol90870.Versioned;
 
 namespace Sc2ReplayAnalyzer.Decoder;
 
-public class Sc2ReplayDecoder(string path)
+public class ReplayDecoder(string path)
 {
     private Dictionary<string, byte[]> _listingFiles;
     public void Decode()
@@ -71,17 +71,9 @@ public class Sc2ReplayDecoder(string path)
 
         var info = new List<string>();
 
-        try
+        while (reader.BaseStream.Position < reader.BaseStream.Length)
         {
-            while (reader.BaseStream.Position < reader.BaseStream.Length)
-            {
-                var gameTriples = ParseGameEventTriplet(bitPackedParser, info);
-            }
-        }
-        catch(Exception ex)
-        {
-            File.WriteAllLines("generated_game_events.txt", info);
-            throw new Exception("GAME EXCEPTION.");
+            var gameTriples = ParseGameEventTriplet(bitPackedParser, info);
         }
     }
 
@@ -120,12 +112,8 @@ public class Sc2ReplayDecoder(string path)
     private GameEventTriplet ParseGameEventTriplet(BitPackedProtocolParser bitPackedParser, List<string> info)
     {
         var delta = bitPackedParser.Parse_SVarUint32();
-
-        LogLines(bitPackedParser, info);
         var gameUserID = bitPackedParser.Parse_ReplaySGameUserId();
-        LogLines(bitPackedParser, info);
         var eventID = bitPackedParser.Parse_GameEEventId();
-        LogLines(bitPackedParser, info);
 
         var realDelta = delta switch
         {
@@ -169,46 +157,5 @@ public class Sc2ReplayDecoder(string path)
             UserID = gameUserID.m_userId,
             EventID = eventID
         };
-    }
-
-    private static int _operation = 0;
-
-    private void LogLines(BitPackedProtocolParser bitPacked, List<string> info)
-    {
-        var operation = _operation;
-        var rustSize = bitPacked.RustSize;
-        var available = bitPacked.AvailableBits;
-        var offset = 8 - available;
-
-        var debug = $"Op:{operation}: (RS:{rustSize}, OS:{offset})";
-
-        info.Add(debug);
-
-        _operation++;
-
-        if (_operation == 58738)
-        {
-
-        }
-    }
-
-    private record class EventPair
-    {
-        public uint Delta;
-        public ReplayTrackerEEventId TrackerEventID;
-    }
-
-    private record class GameEventTriplet
-    {
-        public long Delta;
-        public long UserID;
-        public GameEEventId EventID;
-    }
-
-    private record class MessageEventTriplet
-    {
-        public long Delta;
-        public long UserID;
-        public GameEMessageId EventID;
     }
 }

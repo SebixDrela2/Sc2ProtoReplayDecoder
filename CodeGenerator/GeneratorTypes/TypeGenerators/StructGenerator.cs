@@ -5,13 +5,13 @@ using System.Text.Json.Nodes;
 
 namespace Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes.TypeGenerators;
 
-using static Sc2ReplayAnalyzer.Json.Sc2JsonType;
+using static Sc2ReplayAnalyzer.Json.ProtocolJsonType;
 
-internal class Sc2StructGenerator(StringBuilder builder, Sc2GeneratorData data)
-    : Sc2GeneratorBase(builder, data)
+internal class StructGenerator(StringBuilder builder, Sc2GeneratorData data)
+    : CodeGeneratorBase(builder, data)
 {
     public void Generate<T>(IReadOnlyList<JsonNode> nodes)
-        where T : ISc2JsonTypeConversionAlignment
+        where T : IProtocolTypeConversionAlignment
     {
         var structNodes = nodes.Where(x => x[TypeInfo][Type].ToString() is "StructType");
 
@@ -19,7 +19,7 @@ internal class Sc2StructGenerator(StringBuilder builder, Sc2GeneratorData data)
         {
             var unitTypeName = node[FullName].ToString();
 
-            var typeName = Sc2TypeUtils.GetTypeName(unitTypeName);          
+            var typeName = ProtocolTypeUtils.GetTypeName(unitTypeName);          
             var unitType = node[TypeInfo][Type].ToString();
             var fields = node[TypeInfo][Fields].AsArray();
             var hasTags = fields.Count > 1 && fields[0][Tag] is not null;
@@ -49,7 +49,7 @@ internal class Sc2StructGenerator(StringBuilder builder, Sc2GeneratorData data)
     }
 
     private void HandleStructField<T>(JsonNode field, string unitTypeName, bool hasTags)
-        where T : ISc2JsonTypeConversionAlignment
+        where T : IProtocolTypeConversionAlignment
     {
         var methodParser = GetMethodParser<T>();
         var nnetFieldType = field[Type].ToString();
@@ -79,7 +79,7 @@ internal class Sc2StructGenerator(StringBuilder builder, Sc2GeneratorData data)
     }
 
     private Sc2JsonTypeConversion GetStructFieldCoverted<T>(JsonNode field, string fieldTypeInfo)
-        where T : ISc2JsonTypeConversionAlignment
+        where T : IProtocolTypeConversionAlignment
     {
         var fieldConverted = T.GetFieldConverted(field, fieldTypeInfo);
 

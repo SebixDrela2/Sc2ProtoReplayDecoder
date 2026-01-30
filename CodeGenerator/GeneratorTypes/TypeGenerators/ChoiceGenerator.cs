@@ -5,13 +5,13 @@ using System.Text.Json.Nodes;
 
 namespace Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes.TypeGenerators;
 
-using static Sc2ReplayAnalyzer.Json.Sc2JsonType;
+using static Sc2ReplayAnalyzer.Json.ProtocolJsonType;
 
-internal class Sc2ChoiceGenerator(StringBuilder builder, Sc2GeneratorData data)
-    : Sc2GeneratorBase(builder, data)
+internal class ChoiceGenerator(StringBuilder builder, Sc2GeneratorData data)
+    : CodeGeneratorBase(builder, data)
 {
     public void Generate<T>(IReadOnlyList<JsonNode> nodes)
-        where T : ISc2JsonTypeConversionAlignment
+        where T : IProtocolTypeConversionAlignment
     {
         var choiceNodes = nodes.Where(x => x[TypeInfo][Type].ToString() is "ChoiceType");
         var methodParser = GetMethodParser<T>();
@@ -37,7 +37,7 @@ internal class Sc2ChoiceGenerator(StringBuilder builder, Sc2GeneratorData data)
     }
 
     private void HandleVariant<T>(JsonNode variant, string unitTypeFullName)
-        where T : ISc2JsonTypeConversionAlignment
+        where T : IProtocolTypeConversionAlignment
     {
         var variantTypeInfoType = variant[TypeInfo][Type].ToString();
         
@@ -60,7 +60,7 @@ internal class Sc2ChoiceGenerator(StringBuilder builder, Sc2GeneratorData data)
 
             if (typeof(T) == typeof(Sc2TypeConversionBitPacked) && enclosedType is "UserType")
             {
-                enclosedType = Sc2TypeUtils.GetTypeName(variant[TypeInfo][TypeInfo][FullName].ToString());
+                enclosedType = ProtocolTypeUtils.GetTypeName(variant[TypeInfo][TypeInfo][FullName].ToString());
             }
 
             fieldConverted.Parser = fieldConverted.Parser.Replace("{}", enclosedType);

@@ -3,13 +3,13 @@
 using Sc2ReplayAnalyzer.Json.Generator;
 using System.Text;
 using System.Text.Json.Nodes;
-using static Sc2ReplayAnalyzer.Json.Sc2JsonType;
+using static Sc2ReplayAnalyzer.Json.ProtocolJsonType;
 
-internal class Sc2BlobTypeStringGenerator(StringBuilder builder, Sc2GeneratorData data)
-    : Sc2GeneratorBase(builder, data)
+internal class BlobTypeStringGenerator(StringBuilder builder, Sc2GeneratorData data)
+    : CodeGeneratorBase(builder, data)
 {
     public void Generate<T>(IReadOnlyList<JsonNode> nodes)
-        where T : ISc2JsonTypeConversionAlignment
+        where T : IProtocolTypeConversionAlignment
     {
         // bitpacked
         var blobNodes = nodes.Where(x => x[TypeInfo][Type].ToString() is "BlobType");
@@ -22,7 +22,7 @@ internal class Sc2BlobTypeStringGenerator(StringBuilder builder, Sc2GeneratorDat
             var fullName = node[FullName].ToString();
             var bounds = node[TypeInfo][Bounds];
 
-            var unitTypeName = Sc2TypeUtils.GetTypeName(fullName);
+            var unitTypeName = ProtocolTypeUtils.GetTypeName(fullName);
 
             if (unitTypeName is 
                 "GameTFlexLicenseName" or 

@@ -3,7 +3,7 @@ using System.Text.Json.Nodes;
 
 namespace Sc2ReplayAnalyzer.CodeGenerator;
 
-using static Sc2ReplayAnalyzer.Json.Sc2JsonType;
+using static Sc2ReplayAnalyzer.Json.ProtocolJsonType;
 
 public class Sc2JsonTypeConversion
 {
@@ -16,13 +16,13 @@ public class Sc2JsonTypeConversion
     public string Parser = "unknown type";
 }
 
-internal interface ISc2JsonTypeConversionAlignment
+internal interface IProtocolTypeConversionAlignment
 {
     static abstract Sc2JsonTypeConversion FromNnetName(string nnetName);
     static abstract Sc2JsonTypeConversion GetFieldConverted(JsonNode field, string fieldTypeInfo);
 }
 
-public class Sc2TypeConversionBitPacked : ISc2JsonTypeConversionAlignment
+public class Sc2TypeConversionBitPacked : IProtocolTypeConversionAlignment
 {
     public static Sc2JsonTypeConversion FromNnetName(string nnetName)
     {
@@ -31,7 +31,7 @@ public class Sc2TypeConversionBitPacked : ISc2JsonTypeConversionAlignment
             return new Sc2JsonTypeConversion
             {
                 CSharpType = nnetName,
-                Parser = $"Parse_{Sc2TypeUtils.GetTypeName(nnetName)}"
+                Parser = $"Parse_{ProtocolTypeUtils.GetTypeName(nnetName)}"
             };
         }
 
@@ -216,7 +216,7 @@ public class Sc2TypeConversionBitPacked : ISc2JsonTypeConversionAlignment
     }
 }
 
-public class Sc2TypeConversionByteAligned : ISc2JsonTypeConversionAlignment
+public class Sc2TypeConversionByteAligned : IProtocolTypeConversionAlignment
 {
     public static Sc2JsonTypeConversion FromNnetName(string nnetName) => nnetName switch
     {

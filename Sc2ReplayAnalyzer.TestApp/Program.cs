@@ -1,6 +1,7 @@
 ﻿using Sc2ReplayAnalyzer.CodeGenerator.Generators;
 using Sc2ReplayAnalyzer.Decoder;
 using Sc2ReplayAnalyzer.Json;
+using Sc2ReplayAnalyzer.TestApp;
 using Sc2ReplayAnalyzer.Tokenizer;
 using System.Diagnostics;
 
@@ -8,22 +9,31 @@ internal class Program
 {
     private static readonly Sc2JsonProvider _provider = new Sc2JsonProvider();
     private const string GenPath = @"C:\Users\Sebastian\source\repos\Sc2ReplayAnalyzer\Sc2ReplayAnalyzer\ProtocolGen";
+
+    private const ProtoRunType RunChoice = ProtoRunType.Decode;
+    private const string ProtocolName = "protocol90870";
+
     internal static void Main(string[] args)
     {
-        //Generate();
-        Decode();
+        Action action = RunChoice switch
+        {
+            ProtoRunType.Decode => Decode,
+            ProtoRunType.Generate => Generate,
+            var runChoice => throw new InvalidOperationException()
+        };
+
+        action();
     }
 
     private static void Generate()
     {
         var jsonFiles = _provider.Provide();
-        var jsonParser = new Sc2JsonParser(jsonFiles);
+        var jsonParser = new ProtocolJsonParser(jsonFiles);
         var dataList = jsonParser.Parse().ToArray();
 
         var data = dataList.First(x => x.ProtocolName is "protocol90870");
-        data.GenFolderPath = GenPath;
 
-        var generator = new Sc2SharedCodeGenerator(data);
+        var generator = new SharedProtocolGenerator(data);
         generator.Generate();
     }
 
@@ -37,7 +47,7 @@ internal class Program
 
         foreach (var file in files)
         {
-            var decoder = new Sc2ReplayDecoder(file);
+            var decoder = new ReplayDecoder(file);
             decoder.Decode();
 
             Console.WriteLine($"Decoded: {file}");

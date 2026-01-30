@@ -5,8 +5,8 @@ using System.Text.Json.Nodes;
 
 namespace Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes.MethodGenerators;
 
-using static Sc2ReplayAnalyzer.Json.Sc2JsonType;
-internal class Sc2ByteMethodParser(StringBuilder methodBuilder, Sc2GeneratorData data) : ISc2MethodParser
+using static Sc2ReplayAnalyzer.Json.ProtocolJsonType;
+internal class ByteMethodParser(StringBuilder methodBuilder, Sc2GeneratorData data) : IProtocolMethodParser
 {
     public string DebugView => GetDebugView();
 
@@ -18,8 +18,8 @@ internal class Sc2ByteMethodParser(StringBuilder methodBuilder, Sc2GeneratorData
 
     public void OpenArray(JsonNode bounds, string unitTypeName, string internalType)
     {
-        var typeName = Sc2TypeUtils.GetTypeName(unitTypeName);
-        internalType = Sc2TypeUtils.GetTypeName(internalType);
+        var typeName = ProtocolTypeUtils.GetTypeName(unitTypeName);
+        internalType = ProtocolTypeUtils.GetTypeName(internalType);
 
         _generalMethodBuilder.AppendLine($$"""
                 public {{typeName}} Parse_{{typeName}}()
@@ -39,7 +39,7 @@ internal class Sc2ByteMethodParser(StringBuilder methodBuilder, Sc2GeneratorData
 
     public void OpenInt(JsonNode bounds, string unitTypeName)
     {
-        var typeName = Sc2TypeUtils.GetTypeName(unitTypeName);
+        var typeName = ProtocolTypeUtils.GetTypeName(unitTypeName);
         _generalMethodBuilder.AppendLine($$"""
                     public {{typeName}} Parse_{{typeName}}()
                     {
@@ -57,7 +57,7 @@ internal class Sc2ByteMethodParser(StringBuilder methodBuilder, Sc2GeneratorData
     public void OpenChoice(string unitTypeName, int numBits)
     {
         var methodCtorBuilder = new StringBuilder();
-        var typeName = Sc2TypeUtils.GetTypeName(unitTypeName);
+        var typeName = ProtocolTypeUtils.GetTypeName(unitTypeName);
 
         _parserBuilder.AppendLine();
         _parserBuilder.AppendLine($$"""
@@ -76,8 +76,8 @@ internal class Sc2ByteMethodParser(StringBuilder methodBuilder, Sc2GeneratorData
 
     public void ContinueVariantChoice(Sc2JsonTypeConversion fieldConverted, string fieldTypeInfo, string fieldType, string variantName, string fieldTag)
     {
-        var typeName = Sc2TypeUtils.GetTypeName(variantName);
-        fieldType = Sc2TypeUtils.GetTypeName(fieldType);
+        var typeName = ProtocolTypeUtils.GetTypeName(variantName);
+        fieldType = ProtocolTypeUtils.GetTypeName(fieldType);
 
         _generalMethodBuilder.AppendLine($$"""
                             case {{fieldTag}}:
@@ -155,7 +155,7 @@ internal class Sc2ByteMethodParser(StringBuilder methodBuilder, Sc2GeneratorData
     public void OpenStruct(string unitTypeName, bool hasTags)
     {
         var methodCtorBuilder = new StringBuilder();
-        var typeName = Sc2TypeUtils.GetTypeName(unitTypeName);
+        var typeName = ProtocolTypeUtils.GetTypeName(unitTypeName);
 
         _methodInitializerBuilder.AppendLine($$"""
                         return new {{typeName}}
@@ -188,7 +188,7 @@ internal class Sc2ByteMethodParser(StringBuilder methodBuilder, Sc2GeneratorData
 
     public void ContinueFieldStruct(JsonNode field, Sc2JsonTypeConversion fieldConverted, string fieldName, string fieldType, string unitTypeName, bool hasTags)
     {
-        var typeName = Sc2TypeUtils.GetTypeName(unitTypeName);
+        var typeName = ProtocolTypeUtils.GetTypeName(unitTypeName);
 
         if (fieldConverted.IsOptional)
         {
@@ -285,7 +285,7 @@ internal class Sc2ByteMethodParser(StringBuilder methodBuilder, Sc2GeneratorData
                 if (fieldConverted.ShouldTryFrom)
                 {
                     _fieldNameMethodBuilder.AppendLine($$"""
-                            {{fieldName}} = Option.Some(array.Select(x => ProtocolConversion<{{Sc2TypeUtils.GetUnwrappedOptionListTypeName(fieldConverted.CSharpType)}}>.From(x)).ToList());                                 
+                            {{fieldName}} = Option.Some(array.Select(x => ProtocolConversion<{{ProtocolTypeUtils.GetUnwrappedOptionListTypeName(fieldConverted.CSharpType)}}>.From(x)).ToList());                                 
                 """);
                 }
                 else
@@ -305,7 +305,7 @@ internal class Sc2ByteMethodParser(StringBuilder methodBuilder, Sc2GeneratorData
                 if (fieldConverted.ShouldTryFrom)
                 {
                     _fieldNameMethodBuilder.AppendLine($$"""
-                            {{fieldName}} = Option.Some(ProtocolConversion<{{Sc2TypeUtils.GetUnwrappedOptionTypeName(fieldConverted.CSharpType)}}>.From(res));
+                            {{fieldName}} = Option.Some(ProtocolConversion<{{ProtocolTypeUtils.GetUnwrappedOptionTypeName(fieldConverted.CSharpType)}}>.From(res));
                 """);
                 }
                 else
