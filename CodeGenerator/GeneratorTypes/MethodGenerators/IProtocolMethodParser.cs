@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes.TypeGenerators.Utils;
+using System.Text;
 using System.Text.Json.Nodes;
 
 namespace Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes.MethodGenerators;
@@ -10,7 +11,7 @@ internal interface IProtocolMethodParser : IProtocolFinaliserParser
     void OpenChoice(string unitTypeName, int numFields);
 
     void ContinueVariantChoice(
-        Sc2JsonTypeConversion fieldConverted, 
+        ProtocolJsonTypeConversion fieldConverted, 
         string fieldTypeInfo, 
         string fieldType, 
         string variantName, 
@@ -22,7 +23,7 @@ internal interface IProtocolMethodParser : IProtocolFinaliserParser
 
     void ContinueFieldStruct(
         JsonNode field,
-        Sc2JsonTypeConversion fieldConverted,
+        ProtocolJsonTypeConversion fieldConverted,
         string fieldName,
         string fieldType,
         string unitTypeName,

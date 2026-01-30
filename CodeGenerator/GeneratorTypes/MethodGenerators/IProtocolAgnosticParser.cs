@@ -1,4 +1,6 @@
-﻿namespace Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes.MethodGenerators;
+﻿using Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes.TypeGenerators.Utils;
+
+namespace Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes.MethodGenerators;
 
 internal interface IProtocolAgnosticParser : IProtocolFinaliserParser
 {

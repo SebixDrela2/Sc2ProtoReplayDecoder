@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes.TypeGenerators;
+namespace Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes.TypeGenerators.Utils;
 
 internal static class ProtocolTypeUtils
 {

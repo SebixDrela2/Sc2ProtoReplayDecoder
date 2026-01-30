@@ -5,10 +5,11 @@ using Sc2ReplayAnalyzer.Json.protocol90870.Versioned;
 
 namespace Sc2ReplayAnalyzer.Decoder;
 
-public class ReplayDecoder(string path)
+public class ReplayDecoder
 {
     private Dictionary<string, byte[]> _listingFiles;
-    public void Decode()
+
+    public void Decode(string path)
     {
         using var fileStream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read);
         var mpqArchive = new MPQReader(fileStream).Read();

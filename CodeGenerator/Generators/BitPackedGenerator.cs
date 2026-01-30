@@ -1,4 +1,5 @@
-﻿using Sc2ReplayAnalyzer.Json.Generator;
+﻿using Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes.TypeGenerators.Utils;
+using Sc2ReplayAnalyzer.Json.Generator;
 using System.Text;
 
 namespace Sc2ReplayAnalyzer.CodeGenerator.Generators;
@@ -13,14 +14,14 @@ internal class BitPackedGenerator(StringBuilder builder, Sc2GeneratorData data)
 
         Init(protocolName);
 
-        _choiceGenerator.Generate<Sc2TypeConversionBitPacked>(bitPacked);
-        _structGenerator.Generate<Sc2TypeConversionBitPacked>(bitPacked);
-        _enumGenerator.Generate<Sc2TypeConversionBitPacked>(bitPacked);
-        _intGenerator.Generate<Sc2TypeConversionBitPacked>(bitPacked);
-        _bitArrayGenerator.Generate<Sc2TypeConversionBitPacked>(bitPacked);
-        _userTypeGenerator.Generate<Sc2TypeConversionBitPacked>(bitPacked);
-        _arrayDynGenerator.Generate<Sc2TypeConversionBitPacked>(bitPacked);
-        _blobStringGenerator.Generate<Sc2TypeConversionBitPacked>(bitPacked);
+        _choiceGenerator.Generate<ProtocolConversionBitPacked>(bitPacked);
+        _structGenerator.Generate<ProtocolConversionBitPacked>(bitPacked);
+        _enumGenerator.Generate<ProtocolConversionBitPacked>(bitPacked);
+        _intGenerator.Generate<ProtocolConversionBitPacked>(bitPacked);
+        _bitArrayGenerator.Generate<ProtocolConversionBitPacked>(bitPacked);
+        _userTypeGenerator.Generate<ProtocolConversionBitPacked>(bitPacked);
+        _arrayDynGenerator.Generate<ProtocolConversionBitPacked>(bitPacked);
+        _blobStringGenerator.Generate<ProtocolConversionBitPacked>(bitPacked);
 
         Finalise(protocolName);
     }

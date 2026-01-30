@@ -1,4 +1,5 @@
-﻿using Sc2ReplayAnalyzer.Json.Generator;
+﻿using Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes.TypeGenerators.Utils;
+using Sc2ReplayAnalyzer.Json.Generator;
 using System.Text;
 
 namespace Sc2ReplayAnalyzer.CodeGenerator.Generators;
@@ -13,11 +14,11 @@ internal class VersionedGenerator(StringBuilder builder, Sc2GeneratorData data)
 
         Init(protocolName);
 
-        _choiceGenerator.Generate<Sc2TypeConversionByteAligned>(byteAligned);
-        _structGenerator.Generate<Sc2TypeConversionByteAligned>(byteAligned);
-        _enumGenerator.Generate<Sc2TypeConversionByteAligned>(byteAligned);
-        _intGenerator.Generate<Sc2TypeConversionByteAligned>(byteAligned);
-        _arrayDynGenerator.Generate<Sc2TypeConversionByteAligned>(byteAligned);
+        _choiceGenerator.Generate<ProtocolTypeConversionByteAligned>(byteAligned);
+        _structGenerator.Generate<ProtocolTypeConversionByteAligned>(byteAligned);
+        _enumGenerator.Generate<ProtocolTypeConversionByteAligned>(byteAligned);
+        _intGenerator.Generate<ProtocolTypeConversionByteAligned>(byteAligned);
+        _arrayDynGenerator.Generate<ProtocolTypeConversionByteAligned>(byteAligned);
 
         Finalise(protocolName);
 

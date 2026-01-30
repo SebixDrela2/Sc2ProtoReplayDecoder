@@ -2,6 +2,11 @@
 
 namespace Sc2ReplayAnalyzer.Global;
 
+public static class ProtocolConversion<TResult>
+{
+
+}
+
 public static class Extensions
 {
     extension<TResult>(ProtocolConversion<TResult>)

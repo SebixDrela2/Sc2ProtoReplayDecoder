@@ -1,5 +1,6 @@
 ﻿namespace Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes.TypeGenerators;
 
+using Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes.TypeGenerators.Utils;
 using Sc2ReplayAnalyzer.Json.Generator;
 using System.Text;
 using System.Text.Json.Nodes;
@@ -11,7 +12,7 @@ internal class UserTypeGenerator(StringBuilder builder, Sc2GeneratorData data)
     public void Generate<T>(IReadOnlyList<JsonNode> nodes)
         where T : IProtocolTypeConversionAlignment
     {
-        var userTypeNodes = nodes.Where(x => x[TypeInfo][Type].ToString() is "UserType");
+        var userTypeNodes = nodes.Where(node => ProtoTypes.IsForGenerator(node, ProtoGenType.UserType));
         var methodParser = GetAgnosticMethodParser();
 
         foreach(var node in userTypeNodes)

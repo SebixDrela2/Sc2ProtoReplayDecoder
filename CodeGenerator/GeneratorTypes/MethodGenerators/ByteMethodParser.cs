@@ -1,4 +1,4 @@
-﻿using Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes.TypeGenerators;
+﻿using Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes.TypeGenerators.Utils;
 using Sc2ReplayAnalyzer.Json.Generator;
 using System.Text;
 using System.Text.Json.Nodes;
@@ -74,7 +74,7 @@ internal class ByteMethodParser(StringBuilder methodBuilder, Sc2GeneratorData da
                 """);
     }
 
-    public void ContinueVariantChoice(Sc2JsonTypeConversion fieldConverted, string fieldTypeInfo, string fieldType, string variantName, string fieldTag)
+    public void ContinueVariantChoice(ProtocolJsonTypeConversion fieldConverted, string fieldTypeInfo, string fieldType, string variantName, string fieldTag)
     {
         var typeName = ProtocolTypeUtils.GetTypeName(variantName);
         fieldType = ProtocolTypeUtils.GetTypeName(fieldType);
@@ -186,7 +186,7 @@ internal class ByteMethodParser(StringBuilder methodBuilder, Sc2GeneratorData da
         }
     }
 
-    public void ContinueFieldStruct(JsonNode field, Sc2JsonTypeConversion fieldConverted, string fieldName, string fieldType, string unitTypeName, bool hasTags)
+    public void ContinueFieldStruct(JsonNode field, ProtocolJsonTypeConversion fieldConverted, string fieldName, string fieldType, string unitTypeName, bool hasTags)
     {
         var typeName = ProtocolTypeUtils.GetTypeName(unitTypeName);
 

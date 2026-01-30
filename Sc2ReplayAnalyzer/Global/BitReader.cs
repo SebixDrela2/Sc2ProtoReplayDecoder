@@ -10,20 +10,6 @@ public sealed class BitReader(BinaryReader reader) : IDisposable
     public int BitPosition => 8 - _available;
     public int RustSize => (int)reader.BaseStream.Length - BytePosition;
 
-    private string GetDebugView()
-    {
-        var pos = reader.BaseStream.Position;
-
-        var backing = (int)Math.Min(8, reader.BaseStream.Position);
-        reader.BaseStream.Position -= backing;
-
-        var value = reader.ReadBytes(16);
-
-        reader.BaseStream.Position = pos;
-
-        return $"Pos: {BytePosition}:{BitPosition} {string.Join(" ", value[..backing].Select(x => $"{x,3}"))} * {string.Join(" ", value[backing..].Select(x => $"{x,3}"))}";
-    }
-
     public int AvailableBits => _available;
 
     public long TakeBitsI64(int totalBits)
@@ -151,5 +137,19 @@ public sealed class BitReader(BinaryReader reader) : IDisposable
         _available -= count;
 
         return result;
+    }
+
+    private string GetDebugView()
+    {
+        var pos = reader.BaseStream.Position;
+
+        var backing = (int)Math.Min(8, reader.BaseStream.Position);
+        reader.BaseStream.Position -= backing;
+
+        var value = reader.ReadBytes(16);
+
+        reader.BaseStream.Position = pos;
+
+        return $"Pos: {BytePosition}:{BitPosition} {string.Join(" ", value[..backing].Select(x => $"{x,3}"))} * {string.Join(" ", value[backing..].Select(x => $"{x,3}"))}";
     }
 }

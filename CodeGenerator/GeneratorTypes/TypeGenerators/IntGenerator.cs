@@ -1,5 +1,6 @@
 ﻿namespace Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes.TypeGenerators;
 
+using Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes.TypeGenerators.Utils;
 using Sc2ReplayAnalyzer.Json.Generator;
 using System.Text;
 using System.Text.Json.Nodes;
@@ -11,7 +12,7 @@ internal class IntGenerator(StringBuilder builder, Sc2GeneratorData data)
     public void Generate<T>(IReadOnlyList<JsonNode> nodes)
         where T : IProtocolTypeConversionAlignment
     {
-        var intNodes = nodes.Where(x => x[TypeInfo][Type].ToString() is "IntType" or "InumType");
+        var intNodes = nodes.Where(node => ProtoTypes.IsForGenerator(node, ProtoGenType.Int));
         var methodParser = GetMethodParser<T>();
 
         foreach(var node in intNodes)

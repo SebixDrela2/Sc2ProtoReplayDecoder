@@ -1,5 +1,6 @@
 ﻿namespace Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes.TypeGenerators;
 
+using Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes.TypeGenerators.Utils;
 using Sc2ReplayAnalyzer.Json.Generator;
 using System.Text;
 using System.Text.Json.Nodes;
@@ -12,7 +13,7 @@ internal class ArrayGenerator(StringBuilder builder, Sc2GeneratorData data)
         where T : IProtocolTypeConversionAlignment
     {
         // bitpacked
-        var arrayNodes = nodes.Where(x => x[TypeInfo][Type].ToString() is "BitArrayType");
+        var arrayNodes = nodes.Where(node => ProtoTypes.IsForGenerator(node, ProtoGenType.BitArray));
 
         foreach(var node in arrayNodes)
         {

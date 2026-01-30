@@ -1,4 +1,4 @@
-﻿using Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes.TypeGenerators;
+﻿using Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes.TypeGenerators.Utils;
 using Sc2ReplayAnalyzer.Json.Generator;
 using System.Text;
 using System.Text.Json.Nodes;
@@ -91,7 +91,7 @@ internal class BitMethodParser(StringBuilder methodBuilder, Sc2GeneratorData dat
     public void OpenBlob(JsonNode bounds, string unitTypeName)
     {
         var typeName = ProtocolTypeUtils.GetTypeName(unitTypeName);
-        var numBytes = Sc2TypeConversionBitPacked.GetBoundsCCacheHandle(bounds);
+        var numBytes = ProtocolConversionBitPacked.GetBoundsCCacheHandle(bounds);
 
         _generalMethodBuilder.AppendLine($$"""
                 public {{typeName}} Parse_{{typeName}}()
@@ -111,7 +111,7 @@ internal class BitMethodParser(StringBuilder methodBuilder, Sc2GeneratorData dat
 
     public void OpenBitArray(JsonNode bounds, string unitTypeName)
     {
-        var numBits = Sc2TypeConversionBitPacked.BoundsMaxValueToBitSize(bounds);
+        var numBits = ProtocolConversionBitPacked.BoundsMaxValueToBitSize(bounds);
         var typeName = ProtocolTypeUtils.GetTypeName(unitTypeName);
 
         _generalMethodBuilder.AppendLine($$"""
@@ -181,7 +181,7 @@ internal class BitMethodParser(StringBuilder methodBuilder, Sc2GeneratorData dat
                 """);
     }
 
-    public void ContinueVariantChoice(Sc2JsonTypeConversion fieldConverted, string fieldTypeInfo, string fieldType, string variantName, string fieldTag)
+    public void ContinueVariantChoice(ProtocolJsonTypeConversion fieldConverted, string fieldTypeInfo, string fieldType, string variantName, string fieldTag)
     {
         var typeName = ProtocolTypeUtils.GetTypeName(variantName);
         fieldType = ProtocolTypeUtils.GetTypeName(fieldType);
@@ -272,7 +272,7 @@ internal class BitMethodParser(StringBuilder methodBuilder, Sc2GeneratorData dat
                 """);
     }
 
-    public void ContinueFieldStruct(JsonNode field, Sc2JsonTypeConversion fieldConverted, string fieldName, string fieldType, string unitTypeName, bool hasTags)
+    public void ContinueFieldStruct(JsonNode field, ProtocolJsonTypeConversion fieldConverted, string fieldName, string fieldType, string unitTypeName, bool hasTags)
     {
         var typeName = ProtocolTypeUtils.GetTypeName(unitTypeName);
         fieldType = ProtocolTypeUtils.GetTypeName(fieldType);
@@ -530,7 +530,7 @@ internal class BitMethodParser(StringBuilder methodBuilder, Sc2GeneratorData dat
 
         if (bounds[Max]?[EValue]?.ToString() is not null)
         {
-            numBits = Sc2TypeConversionBitPacked.BoundsMaxValueToBitSize(bounds);
+            numBits = ProtocolConversionBitPacked.BoundsMaxValueToBitSize(bounds);
         }
 
         return bounds[Type]?.ToString() ?? throw new InvalidOperationException("bounds should have .type");

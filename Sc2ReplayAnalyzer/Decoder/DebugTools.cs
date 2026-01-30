@@ -2,9 +2,9 @@
 
 namespace Sc2ReplayAnalyzer.Decoder;
 
-internal class DebugTools
+internal static class DebugTools
 {
-    private void LogBitPackedLines(BitPackedProtocolParser bitPacked, ref int operation, List<string> info)
+    public static void LogBitPackedLines(BitPackedProtocolParser bitPacked, ref int operation, List<string> info)
     {
         var rustSize = bitPacked.RustSize;
         var available = bitPacked.AvailableBits;

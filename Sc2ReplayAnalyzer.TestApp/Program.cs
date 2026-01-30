@@ -8,10 +8,11 @@ using System.Diagnostics;
 internal class Program
 {
     private static readonly Sc2JsonProvider _provider = new Sc2JsonProvider();
-    private const string GenPath = @"C:\Users\Sebastian\source\repos\Sc2ReplayAnalyzer\Sc2ReplayAnalyzer\ProtocolGen";
 
     private const ProtoRunType RunChoice = ProtoRunType.Decode;
     private const string ProtocolName = "protocol90870";
+
+    private const string ReplaysPath = @"";
 
     internal static void Main(string[] args)
     {
@@ -31,7 +32,7 @@ internal class Program
         var jsonParser = new ProtocolJsonParser(jsonFiles);
         var dataList = jsonParser.Parse().ToArray();
 
-        var data = dataList.First(x => x.ProtocolName is "protocol90870");
+        var data = dataList.First(x => x.ProtocolName is ProtocolName);
 
         var generator = new SharedProtocolGenerator(data);
         generator.Generate();
@@ -39,16 +40,13 @@ internal class Program
 
     private static void Decode()
     {
-        var count = 0;
         var files = Directory.GetFiles(@"C:\Users\Sebastian\Documents\StarCraft II\Accounts\103757627\1-S2-1-10180166\Replays\Multiplayer").ToArray();
         var length = files.Count();
-
-        var path = "C:\\Users\\Sebastian\\Documents\\StarCraft II\\Accounts\\103757627\\1-S2-1-10180166\\Replays\\Multiplayer\\Oh No It's Zombies Arctic Map (11).SC2Replay";
-
+        
         foreach (var file in files)
         {
-            var decoder = new ReplayDecoder(file);
-            decoder.Decode();
+            var decoder = new ReplayDecoder();
+            decoder.Decode(file);
 
             Console.WriteLine($"Decoded: {file}");
         }

@@ -1,54 +1,17 @@
-﻿namespace Sc2ReplayAnalyzer.Global;
+﻿global using u8 = byte;
+global using i8 = sbyte;
+global using u16 = ushort;
+global using i16 = short;
+global using u32 = uint;
+global using i32 = int;
+global using u64 = ulong;
+global using i64 = long;
+global using f16 = System.Half;
+global using f32 = float;
+global using f64 = double;
+global using usize = nuint;
+global using ssize = nint;
 
-public static class ProtocolConversion<TResult>
-{
-    public static bool TryFrom<TFrom>(TFrom source, out TResult result)
-    {
-        result = default;
+namespace Sc2ReplayAnalyzer.Global;
 
-        if (source == null)
-        {
-            return false;
-        }
-
-        if (source is TResult)
-        {
-            result = (TResult)(object)source;
-            return true;
-        }
-
-        try
-        {
-            var underlyingType = Nullable.GetUnderlyingType(typeof(TResult));
-            var targetType = underlyingType ?? typeof(TResult);
-
-            if (targetType == typeof(string))
-            {
-                result = (TResult)(object)source.ToString();
-                return true;
-            }
-
-            if (source is IConvertible)
-            {
-                result = (TResult)Convert.ChangeType(source, targetType);
-                return true;
-            }
-        }
-        catch
-        {
-            return false;
-        }
-
-        return false;
-    }
-
-    //public static TResult From<TFrom>(TFrom source)
-    //{
-    //    if (!TryFrom(source, out var result))
-    //    {
-    //        throw new InvalidCastException($"Invalid cast");
-    //    }
-
-    //    return result;
-    //}
-}
+public struct NoneValue;

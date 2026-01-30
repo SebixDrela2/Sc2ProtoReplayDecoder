@@ -1,4 +1,5 @@
-﻿using Sc2ReplayAnalyzer.Json.Generator;
+﻿using Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes.TypeGenerators.Utils;
+using Sc2ReplayAnalyzer.Json.Generator;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -13,7 +14,7 @@ internal class StructGenerator(StringBuilder builder, Sc2GeneratorData data)
     public void Generate<T>(IReadOnlyList<JsonNode> nodes)
         where T : IProtocolTypeConversionAlignment
     {
-        var structNodes = nodes.Where(x => x[TypeInfo][Type].ToString() is "StructType");
+        var structNodes = nodes.Where(node => ProtoTypes.IsForGenerator(node, ProtoGenType.Struct));
 
         foreach (var node in structNodes)
         {
@@ -24,7 +25,7 @@ internal class StructGenerator(StringBuilder builder, Sc2GeneratorData data)
             var fields = node[TypeInfo][Fields].AsArray();
             var hasTags = fields.Count > 1 && fields[0][Tag] is not null;
 
-            if (typeof(T) == typeof(Sc2TypeConversionByteAligned))
+            if (typeof(T) == typeof(ProtocolTypeConversionByteAligned))
             {
                 hasTags = !(fields.Count is 1 && fields[0][Tag].GetValueKind() == JsonValueKind.Null);
             }
@@ -78,7 +79,7 @@ internal class StructGenerator(StringBuilder builder, Sc2GeneratorData data)
         
     }
 
-    private Sc2JsonTypeConversion GetStructFieldCoverted<T>(JsonNode field, string fieldTypeInfo)
+    private ProtocolJsonTypeConversion GetStructFieldCoverted<T>(JsonNode field, string fieldTypeInfo)
         where T : IProtocolTypeConversionAlignment
     {
         var fieldConverted = T.GetFieldConverted(field, fieldTypeInfo);

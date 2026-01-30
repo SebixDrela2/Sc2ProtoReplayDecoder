@@ -1,4 +1,4 @@
-﻿using Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes.TypeGenerators;
+﻿using Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes.TypeGenerators.Utils;
 using Sc2ReplayAnalyzer.Json.Generator;
 using System.Text;
 
@@ -39,7 +39,7 @@ internal class AgnosticParser(StringBuilder methodBuilder, Sc2GeneratorData data
         var typeName = ProtocolTypeUtils.GetTypeName(unitTypeName);
         var numBits = (int)Math.Ceiling(Math.Log2(numFields)); 
 
-        if (typeof(T) == typeof(Sc2TypeConversionByteAligned))
+        if (typeof(T) == typeof(ProtocolTypeConversionByteAligned))
         {
             _generalMethodBuilder.AppendLine($$"""
                     public {{typeName}} Parse_{{typeName}}()
@@ -52,7 +52,7 @@ internal class AgnosticParser(StringBuilder methodBuilder, Sc2GeneratorData data
                         
                 """);
         }
-        else if (typeof(T) == typeof(Sc2TypeConversionBitPacked))
+        else if (typeof(T) == typeof(ProtocolConversionBitPacked))
         {
             numBits = typeName is "GameEMessageId" ? ++numBits : numBits;
 

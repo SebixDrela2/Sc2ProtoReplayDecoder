@@ -1,4 +1,5 @@
-﻿using Sc2ReplayAnalyzer.Json.Generator;
+﻿using Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes.TypeGenerators.Utils;
+using Sc2ReplayAnalyzer.Json.Generator;
 using System.Diagnostics;
 using System.Text;
 using System.Text.Json.Nodes;
@@ -13,7 +14,7 @@ internal class ChoiceGenerator(StringBuilder builder, Sc2GeneratorData data)
     public void Generate<T>(IReadOnlyList<JsonNode> nodes)
         where T : IProtocolTypeConversionAlignment
     {
-        var choiceNodes = nodes.Where(x => x[TypeInfo][Type].ToString() is "ChoiceType");
+        var choiceNodes = nodes.Where(node => ProtoTypes.IsForGenerator(node, ProtoGenType.Choice));
         var methodParser = GetMethodParser<T>();
 
         foreach (var node in choiceNodes)
@@ -41,7 +42,7 @@ internal class ChoiceGenerator(StringBuilder builder, Sc2GeneratorData data)
     {
         var variantTypeInfoType = variant[TypeInfo][Type].ToString();
         
-        if (typeof(T) == typeof(Sc2TypeConversionByteAligned) && variantTypeInfoType is "NullType")
+        if (typeof(T) == typeof(ProtocolTypeConversionByteAligned) && variantTypeInfoType is "NullType")
         {
             return;
         }
@@ -58,7 +59,7 @@ internal class ChoiceGenerator(StringBuilder builder, Sc2GeneratorData data)
         {
             var enclosedType = variant[TypeInfo][TypeInfo][Type].ToString();
 
-            if (typeof(T) == typeof(Sc2TypeConversionBitPacked) && enclosedType is "UserType")
+            if (typeof(T) == typeof(ProtocolConversionBitPacked) && enclosedType is "UserType")
             {
                 enclosedType = ProtocolTypeUtils.GetTypeName(variant[TypeInfo][TypeInfo][FullName].ToString());
             }

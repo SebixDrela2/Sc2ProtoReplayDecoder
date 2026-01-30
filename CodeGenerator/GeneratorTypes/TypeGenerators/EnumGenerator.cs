@@ -1,4 +1,5 @@
-﻿using Sc2ReplayAnalyzer.Json.Generator;
+﻿using Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes.TypeGenerators.Utils;
+using Sc2ReplayAnalyzer.Json.Generator;
 using System.Diagnostics;
 using System.Text;
 using System.Text.Json.Nodes;
@@ -12,9 +13,9 @@ internal class EnumGenerator(StringBuilder builder, Sc2GeneratorData data)
     public void Generate<T>(IReadOnlyList<JsonNode> nodes)
         where T : IProtocolTypeConversionAlignment
     {
-        var enumNodes = nodes.Where(x => x[TypeInfo][Type].ToString() is "EnumType");
+        var enumNodes = nodes.Where(node => ProtoTypes.IsForGenerator(node, ProtoGenType.Enum));
 
-        foreach(var node in enumNodes)
+        foreach (var node in enumNodes)
         {
             var fullName = node[FullName].ToString();
             var methodParser = GetAgnosticMethodParser();

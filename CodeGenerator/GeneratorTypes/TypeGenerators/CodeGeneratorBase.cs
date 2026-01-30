@@ -1,4 +1,5 @@
 ﻿using Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes.MethodGenerators;
+using Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes.TypeGenerators.Utils;
 using Sc2ReplayAnalyzer.Json.Generator;
 using System.Text;
 
@@ -35,11 +36,11 @@ internal abstract class CodeGeneratorBase
     protected IProtocolMethodParser GetMethodParser<T>()
         where T : IProtocolTypeConversionAlignment
     {
-        if (typeof(T) == typeof(Sc2TypeConversionBitPacked))
+        if (typeof(T) == typeof(ProtocolConversionBitPacked))
         {
             return _bitMethodParser;
         }
-        if (typeof(T) == typeof(Sc2TypeConversionByteAligned))
+        if (typeof(T) == typeof(ProtocolTypeConversionByteAligned))
         {
             return _byteMethodParser;
         }

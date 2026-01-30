@@ -1,5 +1,6 @@
 ﻿namespace Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes.TypeGenerators;
 
+using Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes.TypeGenerators.Utils;
 using Sc2ReplayAnalyzer.Json.Generator;
 using System.Text;
 using System.Text.Json.Nodes;
@@ -12,8 +13,8 @@ internal class BlobTypeStringGenerator(StringBuilder builder, Sc2GeneratorData d
         where T : IProtocolTypeConversionAlignment
     {
         // bitpacked
-        var blobNodes = nodes.Where(x => x[TypeInfo][Type].ToString() is "BlobType");
-        var stringNodes = nodes.Where(x => x[TypeInfo][Type].ToString() is "StringType");
+        var blobNodes = nodes.Where(node => ProtoTypes.IsForGenerator(node, ProtoGenType.Blob));
+        var stringNodes = nodes.Where(node => ProtoTypes.IsForGenerator(node, ProtoGenType.String));
 
         var methodParser = GetBitMethodParser();
 

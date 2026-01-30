@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Sc2ReplayAnalyzer.Json.MetaData;
+﻿namespace Sc2ReplayAnalyzer.Json.MetaData;
 
 public sealed record ReplayMetadata
 {
