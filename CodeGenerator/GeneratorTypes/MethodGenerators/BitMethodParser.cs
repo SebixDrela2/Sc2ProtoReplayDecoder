@@ -19,10 +19,6 @@ internal class BitMethodParser(StringBuilder methodBuilder, Sc2GeneratorData dat
     {
         var arrayMaxValue = int.Parse(bounds[Max][EValue].ToString());
         var typeName = ProtocolTypeUtils.GetTypeName(unitTypeName);
-        if (typeName == "GameSelectionIndexArrayType")
-        {
-
-        }
 
         if (bounds[Max][Inclusive] is { } inclusiveBounds && inclusiveBounds.GetValue<bool>())
         {
@@ -51,24 +47,7 @@ internal class BitMethodParser(StringBuilder methodBuilder, Sc2GeneratorData dat
     public void OpenString(JsonNode bounds, string unitTypeName)
     {
         var typeName = ProtocolTypeUtils.GetTypeName(unitTypeName);
-        var res = int.Parse(bounds[Max][EValue].ToString());
-        
-        if (bounds[Max][Inclusive] is { } inclusiveBounds && inclusiveBounds.GetValue<bool>())
-        {
-            res += 1;
-        }
-
-        // Hardcoded values, no idea how they exist.
-
-        var stringSizeNumBits = typeName switch
-        {
-            "CFilePath" or "GameCChatString" => 11,
-            "CUserName" or "CClanTag" or "GameCAuthorName" => 8,
-            "CSkinHandle" or "CMountHandle" or "CArtifactHandle" or "CCommanderHandle" or "CHeroHandle" => 9,
-            "CToonHandle" => 7,
-            "GameCCheatString" or "GameCTriggerChatMessageString" or "GameCGameCacheName" => 10,
-            var x => throw new NotSupportedException($"Invalid type: {x} for string bit parser.")
-        };
+        var stringSizeNumBits = ProtocolTypeUtils.GetStrSizeBoundMax(typeName);
 
         _generalMethodBuilder.AppendLine($$"""
                 public {{typeName}} Parse_{{typeName}}()

@@ -8,6 +8,17 @@ internal static class ProtocolTypeUtils
         .Replace(".", string.Empty)
         .Replace("NNet", "");
 
+    //Retrieved from protocol.py file.
+    public static int GetStrSizeBoundMax(string typeName) => typeName switch
+    {
+        "CFilePath" or "GameCChatString" => 11,
+        "CUserName" or "CClanTag" or "GameCAuthorName" => 8,
+        "CSkinHandle" or "CMountHandle" or "CArtifactHandle" or "CCommanderHandle" or "CHeroHandle" => 9,
+        "CToonHandle" => 7,
+        "GameCCheatString" or "GameCTriggerChatMessageString" or "GameCGameCacheName" => 10,
+        var x => throw new NotSupportedException($"Invalid type: {x} for string bit parser.")
+    };
+
     public static string GetUnwrappedOptionTypeName(string unitTypeName)
     {
         var typeName = GetTypeName(unitTypeName);

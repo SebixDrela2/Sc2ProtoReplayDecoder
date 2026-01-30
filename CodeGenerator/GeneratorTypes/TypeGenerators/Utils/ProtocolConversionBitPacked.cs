@@ -128,6 +128,18 @@ public class ProtocolConversionBitPacked : IProtocolTypeConversionAlignment
         return fieldConverted;
     }
 
+    public static int GetBoundsMaxEValueInclusive(JsonNode bounds)
+    {
+        var result = int.Parse(bounds[Max][EValue].ToString());
+
+        if (bounds[Max][Inclusive] is { } inclusiveBounds && inclusiveBounds.GetValue<bool>())
+        {
+            return ++result;
+        }
+
+        return result;
+    }
+
     public static int GetBoundsCCacheHandle(JsonNode bounds)
     {
         var boundType = bounds[Type].ToString();
