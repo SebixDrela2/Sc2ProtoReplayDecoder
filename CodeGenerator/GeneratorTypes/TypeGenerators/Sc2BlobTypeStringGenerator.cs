@@ -22,10 +22,18 @@ internal class Sc2BlobTypeStringGenerator(StringBuilder builder, Sc2GeneratorDat
             var fullName = node[FullName].ToString();
             var bounds = node[TypeInfo][Bounds];
 
+            var unitTypeName = Sc2TypeUtils.GetTypeName(fullName);
+
+            if (unitTypeName is 
+                "GameTFlexLicenseName" or 
+                "GameTFlexLicenseAttributeName" or 
+                "GameTFlexLicenseAttributeValue")
+            {
+                continue; // Unread/unused so far.
+            }
+
             if (OpenClass(fullName))
             {
-                Console.WriteLine(fullName);
-
                 AddField("Value", "List<byte>");
                 Close();
             }
@@ -33,8 +41,6 @@ internal class Sc2BlobTypeStringGenerator(StringBuilder builder, Sc2GeneratorDat
             methodParser.OpenString(bounds, fullName);
             methodParser.Finalise();
         }
-
-        Console.WriteLine();
 
         foreach (var node in blobNodes)
         {
@@ -47,9 +53,7 @@ internal class Sc2BlobTypeStringGenerator(StringBuilder builder, Sc2GeneratorDat
             }
 
             if (OpenClass(fullName))
-            {
-                Console.WriteLine(fullName);
-
+            {   
                 AddField("Value", "List<byte>");
                 Close();
             }

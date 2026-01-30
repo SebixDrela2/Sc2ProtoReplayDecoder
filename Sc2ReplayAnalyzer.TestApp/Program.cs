@@ -17,7 +17,6 @@ internal class Program
     private static void Generate()
     {
         var jsonFiles = _provider.Provide();
-
         var jsonParser = new Sc2JsonParser(jsonFiles);
         var dataList = jsonParser.Parse().ToArray();
 
@@ -34,16 +33,14 @@ internal class Program
         var files = Directory.GetFiles(@"C:\Users\Sebastian\Documents\StarCraft II\Accounts\103757627\1-S2-1-10180166\Replays\Multiplayer").ToArray();
         var length = files.Count();
 
-        var totalTime = Stopwatch.StartNew();
+        var path = "C:\\Users\\Sebastian\\Documents\\StarCraft II\\Accounts\\103757627\\1-S2-1-10180166\\Replays\\Multiplayer\\Oh No It's Zombies Arctic Map (11).SC2Replay";
 
         foreach (var file in files)
         {
             var decoder = new Sc2ReplayDecoder(file);
             decoder.Decode();
+
+            Console.WriteLine($"Decoded: {file}");
         }
-
-        totalTime.Stop();
-
-        Console.WriteLine($"Total Time: {totalTime}");
     }
 }

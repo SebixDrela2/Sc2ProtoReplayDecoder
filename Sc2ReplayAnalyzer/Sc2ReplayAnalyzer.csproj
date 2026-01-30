@@ -24,7 +24,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Parser\" />
     <Folder Include="ProtocolGen\" />
   </ItemGroup>
 </Project>

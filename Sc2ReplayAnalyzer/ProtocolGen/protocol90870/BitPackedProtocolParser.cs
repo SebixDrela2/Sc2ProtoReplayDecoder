@@ -2575,24 +2575,6 @@ public class GameCAuthorName
     public List<byte> Value;
 }
 
-// NNet.Game.TFlexLicenseName
-public class GameTFlexLicenseName
-{
-    public List<byte> Value;
-}
-
-// NNet.Game.TFlexLicenseAttributeName
-public class GameTFlexLicenseAttributeName
-{
-    public List<byte> Value;
-}
-
-// NNet.Game.TFlexLicenseAttributeValue
-public class GameTFlexLicenseAttributeValue
-{
-    public List<byte> Value;
-}
-
 // NNet.Game.CChatString
 public class GameCChatString
 {
@@ -13436,7 +13418,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public CHeroHandle Parse_CHeroHandle()
     {
-        var strSizeNumBits = 10;
+        var strSizeNumBits = 9;
         var strSize = parse_packed_int(0, strSizeNumBits);
 
         byte_align();
@@ -13450,7 +13432,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public CSkinHandle Parse_CSkinHandle()
     {
-        var strSizeNumBits = 10;
+        var strSizeNumBits = 9;
         var strSize = parse_packed_int(0, strSizeNumBits);
 
         byte_align();
@@ -13464,7 +13446,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public CMountHandle Parse_CMountHandle()
     {
-        var strSizeNumBits = 10;
+        var strSizeNumBits = 9;
         var strSize = parse_packed_int(0, strSizeNumBits);
 
         byte_align();
@@ -13478,7 +13460,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public CArtifactHandle Parse_CArtifactHandle()
     {
-        var strSizeNumBits = 10;
+        var strSizeNumBits = 9;
         var strSize = parse_packed_int(0, strSizeNumBits);
 
         byte_align();
@@ -13506,7 +13488,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public CCommanderHandle Parse_CCommanderHandle()
     {
-        var strSizeNumBits = 10;
+        var strSizeNumBits = 9;
         var strSize = parse_packed_int(0, strSizeNumBits);
 
         byte_align();
@@ -13520,7 +13502,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public GameCCheatString Parse_GameCCheatString()
     {
-        var strSizeNumBits = 11;
+        var strSizeNumBits = 10;
         var strSize = parse_packed_int(0, strSizeNumBits);
 
         byte_align();
@@ -13534,7 +13516,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public GameCTriggerChatMessageString Parse_GameCTriggerChatMessageString()
     {
-        var strSizeNumBits = 11;
+        var strSizeNumBits = 10;
         var strSize = parse_packed_int(0, strSizeNumBits);
 
         byte_align();
@@ -13548,7 +13530,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     }
     public GameCGameCacheName Parse_GameCGameCacheName()
     {
-        var strSizeNumBits = 11;
+        var strSizeNumBits = 10;
         var strSize = parse_packed_int(0, strSizeNumBits);
 
         byte_align();
@@ -13570,48 +13552,6 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         var value = take_bit_array(strSize * 8);
 
         return new GameCAuthorName
-        {
-            Value = value
-        };
-    }
-    public GameTFlexLicenseName Parse_GameTFlexLicenseName()
-    {
-        var strSizeNumBits = 8;
-        var strSize = parse_packed_int(0, strSizeNumBits);
-
-        byte_align();
-
-        var value = take_bit_array(strSize * 8);
-
-        return new GameTFlexLicenseName
-        {
-            Value = value
-        };
-    }
-    public GameTFlexLicenseAttributeName Parse_GameTFlexLicenseAttributeName()
-    {
-        var strSizeNumBits = 8;
-        var strSize = parse_packed_int(0, strSizeNumBits);
-
-        byte_align();
-
-        var value = take_bit_array(strSize * 8);
-
-        return new GameTFlexLicenseAttributeName
-        {
-            Value = value
-        };
-    }
-    public GameTFlexLicenseAttributeValue Parse_GameTFlexLicenseAttributeValue()
-    {
-        var strSizeNumBits = 11;
-        var strSize = parse_packed_int(0, strSizeNumBits);
-
-        byte_align();
-
-        var value = take_bit_array(strSize * 8);
-
-        return new GameTFlexLicenseAttributeValue
         {
             Value = value
         };

@@ -58,7 +58,17 @@ internal class Sc2BitMethodParser(StringBuilder methodBuilder, Sc2GeneratorData 
             res += 1;
         }
 
-        var stringSizeNumBits = Math.Floor(Math.Log2(res) + 1) + 2;
+        // Hardcoded values, no idea how they exist.
+
+        var stringSizeNumBits = typeName switch
+        {
+            "CFilePath" or "GameCChatString" => 11,
+            "CUserName" or "CClanTag" or "GameCAuthorName" => 8,
+            "CSkinHandle" or "CMountHandle" or "CArtifactHandle" or "CCommanderHandle" or "CHeroHandle" => 9,
+            "CToonHandle" => 7,
+            "GameCCheatString" or "GameCTriggerChatMessageString" or "GameCGameCacheName" => 10,
+            var x => throw new NotSupportedException($"Invalid type: {x} for string bit parser.")
+        };
 
         _generalMethodBuilder.AppendLine($$"""
                 public {{typeName}} Parse_{{typeName}}()

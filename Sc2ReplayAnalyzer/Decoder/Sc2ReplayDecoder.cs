@@ -2,15 +2,11 @@
 using Sc2ReplayAnalyzer.Json.MetaData;
 using Sc2ReplayAnalyzer.Json.protocol90870.BitPacked;
 using Sc2ReplayAnalyzer.Json.protocol90870.Versioned;
-using Sc2ReplayAnalyzer.Tokenizer;
-using System.Diagnostics;
-using System.Text;
+
 namespace Sc2ReplayAnalyzer.Decoder;
 
 public class Sc2ReplayDecoder(string path)
 {
-    private readonly Sc2JsonProvider _provider = new Sc2JsonProvider();
-
     private Dictionary<string, byte[]> _listingFiles;
     public void Decode()
     {
@@ -54,23 +50,9 @@ public class Sc2ReplayDecoder(string path)
         var bitPackedParser = new BitPackedProtocolParser(reader);
         var info = new List<string>();
 
-        try
+        while (reader.BaseStream.Position < reader.BaseStream.Length)
         {
-            while (reader.BaseStream.Position < reader.BaseStream.Length)
-            {
-                var messageTriples = ParseMessageEventTriplet(bitPackedParser, info);
-                var debug = $"Event#{_counter} Delta: {messageTriples.Delta} Event:{messageTriples.EventID.GetType().Name.ToUpper()}";
-
-                info.Add(debug);
-            }
-        }
-        catch(Exception ex)
-        {
-            throw;
-        }
-        finally
-        {
-            
+            var messageTriples = ParseMessageEventTriplet(bitPackedParser, info);
         }
     }
 
@@ -85,8 +67,8 @@ public class Sc2ReplayDecoder(string path)
     private void ParseGameEvents()
     {
         using var reader = new BinaryReader(new MemoryStream(_listingFiles["replay.game.events"]));
-
         var bitPackedParser = new BitPackedProtocolParser(reader);
+
         var info = new List<string>();
 
         try
@@ -94,14 +76,12 @@ public class Sc2ReplayDecoder(string path)
             while (reader.BaseStream.Position < reader.BaseStream.Length)
             {
                 var gameTriples = ParseGameEventTriplet(bitPackedParser, info);
-                var debug = $"Event#{_counter} Delta: {gameTriples.Delta} Event:{gameTriples.EventID.GetType().Name.ToUpper()}";
-
-                info.Add(debug);
             }
         }
-        catch
+        catch(Exception ex)
         {
-            
+            File.WriteAllLines("generated_game_events.txt", info);
+            throw new Exception("GAME EXCEPTION.");
         }
     }
 
@@ -113,13 +93,6 @@ public class Sc2ReplayDecoder(string path)
         while (reader.BaseStream.Position < reader.BaseStream.Length)
         {
             var eventPair = ParseEventPair(versionedParser);
-
-            if (eventPair.TrackerEventID is ReplayTrackerEEventId_e_unitBorn born)
-            {
-                var sUpgradeEvent = born.Value;
-
-                //Console.WriteLine($"{Encoding.UTF8.GetString([.. sUpgradeEvent.m_unitTypeName])} {sUpgradeEvent.m_upkeepPlayerId} {sUpgradeEvent.m_unitTagIndex}");
-            }
         }
     }
 
@@ -144,17 +117,13 @@ public class Sc2ReplayDecoder(string path)
         };
     }
 
-    private static int _counter = 0;
-    private static int _operation = 0;
-
     private GameEventTriplet ParseGameEventTriplet(BitPackedProtocolParser bitPackedParser, List<string> info)
     {
         var delta = bitPackedParser.Parse_SVarUint32();
-        LogLines(bitPackedParser, info);
 
+        LogLines(bitPackedParser, info);
         var gameUserID = bitPackedParser.Parse_ReplaySGameUserId();
         LogLines(bitPackedParser, info);
-
         var eventID = bitPackedParser.Parse_GameEEventId();
         LogLines(bitPackedParser, info);
 
@@ -169,8 +138,6 @@ public class Sc2ReplayDecoder(string path)
 
         bitPackedParser.byte_align();
 
-        _counter++;
-
         return new GameEventTriplet
         {
             Delta = realDelta,
@@ -182,13 +149,8 @@ public class Sc2ReplayDecoder(string path)
     private MessageEventTriplet ParseMessageEventTriplet(BitPackedProtocolParser bitPackedParser, List<string> info)
     {
         var delta = bitPackedParser.Parse_SVarUint32();
-        LogLines(bitPackedParser, info);
-
         var gameUserID = bitPackedParser.Parse_ReplaySGameUserId();
-        LogLines(bitPackedParser, info);
-
         var eventID = bitPackedParser.Parse_GameEMessageId();
-        LogLines(bitPackedParser, info);
 
         var realDelta = delta switch
         {
@@ -209,6 +171,8 @@ public class Sc2ReplayDecoder(string path)
         };
     }
 
+    private static int _operation = 0;
+
     private void LogLines(BitPackedProtocolParser bitPacked, List<string> info)
     {
         var operation = _operation;
@@ -218,11 +182,11 @@ public class Sc2ReplayDecoder(string path)
 
         var debug = $"Op:{operation}: (RS:{rustSize}, OS:{offset})";
 
-        //Console.WriteLine(debug);    
+        info.Add(debug);
 
         _operation++;
 
-        if (_operation == 35)
+        if (_operation == 58738)
         {
 
         }
