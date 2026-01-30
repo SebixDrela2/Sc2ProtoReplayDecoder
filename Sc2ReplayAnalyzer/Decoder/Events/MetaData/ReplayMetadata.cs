@@ -1,8 +1,7 @@
-﻿namespace Sc2ReplayAnalyzer.Json.MetaData;
+﻿namespace Sc2ReplayAnalyzer.Decoder.Events.MetaData;
 
 public sealed record ReplayMetadata
 {
-    // For serializer empty constructor.
     public ReplayMetadata()
     {
 
@@ -27,20 +26,20 @@ public sealed record ReplayMetadata
         Title = title;
         Players = players;
     }
-
+    
     public string BaseBuild { get; init; }
-
+    
     public string DataBuild { get; init; }
-
+    
     public string DataVersion { get; init; }
-
+    
     public int Duration { get; init; }
-
+    
     public Version GameVersion { get; init; }
-
+    
     public bool IsNotAvailable { get; init; }
-
+    
     public string Title { get; init; }
-
+   
     public ICollection<MetadataPlayer> Players { get; init; }
 }

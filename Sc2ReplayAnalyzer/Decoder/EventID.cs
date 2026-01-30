@@ -3,7 +3,7 @@ using Sc2ReplayAnalyzer.Json.protocol90870.Versioned;
 
 namespace Sc2ReplayAnalyzer.Decoder;
 
-internal record class EventPair
+internal record class TrackerEventPair
 {
     public uint Delta;
     public ReplayTrackerEEventId TrackerEventID;

@@ -25,12 +25,9 @@ internal class BlobTypeStringGenerator(StringBuilder builder, Sc2GeneratorData d
 
             var unitTypeName = ProtocolTypeUtils.GetTypeName(fullName);
 
-            if (unitTypeName is 
-                "GameTFlexLicenseName" or 
-                "GameTFlexLicenseAttributeName" or 
-                "GameTFlexLicenseAttributeValue")
+            if (ProtocolTypeUtils.IsUnusedUnitTypeName(unitTypeName))
             {
-                continue; // Unread/unused so far.
+                continue;
             }
 
             if (OpenClass(fullName))

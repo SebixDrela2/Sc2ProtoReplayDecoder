@@ -4,11 +4,17 @@ namespace Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes.TypeGenerators.Utils;
 
 internal static class ProtocolTypeUtils
 {
+    private static readonly string[] UnusedUnitTypeNames = 
+        ["GameTFlexLicenseName",
+         "GameTFlexLicenseAttributeName",
+         "GameTFlexLicenseAttributeValue"];
+
     public static string GetTypeName(string fullName) => fullName
         .Replace(".", string.Empty)
         .Replace("NNet", "");
 
-    //Retrieved from protocol.py file.
+    public static bool IsUnusedUnitTypeName(string unitTypeName) => UnusedUnitTypeNames.Contains(unitTypeName);
+
     public static int GetStrSizeBoundMax(string typeName) => typeName switch
     {
         "CFilePath" or "GameCChatString" => 11,

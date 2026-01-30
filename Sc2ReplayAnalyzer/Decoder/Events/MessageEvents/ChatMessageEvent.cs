@@ -1,0 +1,17 @@
+﻿namespace Sc2ReplayAnalyzer.Decoder.Events.MessageEvents;
+
+public class ChatMessageEvent
+{
+    public ChatMessageEvent(int recipient, int id, string msg, int loop)
+    {
+        Recipient = recipient;
+        Id = id;
+        Msg = msg;
+        Loop = loop;
+    }
+
+    public int Recipient { get; }
+    public int Id { get; }
+    public string Msg { get; }
+    public int Loop { get; }
+}

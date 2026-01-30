@@ -3,7 +3,7 @@
 public struct Option<T>
 {
     public bool HasValue;
-    public T Value;
+    public T? Value;
 
     public static Option<T> Some(T value) => new Option<T>
     {
@@ -12,7 +12,7 @@ public struct Option<T>
     };
 
     public readonly T DefaultIfNone(T defaultValue) => HasValue ? Value : defaultValue;
-    public readonly T DefaultIfNone() => default;
+    public readonly T? DefaultIfNone() => HasValue ? Value : default;
 
     public readonly void Deconstruct(out bool hasValue, out T value) => (hasValue, value) = (HasValue, Value);
 
