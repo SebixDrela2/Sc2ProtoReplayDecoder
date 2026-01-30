@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Reflection;
-using System.Reflection.Metadata;
-using System.Text.Json.Nodes;
+﻿using System.Text.Json.Nodes;
 
 namespace Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes.TypeGenerators.Utils;
 
