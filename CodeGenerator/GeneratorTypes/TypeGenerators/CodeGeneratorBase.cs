@@ -52,7 +52,7 @@ internal abstract class CodeGeneratorBase
 
     protected IProtocolAgnosticParser GetAgnosticMethodParser() => _agnosticParser;
 
-    protected bool OpenClass(string className, string choiceType = null)
+    protected bool OpenClass(string className, string choiceType = null, bool isPartial = false)
     {
         var typeName = ProtocolTypeUtils.GetTypeName(className);
 
@@ -65,9 +65,11 @@ internal abstract class CodeGeneratorBase
             ? $" : {ProtocolTypeUtils.GetTypeName(choiceType)}" 
             : string.Empty;
 
+        var possiblePartial = isPartial ? "partial" : string.Empty;
+
         _builder.AppendLine($"// {className}");
         _builder.AppendLine($$"""
-            public class {{typeName}}{{possibleAbstractClass}}
+            public {{possiblePartial}} class {{typeName}}{{possibleAbstractClass}}
             {
             """);
 

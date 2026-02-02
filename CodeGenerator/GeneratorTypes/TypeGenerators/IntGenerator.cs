@@ -25,7 +25,7 @@ internal class IntGenerator(StringBuilder builder, Sc2GeneratorData data)
                 continue;
             }
 
-            if (OpenClass(fullName))
+            if (OpenClass(fullName, isPartial: true))
             {
                 AddField("Value", "long");
                 Close();

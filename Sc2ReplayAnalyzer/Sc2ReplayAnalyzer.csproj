@@ -22,8 +22,4 @@
   <ItemGroup>
     <ProjectReference Include="..\MPQArchive\MPQArchive.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="ProtocolGen\" />
-  </ItemGroup>
 </Project>

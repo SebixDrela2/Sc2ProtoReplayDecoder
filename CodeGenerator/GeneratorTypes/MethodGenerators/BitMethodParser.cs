@@ -47,7 +47,7 @@ internal class BitMethodParser(StringBuilder methodBuilder, Sc2GeneratorData dat
     public void OpenString(JsonNode bounds, string unitTypeName)
     {
         var typeName = ProtocolTypeUtils.GetTypeName(unitTypeName);
-        var stringSizeNumBits = ProtocolTypeUtils.GetStrSizeBoundMax(typeName);
+        var stringSizeNumBits = ProtocolTypeUtils.GetStrSizeBoundMax(typeName, data.ProtocolName);
 
         _generalMethodBuilder.AppendLine($$"""
                 public {{typeName}} Parse_{{typeName}}()

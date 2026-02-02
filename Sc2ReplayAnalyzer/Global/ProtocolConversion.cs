@@ -12,9 +12,12 @@ global using f64 = double;
 global using usize = nuint;
 global using ssize = nint;
 
-global using Sc2ReplayAnalyzer.Json.protocol90870;
-global using GameSDetails = Sc2ReplayAnalyzer.Json.protocol90870.Versioned.GameSDetails;
-
+global using static Sc2ReplayAnalyzer.Global.Global;
 namespace Sc2ReplayAnalyzer.Global;
 
 public struct NoneValue;
+
+public class Global
+{
+    public const int MaxExpectedProtocolNotInclusive = 100000;
+}

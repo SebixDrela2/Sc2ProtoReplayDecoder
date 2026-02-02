@@ -2,7 +2,7 @@
 
 public class UserInitialData
 {
-    public UserInitialData(string mount, string skin, int observe, int? teamPref, string toonHandle, long combinedRaceLevels, int highestLeague, string clanTag, bool testMap, bool testAuto, bool examine, int testType, bool customInterface, string clanLogo, string name, int? racePreference, int randomSeed, string hero, long? scaledRating)
+    public UserInitialData(string mount, string skin, string observe, int? teamPref, string toonHandle, long combinedRaceLevels, int highestLeague, string clanTag, bool testMap, bool testAuto, bool examine, int testType, bool customInterface, string clanLogo, string name, int? racePreference, int randomSeed, string hero, long? scaledRating)
     {
         Mount = mount;
         Skin = skin;
@@ -27,7 +27,7 @@ public class UserInitialData
 
     public string Mount { get; }
     public string Skin { get; }
-    public int Observe { get; }
+    public string Observe { get; }
     public int? TeamPref { get; }
     public string ToonHandle { get; }
     public long CombinedRaceLevels { get; }

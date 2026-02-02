@@ -1,4 +1,5 @@
-﻿using Sc2ReplayAnalyzer.Json.Generator;
+﻿using Sc2ReplayAnalyzer.Decoder.APIModel;
+using Sc2ReplayAnalyzer.Json.Generator;
 using System.Reflection;
 using System.Text;
 
@@ -9,14 +10,13 @@ public class SharedProtocolGenerator(Sc2GeneratorData data)
     private readonly BitPackedGenerator _bitPackedGenerator = new(new StringBuilder(), data);
     private readonly VersionedGenerator _versionedGenerator = new(new StringBuilder(), data);
 
-    private string GeneratedProtocolPath => @$"{ProtocolGenerationFolderPath}\{data.GenFolderPath}";
-
     private string ProtocolGenerationFolderPath => Path.GetFullPath(Path.Combine(
             AssemblyLocation,
-           "..", "..", "..", "..",
-           "ProtocolGen"));
+           @"..\..\..\..\Sc2ReplayAnalyzer\ProtocolGen",
+           data.ProtocolName));
 
-    private string AssemblyLocation => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+    private string AssemblyLocation => Path.GetDirectoryName(typeof(Sc2Replay).Assembly.Location);
+
     public void Generate()
     {
         PrepareDirAndCleanUpPrevRun();
@@ -30,12 +30,12 @@ public class SharedProtocolGenerator(Sc2GeneratorData data)
 
     private void PrepareDirAndCleanUpPrevRun()
     {
-        if (!Directory.Exists(GeneratedProtocolPath))
+        if (!Directory.Exists(ProtocolGenerationFolderPath))
         {
-            Directory.CreateDirectory(GeneratedProtocolPath);
+            Directory.CreateDirectory(ProtocolGenerationFolderPath);
         }
 
-        var files = Directory.GetFiles(GeneratedProtocolPath);
+        var files = Directory.GetFiles(ProtocolGenerationFolderPath);
 
         foreach (var file in files)
         {

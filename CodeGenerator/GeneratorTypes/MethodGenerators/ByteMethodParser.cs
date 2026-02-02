@@ -136,7 +136,6 @@ internal class ByteMethodParser(StringBuilder methodBuilder, Sc2GeneratorData da
 
         _generalMethodBuilder.AppendLine($$"""
                             }
-                            break;
                 """);
     }
 
@@ -240,7 +239,6 @@ internal class ByteMethodParser(StringBuilder methodBuilder, Sc2GeneratorData da
                                         throw new Exception("Duplicate tag!");
                                     }
                                 }
-                                break;
                 """);
         }
         else

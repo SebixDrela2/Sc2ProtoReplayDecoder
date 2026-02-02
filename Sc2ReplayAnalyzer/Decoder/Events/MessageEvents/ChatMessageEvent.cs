@@ -2,7 +2,7 @@
 
 public class ChatMessageEvent
 {
-    public ChatMessageEvent(int recipient, int id, string msg, int loop)
+    public ChatMessageEvent(string recipient, int id, string msg, long loop)
     {
         Recipient = recipient;
         Id = id;
@@ -10,8 +10,8 @@ public class ChatMessageEvent
         Loop = loop;
     }
 
-    public int Recipient { get; }
+    public string Recipient { get; }
     public int Id { get; }
     public string Msg { get; }
-    public int Loop { get; }
+    public long Loop { get; }
 }

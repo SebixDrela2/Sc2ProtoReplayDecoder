@@ -9,14 +9,14 @@ namespace Sc2ReplayAnalyzer.Decoder.Models.InitData
                        bool lockTeams,
                        bool amm,
                        bool battleNet,
-                       int fog,
+                       string fog,
                        bool noVictoryOrDefeat,
                        bool heroDuplicatesAllowed,
-                       int userDifficulty,
+                       string userDifficulty,
                        bool advancedSharedControl,
                        bool cooperative,
                        long clientDebugFlags,
-                       int observers,
+                       string observers,
                        bool teamsTogether,
                        bool randomRaces,
                        bool buildCoachEnabled)
@@ -56,7 +56,7 @@ namespace Sc2ReplayAnalyzer.Decoder.Models.InitData
         public bool BattleNet { get; init; }
         /// <summary>InitData GameOptions Fog</summary>
         ///
-        public int Fog { get; init; }
+        public string Fog { get; init; }
         /// <summary>InitData GameOptions NoVictoryOrDefeat</summary>
         ///
         public bool NoVictoryOrDefeat { get; init; }
@@ -65,7 +65,7 @@ namespace Sc2ReplayAnalyzer.Decoder.Models.InitData
         public bool HeroDuplicatesAllowed { get; init; }
         /// <summary>InitData GameOptions UserDifficulty</summary>
         ///
-        public int UserDifficulty { get; init; }
+        public string UserDifficulty { get; init; }
         /// <summary>InitData GameOptions AdvancedSharedControl</summary>
         ///
         public bool AdvancedSharedControl { get; init; }
@@ -77,7 +77,7 @@ namespace Sc2ReplayAnalyzer.Decoder.Models.InitData
         public long ClientDebugFlags { get; init; }
         /// <summary>InitData GameOptions Observers</summary>
         ///
-        public int Observers { get; init; }
+        public string Observers { get; init; }
         /// <summary>InitData GameOptions TeamsTogether</summary>
         ///
         public bool TeamsTogether { get; init; }

@@ -8,6 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="ProtocolGen\**" />
+    <EmbeddedResource Remove="ProtocolGen\**" />
+    <None Remove="ProtocolGen\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\CodeGenerator\Sc2ReplayAnalyzer.CodeGenerator.csproj" />
     <ProjectReference Include="..\Sc2ReplayAnalyzer\Sc2ReplayAnalyzer.csproj" />
   </ItemGroup>

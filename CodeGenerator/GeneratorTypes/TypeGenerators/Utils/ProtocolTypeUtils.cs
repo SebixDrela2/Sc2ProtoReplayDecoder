@@ -15,14 +15,14 @@ internal static class ProtocolTypeUtils
 
     public static bool IsUnusedUnitTypeName(string unitTypeName) => UnusedUnitTypeNames.Contains(unitTypeName);
 
-    public static int GetStrSizeBoundMax(string typeName) => typeName switch
+    public static int GetStrSizeBoundMax(string typeName, string protocolName) => typeName switch
     {
         "CFilePath" or "GameCChatString" => 11,
         "CUserName" or "CClanTag" or "GameCAuthorName" => 8,
         "CSkinHandle" or "CMountHandle" or "CArtifactHandle" or "CCommanderHandle" or "CHeroHandle" => 9,
         "CToonHandle" => 7,
         "GameCCheatString" or "GameCTriggerChatMessageString" or "GameCGameCacheName" => 10,
-        var x => throw new NotSupportedException($"Invalid type: {x} for string bit parser.")
+        var x => throw new NotSupportedException($"Invalid type: {x} for string bit parser. For {protocolName}")
     };
 
     public static string GetUnwrappedOptionTypeName(string unitTypeName)

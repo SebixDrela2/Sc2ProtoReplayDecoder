@@ -1,6 +1,8 @@
 ﻿using Sc2ReplayAnalyzer.Decoder.Models.Details;
 using Sc2ReplayAnalyzer.Global;
-using Sc2ReplayAnalyzer.Json.protocol90870.Versioned;
+using Sc2ReplayAnalyzer.Json.VersionedProtocolDefinitions;
+
+using GameSDetails = Sc2ReplayAnalyzer.Json.VersionedProtocolDefinitions.GameSDetails;
 
 namespace Sc2ReplayAnalyzer.Decoder.Parser;
 

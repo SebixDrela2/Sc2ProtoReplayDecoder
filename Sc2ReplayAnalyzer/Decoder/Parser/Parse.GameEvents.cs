@@ -1,5 +1,6 @@
 ﻿using Sc2ReplayAnalyzer.Decoder.Events.GameEvents;
-using Sc2ReplayAnalyzer.Json.protocol90870.BitPacked;
+using Sc2ReplayAnalyzer.Json.BitPackedProtocolDefinitions;
+
 
 namespace Sc2ReplayAnalyzer.Decoder.Parser;
 
@@ -14,51 +15,56 @@ internal static partial class Parse
             GameEvent gameEvent = GetGameEvent(gameEventData);
             GameEvent detailEvent = gameEvent.EventId switch
             {
-                GameEEventId_e_bankFile enclosedEvent => GetSBankFileEvent(enclosedEvent.Value, gameEvent),
-                GameEEventId_e_bankKey enclosedEvent => GetSBankKeyEvent(enclosedEvent.Value, gameEvent),
-                GameEEventId_e_bankSection enclosedEvent => GetSBankSectionEvent(enclosedEvent.Value, gameEvent),
-                GameEEventId_e_bankSignature enclosedEvent => GetSBankSignatureEvent(enclosedEvent.Value, gameEvent),
-                GameEEventId_e_bankValue enclosedEvent => GetSBankValueEvent(enclosedEvent.Value, gameEvent),
-                GameEEventId_e_cameraUpdate enclosedEvent => GetSCameraUpdateEvent(enclosedEvent.Value, gameEvent),
-                GameEEventId_e_cmd enclosedEvent => GetSCmdEvent(enclosedEvent.Value, gameEvent),
-                GameEEventId_e_cmdUpdateTargetPoint enclosedEvent => GetSCmdUpdateTargetPointEvent(enclosedEvent.Value, gameEvent),
-                GameEEventId_e_commandManagerState enclosedEvent => GetSCommandManagerStateEvent(enclosedEvent.Value, gameEvent),
-                GameEEventId_e_controlGroupUpdate enclosedEvent => GetSControlGroupUpdateEvent(enclosedEvent.Value, gameEvent),
-                GameEEventId_e_gameUserLeave enclosedEvent => GetSGameUserLeaveEvent(enclosedEvent.Value, gameEvent),
-                GameEEventId_e_selectionDelta enclosedEvent => GetSSelectionDeltaEvent(enclosedEvent.Value, gameEvent),
-                GameEEventId_e_setSyncLoadingTime enclosedEvent => GetSSetSyncLoadingTimeEvent(enclosedEvent.Value, gameEvent),
-                GameEEventId_e_setSyncPlayingTime enclosedEvent => GetSSetSyncPlayingTimeEvent(enclosedEvent.Value, gameEvent),
-                GameEEventId_e_triggerDialogControl enclosedEvent => GetSTriggerDialogControlEvent(enclosedEvent.Value, gameEvent),
-                GameEEventId_e_triggerPing enclosedEvent => GetSTriggerPingEvent(enclosedEvent.Value, gameEvent),
-                GameEEventId_e_triggerSoundLengthSync enclosedEvent => new STriggerSoundLengthSyncEvent(gameEvent),
-                GameEEventId_e_userFinishedLoadingSync enclosedEvent => new SUserFinishedLoadingSyncEvent(gameEvent),
-                GameEEventId_e_userOptions enclosedEvent => GetSUserOptionsEvent(enclosedEvent.Value, gameEvent),
-                GameEEventId_e_cmdUpdateTargetUnit enclosedEvent => GetSCmdUpdateTargetUnitEvent(enclosedEvent.Value, gameEvent),
-                GameEEventId_e_triggerKeyPressed enclosedEvent => GetSTriggerKeyPressedEvent(enclosedEvent.Value, gameEvent),
-                GameEEventId_e_unitClick enclosedEvent => GetSUnitClickEvent(enclosedEvent.Value, gameEvent),
-                GameEEventId_e_decrementGameTimeRemaining enclosedEvent => GetSDecrementGameTimeRemainingEvent(enclosedEvent.Value, gameEvent),
-                GameEEventId_e_triggerChatMessage enclosedEvent => GetSTriggerChatMessageEvent(enclosedEvent.Value, gameEvent),
-                GameEEventId_e_triggerMouseClicked enclosedEvent => GetSTriggerMouseClickedEvent(enclosedEvent.Value, gameEvent),
-                GameEEventId_e_triggerSoundtrackDone enclosedEvent => GetSTriggerSoundtrackDoneEvent(enclosedEvent.Value, gameEvent),
-                GameEEventId_e_cameraSave enclosedEvent => GetSCameraSaveEvent(enclosedEvent.Value, gameEvent),
-                GameEEventId_e_triggerCutsceneBookmarkFired enclosedEvent => GetSTriggerCutsceneBookmarkFiredEvent(enclosedEvent.Value, gameEvent),
-                GameEEventId_e_triggerCutsceneEndSceneFired enclosedEvent => GetSTriggerCutsceneEndSceneFiredEvent(enclosedEvent.Value, gameEvent),
-                GameEEventId_e_triggerSoundLengthQuery enclosedEvent => GetSTriggerSoundLengthQueryEvent(enclosedEvent.Value, gameEvent),
-                GameEEventId_e_triggerSoundOffset enclosedEvent => GetSTriggerSoundOffsetEvent(enclosedEvent.Value, gameEvent),
-                GameEEventId_e_triggerTargetModeUpdate enclosedEvent => GetSTriggerTargetModeUpdateEvent(enclosedEvent.Value, gameEvent),
-                GameEEventId_e_triggerTransmissionComplete enclosedEvent => GetSTriggerTransmissionCompleteEvent(enclosedEvent.Value, gameEvent),
-                GameEEventId_e_achievementAwarded enclosedEvent => GetSAchievementAwardedEvent(enclosedEvent.Value, gameEvent),
-                GameEEventId_e_triggerTransmissionOffset enclosedEvent => GetSTriggerTransmissionOffsetEvent(enclosedEvent.Value, gameEvent),
-                GameEEventId_e_triggerButtonPressed enclosedEvent => GetSTriggerButtonPressedEvent(enclosedEvent.Value, gameEvent),
-                GameEEventId_e_triggerGameMenuItemSelected enclosedEvent => GetSTriggerGameMenuItemSelectedEvent(enclosedEvent.Value, gameEvent),
-                GameEEventId_e_triggerMouseMoved enclosedEvent => GetSTriggerMouseMovedEvent(enclosedEvent.Value, gameEvent),
-                var enclosedEvent => GetUnknownEvent(gameEventData)
+                GameEEventId_e_bankFile(var value) => GetSBankFileEvent(value, gameEvent),
+                GameEEventId_e_bankKey(var value) => GetSBankKeyEvent(value, gameEvent),
+                GameEEventId_e_bankSection(var value) => GetSBankSectionEvent(value, gameEvent),
+                GameEEventId_e_bankSignature(var value) => GetSBankSignatureEvent(value, gameEvent),
+                GameEEventId_e_bankValue(var value) => GetSBankValueEvent(value, gameEvent),
+                GameEEventId_e_cameraUpdate(var value) => GetSCameraUpdateEvent(value, gameEvent),
+                GameEEventId_e_cmd(var value) => GetSCmdEvent(value, gameEvent),
+                GameEEventId_e_cmdUpdateTargetPoint(var value) => GetSCmdUpdateTargetPointEvent(value, gameEvent),
+                GameEEventId_e_commandManagerState(var value) => GetSCommandManagerStateEvent(value, gameEvent),
+                GameEEventId_e_controlGroupUpdate(var value) => GetSControlGroupUpdateEvent(value, gameEvent),
+                GameEEventId_e_gameUserLeave(var value) => GetSGameUserLeaveEvent(value, gameEvent),
+                GameEEventId_e_selectionDelta(var value) => GetSSelectionDeltaEvent(value, gameEvent),
+                GameEEventId_e_setSyncLoadingTime(var value) => GetSSetSyncLoadingTimeEvent(value, gameEvent),
+                GameEEventId_e_setSyncPlayingTime(var value) => GetSSetSyncPlayingTimeEvent(value, gameEvent),
+                GameEEventId_e_triggerDialogControl(var value) => GetSTriggerDialogControlEvent(value, gameEvent),
+                GameEEventId_e_triggerPing(var value) => GetSTriggerPingEvent(value, gameEvent),
+                GameEEventId_e_triggerSoundLengthSync(var value) => new STriggerSoundLengthSyncEvent(gameEvent),
+                GameEEventId_e_userFinishedLoadingSync(var value) => new SUserFinishedLoadingSyncEvent(gameEvent),
+                GameEEventId_e_userOptions(var value) => GetSUserOptionsEvent(value, gameEvent),
+                GameEEventId_e_cmdUpdateTargetUnit(var value) => GetSCmdUpdateTargetUnitEvent(value, gameEvent),
+                GameEEventId_e_triggerKeyPressed(var value) => GetSTriggerKeyPressedEvent(value, gameEvent),
+                GameEEventId_e_unitClick(var value) => GetSUnitClickEvent(value, gameEvent),
+                GameEEventId_e_decrementGameTimeRemaining(var value) => GetSDecrementGameTimeRemainingEvent(value, gameEvent),
+                GameEEventId_e_triggerChatMessage(var value) => GetSTriggerChatMessageEvent(value, gameEvent),
+                GameEEventId_e_triggerMouseClicked(var value) => GetSTriggerMouseClickedEvent(value, gameEvent),
+                GameEEventId_e_triggerSoundtrackDone(var value) => GetSTriggerSoundtrackDoneEvent(value, gameEvent),
+                GameEEventId_e_cameraSave(var value) => GetSCameraSaveEvent(value, gameEvent),
+                GameEEventId_e_triggerCutsceneBookmarkFired(var value) => GetSTriggerCutsceneBookmarkFiredEvent(value, gameEvent),
+                GameEEventId_e_triggerCutsceneEndSceneFired(var value) => GetSTriggerCutsceneEndSceneFiredEvent(value, gameEvent),
+                GameEEventId_e_triggerSoundLengthQuery(var value) => GetSTriggerSoundLengthQueryEvent(value, gameEvent),
+                GameEEventId_e_triggerSoundOffset(var value) => GetSTriggerSoundOffsetEvent(value, gameEvent),
+                GameEEventId_e_triggerTargetModeUpdate(var value) => GetSTriggerTargetModeUpdateEvent(value, gameEvent),
+                GameEEventId_e_triggerTransmissionComplete(var value) => GetSTriggerTransmissionCompleteEvent(value, gameEvent),
+                GameEEventId_e_achievementAwarded(var value) => GetSAchievementAwardedEvent(value, gameEvent),
+                GameEEventId_e_triggerTransmissionOffset(var value) => GetSTriggerTransmissionOffsetEvent(value, gameEvent),
+                GameEEventId_e_triggerButtonPressed(var value) => GetSTriggerButtonPressedEvent(value, gameEvent),
+                GameEEventId_e_triggerGameMenuItemSelected(var value) => GetSTriggerGameMenuItemSelectedEvent(value, gameEvent),
+                GameEEventId_e_triggerMouseMoved(var value) => GetSTriggerMouseMovedEvent(value, gameEvent),
+                var enclosedEvent => throw new NotSupportedException("Not supported game event.")
             };
 
             gameevents.Add(detailEvent);
         }
 
         return new GameEvents(gameevents);
+    }
+
+    private static GameEvent GetDefLogUnknown(GameEventTriplet gameeventData)
+    {
+        return GetGameEvent(gameeventData);
     }
 
     private static GameEvent GetGameEvent(GameEventTriplet gameEventData)
@@ -71,13 +77,11 @@ internal static partial class Parse
         return new GameEvent(userId, eventId, type, gameloop);
     }
 
-    private static GameEvent GetUnknownEvent(GameEventTriplet unknownEvent) => GetGameEvent(unknownEvent);
-
     private static STriggerDialogControlEvent GetSTriggerDialogControlEvent(GameSTriggerDialogControlEvent sTriggerDialogControlEvent, GameEvent gameEvent)
     {
         long m_controlId = sTriggerDialogControlEvent.m_controlId.Value;
-        int mouseButton = (int)((MouseButton)sTriggerDialogControlEvent.m_eventData).Value.Value;
-        string textChanged = ((TextChanged)sTriggerDialogControlEvent.m_eventData).Value.Value.ReadStringBytes();
+        int? mouseButton = (int?)((sTriggerDialogControlEvent.m_eventData as MouseButton)?.Value?.Value);
+        string? textChanged = (sTriggerDialogControlEvent.m_eventData as TextChanged)?.Value?.Value.ReadStringBytes();
         long m_eventType = sTriggerDialogControlEvent.m_eventType.Value;
         return new STriggerDialogControlEvent(gameEvent, m_controlId, mouseButton, textChanged, m_eventType);
     }
@@ -169,8 +173,8 @@ internal static partial class Parse
     {
         string? reason = "FIX"; //sCameraUpdateEvent.m_reason.;
         int? distance = (int?)(sCameraUpdateEvent.m_distance.DefaultIfNone()?.Value.Value);
-        int? yaw = (int?)sCameraUpdateEvent.m_yaw.DefaultIfNone().Value.Value;
-        int? pitch = (int?)sCameraUpdateEvent.m_pitch.DefaultIfNone().Value.Value;
+        int? yaw = (int?)sCameraUpdateEvent.m_yaw.DefaultIfNone()?.Value.Value;
+        int? pitch = (int?)sCameraUpdateEvent.m_pitch.DefaultIfNone()?.Value.Value;
         bool follow = sCameraUpdateEvent.m_follow;
         
         (long? targetX, long? targetY) = GetSCameraUpdateEventTarget(sCameraUpdateEvent);
@@ -229,7 +233,7 @@ internal static partial class Parse
 
             int link = (int)abil.m_abilLink.Value.Value;
             int cmdIndex = (int)abil.m_abilCmdIndex;
-            string? cmdData = "FIX";//abil.m_abilCmdData.DefaultIfNone()?
+            string? cmdData = "FIX"; //abil.m_abilCmdData.DefaultIfNone()?
 
             return (link, cmdIndex, cmdData);
         }
@@ -288,9 +292,10 @@ internal static partial class Parse
         long option = gameSTriggerPingEvent.m_option.Value;
         int unit = (int)gameSTriggerPingEvent.m_unit.Value.Value;
         (long unitX, long unitY, long unitZ) = GetUnitPosition(gameSTriggerPingEvent);
-        int? unitControlPlayerId = (int?)gameSTriggerPingEvent.m_unitControlPlayerId.Value.Value;
+        int? unitControlPlayerId = (int?)gameSTriggerPingEvent.m_unitControlPlayerId.Value?.Value;
         (long pointX, long pointY) = GetPoint(gameSTriggerPingEvent);
         int? unitUpkeepPlayerId = (int?)(gameSTriggerPingEvent.m_unitUpkeepPlayerId.DefaultIfNone()?.Value);
+
         return new STriggerPingEvent(gameEvent,
                                      pingedMinimap,
                                      unitLink,

@@ -10,12 +10,15 @@ public class ProtocolJsonParser(Dictionary<string, string> jsonFiles)
     private const string NNetReplay = "NNet.Replay";
     private const string NNetGame = "NNet.Game";
 
+    private string _latestProtocolName;
+
     private readonly ByteAlignedProtocolProcessor _byteAlignedProcessor = new ByteAlignedProtocolProcessor();
     private readonly BitPackedProtocolProcessor _bitPackedProcessor = new BitPackedProtocolProcessor();
 
-    public IReadOnlyList<Sc2GeneratorData> Parse()
+    public List<Sc2GeneratorData> Parse()
     {
         var result = new List<Sc2GeneratorData>();
+        _latestProtocolName = jsonFiles.Keys.OrderByDescending(x => x).First();
 
         foreach(var json in jsonFiles)
         {
@@ -35,6 +38,7 @@ public class ProtocolJsonParser(Dictionary<string, string> jsonFiles)
         return new Sc2GeneratorData
         {
             ProtocolName = protocolName,
+            IsLatestProtocol = protocolName == _latestProtocolName,
             EnumTags = ParseRootModuleForEnumTags(rootModule),
             ByteAligned = _byteAlignedProcessor.ProcessByteAligned(rootModule),
             BitPacked = _bitPackedProcessor.ProcessBitPacked(rootModule)

@@ -1,11 +1,14 @@
 ﻿using MPQArchive.MPQ;
-using MPQArchive.MPQ.ReceivedData;
 using Sc2ReplayAnalyzer.Decoder.APIModel;
 using Sc2ReplayAnalyzer.Decoder.Events.MetaData;
-using Sc2ReplayAnalyzer.Decoder.Parser;
-using Sc2ReplayAnalyzer.Json.MetaData;
-using Sc2ReplayAnalyzer.Json.protocol90870.BitPacked;
-using Sc2ReplayAnalyzer.Json.protocol90870.Versioned;
+using Sc2ReplayAnalyzer.Json.BitPackedProtocolDefinitions;
+using Sc2ReplayAnalyzer.Json.VersionedProtocolDefinitions;
+using Sc2ReplayAnalyzer.Decoder.Factory;
+using Sc2ReplayAnalyzer.Json.protocol95299.Versioned;
+
+using BitPacked = Sc2ReplayAnalyzer.Json.BitPackedProtocolDefinitions;
+using Versioned = Sc2ReplayAnalyzer.Json.VersionedProtocolDefinitions;
+using GameSDetails = Sc2ReplayAnalyzer.Json.VersionedProtocolDefinitions.GameSDetails;
 
 namespace Sc2ReplayAnalyzer.Decoder;
 
@@ -13,22 +16,31 @@ public class ReplayDecoder
 {
     private Dictionary<string, byte[]> _listingFiles;
 
-    internal Sc2ReplayData Decode(string path)
+    private long _topBuilderNumber = 0;
+    private long _currentBuildNumber;
+
+    private BitPackedProtocolParserFactory _bitPackedProtocolParserFactory;
+    private VersionedProtocolParserFactory _versionedProtocolParserFactory;
+    public Sc2Replay DecodeReplay(string path)
     {
         using var fileStream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read);
         var mpqArchive = new MPQReader(fileStream).Read();
-        var userData = mpqArchive.MPQUserData;
-
-        using var binaryReader = new BinaryReader(new MemoryStream(mpqArchive.MPQUserData.Content));
-
-        var parser = new VersionedProtocolParser(binaryReader);
-        var header = parser.Parse_ReplaySHeader();
 
         _listingFiles = mpqArchive.ListingFiles;
 
-        return new Sc2ReplayData
+        var header = ParseHeader(mpqArchive.MPQUserData);
+
+        _topBuilderNumber = Math.Max(header.m_dataBuildNum, _topBuilderNumber);
+        _currentBuildNumber = header.m_dataBuildNum;
+
+        _bitPackedProtocolParserFactory = new BitPackedProtocolParserFactory(_currentBuildNumber);
+        _versionedProtocolParserFactory = new VersionedProtocolParserFactory(_currentBuildNumber);
+
+        Console.WriteLine($"Build number:{header.m_dataBuildNum}, Top: {_topBuilderNumber}");
+
+        var replayData = new Sc2ReplayData
         {
-            HeaderData = ParseHeader(mpqArchive.MPQUserData),
+            FileName = path,
             MetaData = ParseMetaData(),
             InitData = ParseReplayInitData(),
             MessagesData = ParseMessageEvents(),
@@ -36,6 +48,8 @@ public class ReplayDecoder
             TrackerData = ParseTrackerEvents(),
             GameData = ParseGameEvents(),
         };
+
+        return Sc2Replay.FromData(replayData);
     }
 
     private ReplaySHeader ParseHeader(MPQUserData userData)
@@ -57,7 +71,7 @@ public class ReplayDecoder
     {
         using var reader = new BinaryReader(new MemoryStream(_listingFiles["replay.initData"]));
 
-        var bitPackedParser = new BitPackedProtocolParser(reader);
+        var bitPackedParser = _bitPackedProtocolParserFactory.Create(reader);
 
         return bitPackedParser.Parse_ReplaySInitData();
     }
@@ -66,7 +80,7 @@ public class ReplayDecoder
     {
         using var reader = new BinaryReader(new MemoryStream(_listingFiles["replay.message.events"]));
 
-        var bitPackedParser = new BitPackedProtocolParser(reader);
+        var bitPackedParser = _bitPackedProtocolParserFactory.Create(reader);
         var result = new List<MessageEventTriplet>();
 
         while (reader.BaseStream.Position < reader.BaseStream.Length)
@@ -81,7 +95,7 @@ public class ReplayDecoder
     {
         using var reader = new BinaryReader(new MemoryStream(_listingFiles["replay.details"]));
 
-        var versionedParser = new VersionedProtocolParser(reader);
+        var versionedParser = _versionedProtocolParserFactory.Create(reader);
 
         return versionedParser.Parse_GameSDetails();
     }
@@ -89,7 +103,7 @@ public class ReplayDecoder
     private IReadOnlyList<GameEventTriplet> ParseGameEvents()
     {
         using var reader = new BinaryReader(new MemoryStream(_listingFiles["replay.game.events"]));
-        var bitPackedParser = new BitPackedProtocolParser(reader);
+        var bitPackedParser = _bitPackedProtocolParserFactory.Create(reader);
 
         var result = new List<GameEventTriplet>();
 
@@ -104,7 +118,7 @@ public class ReplayDecoder
     private IReadOnlyList<TrackerEventPair> ParseTrackerEvents()
     {
         using var reader = new BinaryReader(new MemoryStream(_listingFiles["replay.tracker.events"]));
-        var versionedParser = new VersionedProtocolParser(reader);
+        var versionedParser = _versionedProtocolParserFactory.Create(reader);
         var result = new List<TrackerEventPair>();
 
         while (reader.BaseStream.Position < reader.BaseStream.Length)
@@ -115,17 +129,17 @@ public class ReplayDecoder
         return result;
     }
 
-    private TrackerEventPair ParseEventPair(VersionedProtocolParser trackerParser)
+    private TrackerEventPair ParseEventPair(IVersionedProtocolParser trackerParser)
     {
         var delta = trackerParser.Parse_SVarUint32();
         var eventID = trackerParser.Parse_ReplayTrackerEEventId();
 
         uint deltaValue = delta switch
         {
-            Json.protocol90870.Versioned.m_uint6 val => val.Value,
-            Json.protocol90870.Versioned.m_uint14 val => val.Value,
-            Json.protocol90870.Versioned.m_uint22 val => val.Value,
-            Json.protocol90870.Versioned.m_uint32 val => val.Value,
+            Versioned.m_uint6 val => val.Value,
+            Versioned.m_uint14 val => val.Value,
+            Versioned.m_uint22 val => val.Value,
+            Versioned.m_uint32 val => val.Value,
             _ => throw new NotImplementedException(),
         };
 
@@ -136,7 +150,7 @@ public class ReplayDecoder
         };
     }
 
-    private GameEventTriplet ParseGameEventTriplet(BitPackedProtocolParser bitPackedParser)
+    private GameEventTriplet ParseGameEventTriplet(IBitPackedProtocolParser bitPackedParser)
     {
         var delta = bitPackedParser.Parse_SVarUint32();
         var gameUserID = bitPackedParser.Parse_ReplaySGameUserId();
@@ -144,10 +158,10 @@ public class ReplayDecoder
 
         var realDelta = delta switch
         {
-            Json.protocol90870.BitPacked.m_uint6 val => val.Value.Value,
-            Json.protocol90870.BitPacked.m_uint14 val => val.Value.Value,
-            Json.protocol90870.BitPacked.m_uint22 val => val.Value.Value,
-            Json.protocol90870.BitPacked.m_uint32 val => val.Value.Value,
+            BitPacked.m_uint6 val => val.Value.Value,
+            BitPacked.m_uint14 val => val.Value.Value,
+            BitPacked.m_uint22 val => val.Value.Value,
+            BitPacked.m_uint32 val => val.Value.Value,
             _ => throw new NotImplementedException(),
         };
 
@@ -161,7 +175,7 @@ public class ReplayDecoder
         };
     }
 
-    private MessageEventTriplet ParseMessageEventTriplet(BitPackedProtocolParser bitPackedParser)
+    private MessageEventTriplet ParseMessageEventTriplet(IBitPackedProtocolParser bitPackedParser)
     {
         var delta = bitPackedParser.Parse_SVarUint32();
         var gameUserID = bitPackedParser.Parse_ReplaySGameUserId();
@@ -169,10 +183,10 @@ public class ReplayDecoder
 
         var realDelta = delta switch
         {
-            Json.protocol90870.BitPacked.m_uint6 val => val.Value.Value,
-            Json.protocol90870.BitPacked.m_uint14 val => val.Value.Value,
-            Json.protocol90870.BitPacked.m_uint22 val => val.Value.Value,
-            Json.protocol90870.BitPacked.m_uint32 val => val.Value.Value,
+            BitPacked.m_uint6 val => val.Value.Value,
+            BitPacked.m_uint14 val => val.Value.Value,
+            BitPacked.m_uint22 val => val.Value.Value,
+            BitPacked.m_uint32 val => val.Value.Value,
             _ => throw new NotImplementedException(),
         };
 

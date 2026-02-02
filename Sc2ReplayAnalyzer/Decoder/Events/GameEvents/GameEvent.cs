@@ -1,4 +1,5 @@
-﻿using Sc2ReplayAnalyzer.Json.protocol90870.BitPacked;
+﻿using Sc2ReplayAnalyzer.Json.BitPackedProtocolDefinitions;
+
 
 namespace Sc2ReplayAnalyzer.Decoder.Events.GameEvents;
 

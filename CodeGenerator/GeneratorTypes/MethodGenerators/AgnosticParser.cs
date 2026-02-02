@@ -100,8 +100,7 @@ internal class AgnosticParser(StringBuilder methodBuilder, Sc2GeneratorData data
         }
 
         _generalMethodBuilder.AppendLine($$"""
-                            }
-                            break;                  
+                            }                
                 """);
     }
 

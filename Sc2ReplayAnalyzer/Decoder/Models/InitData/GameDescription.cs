@@ -12,7 +12,7 @@ public class GameDescription
                            bool isCoopMode,
                            string mapFileName,
                            int defaultAIBuild,
-                           int gameType,
+                           string gameType,
                            bool hasNonBlizzardExtensionMod,
                            long randomValue,
                            int maxObservers,
@@ -22,7 +22,7 @@ public class GameDescription
                            long mapFileSyncChecksum,
                            int maxPlayers,
                            ICollection<string> cacheHandles,
-                           int gameSpeed,
+                           string gameSpeed,
                            int maxControls,
                            string gameCacheName,
                            string mapAuthorName,
@@ -91,7 +91,7 @@ public class GameDescription
     public int DefaultAIBuild { get; init; }
     /// <summary>InitData GameDescription GameType</summary>
     ///
-    public int GameType { get; init; }
+    public string GameType { get; init; }
     /// <summary>InitData GameDescription HasNonBlizzardExtensionMod</summary>
     ///
     public bool HasNonBlizzardExtensionMod { get; init; }
@@ -121,7 +121,7 @@ public class GameDescription
     public ICollection<string> CacheHandles { get; init; }
     /// <summary>InitData GameDescription GameSpeed</summary>
     ///
-    public int GameSpeed { get; init; }
+    public string GameSpeed { get; init; }
     /// <summary>InitData GameDescription MaxControls</summary>
     ///
     public int MaxControls { get; init; }

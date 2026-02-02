@@ -12,7 +12,12 @@ internal class BitPackedGenerator(StringBuilder builder, Sc2GeneratorData data)
         var bitPacked = data.BitPacked;
         var protocolName = data.ProtocolName;
 
-        Init(protocolName);
+        var methodBuilder = new StringBuilder();
+
+        if (data.IsLatestProtocol)
+        {
+            AddClasses();
+        }
 
         _choiceGenerator.Generate<ProtocolConversionBitPacked>(bitPacked);
         _structGenerator.Generate<ProtocolConversionBitPacked>(bitPacked);
@@ -23,28 +28,44 @@ internal class BitPackedGenerator(StringBuilder builder, Sc2GeneratorData data)
         _arrayDynGenerator.Generate<ProtocolConversionBitPacked>(bitPacked);
         _blobStringGenerator.Generate<ProtocolConversionBitPacked>(bitPacked);
 
-        Finalise(protocolName);
+        AddParser(methodBuilder, protocolName);
+
+        if (data.IsLatestProtocol)
+        {
+            File.WriteAllText(@$"{ProtocolGenerationFolderPath}\BitPackedProtocolDefinitions.cs", builder.ToString());
+        }
     }
 
-    private void Init(string protocolName)
+    private void AddClasses()
     {
+        if (!data.IsLatestProtocol)
+        {
+            return;
+        }
+
         builder.AppendLine();
         builder.AppendLine($"""
-            using Sc2ReplayAnalyzer.Json.Global;
+            using Sc2ReplayAnalyzer.Global;
 
-            namespace Sc2ReplayAnalyzer.Json.{protocolName}.BitPacked;
+            namespace Sc2ReplayAnalyzer.Json.BitPackedProtocolDefinitions;
             """);
-        builder.AppendLine();
+        builder.AppendLine();   
     }
 
-    private void Finalise(string protocolName)
+    private void AddParser(StringBuilder methodBuilder, string protocolName)
     {
-        builder.AppendLine($$"""
-            public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolParserImpl(reader)
+        methodBuilder.AppendLine($$"""
+            using Sc2ReplayAnalyzer.Global;
+            using Sc2ReplayAnalyzer.Json.BitPackedProtocolDefinitions;
+            using Sc2ReplayAnalyzer.Decoder.Factory;
+
+            namespace Sc2ReplayAnalyzer.Json.{{protocolName}}.BitPacked;
+
+            public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolParserImpl(reader), IBitPackedProtocolParser
             {
             {{data.ParserGenerator}}
             }
             """);
-        File.WriteAllText(@$"{data.GenFolderPath}\{protocolName}\BitPackedProtocolParser.cs", builder.ToString());
+        File.WriteAllText(@$"{ProtocolGenerationFolderPathVersioned}\BitPackedProtocolParser.cs", methodBuilder.ToString());
     }
 }

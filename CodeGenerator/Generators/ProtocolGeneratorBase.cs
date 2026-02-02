@@ -1,4 +1,5 @@
 ﻿using Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes.TypeGenerators;
+using Sc2ReplayAnalyzer.Decoder.APIModel;
 using Sc2ReplayAnalyzer.Json.Generator;
 using System.Reflection;
 using System.Text;
@@ -16,10 +17,12 @@ internal abstract class ProtocolGeneratorBase(StringBuilder builder, Sc2Generato
     protected readonly ArrayDynGenerator _arrayDynGenerator = new(builder, data);
     protected readonly BlobTypeStringGenerator _blobStringGenerator = new(builder, data);
 
-    protected string ProtocolGenerationFolderPath => Path.GetFullPath(Path.Combine(
+    protected string ProtocolGenerationFolderPathVersioned => Path.GetFullPath(Path.Combine(
         AssemblyLocation,
-       "..", "..", "..", "..",
-       "ProtocolGen"));
+       @"..\..\..\..\Sc2ReplayAnalyzer\ProtocolGen",
+       data.ProtocolName));
 
-    private string AssemblyLocation => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+    protected string ProtocolGenerationFolderPath => Directory.GetParent(ProtocolGenerationFolderPathVersioned).FullName;
+
+    private string AssemblyLocation => Path.GetDirectoryName(typeof(Sc2Replay).Assembly.Location);
 }

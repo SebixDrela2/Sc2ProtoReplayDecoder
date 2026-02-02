@@ -3,11 +3,14 @@
 public class Sc2JsonProvider
 {
     private const string ResourcePrefix = "Sc2ReplayAnalyzer.Json.Protocols.";
-
+    private const string ProtocolNumberPrefix = "Sc2ReplayAnalyzer.Json.Protocols.protocol";
+    private const string ProtocolNumberSuffix = ".json";
+    private const int MinimalProtocolSupported = 51702;
     public Dictionary<string, string> Provide()
     {
         var assembly = typeof(Sc2JsonProvider).Assembly;
-        var resourceNames = assembly.GetManifestResourceNames();
+        var resourceNames = assembly.GetManifestResourceNames()
+            .Where(IsSupportedProtocol);
         var jsonDict = new Dictionary<string, string>();
 
         foreach(var resourceName in resourceNames)
@@ -21,4 +24,7 @@ public class Sc2JsonProvider
 
         return jsonDict;
     }
+
+    private bool IsSupportedProtocol(string resource) 
+        => int.Parse(resource[ProtocolNumberPrefix.Length..^ProtocolNumberSuffix.Length]) >= MinimalProtocolSupported;
 }

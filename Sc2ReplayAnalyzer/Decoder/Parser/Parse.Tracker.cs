@@ -1,30 +1,31 @@
 ﻿using Sc2ReplayAnalyzer.Decoder.Events.TrackerEvents;
+using Sc2ReplayAnalyzer.Json.VersionedProtocolDefinitions;
 
 namespace Sc2ReplayAnalyzer.Decoder.Parser;
 
 internal static partial class Parse
 {
-    public static TrackerEvents Tracker(IReadOnlyList<TrackerEventPair> trackerData)
+    public static TrackerEvents Tracker(IReadOnlyList<TrackerEventPair> trackerEventData)
     {
         List<TrackerEvent> trackerevents = new();
 
-        foreach (var eventDic in eventDicList)
+        foreach (var trackerData in trackerEventData)
         {
-            TrackerEvent trackerEvent = GetTrackerEvent(eventDic);
+            TrackerEvent trackerEvent = GetTrackerEvent(trackerData);
 
-            TrackerEvent detailEvent = trackerEvent.EventType switch
+            TrackerEvent detailEvent = trackerEvent.TrackerEventId switch
             {
-                TrackerEventType.SPlayerSetupEvent => GetSPlayerSetupEvent(eventDic, trackerEvent),
-                TrackerEventType.SPlayerStatsEvent => GetSPlayerStatsEvent(eventDic, trackerEvent),
-                TrackerEventType.SUnitBornEvent => GetSUnitBornEvent(eventDic, trackerEvent),
-                TrackerEventType.SUnitDiedEvent => GetSUnitDiedEvent(eventDic, trackerEvent),
-                TrackerEventType.SUnitOwnerChangeEvent => GetSUnitOwnerChangeEvent(eventDic, trackerEvent),
-                TrackerEventType.SUnitPositionsEvent => GetSUnitPositionsEvent(eventDic, trackerEvent),
-                TrackerEventType.SUnitTypeChangeEvent => GetSUnitTypeChangeEvent(eventDic, trackerEvent),
-                TrackerEventType.SUpgradeEvent => GetSUpgradeEvent(eventDic, trackerEvent),
-                TrackerEventType.SUnitInitEvent => GetSUnitInitEvent(eventDic, trackerEvent),
-                TrackerEventType.SUnitDoneEvent => GetSUnitDoneEvent(eventDic, trackerEvent),
-                _ => GetUnknownEvent(eventDic, trackerEvent)
+                ReplayTrackerEEventId_e_playerSetup(var value) => GetSPlayerSetupEvent(value, trackerEvent),
+                ReplayTrackerEEventId_e_playerStats(var value) => GetSPlayerStatsEvent(value, trackerEvent),
+                ReplayTrackerEEventId_e_unitBorn(var value) => GetSUnitBornEvent(value, trackerEvent),
+                ReplayTrackerEEventId_e_unitDied(var value) => GetSUnitDiedEvent(value, trackerEvent),
+                ReplayTrackerEEventId_e_unitOwnerChange(var value) => GetSUnitOwnerChangeEvent(value, trackerEvent),
+                ReplayTrackerEEventId_e_unitPosition(var value) => GetSUnitPositionsEvent(value, trackerEvent),
+                ReplayTrackerEEventId_e_unitTypeChange(var value) => GetSUnitTypeChangeEvent(value, trackerEvent),
+                ReplayTrackerEEventId_e_upgrade(var value) => GetSUpgradeEvent(value, trackerEvent),
+                ReplayTrackerEEventId_e_unitInit(var value) => GetSUnitInitEvent(value, trackerEvent),
+                ReplayTrackerEEventId_e_unitDone(var value) => GetSUnitDoneEvent(value, trackerEvent),
+                var value => throw new NotSupportedException($"Unknown tracker: {value.GetType().FullName}")
             };
             trackerevents.Add(detailEvent);
         }
@@ -45,218 +46,202 @@ internal static partial class Parse
         return events;
     }
 
-    internal static void SetTrackerEventsUnitConnections(TrackerEvents trackerEvents)
+    private static TrackerEvent GetTrackerEvent(TrackerEventPair eventPair)
     {
-        trackerEvents.SUnitBornEvents.ToList().ForEach(x => x.SUnitDiedEvent = trackerEvents.SUnitDiedEvents.FirstOrDefault(f => f.UnitIndex == x.UnitIndex));
-        trackerEvents.SUnitInitEvents.ToList().ForEach(x => x.SUnitDiedEvent = trackerEvents.SUnitDiedEvents.FirstOrDefault(f => f.UnitIndex == x.UnitIndex));
-        trackerEvents.SUnitInitEvents.ToList().ForEach(x => x.SUnitDoneEvent = trackerEvents.SUnitDoneEvents.FirstOrDefault(f => f.UnitIndex == x.UnitIndex));
-        trackerEvents.SUnitDiedEvents.ToList().ForEach(x => x.KillerUnitBornEvent = trackerEvents.SUnitBornEvents.FirstOrDefault(f => f.UnitTagIndex == x.KillerUnitTagIndex && f.UnitTagRecycle == x.KillerUnitTagRecycle));
-        trackerEvents.SUnitDiedEvents.ToList().ForEach(x => x.KillerUnitInitEvent = trackerEvents.SUnitInitEvents.FirstOrDefault(f => f.UnitTagIndex == x.KillerUnitTagIndex && f.UnitTagRecycle == x.KillerUnitTagRecycle));
+        var eventValue = eventPair.TrackerEventID;
+        var type = eventValue.GetType().Name;
+
+        return new TrackerEvent(eventPair.TrackerEventID, type, eventPair.Delta);
     }
 
-    private static TrackerEvent GetTrackerEvent(Dictionary<string, object> dic)
+    private static SUnitDoneEvent GetSUnitDoneEvent(ReplayTrackerSUnitDoneEvent replayTrackerSUnitDoneEvent, TrackerEvent trackerEvent)
     {
-        int playerId = GetInt(dic, "m_playerId");            
-        string type = GetString(dic, "_event");
-        int bits = GetInt(dic, "_bits");
-        uint gameloop = GetUInt(dic, "_gameloop");
-        return new TrackerEvent(playerId, type, bits, gameloop);
-    }
-    private static TrackerEvent GetUnknownEvent(Dictionary<string, object> dic, TrackerEvent trackerEvent)
-    {
-        return trackerEvent;
-    }
+        int unitTagIndex = (int)replayTrackerSUnitDoneEvent.m_unitTagIndex;
+        int unitTagRecycle = (int)replayTrackerSUnitDoneEvent.m_unitTagRecycle;
 
-    private static SUnitDoneEvent GetSUnitDoneEvent(Dictionary<string, object> dic, TrackerEvent trackerEvent)
-    {
-        int unitTagIndex = GetInt(dic, "m_unitTagIndex");
-        int unitTagRecycle = GetInt(dic, "m_unitTagRecycle");
         return new SUnitDoneEvent(trackerEvent, unitTagIndex, unitTagRecycle);
     }
 
-    private static SUnitInitEvent GetSUnitInitEvent(Dictionary<string, object> dic, TrackerEvent trackerEvent)
+    private static SUnitInitEvent GetSUnitInitEvent(ReplayTrackerSUnitInitEvent replayTrackerSUnitInitEvent, TrackerEvent trackerEvent)
     {
-        int unitTagIndex = GetInt(dic, "m_unitTagIndex");
-        int unitTagRecycle = GetInt(dic, "m_unitTagRecycle");
-        string unitTypeName = GetString(dic, "m_unitTypeName");
-        int controlPlayerId = GetInt(dic, "m_controlPlayerId");
-        int x = GetInt(dic, "m_x");
-        int y = GetInt(dic, "m_y");
-        int upkeepPlayerId = GetInt(dic, "m_upkeepPlayerId");
+        int unitTagIndex = (int)replayTrackerSUnitInitEvent.m_unitTagIndex;
+        int unitTagRecycle = (int)replayTrackerSUnitInitEvent.m_unitTagRecycle;
+        string unitTypeName = replayTrackerSUnitInitEvent.m_unitTypeName.ReadStringBytes();
+        int controlPlayerId = replayTrackerSUnitInitEvent.m_controlPlayerId;
+        int x = replayTrackerSUnitInitEvent.m_x;
+        int y = replayTrackerSUnitInitEvent.m_y;
+        int upkeepPlayerId = replayTrackerSUnitInitEvent.m_upkeepPlayerId;
+
         return new SUnitInitEvent(trackerEvent, unitTagIndex, unitTagRecycle, controlPlayerId, x, y, upkeepPlayerId, unitTypeName);
     }
 
-    private static SUpgradeEvent GetSUpgradeEvent(Dictionary<string, object> dic, TrackerEvent trackerEvent)
+    private static SUpgradeEvent GetSUpgradeEvent(ReplayTrackerSUpgradeEvent replayTrackerSUpgradeEvent, TrackerEvent trackerEvent)
     {
-        int count = GetInt(dic, "m_count");
-        string upgradeTypeName = GetString(dic, "m_upgradeTypeName");
+        int count = replayTrackerSUpgradeEvent.m_count;
+        string upgradeTypeName = replayTrackerSUpgradeEvent.m_upgradeTypeName.ReadStringBytes();
         return new SUpgradeEvent(trackerEvent, count, upgradeTypeName);
     }
 
-    private static SUnitTypeChangeEvent GetSUnitTypeChangeEvent(Dictionary<string, object> dic, TrackerEvent trackerEvent)
+    private static SUnitTypeChangeEvent GetSUnitTypeChangeEvent(ReplayTrackerSUnitTypeChangeEvent replayTrackerSUnitTypeChangeEvent, TrackerEvent trackerEvent)
     {
-        int unitTagIndex = GetInt(dic, "m_unitTagIndex");
-        int unitTagRecycle = GetInt(dic, "m_unitTagRecycle");
-        string unitTypeName = GetString(dic, "m_unitTypeName");
+        int unitTagIndex = (int)replayTrackerSUnitTypeChangeEvent.m_unitTagIndex;
+        int unitTagRecycle = (int)replayTrackerSUnitTypeChangeEvent.m_unitTagRecycle;
+        string unitTypeName = replayTrackerSUnitTypeChangeEvent.m_unitTypeName.ReadStringBytes();
+
         return new SUnitTypeChangeEvent(trackerEvent, unitTagIndex, unitTagRecycle, unitTypeName);
     }
 
-    private static SUnitPositionsEvent GetSUnitPositionsEvent(Dictionary<string, object> dic, TrackerEvent trackerEvent)
+    private static SUnitPositionsEvent GetSUnitPositionsEvent(ReplayTrackerSUnitPositionsEvent replayTrackerSUnitPositionsEvent, TrackerEvent trackerEvent)
     {
-        int firstUnitIndex = GetInt(dic, "m_firstUnitIndex");
+        int firstUnitIndex = (int)replayTrackerSUnitPositionsEvent.m_firstUnitIndex;
+
         List<int> items = new List<int>();
-        if (dic.TryGetValue("m_items", out var itemsObj))
+
+        if (replayTrackerSUnitPositionsEvent.m_items is { } itemsObj)
         {
-            if (itemsObj is ICollection<object> nums)
-            {
-                foreach (var num in nums)
-                {
-                    if (num is int n)
-                    {
-                        items.Add(n);
-                    }
-                }
-            }
+            items.AddRange(itemsObj);
         }
-        return new SUnitPositionsEvent(trackerEvent, firstUnitIndex, items.ToArray());
+
+        return new SUnitPositionsEvent(trackerEvent, firstUnitIndex, [.. items]);
     }
 
-    private static SUnitOwnerChangeEvent GetSUnitOwnerChangeEvent(Dictionary<string, object> dic, TrackerEvent trackerEvent)
+    private static SUnitOwnerChangeEvent GetSUnitOwnerChangeEvent(ReplayTrackerSUnitOwnerChangeEvent replayTrackerSUnitOwnerChangeEvent, TrackerEvent trackerEvent)
     {
-        int unitTagIndex = GetInt(dic, "m_unitTagIndex");
-        int unitTagRecycle = GetInt(dic, "m_unitTagRecycle");
-        int controlPlayerId = GetInt(dic, "m_controlPlayerId");
-        int upkeepPlayerId = GetInt(dic, "m_upkeepPlayerId");
+        int unitTagIndex = (int)replayTrackerSUnitOwnerChangeEvent.m_unitTagIndex;
+        int unitTagRecycle = (int)replayTrackerSUnitOwnerChangeEvent.m_unitTagRecycle;
+        int controlPlayerId = replayTrackerSUnitOwnerChangeEvent.m_controlPlayerId;
+        int upkeepPlayerId = replayTrackerSUnitOwnerChangeEvent.m_upkeepPlayerId;
+
         return new SUnitOwnerChangeEvent(trackerEvent, unitTagIndex, unitTagRecycle, controlPlayerId, upkeepPlayerId);
     }
 
-    private static SUnitDiedEvent GetSUnitDiedEvent(Dictionary<string, object> dic, TrackerEvent trackerEvent)
+    private static SUnitDiedEvent GetSUnitDiedEvent(ReplayTrackerSUnitDiedEvent replayTrackerSUnitDiedEvent, TrackerEvent trackerEvent)
     {
-        int unitTagIndex = GetInt(dic, "m_unitTagIndex");
-        int unitTagRecycle = GetInt(dic, "m_unitTagRecycle");
-        int? killerPlayerId = GetNullableInt(dic, "m_killerPlayerId");
-        int x = GetInt(dic, "m_x");
-        int y = GetInt(dic, "m_y");
-        int? killerUnitTagRecycle = GetNullableInt(dic, "m_killerUnitTagRecycle");
-        int? killerUnitTagIndex = GetNullableInt(dic, "m_killerUnitTagIndex");
+        int unitTagIndex = (int)replayTrackerSUnitDiedEvent.m_unitTagIndex;
+        int unitTagRecycle = (int)replayTrackerSUnitDiedEvent.m_unitTagRecycle;
+        int? killerPlayerId = replayTrackerSUnitDiedEvent.m_killerPlayerId.DefaultIfNone();
+
+        int x = replayTrackerSUnitDiedEvent.m_x;
+        int y = replayTrackerSUnitDiedEvent.m_y;
+        int? killerUnitTagRecycle = (int?)replayTrackerSUnitDiedEvent.m_killerUnitTagRecycle.DefaultIfNone();
+        int? killerUnitTagIndex = (int?)replayTrackerSUnitDiedEvent.m_killerUnitTagIndex.DefaultIfNone();
+
         return new SUnitDiedEvent(trackerEvent, unitTagIndex, unitTagRecycle, killerPlayerId, x, y, killerUnitTagRecycle, killerUnitTagIndex);
     }
 
-    private static SUnitBornEvent GetSUnitBornEvent(Dictionary<string, object> dic, TrackerEvent trackerEvent)
+    private static SUnitBornEvent GetSUnitBornEvent(ReplayTrackerSUnitBornEvent replayTrackerSUnitBornEvent, TrackerEvent trackerEvent)
     {
-        int unitTagIndex = GetInt(dic, "m_unitTagIndex");
-        int unitTagRecycle = GetInt(dic, "m_unitTagRecycle");
-        string? creatorAbilityName = GetNullableString(dic, "m_creatorAbilityName");
-        int? creatorUnitTagRecycle = GetNullableInt(dic, "m_creatorUnitTagRecycle");
-        int controlPlayerId = GetInt(dic, "m_controlPlayerId");
-        int x = GetInt(dic, "m_x");
-        int y = GetInt(dic, "m_y");
-        int upkeepPlayerId = GetInt(dic, "m_upkeepPlayerId");
-        string unitTypeName = GetString(dic, "m_unitTypeName");
-        int? creatorUnitTagIndex = GetNullableInt(dic, "m_creatorUnitTagIndex");
+        int unitTagIndex = (int)replayTrackerSUnitBornEvent.m_unitTagIndex;
+        int unitTagRecycle = (int)replayTrackerSUnitBornEvent.m_unitTagRecycle;
+        string? creatorAbilityName = replayTrackerSUnitBornEvent.m_creatorAbilityName.DefaultIfNone()?.ReadStringBytes();
+        int? creatorUnitTagRecycle = (int?)replayTrackerSUnitBornEvent.m_creatorUnitTagRecycle.DefaultIfNone();
+        int controlPlayerId = replayTrackerSUnitBornEvent.m_controlPlayerId;
+        int x = replayTrackerSUnitBornEvent.m_x;
+        int y = replayTrackerSUnitBornEvent.m_y;
+        int upkeepPlayerId = replayTrackerSUnitBornEvent.m_upkeepPlayerId;
+        string unitTypeName = replayTrackerSUnitBornEvent.m_unitTypeName.ReadStringBytes();
+        int? creatorUnitTagIndex = (int?)replayTrackerSUnitBornEvent.m_creatorUnitTagIndex.DefaultIfNone();
         return new SUnitBornEvent(trackerEvent, unitTagIndex, unitTagRecycle, creatorAbilityName, creatorUnitTagRecycle, controlPlayerId, x, y, upkeepPlayerId, unitTypeName, creatorUnitTagIndex);
     }
 
-    private static SPlayerSetupEvent GetSPlayerSetupEvent(Dictionary<string, object> dic, TrackerEvent trackerEvent)
+    private static SPlayerSetupEvent GetSPlayerSetupEvent(ReplayTrackerSPlayerSetupEvent replayTrackerSPlayerSetupEvent, TrackerEvent trackerEvent)
     {
-        int type = GetInt(dic, "m_type");
-        int? userId = GetNullableInt(dic, "m_userId");
-        int slotId = GetInt(dic, "m_slotId");
+        int type = (int)replayTrackerSPlayerSetupEvent.m_type;
+        int? userId = (int?)replayTrackerSPlayerSetupEvent.m_userId.DefaultIfNone();
+        int slotId = (int)replayTrackerSPlayerSetupEvent.m_slotId.DefaultIfNone();
+
         return new SPlayerSetupEvent(trackerEvent, type, userId, slotId);
     }
     
-    private static SPlayerStatsEvent GetSPlayerStatsEvent(Dictionary<string, object> dic, TrackerEvent trackerEvent)
+    private static SPlayerStatsEvent GetSPlayerStatsEvent(ReplayTrackerSPlayerStatsEvent replayTrackerSPlayerStatsEvent, TrackerEvent trackerEvent)
     {
-        if (dic.ContainsKey("m_stats"))
+        if (replayTrackerSPlayerStatsEvent.m_stats is { } stats)
         {
-           var statsDic = dic["m_stats"] as Dictionary<string, object>;
+            int scoreValueVespeneUsedCurrentTechnology = stats.m_scoreValueVespeneUsedCurrentTechnology;
+            int scoreValueVespeneFriendlyFireArmy = stats.m_scoreValueVespeneFriendlyFireArmy;
+            int scoreValueMineralsFriendlyFireTechnology = stats.m_scoreValueMineralsFriendlyFireTechnology;
+            int scoreValueMineralsUsedCurrentEconomy = stats.m_scoreValueMineralsUsedCurrentEconomy;
+            int scoreValueVespeneLostEconomy = stats.m_scoreValueVespeneLostEconomy;
+            int scoreValueMineralsUsedCurrentArmy = stats.m_scoreValueMineralsUsedCurrentArmy;
+            int scoreValueVespeneUsedInProgressArmy = stats.m_scoreValueVespeneUsedInProgressArmy;
+            int scoreValueVespeneCollectionRate = stats.m_scoreValueVespeneCollectionRate;
+            int scoreValueMineralsUsedInProgressTechnology = stats.m_scoreValueMineralsUsedInProgressTechnology;
+            int scoreValueMineralsCollectionRate = stats.m_scoreValueMineralsCollectionRate;
+            int scoreValueWorkersActiveCount = stats.m_scoreValueWorkersActiveCount;
+            int scoreValueMineralsUsedInProgressArmy = stats.m_scoreValueMineralsUsedInProgressArmy;
+            int scoreValueVespeneLostArmy = stats.m_scoreValueVespeneLostArmy;
+            int scoreValueMineralsKilledEconomy = stats.m_scoreValueMineralsKilledEconomy;
+            int scoreValueMineralsUsedCurrentTechnology = stats.m_scoreValueMineralsUsedCurrentTechnology;
+            int scoreValueMineralsKilledArmy = stats.m_scoreValueMineralsKilledArmy;
+            int scoreValueMineralsLostEconomy = stats.m_scoreValueMineralsLostEconomy;
+            int scoreValueMineralsCurrent = stats.m_scoreValueMineralsCurrent;
+            int scoreValueMineralsLostArmy = stats.m_scoreValueMineralsLostArmy;
+            int scoreValueVespeneKilledArmy = stats.m_scoreValueVespeneKilledArmy;
+            int scoreValueVespeneKilledTechnology = stats.m_scoreValueVespeneKilledTechnology;
+            int scoreValueVespeneKilledEconomy = stats.m_scoreValueVespeneKilledEconomy;
+            int scoreValueMineralsUsedActiveForces = stats.m_scoreValueMineralsUsedActiveForces;
+            int scoreValueVespeneUsedCurrentArmy = stats.m_scoreValueVespeneUsedCurrentArmy;
+            int scoreValueMineralsFriendlyFireArmy = stats.m_scoreValueMineralsFriendlyFireArmy;
+            int scoreValueVespeneUsedActiveForces = stats.m_scoreValueVespeneUsedActiveForces;
+            int scoreValueVespeneCurrent = stats.m_scoreValueVespeneCurrent;
+            int scoreValueMineralsLostTechnology = stats.m_scoreValueMineralsLostTechnology;
+            int scoreValueMineralsUsedInProgressEconomy = stats.m_scoreValueMineralsUsedInProgressEconomy;
+            int scoreValueMineralsFriendlyFireEconomy = stats.m_scoreValueMineralsFriendlyFireEconomy;
+            int scoreValueVespeneUsedInProgressTechnology = stats.m_scoreValueVespeneUsedInProgressTechnology;
+            int scoreValueFoodMade = stats.m_scoreValueFoodMade;
+            int scoreValueMineralsKilledTechnology = stats.m_scoreValueMineralsKilledTechnology;
+            int scoreValueVespeneLostTechnology = stats.m_scoreValueVespeneLostTechnology;
+            int scoreValueVespeneFriendlyFireEconomy = stats.m_scoreValueVespeneFriendlyFireEconomy;
+            int scoreValueVespeneUsedInProgressEconomy = stats.m_scoreValueVespeneUsedInProgressEconomy;
+            int scoreValueVespeneUsedCurrentEconomy = stats.m_scoreValueVespeneUsedCurrentEconomy;
+            int scoreValueVespeneFriendlyFireTechnology = stats.m_scoreValueVespeneFriendlyFireTechnology;
+            int scoreValueFoodUsed = stats.m_scoreValueFoodUsed;
 
-            if (statsDic != null)
-            {
-                int scoreValueVespeneUsedCurrentTechnology = GetInt(statsDic, "m_scoreValueVespeneUsedCurrentTechnology");
-                int scoreValueVespeneFriendlyFireArmy = GetInt(statsDic, "m_scoreValueVespeneFriendlyFireArmy");
-                int scoreValueMineralsFriendlyFireTechnology = GetInt(statsDic, "m_scoreValueMineralsFriendlyFireTechnology");
-                int scoreValueMineralsUsedCurrentEconomy = GetInt(statsDic, "m_scoreValueMineralsUsedCurrentEconomy");
-                int scoreValueVespeneLostEconomy = GetInt(statsDic, "m_scoreValueVespeneLostEconomy");
-                int scoreValueMineralsUsedCurrentArmy = GetInt(statsDic, "m_scoreValueMineralsUsedCurrentArmy");
-                int scoreValueVespeneUsedInProgressArmy = GetInt(statsDic, "m_scoreValueVespeneUsedInProgressArmy");
-                int scoreValueVespeneCollectionRate = GetInt(statsDic, "m_scoreValueVespeneCollectionRate");
-                int scoreValueMineralsUsedInProgressTechnology = GetInt(statsDic, "m_scoreValueMineralsUsedInProgressTechnology");
-                int scoreValueMineralsCollectionRate = GetInt(statsDic, "m_scoreValueMineralsCollectionRate");
-                int scoreValueWorkersActiveCount = GetInt(statsDic, "m_scoreValueWorkersActiveCount");
-                int scoreValueMineralsUsedInProgressArmy = GetInt(statsDic, "m_scoreValueMineralsUsedInProgressArmy");
-                int scoreValueVespeneLostArmy = GetInt(statsDic, "m_scoreValueVespeneLostArmy");
-                int scoreValueMineralsKilledEconomy = GetInt(statsDic, "m_scoreValueMineralsKilledEconomy");
-                int scoreValueMineralsUsedCurrentTechnology = GetInt(statsDic, "m_scoreValueMineralsUsedCurrentTechnology");
-                int scoreValueMineralsKilledArmy = GetInt(statsDic, "m_scoreValueMineralsKilledArmy");
-                int scoreValueMineralsLostEconomy = GetInt(statsDic, "m_scoreValueMineralsLostEconomy");
-                int scoreValueMineralsCurrent = GetInt(statsDic, "m_scoreValueMineralsCurrent");
-                int scoreValueMineralsLostArmy = GetInt(statsDic, "m_scoreValueMineralsLostArmy");
-                int scoreValueVespeneKilledArmy = GetInt(statsDic, "m_scoreValueVespeneKilledArmy");
-                int scoreValueVespeneKilledTechnology = GetInt(statsDic, "m_scoreValueVespeneKilledTechnology");
-                int scoreValueVespeneKilledEconomy = GetInt(statsDic, "m_scoreValueVespeneKilledEconomy");
-                int scoreValueMineralsUsedActiveForces = GetInt(statsDic, "m_scoreValueMineralsUsedActiveForces");
-                int scoreValueVespeneUsedCurrentArmy = GetInt(statsDic, "m_scoreValueVespeneUsedCurrentArmy");
-                int scoreValueMineralsFriendlyFireArmy = GetInt(statsDic, "m_scoreValueMineralsFriendlyFireArmy");
-                int scoreValueVespeneUsedActiveForces = GetInt(statsDic, "m_scoreValueVespeneUsedActiveForces");
-                int scoreValueVespeneCurrent = GetInt(statsDic, "m_scoreValueVespeneCurrent");
-                int scoreValueMineralsLostTechnology = GetInt(statsDic, "m_scoreValueMineralsLostTechnology");
-                int scoreValueMineralsUsedInProgressEconomy = GetInt(statsDic, "m_scoreValueMineralsUsedInProgressEconomy");
-                int scoreValueMineralsFriendlyFireEconomy = GetInt(statsDic, "m_scoreValueMineralsFriendlyFireEconomy");
-                int scoreValueVespeneUsedInProgressTechnology = GetInt(statsDic, "m_scoreValueVespeneUsedInProgressTechnology");
-                int scoreValueFoodMade = GetInt(statsDic, "m_scoreValueFoodMade");
-                int scoreValueMineralsKilledTechnology = GetInt(statsDic, "m_scoreValueMineralsKilledTechnology");
-                int scoreValueVespeneLostTechnology = GetInt(statsDic, "m_scoreValueVespeneLostTechnology");
-                int scoreValueVespeneFriendlyFireEconomy = GetInt(statsDic, "m_scoreValueVespeneFriendlyFireEconomy");
-                int scoreValueVespeneUsedInProgressEconomy = GetInt(statsDic, "m_scoreValueVespeneUsedInProgressEconomy");
-                int scoreValueVespeneUsedCurrentEconomy = GetInt(statsDic, "m_scoreValueVespeneUsedCurrentEconomy");
-                int scoreValueVespeneFriendlyFireTechnology = GetInt(statsDic, "m_scoreValueVespeneFriendlyFireTechnology");
-                int scoreValueFoodUsed = GetInt(statsDic, "m_scoreValueFoodUsed");
-                return new SPlayerStatsEvent
-                    (
-                        trackerEvent,
-                        scoreValueVespeneUsedCurrentTechnology,
-                        scoreValueVespeneFriendlyFireArmy,
-                        scoreValueMineralsFriendlyFireTechnology,
-                        scoreValueMineralsUsedCurrentEconomy,
-                        scoreValueVespeneLostEconomy,
-                        scoreValueMineralsUsedCurrentArmy,
-                        scoreValueVespeneUsedInProgressArmy,
-                        scoreValueVespeneCollectionRate,
-                        scoreValueMineralsUsedInProgressTechnology,
-                        scoreValueMineralsCollectionRate,
-                        scoreValueWorkersActiveCount,
-                        scoreValueMineralsUsedInProgressArmy,
-                        scoreValueVespeneLostArmy,
-                        scoreValueMineralsKilledEconomy,
-                        scoreValueMineralsUsedCurrentTechnology,
-                        scoreValueMineralsKilledArmy,
-                        scoreValueMineralsLostEconomy,
-                        scoreValueMineralsCurrent,
-                        scoreValueMineralsLostArmy,
-                        scoreValueVespeneKilledArmy,
-                        scoreValueVespeneKilledTechnology,
-                        scoreValueVespeneKilledEconomy,
-                        scoreValueMineralsUsedActiveForces,
-                        scoreValueVespeneUsedCurrentArmy,
-                        scoreValueMineralsFriendlyFireArmy,
-                        scoreValueVespeneUsedActiveForces,
-                        scoreValueVespeneCurrent,
-                        scoreValueMineralsLostTechnology,
-                        scoreValueMineralsUsedInProgressEconomy,
-                        scoreValueMineralsFriendlyFireEconomy,
-                        scoreValueVespeneUsedInProgressTechnology,
-                        scoreValueFoodMade,
-                        scoreValueMineralsKilledTechnology,
-                        scoreValueVespeneLostTechnology,
-                        scoreValueVespeneFriendlyFireEconomy,
-                        scoreValueVespeneUsedInProgressEconomy,
-                        scoreValueVespeneUsedCurrentEconomy,
-                        scoreValueVespeneFriendlyFireTechnology,
-                        scoreValueFoodUsed
-                    );
-            }
+            return new SPlayerStatsEvent
+                (
+                    trackerEvent,
+                    scoreValueVespeneUsedCurrentTechnology,
+                    scoreValueVespeneFriendlyFireArmy,
+                    scoreValueMineralsFriendlyFireTechnology,
+                    scoreValueMineralsUsedCurrentEconomy,
+                    scoreValueVespeneLostEconomy,
+                    scoreValueMineralsUsedCurrentArmy,
+                    scoreValueVespeneUsedInProgressArmy,
+                    scoreValueVespeneCollectionRate,
+                    scoreValueMineralsUsedInProgressTechnology,
+                    scoreValueMineralsCollectionRate,
+                    scoreValueWorkersActiveCount,
+                    scoreValueMineralsUsedInProgressArmy,
+                    scoreValueVespeneLostArmy,
+                    scoreValueMineralsKilledEconomy,
+                    scoreValueMineralsUsedCurrentTechnology,
+                    scoreValueMineralsKilledArmy,
+                    scoreValueMineralsLostEconomy,
+                    scoreValueMineralsCurrent,
+                    scoreValueMineralsLostArmy,
+                    scoreValueVespeneKilledArmy,
+                    scoreValueVespeneKilledTechnology,
+                    scoreValueVespeneKilledEconomy,
+                    scoreValueMineralsUsedActiveForces,
+                    scoreValueVespeneUsedCurrentArmy,
+                    scoreValueMineralsFriendlyFireArmy,
+                    scoreValueVespeneUsedActiveForces,
+                    scoreValueVespeneCurrent,
+                    scoreValueMineralsLostTechnology,
+                    scoreValueMineralsUsedInProgressEconomy,
+                    scoreValueMineralsFriendlyFireEconomy,
+                    scoreValueVespeneUsedInProgressTechnology,
+                    scoreValueFoodMade,
+                    scoreValueMineralsKilledTechnology,
+                    scoreValueVespeneLostTechnology,
+                    scoreValueVespeneFriendlyFireEconomy,
+                    scoreValueVespeneUsedInProgressEconomy,
+                    scoreValueVespeneUsedCurrentEconomy,
+                    scoreValueVespeneFriendlyFireTechnology,
+                    scoreValueFoodUsed
+                );
         }
+
         return new SPlayerStatsEvent
             (
                 trackerEvent,

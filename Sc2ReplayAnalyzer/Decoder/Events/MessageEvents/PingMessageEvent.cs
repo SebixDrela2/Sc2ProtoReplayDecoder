@@ -2,7 +2,7 @@
 
 public class PingMessageEvent
 {
-    public PingMessageEvent(int recipient, int id, int loop, long x, long y)
+    public PingMessageEvent(string recipient, int id, long loop, long x, long y)
     {
         Recipient = recipient;
         Id = id;
@@ -11,9 +11,9 @@ public class PingMessageEvent
         Y = y;
     }
 
-    public int Recipient { get; }
+    public string Recipient { get; }
     public int Id { get; }
-    public int Loop { get; }
+    public long Loop { get; }
     public long X { get; }
     public long Y { get; }
 }

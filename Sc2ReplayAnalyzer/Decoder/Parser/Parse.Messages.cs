@@ -1,61 +1,68 @@
-﻿using Sc2ReplayAnalyzer.Decoder.Events.MessageEvents;
+﻿using Sc2ReplayAnalyzer.Decoder.APIModel;
+using Sc2ReplayAnalyzer.Decoder.Events.MessageEvents;
+using Sc2ReplayAnalyzer.Json.BitPackedProtocolDefinitions;
+
 
 namespace Sc2ReplayAnalyzer.Decoder.Parser;
 
 internal static partial class Parse
 {
-    public static void SetMessages(IReadOnlyList<MessageEventTriplet> messageData)
+
+    public static IReadOnlyList<ChatMessageEvent> ChatMessages(IEnumerable<MessageEventTriplet> chatMessages)
     {
         List<ChatMessageEvent> messages = [];
-        List<PingMessageEvent> pings = [];
 
-        foreach (var dic in dicList)
+        foreach (var message in chatMessages)
         {
-            var _event = GetString(dic, "_event");
-            if (_event == "NNet.Game.SChatMessage")
-            {
-                var recipient = GetInt(dic, "m_recipient");
-                var id = GetChatMessageId(dic);
-                var msg = GetString(dic, "m_string");
-                var loop = GetInt(dic, "_gameloop");
-                messages.Add(new ChatMessageEvent(recipient, id, msg, loop));
-            }
-            else if (_event == "NNet.Game.SPingMessage")
-            {
-                var recipient = GetInt(dic, "m_recipient");
-                var id = GetChatMessageId(dic);
-                var loop = GetInt(dic, "_gameloop");
-                (var x, var y) = GetXYCoords(dic);
-                pings.Add(new(recipient, id, loop, x, y));
-            }
+            var chatMessageEvent = message.EventID as GameEMessageId_e_chat;
+            var chatMessage = chatMessageEvent.Value;
+
+            var id = message.UserID;
+            var loop = message.Delta;
+
+            var recipient = chatMessage.m_recipient.GetKind();
+            var msg = chatMessage.m_string.Value.ReadStringBytes();
+
+            messages.Add(new ChatMessageEvent(recipient, (int)id, msg, loop));
         }
-        replay.ChatMessages = messages;
-        replay.PingMessages = pings;
+
+        return messages;
     }
 
-    private static int GetChatMessageId(Dictionary<string, object> dic)
+    public static IReadOnlyList<PingMessageEvent> PingMessages(IEnumerable<MessageEventTriplet> pingMessages)
     {
-        if (dic.ContainsKey("_userid"))
+        List<PingMessageEvent> messages = [];
+
+        foreach (var message in pingMessages)
         {
-            if (dic["_userid"] is Dictionary<string, object> usrdic)
-            {
-                return GetInt(usrdic, "m_userId");
-            }
+            var pingMessageEvent = message.EventID as GameEMessageId_e_ping;
+            var pingMessage = pingMessageEvent.Value;
+            var point = pingMessage.m_point;
+
+            var (x, y) = GetXYCoords(pingMessage);
+
+            var id = message.UserID;
+            var loop = message.Delta;
+
+            var recipient = pingMessage.m_recipient.GetKind();
+
+
+            messages.Add(new PingMessageEvent(recipient, (int)id, loop, x, y));
         }
-        return 0;
+
+        return messages;
     }
 
-    private static (long, long) GetXYCoords(Dictionary<string, object> pydic)
+    private static (long, long) GetXYCoords(GameSPingMessage message)
     {
-        if (pydic.ContainsKey("m_point"))
+        if (message.m_point is { } point)
         {
-            if (pydic["m_point"] is Dictionary<string, object> coorddic)
-            {
-                var x = GetBigInt(coorddic, "x");
-                var y = GetBigInt(coorddic, "y");
-                return (x, y);
-            }
+            var x = point.x.Value.Value;
+            var y = point.y.Value.Value;
+
+            return (x, y);
         }
+
         return (0, 0);
     }
 }

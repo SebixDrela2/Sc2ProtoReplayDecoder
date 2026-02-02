@@ -4,7 +4,7 @@ namespace Sc2ReplayAnalyzer.Decoder.Models.InitData
 {
     public class SlotDescription
     {
-        public SlotDescription(KeyValuePair<int, BigInteger> allowedRaces, KeyValuePair<int, BigInteger> allowedColors, KeyValuePair<int, BigInteger> allowedAIBuilds, KeyValuePair<int, BigInteger> allowedDifficulty, KeyValuePair<int, BigInteger> allowedObserveTypes, KeyValuePair<int, BigInteger> allowedControls)
+        public SlotDescription(string allowedRaces, string allowedColors, string allowedAIBuilds, string allowedDifficulty, string allowedObserveTypes, string allowedControls)
         {
             AllowedRaces = allowedRaces;
             AllowedColors = allowedColors;
@@ -14,11 +14,11 @@ namespace Sc2ReplayAnalyzer.Decoder.Models.InitData
             AllowedControls = allowedControls;
         }
 
-        public KeyValuePair<int, BigInteger> AllowedRaces { get; }
-        public KeyValuePair<int, BigInteger> AllowedColors { get; }
-        public KeyValuePair<int, BigInteger> AllowedAIBuilds { get; }
-        public KeyValuePair<int, BigInteger> AllowedDifficulty { get; }
-        public KeyValuePair<int, BigInteger> AllowedObserveTypes { get; }
-        public KeyValuePair<int, BigInteger> AllowedControls { get; }
+        public string AllowedRaces { get; }
+        public string AllowedColors { get; }
+        public string AllowedAIBuilds { get; }
+        public string AllowedDifficulty { get; }
+        public string AllowedObserveTypes { get; }
+        public string AllowedControls { get; }
     }
 }

@@ -12,7 +12,9 @@ internal class VersionedGenerator(StringBuilder builder, Sc2GeneratorData data)
         var byteAligned = data.ByteAligned;
         var protocolName = data.ProtocolName;
 
-        Init(protocolName);
+        var methodBuilder = new StringBuilder();
+
+        AddClasses();
 
         _choiceGenerator.Generate<ProtocolTypeConversionByteAligned>(byteAligned);
         _structGenerator.Generate<ProtocolTypeConversionByteAligned>(byteAligned);
@@ -20,29 +22,45 @@ internal class VersionedGenerator(StringBuilder builder, Sc2GeneratorData data)
         _intGenerator.Generate<ProtocolTypeConversionByteAligned>(byteAligned);
         _arrayDynGenerator.Generate<ProtocolTypeConversionByteAligned>(byteAligned);
 
-        Finalise(protocolName);
+        AddParser(methodBuilder, protocolName);
+
+        if (data.IsLatestProtocol)
+        {
+            File.WriteAllText(@$"{ProtocolGenerationFolderPath}\VersionedProtocolDefinitions.cs", builder.ToString());
+        }
 
     }
 
-    private void Init(string protocolName)
+    private void AddClasses()
     {
+        if (!data.IsLatestProtocol)
+        {
+            return;
+        }
+
         builder.AppendLine();
         builder.AppendLine($"""
-            using Sc2ReplayAnalyzer.Json.Global;
+            using Sc2ReplayAnalyzer.Global;
 
-            namespace Sc2ReplayAnalyzer.Json.{protocolName}.Versioned;
+            namespace Sc2ReplayAnalyzer.Json.VersionedProtocolDefinitions;
             """);
         builder.AppendLine();
     }
 
-    private void Finalise(string protocolName)
+    private void AddParser(StringBuilder methodBuilder, string protocolName)
     {
-        builder.AppendLine($$"""
-            public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolParserImpl(reader)
+        methodBuilder.AppendLine($$"""
+            using Sc2ReplayAnalyzer.Global;
+            using Sc2ReplayAnalyzer.Json.VersionedProtocolDefinitions;
+            using Sc2ReplayAnalyzer.Decoder.Factory;
+            
+            namespace Sc2ReplayAnalyzer.Json.{{protocolName}}.Versioned;
+
+            public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolParserImpl(reader), IVersionedProtocolParser
             {
             {{data.ParserGenerator}}
             }
             """);
-        File.WriteAllText(@$"{data.GenFolderPath}\{protocolName}\VersionedProtocolParser.cs", builder.ToString());
+        File.WriteAllText(@$"{ProtocolGenerationFolderPathVersioned}\VersionedProtocolParser.cs", methodBuilder.ToString());
     }
 }

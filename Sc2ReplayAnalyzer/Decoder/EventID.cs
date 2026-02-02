@@ -1,5 +1,5 @@
-﻿using Sc2ReplayAnalyzer.Json.protocol90870.BitPacked;
-using Sc2ReplayAnalyzer.Json.protocol90870.Versioned;
+﻿using Sc2ReplayAnalyzer.Json.BitPackedProtocolDefinitions;
+using Sc2ReplayAnalyzer.Json.VersionedProtocolDefinitions;
 
 namespace Sc2ReplayAnalyzer.Decoder;
 
