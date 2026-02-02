@@ -3416,7 +3416,7 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
             }                
             default:
             {
-                throw new Exception("INVALID TAG");
+                return new ReplayTrackerEEventId_e_unknown();
             }
         }
     }

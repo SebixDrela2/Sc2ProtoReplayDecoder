@@ -8,5 +8,7 @@ internal interface IVersionedProtocolParser
 
     GameSDetails Parse_GameSDetails();
 
-    ReplayTrackerEEventId Parse_ReplayTrackerEEventId();   
+    ReplayTrackerEEventId Parse_ReplayTrackerEEventId();
+
+    int RustSize { get; }
 }

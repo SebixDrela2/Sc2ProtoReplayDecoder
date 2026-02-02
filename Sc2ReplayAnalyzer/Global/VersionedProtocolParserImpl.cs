@@ -4,6 +4,10 @@ namespace Sc2ReplayAnalyzer.Global;
 
 public abstract class VersionedProtocolParserImpl(BinaryReader reader) : ProtocolReaderBase(reader)
 {
+    public int BytePosition => (int)reader.BaseStream.Position;
+    public int RustSize => (int)reader.BaseStream.Length - BytePosition;
+    public string DebugView => GetDebugView();
+
     public List<byte> tagged_bitarray()
     {
         ValidateBitArrayTag();
@@ -63,20 +67,11 @@ public abstract class VersionedProtocolParserImpl(BinaryReader reader) : Protoco
 
         return isNegative ? -result : result;
     }
-
+    
     public List<byte> ReadBytes(long length)
     {
         return reader.ReadBytes((int)length).ToList();
     }
-
-    public List<byte> ReadBytes(int length)
-    {
-        return reader.ReadBytes(length).ToList();
-    }
-
-    public string DebugView => GetDebugView();
-    public int BytePosition => (int)reader.BaseStream.Position;
-    public int RustSize => (int)reader.BaseStream.Length - BytePosition;
 
     private string GetDebugView()
     {

@@ -9,6 +9,7 @@ using Sc2ReplayAnalyzer.Json.protocol95299.Versioned;
 using BitPacked = Sc2ReplayAnalyzer.Json.BitPackedProtocolDefinitions;
 using Versioned = Sc2ReplayAnalyzer.Json.VersionedProtocolDefinitions;
 using GameSDetails = Sc2ReplayAnalyzer.Json.VersionedProtocolDefinitions.GameSDetails;
+using Sc2ReplayAnalyzer.Global;
 
 namespace Sc2ReplayAnalyzer.Decoder;
 
@@ -16,8 +17,10 @@ public class ReplayDecoder
 {
     private Dictionary<string, byte[]> _listingFiles;
 
-    private long _topBuilderNumber = 0;
-    private long _currentBuildNumber;
+    private static long _topBuilderNumber = 0;
+
+    public int CorruptedReplays = 0;
+    public long CurrentBuildNumber = 0;
 
     private BitPackedProtocolParserFactory _bitPackedProtocolParserFactory;
     private VersionedProtocolParserFactory _versionedProtocolParserFactory;
@@ -31,12 +34,12 @@ public class ReplayDecoder
         var header = ParseHeader(mpqArchive.MPQUserData);
 
         _topBuilderNumber = Math.Max(header.m_dataBuildNum, _topBuilderNumber);
-        _currentBuildNumber = header.m_dataBuildNum;
+        CurrentBuildNumber = header.m_dataBuildNum;
 
-        _bitPackedProtocolParserFactory = new BitPackedProtocolParserFactory(_currentBuildNumber);
-        _versionedProtocolParserFactory = new VersionedProtocolParserFactory(_currentBuildNumber);
+        _bitPackedProtocolParserFactory = new BitPackedProtocolParserFactory(CurrentBuildNumber);
+        _versionedProtocolParserFactory = new VersionedProtocolParserFactory(CurrentBuildNumber);
 
-        Console.WriteLine($"Build number:{header.m_dataBuildNum}, Top: {_topBuilderNumber}");
+        Console.WriteLine($"Build number:{CurrentBuildNumber}, Top: {_topBuilderNumber}");
 
         var replayData = new Sc2ReplayData
         {
@@ -121,9 +124,16 @@ public class ReplayDecoder
         var versionedParser = _versionedProtocolParserFactory.Create(reader);
         var result = new List<TrackerEventPair>();
 
-        while (reader.BaseStream.Position < reader.BaseStream.Length)
+        try
         {
-            result.Add(ParseEventPair(versionedParser));
+            while (reader.BaseStream.Position < reader.BaseStream.Length)
+            {
+                result.Add(ParseEventPair(versionedParser));
+            }
+        }
+        catch(ReplayCorruptedException)
+        {
+            ++CorruptedReplays;
         }
 
         return result;
@@ -132,8 +142,6 @@ public class ReplayDecoder
     private TrackerEventPair ParseEventPair(IVersionedProtocolParser trackerParser)
     {
         var delta = trackerParser.Parse_SVarUint32();
-        var eventID = trackerParser.Parse_ReplayTrackerEEventId();
-
         uint deltaValue = delta switch
         {
             Versioned.m_uint6 val => val.Value,
@@ -141,7 +149,15 @@ public class ReplayDecoder
             Versioned.m_uint22 val => val.Value,
             Versioned.m_uint32 val => val.Value,
             _ => throw new NotImplementedException(),
+
         };
+
+        var eventID = trackerParser.Parse_ReplayTrackerEEventId();
+
+        if (eventID is ReplayTrackerEEventId_e_unknown)
+        {
+            throw new ReplayCorruptedException("Unknown event id.");
+        }
 
         return new TrackerEventPair
         {
@@ -151,7 +167,7 @@ public class ReplayDecoder
     }
 
     private GameEventTriplet ParseGameEventTriplet(IBitPackedProtocolParser bitPackedParser)
-    {
+   {
         var delta = bitPackedParser.Parse_SVarUint32();
         var gameUserID = bitPackedParser.Parse_ReplaySGameUserId();
         var eventID = bitPackedParser.Parse_GameEEventId();

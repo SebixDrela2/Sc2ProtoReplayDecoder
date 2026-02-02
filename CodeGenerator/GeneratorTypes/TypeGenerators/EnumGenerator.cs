@@ -31,7 +31,7 @@ internal class EnumGenerator(StringBuilder builder, Sc2GeneratorData data)
                     HandleVariant(node, variant);
                 }
 
-                methodParser.CloseEnum();
+                methodParser.CloseEnum(fullName);
                 methodParser.Finalise();
 
                 AddLine();

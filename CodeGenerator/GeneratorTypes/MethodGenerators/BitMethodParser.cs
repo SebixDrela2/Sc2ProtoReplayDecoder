@@ -392,6 +392,11 @@ internal class BitMethodParser(StringBuilder methodBuilder, Sc2GeneratorData dat
                 : field[TypeInfo][Bounds][Max][EValue].ToString();
             var arraySizeBits = int.Log2(int.Parse(arrayLength)) + 1;
 
+            if (typeName == "GameSBankValueEvent" && fieldName == "m_data")
+            {
+                arraySizeBits = 12; // rare hardcoded case
+            }
+
             _fieldNameMethodBuilder.AppendLine($$"""
                         var arrayLength = take_n_bits_into_i64({{arraySizeBits}});
                         var array = new {{fieldType}}();

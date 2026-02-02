@@ -5,7 +5,7 @@ public abstract class ProtocolReaderBase(BinaryReader reader)
     private const byte ARRAY_TAG = 0x00;
     private const byte BIT_ARRAY_TAG = 0x01;
     private const byte BLOB_TAG = 0x02;
-    private const byte CHOICE_TAG = 0x03;
+    protected const byte CHOICE_TAG = 0x03;
     private const byte OPT_TAG = 0x04;
     private const byte STRUCT_TAG = 0x05;
     private const byte BOOL_TAG = 0x06;

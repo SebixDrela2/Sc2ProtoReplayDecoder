@@ -15,4 +15,8 @@ internal interface IBitPackedProtocolParser
     GameEEventId Parse_GameEEventId();
 
     void byte_align();
+
+    int RustSize { get; }
+
+    int AvailableBits { get; }
 }

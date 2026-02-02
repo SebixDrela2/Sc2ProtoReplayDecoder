@@ -1,21 +1,44 @@
 ﻿
 
-using Sc2ReplayAnalyzer.Json.protocol55505.BitPacked;
+using Sc2ReplayAnalyzer.Decoder.Factory;
+using System.Diagnostics;
 
 namespace Sc2ReplayAnalyzer.Decoder;
 
 internal static class DebugTools
 {
-    public static void LogBitPackedLines(BitPackedProtocolParser bitPacked, ref int operation, List<string> info)
+    private static int _operation = 0;
+
+    public static List<string> Info = [];
+
+
+    public static void LogVersionedLines(IVersionedProtocolParser versionedParser, string additionalContent = "")
+    {
+        var debug = $"Op:{_operation}: (RS:{versionedParser.RustSize}) {additionalContent}";
+
+        AddLineIncrementOp(debug);
+    }
+
+    public static void LogBitPackedLines(IBitPackedProtocolParser bitPacked)
     {
         var rustSize = bitPacked.RustSize;
         var available = bitPacked.AvailableBits;
         var offset = 8 - available;
 
-        var debug = $"Op:{operation}: (RS:{rustSize}, OS:{offset})";
+        var debug = $"Op:{_operation}: (RS:{rustSize}, OS:{offset})";
 
-        info.Add(debug);
+        AddLineIncrementOp(debug);
+    }
 
-        operation++;
+    private static void AddLineIncrementOp(string debug)
+    {
+        Info.Add(debug);
+
+        _operation++;
+
+        if (_operation == 12547)
+        {
+
+        }
     }
 }

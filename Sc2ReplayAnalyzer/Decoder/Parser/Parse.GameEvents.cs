@@ -53,18 +53,14 @@ internal static partial class Parse
                 GameEEventId_e_triggerButtonPressed(var value) => GetSTriggerButtonPressedEvent(value, gameEvent),
                 GameEEventId_e_triggerGameMenuItemSelected(var value) => GetSTriggerGameMenuItemSelectedEvent(value, gameEvent),
                 GameEEventId_e_triggerMouseMoved(var value) => GetSTriggerMouseMovedEvent(value, gameEvent),
-                var enclosedEvent => throw new NotSupportedException("Not supported game event.")
+
+                var enclosedEvent => null
             };
 
             gameevents.Add(detailEvent);
         }
 
         return new GameEvents(gameevents);
-    }
-
-    private static GameEvent GetDefLogUnknown(GameEventTriplet gameeventData)
-    {
-        return GetGameEvent(gameeventData);
     }
 
     private static GameEvent GetGameEvent(GameEventTriplet gameEventData)

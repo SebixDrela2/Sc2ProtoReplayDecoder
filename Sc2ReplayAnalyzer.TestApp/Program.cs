@@ -40,9 +40,10 @@ internal class Program
 
     private static void Decode()
     {
-        var unwork = @"C:\Users\Sebastian\replays\Oh No It's Zombies 10583.SC2Replay";
-        var work = @"C:\Users\Sebastian\Documents\StarCraft II\Accounts\103757627\1-S2-1-10180166\Replays\Multiplayer\Oh No It's Zombies Arctic Map (45).SC2Replay";
-        var choice = work;
+        var work = @"C:\Users\Sebastian\replays\Oh No It's Zombies 10583.SC2Replay";
+        var unwork = @"C:\Users\Sebastian\replays\Oh No It's Zombies 1892.SC2Replay";
+
+        var choice = unwork;
         string[] files = Directory.GetFiles(ReplaysPath);
 
         var time = Stopwatch.StartNew();
@@ -54,12 +55,11 @@ internal class Program
         {
             Console.WriteLine($"Started decoding: {file}");
             decoder.DecodeReplay(file);
-
-            Console.WriteLine($"Decoded: {file}");
             Console.WriteLine($"Total: {++total}");
         }
 
         time.Stop();
-        Console.Write($"Total time: {time}");
+        Console.WriteLine($"Corrupted replays: {decoder.CorruptedReplays}");
+        Console.WriteLine($"Total time: {time}");
     }
 }

@@ -11,5 +11,5 @@ internal interface IProtocolAgnosticParser : IProtocolFinaliserParser
 
     void ContinueEnumVariant(string variantValue, string variantValueFullName, string fullName, string variantName);
 
-    void CloseEnum();
+    void CloseEnum(string unitTypeName);
 }

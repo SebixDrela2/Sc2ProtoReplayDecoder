@@ -104,12 +104,17 @@ internal class AgnosticParser(StringBuilder methodBuilder, Sc2GeneratorData data
                 """);
     }
 
-    public void CloseEnum()
+    public void CloseEnum(string unitTypeName)
     {
+        var typeName = ProtocolTypeUtils.GetTypeName(unitTypeName);
+        var defaultBehaviour = typeName is "ReplayTrackerEEventId"
+            ? "return new ReplayTrackerEEventId_e_unknown();"
+            : "throw new Exception(\"INVALID TAG\");";
+
         _generalMethodBuilder.AppendLine($$"""
                             default:
                             {
-                                throw new Exception("INVALID TAG");
+                                {{defaultBehaviour}}
                             }
                         }
                     }

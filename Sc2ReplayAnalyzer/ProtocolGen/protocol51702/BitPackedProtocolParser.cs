@@ -1425,7 +1425,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
 
     public List<u8> Parse_GameSBankValueEvent_m_data()
     {                             
-        var arrayLength = take_n_bits_into_i64(10);
+        var arrayLength = take_n_bits_into_i64(12);
         var array = new List<u8>();
 
         for (var i = 0 ; i < arrayLength ; ++i)
