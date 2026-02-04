@@ -2,11 +2,12 @@
 using MPQArchive.MPQ.Hashing;
 using MPQArchive.MPQ.ReceivedData;
 using MPQArchive.MPQ.Utils;
+using System.Diagnostics;
 using System.Text;
 
 namespace MPQArchive.MPQ
 {
-    public class MPQReader(FileStream stream) : IDisposable
+    public class MPQReader(Stream stream) : IDisposable
     {
         private const uint MagicHeader = 0x1A_51_50_4D;
         private const uint MagicShunt = 0x1B_51_50_4D;
@@ -26,32 +27,30 @@ namespace MPQArchive.MPQ
             long headerOffset = 0;
 
             for (long baseOffset = 0; baseOffset < _reader.BaseStream.Length; Position += 0x200)
-            {              
+            {
                 switch (_reader.ReadUInt32())
                 {
                     case MagicHeader:
                         mpqHeader = ReadHeader();
-                        headerOffset = baseOffset;                      
-                        goto label;
+                        headerOffset = baseOffset;
+                        goto exit;
 
                     case MagicShunt:
                         mpqUserData = ReadUserData(ref baseOffset);
-                        goto case MagicHeader;                  
+                        goto case MagicHeader;
                 }
             }
             throw new InvalidOperationException("Did not find any of magic cases.");
-
-            label:
+            exit:
 
             var encryptionTable = EncryptionTable.CreateNew();
             var encryption = new Encryption(encryptionTable);
-            
+
             var decryptedTableReader = new DecryptedTableReader(encryption, _reader, mpqHeader!);
             var compositeTable = new CompositeTable(decryptedTableReader, headerOffset);
 
             var mpqHashTableReader = new MPQHashTableReader(encryption, compositeTable.MPQHashTableEntries);
-            var mpqFileReader = new MPQFileReader
-                (_reader, mpqHashTableReader, mpqHeader!, compositeTable, headerOffset);
+            var mpqFileReader = new MPQFileReader(_reader, mpqHashTableReader, mpqHeader!, compositeTable, headerOffset);
 
             var listingFiles = new ListingFilesReader(mpqFileReader).Read();
 

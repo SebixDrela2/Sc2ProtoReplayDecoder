@@ -1,4 +1,5 @@
 ﻿using MPQArchive.MPQ.DecryptedData;
+using System.Diagnostics;
 using System.Text;
 
 namespace MPQArchive.MPQ.ReceivedData
@@ -12,6 +13,7 @@ namespace MPQArchive.MPQ.ReceivedData
             var lines = fileContent.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
           
             var listingFilesDict = new Dictionary<string, byte[]>();
+            var count = 0;
 
             foreach (var listingFile in lines)
             {
@@ -19,6 +21,8 @@ namespace MPQArchive.MPQ.ReceivedData
                 {
                     listingFilesDict.Add(listingFile, mpqFileReader.ReadFile(listingFile));
                 }
+
+                ++count;
             }
 
             return listingFilesDict;

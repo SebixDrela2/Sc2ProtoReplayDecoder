@@ -3,7 +3,6 @@ using Sc2ReplayAnalyzer.Decoder;
 using Sc2ReplayAnalyzer.Json;
 using Sc2ReplayAnalyzer.TestApp;
 using Sc2ReplayAnalyzer.Tokenizer;
-using System.Diagnostics;
 
 internal class Program
 {
@@ -40,26 +39,12 @@ internal class Program
 
     private static void Decode()
     {
-        var work = @"C:\Users\Sebastian\replays\Oh No It's Zombies 10583.SC2Replay";
-        var unwork = @"C:\Users\Sebastian\replays\Oh No It's Zombies 1892.SC2Replay";
-
-        var choice = unwork;
-        string[] files = Directory.GetFiles(ReplaysPath);
-
-        var time = Stopwatch.StartNew();
-
+        var files = Directory.GetFiles(ReplaysPath);
         var decoder = new ReplayDecoder();
-        var total = 0;
 
         foreach (var file in files)
         {
-            Console.WriteLine($"Started decoding: {file}");
             decoder.DecodeReplay(file);
-            Console.WriteLine($"Total: {++total}");
         }
-
-        time.Stop();
-        Console.WriteLine($"Corrupted replays: {decoder.CorruptedReplays}");
-        Console.WriteLine($"Total time: {time}");
     }
 }

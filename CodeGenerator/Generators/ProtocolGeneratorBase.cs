@@ -1,7 +1,6 @@
 ﻿using Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes.TypeGenerators;
 using Sc2ReplayAnalyzer.Decoder.APIModel;
 using Sc2ReplayAnalyzer.Json.Generator;
-using System.Reflection;
 using System.Text;
 
 namespace Sc2ReplayAnalyzer.CodeGenerator.Generators;

@@ -1,153 +1,177 @@
-﻿using MPQArchive.MPQ.Constants;
+﻿using ICSharpCode.SharpZipLib.BZip2;
+using MPQArchive.MPQ.Constants;
 using MPQArchive.MPQ.Utils;
-using ICSharpCode.SharpZipLib.BZip2;
+using System.Buffers;
+using System.Diagnostics;
 using System.IO.Compression;
 
-namespace MPQArchive.MPQ.DecryptedData
+namespace MPQArchive.MPQ.DecryptedData;
+
+public class MPQFileReader
 {
-    public class MPQFileReader(
+    private readonly BinaryReader reader;
+    private readonly MPQHashTableReader mpqHashTableReader;
+    private readonly MPQHeader1 mpqHeader;
+    private readonly CompositeTable compositeTable;
+    private readonly long headerBaseOffset;
+
+    public MPQFileReader(
         BinaryReader reader,
-        MPQHashTableReader mpqHashTableReader, 
-        MPQHeader1 mpqHeader,        
+        MPQHashTableReader mpqHashTableReader,
+        MPQHeader1 mpqHeader,
         CompositeTable compositeTable,
         long headerBaseOffset)
     {
-        public byte[] ReadFile(string fileName, bool forceDecompress = false)
+        this.reader = reader;
+        this.mpqHashTableReader = mpqHashTableReader;
+        this.mpqHeader = mpqHeader;
+        this.compositeTable = compositeTable;
+        this.headerBaseOffset = headerBaseOffset;
+    }
+
+    public byte[] ReadFile(string fileName, bool forceDecompress = false)
+    {
+        var hashEntry = mpqHashTableReader.GetHashTableEntry(fileName)
+            ?? throw new InvalidDataException("File not found.");
+
+        var block = compositeTable.MPQBlockTableEntries[hashEntry.BlockIndex];
+
+        if ((block.Flags & MPQFileConstant.MPQ_FILE_EXISTS) == 0)
+            throw new InvalidDataException("File does not exist.");
+
+        if ((block.Flags & MPQFileConstant.MPQ_FILE_ENCRYPTED) != 0)
+            throw new NotSupportedException("Encryption not supported.");
+
+        reader.GoTo(block.FilePosition + headerBaseOffset);
+        byte[] fileData = reader.ReadBytes((int)block.CompressedSize);
+
+        if ((block.Flags & MPQFileConstant.MPQ_FILE_SINGLE_UNIT) == 0 &&
+            block.UncompressedSize != 0)
         {
-            var mpqHashEntry = mpqHashTableReader.GetHashTableEntry(fileName);
+            int sectorSize = 512 << mpqHeader.SectorSizeShift;
+            int sectors = (int)(block.UncompressedSize / sectorSize) + 1;
 
-            if (mpqHashEntry is null)
-            {
-                throw new InvalidDataException("File not found in hash table.");
-            }
+            bool crc = (block.Flags & MPQFileConstant.MPQ_FILE_SECTOR_CRC) == 0;
+            if (crc) sectors++;
 
-            var mpqBlockEntry = compositeTable.MPQBlockTableEntries[mpqHashEntry.BlockIndex];
-
-            if ((mpqBlockEntry.Flags & MPQFileConstant.MPQ_FILE_EXISTS) == 0)
-            {
-                throw new InvalidDataException("File does not exist.");
-            }
-
-            var offset = mpqBlockEntry.FilePosition + headerBaseOffset;
-
-            reader.GoTo(offset);
-            var fileData = reader.ReadBytes((int)mpqBlockEntry.CompressedSize);
-
-            if ((mpqBlockEntry.Flags & MPQFileConstant.MPQ_FILE_ENCRYPTED) != 0)
-            {
-                throw new NotSupportedException("Encryption is not supported.");
-            }
-
-            if ((mpqBlockEntry.Flags & MPQFileConstant.MPQ_FILE_SINGLE_UNIT) == 0 
-                && (mpqBlockEntry.CompressedSize is not 0 
-                || mpqBlockEntry.UncompressedSize is not 0))
-            {
-                var sectorSize = 512 << mpqHeader.SectorSizeShift;
-                var sectors = (int)(mpqBlockEntry.UncompressedSize / sectorSize) + 1;
-
-                bool crc = false;
-
-                if ((mpqBlockEntry.Flags & MPQFileConstant.MPQ_FILE_SECTOR_CRC) == 0)
-                {
-                    crc = true;
-                    sectors += 1;
-                }
-
-                var positions = UnpackPositions(fileData, sectors);
-                fileData = ProcessSectors(fileData, mpqBlockEntry, positions, crc, forceDecompress);
-            }
-            else if ((mpqBlockEntry.Flags & MPQFileConstant.MPQ_FILE_COMPRESS) != 0
-                && (forceDecompress || mpqBlockEntry.UncompressedSize > mpqBlockEntry.CompressedSize))
-            {
-                fileData = Decompress(fileData);
-            }
-            
-            return fileData;
+            uint[] positions = UnpackPositions(fileData, sectors);
+            fileData = ProcessSectors(fileData, block, positions, crc, forceDecompress);
+        }
+        else if ((block.Flags & MPQFileConstant.MPQ_FILE_COMPRESS) != 0 &&
+                 (forceDecompress || block.UncompressedSize > block.CompressedSize))
+        {
+            fileData = Decompress(fileData);
         }
 
-        public static byte[] ProcessSectors(byte[] fileData, MPQBlockTableEntry blockEntry, uint[] positions, bool crc, bool forceDecompress)
-        {
-            var result = new MemoryStream();
-            int sectorBytesLeft = (int)blockEntry.UncompressedSize;
+        return fileData;
+    }
 
-            for (int i = 0; i < positions.Length - (crc ? 2 : 1); i++)
+    public static unsafe byte[] ProcessSectors(
+        byte[] fileData,
+        MPQBlockTableEntry block,
+        uint[] positions,
+        bool crc,
+        bool forceDecompress)
+    {
+        byte[] output = new byte[block.UncompressedSize];
+        int writeOffset = 0;
+
+        fixed (byte* filePtr = fileData)
+        fixed (byte* outPtr = output)
+        {
+            int sectorCount = positions.Length - (crc ? 2 : 1);
+
+            for (int i = 0; i < sectorCount; i++)
             {
                 int start = (int)positions[i];
-                int end = (int)positions[i + 1];
-                byte[] sector = fileData.Skip(start).Take(end - start).ToArray();
+                int length = (int)(positions[i + 1] - positions[i]);
+                byte* sectorPtr = filePtr + start;
 
-                if ((blockEntry.Flags & MPQFileConstant.MPQ_FILE_COMPRESS) is not 0 &&
-                    (forceDecompress || sectorBytesLeft > sector.Length))
+                bool compressed =
+                    (block.Flags & MPQFileConstant.MPQ_FILE_COMPRESS) != 0 &&
+                    (forceDecompress || length < block.UncompressedSize);
+
+                if (compressed)
                 {
-                    sector = Decompress(sector);
-                }
+                    byte[] decompressed = Decompress(
+                        new ReadOnlySpan<byte>(sectorPtr, length));
 
-                sectorBytesLeft -= sector.Length;
-                result.Write(sector, 0, sector.Length);
-            }
-           
-            result.Position = 0;
-
-            return result.ToArray();
-        }
-
-        private static byte[] Decompress(byte[] data)
-        {
-            if (data.Length == 0)
-            {
-                return data;
-            } 
-            
-            var compressionType = data[0];
-            
-            using (var outputStream = new MemoryStream())
-            {
-                using (var inputStream = new MemoryStream(data, 1, data.Length - 1))
-                {
-                    switch (compressionType)
+                    fixed (byte* src = decompressed)
                     {
-                        case 0:                        
-                            inputStream.CopyTo(outputStream);
-                            break;
-
-                        case 2:                           
-                            using (var decompressionStream = new DeflateStream(inputStream, CompressionMode.Decompress))
-                            {
-                                decompressionStream.CopyTo(outputStream);
-                            }
-                            break;
-
-                        case 16:                            
-                            using (var decompressionStream = new BZip2InputStream(inputStream))
-                            {
-                                decompressionStream.CopyTo(outputStream);
-                            }
-                            break;
-
-                        default:
-                            throw new InvalidOperationException("Unsupported compression type.");
+                        Buffer.MemoryCopy(
+                            src,
+                            outPtr + writeOffset,
+                            output.Length - writeOffset,
+                            decompressed.Length);
                     }
+
+                    writeOffset += decompressed.Length;
                 }
-
-                return outputStream.ToArray();
-            }
-        }
-
-        private uint[] UnpackPositions(byte[] fileData, int sectors)
-        {
-            int count = sectors + 1;
-            uint[] positions = new uint[count];
-
-            using (var stream = new MemoryStream(fileData, 0, 4 * count))
-            using (var reader = new BinaryReader(stream))
-            {
-                for (int i = 0; i < count; i++)
+                else
                 {
-                    positions[i] = reader.ReadUInt32();
+                    Buffer.MemoryCopy(
+                        sectorPtr,
+                        outPtr + writeOffset,
+                        output.Length - writeOffset,
+                        length);
+
+                    writeOffset += length;
                 }
             }
-
-            return positions;
         }
+
+        return output;
+    }
+
+    private static byte[] Decompress(ReadOnlySpan<byte> data)
+    {
+        if (data.Length <= 1)
+        {
+            return Array.Empty<byte>();
+        }
+
+        var type = data[0];
+        var payload = data.Slice(1);
+
+        if (type == 0)
+        {
+            var result = new byte[payload.Length];
+            payload.CopyTo(result);
+            return result;
+        }
+
+        using var inputHandle = MemoryPool<byte>.Shared.Rent(payload.Length);
+        var inputMemory = inputHandle.Memory.Slice(0, payload.Length);
+        payload.CopyTo(inputMemory.Span);
+
+        using var inputStream = new MemoryStream(inputMemory.ToArray());
+        using Stream decompressor = type switch
+        {
+            2 => new DeflateStream(inputStream, CompressionLevel.Fastest),
+            16 => new BZip2InputStream(inputStream),
+            _ => throw new InvalidOperationException("Unsupported compression.")
+        };
+
+        using var outputStream = new MemoryStream();
+        decompressor.CopyTo(outputStream);
+
+        return outputStream.ToArray();
+    }
+
+    private static unsafe uint[] UnpackPositions(byte[] fileData, int sectors)
+    {
+        int count = sectors + 1;
+        uint[] positions = new uint[count];
+
+        fixed (byte* ptr = fileData)
+        {
+            uint* p = (uint*)ptr;
+            for (int i = 0; i < count; i++)
+            {
+                positions[i] = p[i];
+            }
+        }
+
+        return positions;
     }
 }
