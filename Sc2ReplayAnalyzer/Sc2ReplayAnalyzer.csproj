@@ -6,15 +6,16 @@
     <Nullable>disable</Nullable>
   </PropertyGroup>
 
+  <PropertyGroup>
+  	<DebugType>pdbonly</DebugType>
+  	<DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+	
   <ItemGroup>
     <None Remove="Json\Protocols\*.json" />
   </ItemGroup>
-
-<!--<ItemGroup>
-    <None Include="ProtocolGen\*.cs" />
-	<Compile Remove="ProtocolGen\*.cs"/>
-</ItemGroup>-->
-
+	
+	
   <ItemGroup>
     <EmbeddedResource Include="Json\Protocols\*.json" />
   </ItemGroup>

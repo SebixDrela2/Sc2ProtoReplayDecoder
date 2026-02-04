@@ -10,40 +10,34 @@ using BitPacked = Sc2ReplayAnalyzer.Json.BitPackedProtocolDefinitions;
 using Versioned = Sc2ReplayAnalyzer.Json.VersionedProtocolDefinitions;
 using GameSDetails = Sc2ReplayAnalyzer.Json.VersionedProtocolDefinitions.GameSDetails;
 using Sc2ReplayAnalyzer.Global;
+using System.Diagnostics;
 
 namespace Sc2ReplayAnalyzer.Decoder;
 
 public class ReplayDecoder
 {
-    private Dictionary<string, byte[]> _listingFiles;
-
-    private static long _topBuilderNumber = 0;
+    private Dictionary<string, byte[]> _listingFiles;   
+    private BitPackedProtocolParserFactory _bitPackedProtocolParserFactory;
+    private VersionedProtocolParserFactory _versionedProtocolParserFactory;
 
     public int CorruptedReplays = 0;
     public long CurrentBuildNumber = 0;
 
-    private BitPackedProtocolParserFactory _bitPackedProtocolParserFactory;
-    private VersionedProtocolParserFactory _versionedProtocolParserFactory;
-    public Sc2Replay DecodeReplay(string path)
+    public Sc2Replay DecodeReplay(Stream fileStream)
     {
-        using var fileStream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read);
         var mpqArchive = new MPQReader(fileStream).Read();
 
         _listingFiles = mpqArchive.ListingFiles;
 
         var header = ParseHeader(mpqArchive.MPQUserData);
 
-        _topBuilderNumber = Math.Max(header.m_dataBuildNum, _topBuilderNumber);
         CurrentBuildNumber = header.m_dataBuildNum;
 
         _bitPackedProtocolParserFactory = new BitPackedProtocolParserFactory(CurrentBuildNumber);
         _versionedProtocolParserFactory = new VersionedProtocolParserFactory(CurrentBuildNumber);
 
-        Console.WriteLine($"Build number:{CurrentBuildNumber}, Top: {_topBuilderNumber}");
-
         var replayData = new Sc2ReplayData
         {
-            FileName = path,
             MetaData = ParseMetaData(),
             InitData = ParseReplayInitData(),
             MessagesData = ParseMessageEvents(),
@@ -53,6 +47,13 @@ public class ReplayDecoder
         };
 
         return Sc2Replay.FromData(replayData);
+    }
+
+    public Sc2Replay DecodeReplay(string path)
+    {
+        using var fileStream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read);
+
+        return DecodeReplay(fileStream);
     }
 
     private ReplaySHeader ParseHeader(MPQUserData userData)
@@ -66,7 +67,6 @@ public class ReplayDecoder
     private ReplayMetadata ParseMetaData()
     {
         using var stream = new MemoryStream(_listingFiles["replay.gamemetadata.json"]);
-
         return System.Text.Json.JsonSerializer.Deserialize<ReplayMetadata>(stream);
     }
 
@@ -76,7 +76,9 @@ public class ReplayDecoder
 
         var bitPackedParser = _bitPackedProtocolParserFactory.Create(reader);
 
-        return bitPackedParser.Parse_ReplaySInitData();
+        var owo = bitPackedParser.Parse_ReplaySInitData();
+
+        return owo;
     }
 
     private IReadOnlyList<MessageEventTriplet> ParseMessageEvents()
@@ -100,7 +102,9 @@ public class ReplayDecoder
 
         var versionedParser = _versionedProtocolParserFactory.Create(reader);
 
-        return versionedParser.Parse_GameSDetails();
+        var owo = versionedParser.Parse_GameSDetails();
+
+        return owo;
     }
 
     private IReadOnlyList<GameEventTriplet> ParseGameEvents()

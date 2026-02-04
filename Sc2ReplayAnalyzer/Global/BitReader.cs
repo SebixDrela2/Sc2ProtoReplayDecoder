@@ -1,4 +1,6 @@
-﻿namespace Sc2ReplayAnalyzer.Global;
+﻿using System.Diagnostics;
+
+namespace Sc2ReplayAnalyzer.Global;
 
 public sealed class BitReader(BinaryReader reader) : IDisposable
 {
@@ -38,24 +40,75 @@ public sealed class BitReader(BinaryReader reader) : IDisposable
         return result;
     }
 
-    public List<byte> TakeBitArray(int totalBits)
-    {
+    public List<byte> TakeBitArray(int leftBits)
+    {      
         var result = new List<byte>();
-        var remainingBits = totalBits;
+
+        if (leftBits is 0)
+        {
+            return result;
+        }
+
+        if (_available is 0)
+        {
+            var bytesToRead = (leftBits + 7) / 8;
+            var leftOverBits = leftBits % 8;
+            var readBytes = reader.ReadBytes(bytesToRead);
+
+            if (leftOverBits is not 0)
+            {
+                _available = 8 - leftOverBits;
+
+                ref var lastByte = ref readBytes[^1];
+                var mask = (byte)((1 << leftOverBits) - 1);
+
+                _currentByte = (byte)(lastByte >> leftOverBits);
+
+                lastByte &= mask;
+            }
+
+            return readBytes.ToList();
+        }
+        //else
+        //{
+        //    var bitsToRead = leftBits - _available;
+        //    var bytesToRead = (bitsToRead + 7) >> 3;
+
+        //    var bitsRead1 = leftBits & 0b111;
+        //    var bitsRead2 = bitsToRead & 0b111;
+
+        //    var readBytes = reader.ReadBytes(bytesToRead);
+
+        //    GetShiftedArrayBits(readBytes, _currentByte, 8 - bitsRead2);
+
+        //    //if (bitsRead is not 0)
+        //    //{
+        //    //    _available = 8 - bitsRead;
+
+        //    //    ref var lastByte = ref readBytes[^1];
+        //    //    var mask = (byte)((1 << bitsRead) - 1);
+
+        //    //    _currentByte = (byte)(lastByte >> bitsRead);
+
+        //    //    lastByte &= mask;
+        //    //}
+
+        //    return readBytes.ToList();
+        //}
 
         while(true)
         {
-            var count = remainingBits > 8 
+            var count = leftBits > 8 
                 ? 8 
-                : remainingBits;
+                : leftBits;
 
             var bits = RTakeNBits(count);
 
             result.Add(bits);
 
-            remainingBits -= count;
+            leftBits -= count;
 
-            if (remainingBits is 0)
+            if (leftBits is 0)
             {
                 break;
             }
@@ -107,6 +160,26 @@ public sealed class BitReader(BinaryReader reader) : IDisposable
     }
 
     public void Dispose() => reader.Dispose();
+
+    private IReadOnlyList<byte> GetShiftedArrayBits(byte[] bytes, byte prefixByte, int shiftCount)
+    {
+        var result = new byte[bytes.Length + 1];
+
+        for (var i = 0; i < bytes.Length; ++i)
+        {
+            uint tmp = bytes[^i];
+            result[^i] = prefixByte;
+
+            tmp <<= 8;
+            tmp >>= shiftCount;
+
+            result[^i] |= (byte)tmp;
+
+            prefixByte = (byte)(tmp >> 8);
+        }
+
+        return result;
+    }
 
     private byte RTakeNBits(int count)
     {
