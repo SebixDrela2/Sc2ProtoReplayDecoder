@@ -1,6 +1,6 @@
 ﻿namespace Sc2ReplayAnalyzer.Decoder.Events.GameEvents; 
 
-internal class SBankFileEvent : GameEvent
+public class SBankFileEvent : GameEvent
 {
     public SBankFileEvent(GameEvent gameEvent, string name) : base(gameEvent)
     {

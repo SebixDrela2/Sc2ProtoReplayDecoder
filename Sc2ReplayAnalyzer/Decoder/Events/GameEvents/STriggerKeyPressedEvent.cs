@@ -1,6 +1,6 @@
 ﻿namespace Sc2ReplayAnalyzer.Decoder.Events.GameEvents; 
 
-internal class STriggerKeyPressedEvent : GameEvent
+public class STriggerKeyPressedEvent : GameEvent
 {
     public STriggerKeyPressedEvent(GameEvent gameEvent, int flags, int key) : base(gameEvent)
     {

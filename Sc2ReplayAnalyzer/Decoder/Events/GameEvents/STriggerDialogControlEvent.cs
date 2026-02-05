@@ -1,6 +1,6 @@
 ﻿namespace Sc2ReplayAnalyzer.Decoder.Events.GameEvents; 
 
-internal class STriggerDialogControlEvent : GameEvent
+public class STriggerDialogControlEvent : GameEvent
 {
     public STriggerDialogControlEvent(GameEvent gameEvent, long controlId, int? mouseButton, string? textChanged, long eventType) : base(gameEvent)
     {

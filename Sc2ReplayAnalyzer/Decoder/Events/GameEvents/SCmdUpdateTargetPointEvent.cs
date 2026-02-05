@@ -1,6 +1,6 @@
 ﻿namespace Sc2ReplayAnalyzer.Decoder.Events.GameEvents; 
 
-internal class SCmdUpdateTargetPointEvent : GameEvent
+public class SCmdUpdateTargetPointEvent : GameEvent
 {
     public SCmdUpdateTargetPointEvent(GameEvent gameEvent, long x, long y, long z) : base(gameEvent)
     {

@@ -1,6 +1,6 @@
 ﻿namespace Sc2ReplayAnalyzer.Decoder.Events.GameEvents; 
 
-internal class SCommandManagerStateEvent : GameEvent
+public class SCommandManagerStateEvent : GameEvent
 {
     public SCommandManagerStateEvent(GameEvent gameEvent, string state, int? sequence) : base(gameEvent)
     {

@@ -1,6 +1,6 @@
 ﻿namespace Sc2ReplayAnalyzer.Decoder.Events.GameEvents; 
 
-internal class SGameUserLeaveEvent : GameEvent
+public class SGameUserLeaveEvent : GameEvent
 {
     public SGameUserLeaveEvent(GameEvent gameEvent, string leaveReason) : base(gameEvent)
     {

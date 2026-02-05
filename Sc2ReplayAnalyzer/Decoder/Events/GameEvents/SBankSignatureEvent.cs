@@ -1,6 +1,6 @@
 ﻿namespace Sc2ReplayAnalyzer.Decoder.Events.GameEvents; 
 
-internal class SBankSignatureEvent : GameEvent
+public class SBankSignatureEvent : GameEvent
 {
     public SBankSignatureEvent(GameEvent gameEvent, string toonHandle, List<int> signature) : base(gameEvent)
     {

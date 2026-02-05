@@ -1,6 +1,6 @@
 ﻿namespace Sc2ReplayAnalyzer.Decoder.Events.GameEvents; 
 
-internal class STriggerChatMessageEvent : GameEvent
+public class STriggerChatMessageEvent : GameEvent
 {
     public STriggerChatMessageEvent(GameEvent gameEvent, string chatMessage) : base(gameEvent)
     {

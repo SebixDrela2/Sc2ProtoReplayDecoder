@@ -1,6 +1,6 @@
 ﻿namespace Sc2ReplayAnalyzer.Decoder.Events.GameEvents; 
 
-internal class SControlGroupUpdateEvent : GameEvent
+public class SControlGroupUpdateEvent : GameEvent
 {
     public SControlGroupUpdateEvent(GameEvent gameEvent, string controlGroupUpdate) : base(gameEvent)
     {

@@ -1,6 +1,6 @@
 ﻿namespace Sc2ReplayAnalyzer.Decoder.Events.GameEvents;
 
-internal class STriggerCutsceneBookmarkFiredEvent : GameEvent
+public class STriggerCutsceneBookmarkFiredEvent : GameEvent
 {
     public STriggerCutsceneBookmarkFiredEvent(GameEvent gameEvent,
                             long cutsceneId,

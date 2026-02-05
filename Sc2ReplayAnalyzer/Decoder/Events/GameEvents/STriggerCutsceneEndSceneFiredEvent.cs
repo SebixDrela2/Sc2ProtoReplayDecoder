@@ -1,6 +1,6 @@
 ﻿namespace Sc2ReplayAnalyzer.Decoder.Events.GameEvents;
 
-internal class STriggerCutsceneEndSceneFiredEvent : GameEvent
+public class STriggerCutsceneEndSceneFiredEvent : GameEvent
 {
     public STriggerCutsceneEndSceneFiredEvent(GameEvent gameEvent,
                         long cutsceneId) : base(gameEvent)

@@ -1,6 +1,6 @@
 ﻿namespace Sc2ReplayAnalyzer.Decoder.Events.GameEvents;
 
-internal class STriggerTransmissionOffsetEvent : GameEvent
+public class STriggerTransmissionOffsetEvent : GameEvent
 {
     public STriggerTransmissionOffsetEvent(GameEvent gameEvent, long transmissionId, long threadTag) : base(gameEvent)
     {

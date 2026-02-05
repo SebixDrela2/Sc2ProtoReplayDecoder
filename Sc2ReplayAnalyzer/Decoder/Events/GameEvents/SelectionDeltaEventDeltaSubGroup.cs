@@ -1,6 +1,6 @@
 ﻿namespace Sc2ReplayAnalyzer.Decoder.Events.GameEvents; 
 
-internal class SelectionDeltaEventDeltaSubGroup
+public class SelectionDeltaEventDeltaSubGroup
 {
     public SelectionDeltaEventDeltaSubGroup(int v1, int v2, int v3, int v4)
     {

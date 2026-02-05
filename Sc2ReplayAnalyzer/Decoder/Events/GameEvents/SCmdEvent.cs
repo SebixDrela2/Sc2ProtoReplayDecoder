@@ -1,6 +1,6 @@
 ﻿namespace Sc2ReplayAnalyzer.Decoder.Events.GameEvents; 
 
-internal class SCmdEvent : GameEvent
+public class SCmdEvent : GameEvent
 {
     public SCmdEvent(GameEvent gameEvent, int? unitGroup, int abilLink, int abilCmdIndex, string? abilCmdData, long? targetX, long? targetY, long? targetZ, int cmdFalgs, int sequence, int? otherUnit) : base(gameEvent)
     {

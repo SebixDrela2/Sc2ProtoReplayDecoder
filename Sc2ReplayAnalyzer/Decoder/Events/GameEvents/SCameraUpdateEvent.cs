@@ -1,6 +1,6 @@
 ﻿namespace Sc2ReplayAnalyzer.Decoder.Events.GameEvents; 
 
-internal class SCameraUpdateEvent : GameEvent
+public class SCameraUpdateEvent : GameEvent
 {
     public SCameraUpdateEvent(GameEvent gameEvent, string? reason, int? distance, long? targetX, long? targetY, int? yaw, int? pitch, bool follow) : base(gameEvent)
     {

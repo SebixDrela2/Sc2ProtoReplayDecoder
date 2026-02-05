@@ -1,6 +1,6 @@
 ﻿namespace Sc2ReplayAnalyzer.Decoder.Events.GameEvents; 
 
-internal class STriggerPingEvent : GameEvent
+public class STriggerPingEvent : GameEvent
 {
     public STriggerPingEvent(GameEvent gameEvent, bool pingedMinimap, int unitLink, bool unitIsUnderConstruction, long option, int unit, long unitX, long unitY, long unitZ, int? unitControlPlayerId, long pointX, long pointY, int? unitUpkeepPlayerId) : base(gameEvent)
     {

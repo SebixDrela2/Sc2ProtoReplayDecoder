@@ -1,6 +1,6 @@
 ﻿namespace Sc2ReplayAnalyzer.Decoder.Events.GameEvents; 
 
-internal class SDecrementGameTimeRemainingEvent : GameEvent
+public class SDecrementGameTimeRemainingEvent : GameEvent
 {
     public SDecrementGameTimeRemainingEvent(GameEvent gameEvent, int decerementSeconds) : base(gameEvent)
     {

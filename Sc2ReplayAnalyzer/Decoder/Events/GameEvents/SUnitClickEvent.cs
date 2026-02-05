@@ -1,6 +1,6 @@
 ﻿namespace Sc2ReplayAnalyzer.Decoder.Events.GameEvents; 
 
-internal class SUnitClickEvent : GameEvent
+public class SUnitClickEvent : GameEvent
 {
     public SUnitClickEvent(GameEvent gameEvent, int unitTag) : base(gameEvent)
     {

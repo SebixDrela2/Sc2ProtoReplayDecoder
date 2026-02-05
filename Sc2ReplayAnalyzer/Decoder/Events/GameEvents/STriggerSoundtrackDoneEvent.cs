@@ -1,6 +1,6 @@
 ﻿namespace Sc2ReplayAnalyzer.Decoder.Events.GameEvents;
 
-internal class STriggerSoundtrackDoneEvent : GameEvent
+public class STriggerSoundtrackDoneEvent : GameEvent
 {
     public STriggerSoundtrackDoneEvent(GameEvent gameEvent,int soundtrack) : base(gameEvent)
     {
