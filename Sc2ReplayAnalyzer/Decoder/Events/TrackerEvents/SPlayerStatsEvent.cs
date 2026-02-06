@@ -2,8 +2,9 @@
 
 public class SPlayerStatsEvent : TrackerEvent
 {
-    public SPlayerStatsEvent(TrackerEvent trackerEvent, int scoreValueVespeneUsedCurrentTechnology, int scoreValueVespeneFriendlyFireArmy, int scoreValueMineralsFriendlyFireTechnology, int scoreValueMineralsUsedCurrentEconomy, int scoreValueVespeneLostEconomy, int scoreValueMineralsUsedCurrentArmy, int scoreValueVespeneUsedInProgressArmy, int scoreValueVespeneCollectionRate, int scoreValueMineralsUsedInProgressTechnology, int scoreValueMineralsCollectionRate, int scoreValueWorkersActiveCount, int scoreValueMineralsUsedInProgressArmy, int scoreValueVespeneLostArmy, int scoreValueMineralsKilledEconomy, int scoreValueMineralsUsedCurrentTechnology, int scoreValueMineralsKilledArmy, int scoreValueMineralsLostEconomy, int scoreValueMineralsCurrent, int scoreValueMineralsLostArmy, int scoreValueVespeneKilledArmy, int scoreValueVespeneKilledTechnology, int scoreValueVespeneKilledEconomy, int scoreValueMineralsUsedActiveForces, int scoreValueVespeneUsedCurrentArmy, int scoreValueMineralsFriendlyFireArmy, int scoreValueVespeneUsedActiveForces, int scoreValueVespeneCurrent, int scoreValueMineralsLostTechnology, int scoreValueMineralsUsedInProgressEconomy, int scoreValueMineralsFriendlyFireEconomy, int scoreValueVespeneUsedInProgressTechnology, int scoreValueFoodMade, int scoreValueMineralsKilledTechnology, int scoreValueVespeneLostTechnology, int scoreValueVespeneFriendlyFireEconomy, int scoreValueVespeneUsedInProgressEconomy, int scoreValueVespeneUsedCurrentEconomy, int scoreValueVespeneFriendlyFireTechnology, int scoreValueFoodUsed) : base(trackerEvent)
+    public SPlayerStatsEvent(TrackerEvent trackerEvent, byte playerId, int scoreValueVespeneUsedCurrentTechnology, int scoreValueVespeneFriendlyFireArmy, int scoreValueMineralsFriendlyFireTechnology, int scoreValueMineralsUsedCurrentEconomy, int scoreValueVespeneLostEconomy, int scoreValueMineralsUsedCurrentArmy, int scoreValueVespeneUsedInProgressArmy, int scoreValueVespeneCollectionRate, int scoreValueMineralsUsedInProgressTechnology, int scoreValueMineralsCollectionRate, int scoreValueWorkersActiveCount, int scoreValueMineralsUsedInProgressArmy, int scoreValueVespeneLostArmy, int scoreValueMineralsKilledEconomy, int scoreValueMineralsUsedCurrentTechnology, int scoreValueMineralsKilledArmy, int scoreValueMineralsLostEconomy, int scoreValueMineralsCurrent, int scoreValueMineralsLostArmy, int scoreValueVespeneKilledArmy, int scoreValueVespeneKilledTechnology, int scoreValueVespeneKilledEconomy, int scoreValueMineralsUsedActiveForces, int scoreValueVespeneUsedCurrentArmy, int scoreValueMineralsFriendlyFireArmy, int scoreValueVespeneUsedActiveForces, int scoreValueVespeneCurrent, int scoreValueMineralsLostTechnology, int scoreValueMineralsUsedInProgressEconomy, int scoreValueMineralsFriendlyFireEconomy, int scoreValueVespeneUsedInProgressTechnology, int scoreValueFoodMade, int scoreValueMineralsKilledTechnology, int scoreValueVespeneLostTechnology, int scoreValueVespeneFriendlyFireEconomy, int scoreValueVespeneUsedInProgressEconomy, int scoreValueVespeneUsedCurrentEconomy, int scoreValueVespeneFriendlyFireTechnology, int scoreValueFoodUsed) : base(trackerEvent)
     {
+        PlayerId = playerId;
         TrackerEvent = trackerEvent;
         ScoreValueVespeneUsedCurrentTechnology = scoreValueVespeneUsedCurrentTechnology;
         ScoreValueVespeneFriendlyFireArmy = scoreValueVespeneFriendlyFireArmy;
@@ -47,6 +48,8 @@ public class SPlayerStatsEvent : TrackerEvent
     }
 
     public TrackerEvent TrackerEvent { get; }
+
+    public int PlayerId { get; }
     public int ScoreValueVespeneUsedCurrentTechnology { get; }
     public int ScoreValueVespeneFriendlyFireArmy { get; }
     public int ScoreValueMineralsFriendlyFireTechnology { get; }

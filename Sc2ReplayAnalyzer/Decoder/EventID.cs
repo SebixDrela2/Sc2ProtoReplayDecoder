@@ -5,7 +5,7 @@ namespace Sc2ReplayAnalyzer.Decoder;
 
 internal record class TrackerEventPair
 {
-    public uint Delta;
+    public long Delta;
     public ReplayTrackerEEventId TrackerEventID;
 }
 

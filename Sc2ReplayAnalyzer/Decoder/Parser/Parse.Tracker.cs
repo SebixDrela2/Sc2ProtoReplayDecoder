@@ -7,12 +7,11 @@ internal static partial class Parse
 {
     public static TrackerEvents Tracker(IReadOnlyList<TrackerEventPair> trackerEventData)
     {
-        List<TrackerEvent> trackerevents = new();
+        List<TrackerEvent> trackerevents = [];
 
         foreach (var trackerData in trackerEventData)
         {
             TrackerEvent trackerEvent = GetTrackerEvent(trackerData);
-
             TrackerEvent detailEvent = trackerEvent.TrackerEventId switch
             {
                 ReplayTrackerEEventId_e_playerSetup(var value) => GetSPlayerSetupEvent(value, trackerEvent),
@@ -31,19 +30,41 @@ internal static partial class Parse
         }
 
         var events = new TrackerEvents(
-            trackerevents.OfType<SPlayerSetupEvent>().ToArray(),
-            trackerevents.OfType<SPlayerStatsEvent>().ToArray(),
-            trackerevents.OfType<SUnitBornEvent>().ToArray(),
-            trackerevents.OfType<SUnitDiedEvent>().ToArray(),
-            trackerevents.OfType<SUnitOwnerChangeEvent>().ToArray(),
-            trackerevents.OfType<SUnitPositionsEvent>().ToArray(),
-            trackerevents.OfType<SUnitTypeChangeEvent>().ToArray(),
-            trackerevents.OfType<SUpgradeEvent>().ToArray(),
-            trackerevents.OfType<SUnitInitEvent>().ToArray(),
-            trackerevents.OfType<SUnitDoneEvent>().ToArray()
+            [.. trackerevents.OfType<SPlayerSetupEvent>()],
+            [.. trackerevents.OfType<SPlayerStatsEvent>()],
+            [.. trackerevents.OfType<SUnitBornEvent>()],
+            [.. trackerevents.OfType<SUnitDiedEvent>()],
+            [.. trackerevents.OfType<SUnitOwnerChangeEvent>()],
+            [.. trackerevents.OfType<SUnitPositionsEvent>()],
+            [.. trackerevents.OfType<SUnitTypeChangeEvent>()],
+            [.. trackerevents.OfType<SUpgradeEvent>()],
+            [.. trackerevents.OfType<SUnitInitEvent>()],
+            [.. trackerevents.OfType<SUnitDoneEvent>()]
         );
 
+        SetTrackerUnitConnections(events);
+
         return events;
+    }
+
+    private static void SetTrackerUnitConnections(TrackerEvents events)
+    {
+        events.SUnitBornEvents.ToList().ForEach(f => f.UnitIndex = GetUnitIndex(f.UnitTagIndex, f.UnitTagRecycle));
+        events.SUnitInitEvents.ToList().ForEach(f => f.UnitIndex = GetUnitIndex(f.UnitTagIndex, f.UnitTagRecycle));
+        events.SUnitDiedEvents.ToList().ForEach(f => f.UnitIndex = GetUnitIndex(f.UnitTagIndex, f.UnitTagRecycle));
+        events.SUnitDoneEvents.ToList().ForEach(f => f.UnitIndex = GetUnitIndex(f.UnitTagIndex, f.UnitTagRecycle));
+        events.SUnitOwnerChangeEvents.ToList().ForEach(f => f.UnitIndex = GetUnitIndex(f.UnitTagIndex, f.UnitTagRecycle));
+
+        events.SUnitBornEvents.ToList().ForEach(x => x.SUnitDiedEvent = events.SUnitDiedEvents.FirstOrDefault(f => f.UnitIndex == x.UnitIndex));
+        events.SUnitInitEvents.ToList().ForEach(x => x.SUnitDiedEvent = events.SUnitDiedEvents.FirstOrDefault(f => f.UnitIndex == x.UnitIndex));
+        events.SUnitInitEvents.ToList().ForEach(x => x.SUnitDoneEvent = events.SUnitDoneEvents.FirstOrDefault(f => f.UnitIndex == x.UnitIndex));
+        events.SUnitDiedEvents.ToList().ForEach(x => x.KillerUnitBornEvent = events.SUnitBornEvents.FirstOrDefault(f => f.UnitTagIndex == x.KillerUnitTagIndex && f.UnitTagRecycle == x.KillerUnitTagRecycle));
+        events.SUnitDiedEvents.ToList().ForEach(x => x.KillerUnitInitEvent = events.SUnitInitEvents.FirstOrDefault(f => f.UnitTagIndex == x.KillerUnitTagIndex && f.UnitTagRecycle == x.KillerUnitTagRecycle));
+    }
+
+    private static int GetUnitIndex(int unitTagIndex, int unitTagRecycle)
+    {
+        return (unitTagIndex << 18) + unitTagRecycle;
     }
 
     private static TrackerEvent GetTrackerEvent(TrackerEventPair eventPair)
@@ -79,7 +100,9 @@ internal static partial class Parse
     {
         int count = replayTrackerSUpgradeEvent.m_count;
         string upgradeTypeName = replayTrackerSUpgradeEvent.m_upgradeTypeName.ReadStringBytes();
-        return new SUpgradeEvent(trackerEvent, count, upgradeTypeName);
+        int playerId = replayTrackerSUpgradeEvent.m_playerId;
+
+        return new SUpgradeEvent(trackerEvent, count, playerId, upgradeTypeName);
     }
 
     private static SUnitTypeChangeEvent GetSUnitTypeChangeEvent(ReplayTrackerSUnitTypeChangeEvent replayTrackerSUnitTypeChangeEvent, TrackerEvent trackerEvent)
@@ -200,6 +223,7 @@ internal static partial class Parse
             return new SPlayerStatsEvent
                 (
                     trackerEvent,
+                    replayTrackerSPlayerStatsEvent.m_playerId,
                     scoreValueVespeneUsedCurrentTechnology,
                     scoreValueVespeneFriendlyFireArmy,
                     scoreValueMineralsFriendlyFireTechnology,
@@ -245,6 +269,7 @@ internal static partial class Parse
         return new SPlayerStatsEvent
             (
                 trackerEvent,
+                0,
                 0,
                 0,
                 0,

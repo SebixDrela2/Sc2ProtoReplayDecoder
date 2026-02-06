@@ -26,5 +26,5 @@ public class Sc2JsonProvider
     }
 
     private bool IsSupportedProtocol(string resource) 
-        => int.Parse(resource[ProtocolNumberPrefix.Length..^ProtocolNumberSuffix.Length]) >= MinimalProtocolSupported;
+=> int.Parse(resource[ProtocolNumberPrefix.Length..^ProtocolNumberSuffix.Length]) >= MinimalProtocolSupported;
 }

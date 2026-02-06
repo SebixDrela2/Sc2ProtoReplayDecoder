@@ -38,6 +38,7 @@ public class ReplayDecoder
 
         var replayData = new Sc2ReplayData
         {
+            Header = header,
             MetaData = ParseMetaData(),
             InitData = ParseReplayInitData(),
             MessagesData = ParseMessageEvents(),
@@ -88,9 +89,10 @@ public class ReplayDecoder
         var bitPackedParser = _bitPackedProtocolParserFactory.Create(reader);
         var result = new List<MessageEventTriplet>();
 
+        long gameLoop = 0;
         while (reader.BaseStream.Position < reader.BaseStream.Length)
         {
-            result.Add(ParseMessageEventTriplet(bitPackedParser));
+            result.Add(ParseMessageEventTriplet(bitPackedParser, ref gameLoop));
         }
 
         return result;
@@ -113,10 +115,11 @@ public class ReplayDecoder
         var bitPackedParser = _bitPackedProtocolParserFactory.Create(reader);
 
         var result = new List<GameEventTriplet>();
+        long gameLoop = 0;
 
         while (reader.BaseStream.Position < reader.BaseStream.Length)
         {
-            result.Add(ParseGameEventTriplet(bitPackedParser));
+            result.Add(ParseGameEventTriplet(bitPackedParser, ref gameLoop));
         }
 
         return result;
@@ -130,9 +133,11 @@ public class ReplayDecoder
 
         try
         {
+            long gameLoop = 0;
+
             while (reader.BaseStream.Position < reader.BaseStream.Length)
             {
-                result.Add(ParseEventPair(versionedParser));
+                result.Add(ParseEventPair(versionedParser, ref gameLoop));
             }
         }
         catch(ReplayCorruptedException)
@@ -143,7 +148,7 @@ public class ReplayDecoder
         return result;
     }
 
-    private TrackerEventPair ParseEventPair(IVersionedProtocolParser trackerParser)
+    private TrackerEventPair ParseEventPair(IVersionedProtocolParser trackerParser, ref long gameLoop)
     {
         var delta = trackerParser.Parse_SVarUint32();
         uint deltaValue = delta switch
@@ -157,6 +162,7 @@ public class ReplayDecoder
         };
 
         var eventID = trackerParser.Parse_ReplayTrackerEEventId();
+        gameLoop += deltaValue;
 
         if (eventID is ReplayTrackerEEventId_e_unknown)
         {
@@ -165,12 +171,12 @@ public class ReplayDecoder
 
         return new TrackerEventPair
         {
-            Delta = deltaValue,
+            Delta = gameLoop,
             TrackerEventID = eventID
         };
     }
 
-    private GameEventTriplet ParseGameEventTriplet(IBitPackedProtocolParser bitPackedParser)
+    private GameEventTriplet ParseGameEventTriplet(IBitPackedProtocolParser bitPackedParser, ref long gameLoop)
    {
         var delta = bitPackedParser.Parse_SVarUint32();
         var gameUserID = bitPackedParser.Parse_ReplaySGameUserId();
@@ -185,17 +191,18 @@ public class ReplayDecoder
             _ => throw new NotImplementedException(),
         };
 
+        gameLoop += realDelta;
         bitPackedParser.byte_align();
 
         return new GameEventTriplet
         {
-            Delta = realDelta,
+            Delta = gameLoop,
             UserID = gameUserID.m_userId,
             EventID = eventID
         };
     }
 
-    private MessageEventTriplet ParseMessageEventTriplet(IBitPackedProtocolParser bitPackedParser)
+    private MessageEventTriplet ParseMessageEventTriplet(IBitPackedProtocolParser bitPackedParser, ref long gameLoop)
     {
         var delta = bitPackedParser.Parse_SVarUint32();
         var gameUserID = bitPackedParser.Parse_ReplaySGameUserId();
@@ -210,11 +217,12 @@ public class ReplayDecoder
             _ => throw new NotImplementedException(),
         };
 
+        gameLoop += realDelta;
         bitPackedParser.byte_align();
 
         return new MessageEventTriplet
         {
-            Delta = realDelta,
+            Delta = gameLoop,
             UserID = gameUserID.m_userId,
             EventID = eventID
         };

@@ -6,9 +6,9 @@ public class TrackerEvent
 {
     public ReplayTrackerEEventId TrackerEventId { get; init; }
     public string Type { get; init; }
-    public uint Gameloop { get; init; }
+    public long Gameloop { get; init; }
 
-    public TrackerEvent(ReplayTrackerEEventId eventID, string type, uint gameloop)
+    public TrackerEvent(ReplayTrackerEEventId eventID, string type, long gameloop)
     {
         TrackerEventId = eventID;
         Type = type;

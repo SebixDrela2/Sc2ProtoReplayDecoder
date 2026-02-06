@@ -1,4 +1,5 @@
 ﻿using Sc2ReplayAnalyzer.Decoder.Events.GameEvents;
+using Sc2ReplayAnalyzer.Decoder.Events.Header;
 using Sc2ReplayAnalyzer.Decoder.Events.InitEvents;
 using Sc2ReplayAnalyzer.Decoder.Events.MessageEvents;
 using Sc2ReplayAnalyzer.Decoder.Events.MetaData;
@@ -13,6 +14,8 @@ namespace Sc2ReplayAnalyzer.Decoder.APIModel;
 public class Sc2Replay
 {
     public required string FileName { get; set; }
+
+    public required Header Header { get; init; }
     public required InitData InitData { get; init; }
     public required Details Details { get; init; }
     public required GameEvents GameEvents { get; init; }
@@ -30,6 +33,7 @@ public class Sc2Replay
         {
             FileName = replayData.FileName,
             MetaData = replayData.MetaData,
+            Header = Parse.Header(replayData.Header),
             InitData = Parse.InitData(replayData.InitData),
             ChatMessages = Parse.ChatMessages(chatMessages),
             PingMessages = Parse.PingMessages(pingMessages),
