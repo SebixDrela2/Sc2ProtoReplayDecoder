@@ -23,7 +23,7 @@ public class ReplayDecoder
     public int CorruptedReplays = 0;
     public long CurrentBuildNumber = 0;
 
-    public Sc2Replay DecodeReplay(Stream fileStream)
+    public Sc2Replay DecodeReplay(Stream fileStream, string fileName = null)
     {
         var mpqArchive = new MPQReader(fileStream).Read();
 
@@ -38,6 +38,7 @@ public class ReplayDecoder
 
         var replayData = new Sc2ReplayData
         {
+            FileName = fileName,
             Header = header,
             MetaData = ParseMetaData(),
             InitData = ParseReplayInitData(),
@@ -54,7 +55,7 @@ public class ReplayDecoder
     {
         using var fileStream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read);
 
-        return DecodeReplay(fileStream);
+        return DecodeReplay(fileStream, Path.GetFileNameWithoutExtension(path));
     }
 
     private ReplaySHeader ParseHeader(MPQUserData userData)

@@ -9,13 +9,13 @@
   <PropertyGroup>
   	<DebugType>pdbonly</DebugType>
   	<DebugSymbols>true</DebugSymbols>
+  	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>
 	
   <ItemGroup>
     <None Remove="Json\Protocols\*.json" />
   </ItemGroup>
-	
-	
+
   <ItemGroup>
     <EmbeddedResource Include="Json\Protocols\*.json" />
   </ItemGroup>
