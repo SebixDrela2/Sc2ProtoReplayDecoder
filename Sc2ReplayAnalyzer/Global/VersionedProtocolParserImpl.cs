@@ -1,4 +1,5 @@
 ﻿using System.Buffers.Binary;
+using System.Runtime.CompilerServices;
 
 namespace Sc2ReplayAnalyzer.Global;
 
@@ -8,6 +9,7 @@ public abstract class VersionedProtocolParserImpl(BinaryReader reader) : Protoco
     public int RustSize => (int)reader.BaseStream.Length - BytePosition;
     public string DebugView => GetDebugView();
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public List<byte> tagged_bitarray()
     {
         ValidateBitArrayTag();
@@ -18,6 +20,7 @@ public abstract class VersionedProtocolParserImpl(BinaryReader reader) : Protoco
         return ReadBytes(arrayLength);
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public List<byte> tagged_blob()
     {
         ValidateBlobTag();
@@ -27,6 +30,7 @@ public abstract class VersionedProtocolParserImpl(BinaryReader reader) : Protoco
         return ReadBytes(blobLength);
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public long tagged_vlq_int()
     {
         ValidateIntTag();
@@ -34,6 +38,7 @@ public abstract class VersionedProtocolParserImpl(BinaryReader reader) : Protoco
         return ParseVlqInt();
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool tagged_bool()
     {
         ValidateBoolTag();
@@ -41,6 +46,7 @@ public abstract class VersionedProtocolParserImpl(BinaryReader reader) : Protoco
         return ReadByte() != 0;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public uint tagged_fourcc()
     {
         ValidateFourccTag();
@@ -50,6 +56,7 @@ public abstract class VersionedProtocolParserImpl(BinaryReader reader) : Protoco
 
     public void Dispose() => reader.Dispose();
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public long ParseVlqInt()
     {
         long v_int_value = ReadByte();

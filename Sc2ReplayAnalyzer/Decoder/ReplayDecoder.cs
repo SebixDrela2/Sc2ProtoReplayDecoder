@@ -16,7 +16,7 @@ namespace Sc2ReplayAnalyzer.Decoder;
 
 public class ReplayDecoder
 {
-    private Dictionary<string, byte[]> _listingFiles;   
+    private Dictionary<string, ArraySegment<byte>> _listingFiles;   
     private BitPackedProtocolParserFactory _bitPackedProtocolParserFactory;
     private VersionedProtocolParserFactory _versionedProtocolParserFactory;
 
@@ -68,13 +68,14 @@ public class ReplayDecoder
 
     private ReplayMetadata ParseMetaData()
     {
-        using var stream = new MemoryStream(_listingFiles["replay.gamemetadata.json"]);
+        using var stream = GetFileMemoryStream(_listingFiles["replay.gamemetadata.json"]);
         return System.Text.Json.JsonSerializer.Deserialize<ReplayMetadata>(stream);
     }
 
     private ReplaySInitData ParseReplayInitData()
     {
-        using var reader = new BinaryReader(new MemoryStream(_listingFiles["replay.initData"]));
+        using var stream = GetFileMemoryStream(_listingFiles["replay.initData"]);
+        using var reader = new BinaryReader(stream);
 
         var bitPackedParser = _bitPackedProtocolParserFactory.Create(reader);
 
@@ -85,10 +86,11 @@ public class ReplayDecoder
 
     private IReadOnlyList<MessageEventTriplet> ParseMessageEvents()
     {
-        using var reader = new BinaryReader(new MemoryStream(_listingFiles["replay.message.events"]));
+        using var stream = GetFileMemoryStream(_listingFiles["replay.message.events"]);
+        using var reader = new BinaryReader(stream);
 
         var bitPackedParser = _bitPackedProtocolParserFactory.Create(reader);
-        var result = new List<MessageEventTriplet>();
+        var result = new List<MessageEventTriplet>(256); // Pre-allocate typical capacity
 
         long gameLoop = 0;
         while (reader.BaseStream.Position < reader.BaseStream.Length)
@@ -101,7 +103,8 @@ public class ReplayDecoder
 
     private GameSDetails ParseReplayDetails()
     {
-        using var reader = new BinaryReader(new MemoryStream(_listingFiles["replay.details"]));
+        using var stream = GetFileMemoryStream(_listingFiles["replay.details"]);
+        using var reader = new BinaryReader(stream);
 
         var versionedParser = _versionedProtocolParserFactory.Create(reader);
 
@@ -112,10 +115,11 @@ public class ReplayDecoder
 
     private IReadOnlyList<GameEventTriplet> ParseGameEvents()
     {
-        using var reader = new BinaryReader(new MemoryStream(_listingFiles["replay.game.events"]));
+        using var stream = GetFileMemoryStream(_listingFiles["replay.game.events"]);
+        using var reader = new BinaryReader(stream);
         var bitPackedParser = _bitPackedProtocolParserFactory.Create(reader);
 
-        var result = new List<GameEventTriplet>();
+        var result = new List<GameEventTriplet>(512); // Pre-allocate typical capacity
         long gameLoop = 0;
 
         while (reader.BaseStream.Position < reader.BaseStream.Length)
@@ -128,9 +132,10 @@ public class ReplayDecoder
 
     private IReadOnlyList<TrackerEventPair> ParseTrackerEvents()
     {
-        using var reader = new BinaryReader(new MemoryStream(_listingFiles["replay.tracker.events"]));
+        using var stream = GetFileMemoryStream(_listingFiles["replay.tracker.events"]);
+        using var reader = new BinaryReader(stream);
         var versionedParser = _versionedProtocolParserFactory.Create(reader);
-        var result = new List<TrackerEventPair>();
+        var result = new List<TrackerEventPair>(512); // Pre-allocate typical capacity
 
         try
         {
@@ -148,6 +153,8 @@ public class ReplayDecoder
 
         return result;
     }
+
+    private MemoryStream GetFileMemoryStream(ArraySegment<byte> data) => new(data.Array, data.Offset, data.Count, false);
 
     private TrackerEventPair ParseEventPair(IVersionedProtocolParser trackerParser, ref long gameLoop)
     {

@@ -1,8 +1,7 @@
-﻿using ICSharpCode.SharpZipLib.BZip2;
+﻿using MPQArchive.Bzip;
 using MPQArchive.MPQ.Constants;
 using MPQArchive.MPQ.Utils;
 using System.Buffers;
-using System.Diagnostics;
 using System.IO.Compression;
 
 namespace MPQArchive.MPQ.DecryptedData;
@@ -29,7 +28,7 @@ public class MPQFileReader
         this.headerBaseOffset = headerBaseOffset;
     }
 
-    public byte[] ReadFile(string fileName, bool forceDecompress = false)
+    public ArraySegment<byte> ReadFile(string fileName, bool forceDecompress = false)
     {
         var hashEntry = mpqHashTableReader.GetHashTableEntry(fileName)
             ?? throw new InvalidDataException("File not found.");
@@ -43,7 +42,7 @@ public class MPQFileReader
             throw new NotSupportedException("Encryption not supported.");
 
         reader.GoTo(block.FilePosition + headerBaseOffset);
-        byte[] fileData = reader.ReadBytes((int)block.CompressedSize);
+        var fileData = new ArraySegment<byte>(reader.ReadBytes((int)block.CompressedSize));
 
         if ((block.Flags & MPQFileConstant.MPQ_FILE_SINGLE_UNIT) == 0 &&
             block.UncompressedSize != 0)
@@ -67,16 +66,15 @@ public class MPQFileReader
     }
 
     public static unsafe byte[] ProcessSectors(
-        byte[] fileData,
-        MPQBlockTableEntry block,
-        uint[] positions,
-        bool crc,
-        bool forceDecompress)
+    ArraySegment<byte> fileData,
+    MPQBlockTableEntry block,
+    uint[] positions,
+    bool crc,
+    bool forceDecompress)
     {
         byte[] output = new byte[block.UncompressedSize];
         int writeOffset = 0;
 
-        fixed (byte* filePtr = fileData)
         fixed (byte* outPtr = output)
         {
             int sectorCount = positions.Length - (crc ? 2 : 1);
@@ -85,7 +83,8 @@ public class MPQFileReader
             {
                 int start = (int)positions[i];
                 int length = (int)(positions[i + 1] - positions[i]);
-                byte* sectorPtr = filePtr + start;
+
+                var slicedfileData = fileData.Slice(start, length);
 
                 bool compressed =
                     (block.Flags & MPQFileConstant.MPQ_FILE_COMPRESS) != 0 &&
@@ -93,8 +92,7 @@ public class MPQFileReader
 
                 if (compressed)
                 {
-                    byte[] decompressed = Decompress(
-                        new ReadOnlySpan<byte>(sectorPtr, length));
+                    byte[] decompressed = Decompress(slicedfileData);
 
                     fixed (byte* src = decompressed)
                     {
@@ -109,11 +107,14 @@ public class MPQFileReader
                 }
                 else
                 {
-                    Buffer.MemoryCopy(
-                        sectorPtr,
-                        outPtr + writeOffset,
-                        output.Length - writeOffset,
-                        length);
+                    fixed (byte* sectorPtr = fileData.AsSpan(start))
+                    {
+                        Buffer.MemoryCopy(
+                            sectorPtr,
+                            outPtr + writeOffset,
+                            output.Length - writeOffset,
+                            length);
+                    }
 
                     writeOffset += length;
                 }
@@ -123,9 +124,9 @@ public class MPQFileReader
         return output;
     }
 
-    private static byte[] Decompress(ReadOnlySpan<byte> data)
+    private static byte[] Decompress(ArraySegment<byte> data)
     {
-        if (data.Length <= 1)
+        if (data.Count <= 1)
         {
             return Array.Empty<byte>();
         }
@@ -135,30 +136,53 @@ public class MPQFileReader
 
         if (type == 0)
         {
-            var result = new byte[payload.Length];
+            var result = new byte[payload.Count];
             payload.CopyTo(result);
             return result;
         }
 
+        if (type == 2)
+        {
+            using var inputHandle = MemoryPool<byte>.Shared.Rent(payload.Count);
+            var inputMemory = inputHandle.Memory.Slice(0, payload.Count);
+            payload.AsSpan().CopyTo(inputMemory.Span);
+            using var inputStream = new MemoryStream(inputMemory.ToArray());
+
+            using var decompressor = new DeflateStream(inputStream, CompressionLevel.Fastest);
+            using var outputStream = new MemoryStream();
+            decompressor.CopyTo(outputStream);
+            return outputStream.ToArray();
+        }
+        else if (type == 16)
+        {
+            using var inputHandle = MemoryPool<byte>.Shared.Rent(payload.Count);
+            var inputMemory = inputHandle.Memory.Slice(0, payload.Count);
+            payload.AsSpan().CopyTo(inputMemory.Span);
+            using var inputStream = new MemoryStream(inputMemory.ToArray());
+
+            using var decompressor = new FastBZip2InputStream(inputStream);
+            using var outputStream = new MemoryStream();
+
+            decompressor.CopyTo(outputStream);
+            return outputStream.ToArray();
+        }
+        else
+        {
+            throw new InvalidOperationException("Unsupported compression.");
+        }
+    }
+
+    private static DeflateStream GetDeflateStream(ReadOnlySpan<byte> payload)
+    {
         using var inputHandle = MemoryPool<byte>.Shared.Rent(payload.Length);
         var inputMemory = inputHandle.Memory.Slice(0, payload.Length);
         payload.CopyTo(inputMemory.Span);
-
         using var inputStream = new MemoryStream(inputMemory.ToArray());
-        using Stream decompressor = type switch
-        {
-            2 => new DeflateStream(inputStream, CompressionLevel.Fastest),
-            16 => new BZip2InputStream(inputStream),
-            _ => throw new InvalidOperationException("Unsupported compression.")
-        };
 
-        using var outputStream = new MemoryStream();
-        decompressor.CopyTo(outputStream);
-
-        return outputStream.ToArray();
+        return new DeflateStream(inputStream, CompressionLevel.Fastest);
     }
 
-    private static unsafe uint[] UnpackPositions(byte[] fileData, int sectors)
+    private static unsafe uint[] UnpackPositions(ReadOnlySpan<byte> fileData, int sectors)
     {
         int count = sectors + 1;
         uint[] positions = new uint[count];

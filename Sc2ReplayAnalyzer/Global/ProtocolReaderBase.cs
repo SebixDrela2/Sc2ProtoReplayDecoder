@@ -1,5 +1,7 @@
 ﻿namespace Sc2ReplayAnalyzer.Global;
 
+using System.Runtime.CompilerServices;
+
 public abstract class ProtocolReaderBase(BinaryReader reader)
 {
     private const byte ARRAY_TAG = 0x00;
@@ -12,21 +14,40 @@ public abstract class ProtocolReaderBase(BinaryReader reader)
     private const byte FOURCC_TAG = 0x07;
     private const byte INT_TAG = 0x09;
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     protected void ValidateArrayTag() => ValidateTag(ARRAY_TAG);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     protected void ValidateBitArrayTag() => ValidateTag(BIT_ARRAY_TAG);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     protected void ValidateBlobTag() => ValidateTag(BLOB_TAG);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     protected void ValidateChoiceTag() => ValidateTag(CHOICE_TAG);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     protected void ValidateOptTag() => ValidateTag(OPT_TAG);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     protected void ValidateStructTag() => ValidateTag(STRUCT_TAG);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     protected void ValidateBoolTag() => ValidateTag(BOOL_TAG);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     protected void ValidateFourccTag() => ValidateTag(FOURCC_TAG);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     protected void ValidateIntTag() => ValidateTag(INT_TAG);
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     protected byte ReadByte()
     {
         return reader.ReadByte();
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     protected List<byte> ReadBytes(int count)
     {
         return reader.ReadBytes(count).ToList();
@@ -49,6 +70,7 @@ public abstract class ProtocolReaderBase(BinaryReader reader)
         return result;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private void ValidateTag(byte tag)
     {
         var value = ReadByte();
@@ -57,5 +79,5 @@ public abstract class ProtocolReaderBase(BinaryReader reader)
         {
             throw new Exception($"Invalid tag: {value}, Expected: {tag}");
         }
-    }  
+    }
 }

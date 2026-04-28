@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace Sc2ReplayAnalyzer.Global;
 
@@ -14,27 +15,32 @@ public sealed class BitReader(BinaryReader reader) : IDisposable
 
     public int AvailableBits => _available;
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public long TakeBitsI64(int totalBits)
     {
         long result = 0L;
-        var remainingBits = totalBits;
+        int remainingBits = totalBits;
 
-        while (true)
+        // Fast path for small reads (most common case)
+        if (totalBits <= 8 && _available >= totalBits)
         {
-            var count = remainingBits > 8
+            int mask = (1 << totalBits) - 1;
+            result = (long)(_currentByte & mask);
+            _currentByte >>= totalBits;
+            _available -= totalBits;
+            return result;
+        }
+
+        // General path for larger reads
+        while (remainingBits > 0)
+        {
+            int count = remainingBits > 8
                 ? (_available != 0 ? _available : 8)
                 : remainingBits;
 
             long bits = RTakeNBits(count);
-
-            result |= bits << (remainingBits - count);                     
-
+            result |= bits << (remainingBits - count);
             remainingBits -= count;
-
-            if (remainingBits is 0)
-            {
-                break;
-            }
         }
 
         return result;
@@ -49,74 +55,48 @@ public sealed class BitReader(BinaryReader reader) : IDisposable
             return result;
         }
 
+        // Optimized path: if we're byte-aligned and reading a whole number of bytes
+        if (_available is 0 && (leftBits & 0b111) is 0)
+        {
+            int bytesToRead = leftBits >> 3; // Equivalent to leftBits / 8
+            return reader.ReadBytes(bytesToRead).ToList();
+        }
+
+        // Path for partial bytes at current position
         if (_available is 0)
         {
-            var bytesToRead = (leftBits + 7) / 8;
-            var leftOverBits = leftBits % 8;
-            var readBytes = reader.ReadBytes(bytesToRead);
+            int bytesToRead = (leftBits + 7) >> 3;
+            byte[] readBytes = reader.ReadBytes(bytesToRead);
 
+            int leftOverBits = leftBits & 0b111;
             if (leftOverBits is not 0)
             {
                 _available = 8 - leftOverBits;
-
-                ref var lastByte = ref readBytes[^1];
-                var mask = (byte)((1 << leftOverBits) - 1);
-
+                ref byte lastByte = ref readBytes[^1];
+                int mask = (1 << leftOverBits) - 1;
                 _currentByte = (byte)(lastByte >> leftOverBits);
-
-                lastByte &= mask;
+                lastByte &= (byte)mask;
             }
 
             return readBytes.ToList();
         }
-        //else
-        //{
-        //    var bitsToRead = leftBits - _available;
-        //    var bytesToRead = (bitsToRead + 7) >> 3;
 
-        //    var bitsRead1 = leftBits & 0b111;
-        //    var bitsRead2 = bitsToRead & 0b111;
+        // General path: read bits incrementally
+        int capacityHint = (leftBits + 7) >> 3;
+        result.Capacity = capacityHint;
 
-        //    var readBytes = reader.ReadBytes(bytesToRead);
-
-        //    GetShiftedArrayBits(readBytes, _currentByte, 8 - bitsRead2);
-
-        //    //if (bitsRead is not 0)
-        //    //{
-        //    //    _available = 8 - bitsRead;
-
-        //    //    ref var lastByte = ref readBytes[^1];
-        //    //    var mask = (byte)((1 << bitsRead) - 1);
-
-        //    //    _currentByte = (byte)(lastByte >> bitsRead);
-
-        //    //    lastByte &= mask;
-        //    //}
-
-        //    return readBytes.ToList();
-        //}
-
-        while(true)
+        while (leftBits > 0)
         {
-            var count = leftBits > 8 
-                ? 8 
-                : leftBits;
-
-            var bits = RTakeNBits(count);
-
+            int count = leftBits > 8 ? 8 : leftBits;
+            byte bits = (byte)RTakeNBits(count);
             result.Add(bits);
-
             leftBits -= count;
-
-            if (leftBits is 0)
-            {
-                break;
-            }
         }
 
         return result;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void ByteAlign()
     {
         if (_available is 8)
@@ -144,6 +124,7 @@ public sealed class BitReader(BinaryReader reader) : IDisposable
 
     public object TakeNull() => new();
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public long ParsePackedInt(long offset, int numBits)
     {
         var num = TakeBitsI64(numBits);
@@ -152,6 +133,7 @@ public sealed class BitReader(BinaryReader reader) : IDisposable
         return res;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool ParseBool()
     {
         var val = RTakeNBits(1);
@@ -181,6 +163,7 @@ public sealed class BitReader(BinaryReader reader) : IDisposable
         return result;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private byte RTakeNBits(int count)
     {
         byte result;

@@ -6,13 +6,13 @@ namespace MPQArchive.MPQ.ReceivedData
 {
     public class ListingFilesReader(MPQFileReader mpqFileReader)
     {
-        public Dictionary<string, byte[]> Read()
+        public Dictionary<string, ArraySegment<byte>> Read()
         {
             var listingFiles = mpqFileReader.ReadFile("(listfile)");
             var fileContent = Encoding.UTF8.GetString(listingFiles);
             var lines = fileContent.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
           
-            var listingFilesDict = new Dictionary<string, byte[]>();
+            var listingFilesDict = new Dictionary<string, ArraySegment<byte>>();
             var count = 0;
 
             foreach (var listingFile in lines)
