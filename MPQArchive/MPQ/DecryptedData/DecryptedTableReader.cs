@@ -27,16 +27,23 @@ namespace MPQArchive.MPQ.DecryptedData
             var src = MemoryMarshal.Cast<byte, uint>(data);
             var items = new MPQHashTableEntry[_mpqHeader.HashTableCount];
 
-            for (var i = 0; i < _mpqHeader.HashTableCount; i++)
+            try
             {
-                items[i] = new MPQHashTableEntry
+                for (var i = 0; i < _mpqHeader.HashTableCount; i++)
                 {
-                    HashA = (src[i * 4 + 0]),
-                    HashB = (src[i * 4 + 1]),
-                    lcLocale = ((ushort)(src[i * 4 + 2] & 0xFFFF)),
-                    Platform = ((ushort)(src[i * 4 + 2] >> 16)),
-                    BlockIndex = (src[i * 4 + 3])
-                };
+                    items[i] = new MPQHashTableEntry
+                    {
+                        HashA = (src[i * 4 + 0]),
+                        HashB = (src[i * 4 + 1]),
+                        lcLocale = ((ushort)(src[i * 4 + 2] & 0xFFFF)),
+                        Platform = ((ushort)(src[i * 4 + 2] >> 16)),
+                        BlockIndex = (src[i * 4 + 3])
+                    };
+                }
+            }
+            catch (IndexOutOfRangeException)
+            {
+                throw new MPQException("Invalid hash table for the replay..");
             }
 
             return items;

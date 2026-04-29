@@ -209,7 +209,7 @@ internal static partial class Parse
                 int difficulty = (int)lobbySlot.m_difficulty.Value;
                 int? tandemLeaderId = (int?)(lobbySlot.m_tandemLeaderId.DefaultIfNone()?.Value);
                 int commanderMasteryLevel = (int)lobbySlot.m_commanderMasteryLevel.Value;
-                int trophyId = (int)lobbySlot.m_trophyId.Value;
+                int trophyId = (int)(lobbySlot.m_trophyId?.Value ?? -1);
                 int brutalPlusDifficulty = (int)(lobbySlot.m_brutalPlusDifficulty?.Value ?? -1);
                 int? racePref = (int?)(lobbySlot.m_racePref.m_race.DefaultIfNone()?.Value);
                 int? tandemId = (int?)(lobbySlot.m_tandemId.DefaultIfNone()?.Value);
