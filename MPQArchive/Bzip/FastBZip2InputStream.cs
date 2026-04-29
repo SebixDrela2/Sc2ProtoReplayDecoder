@@ -21,6 +21,8 @@ public partial class FastBZip2InputStream
 {
     public override int ReadByte()
     {
+        Span<int> cftab = stackalloc int[257];
+
         if (streamEnd)
         {
             return -1;
@@ -214,15 +216,15 @@ public partial class FastBZip2InputStream
 
         SetupBlock:
         {
-            int[] cftab = new int[257];
 
-            cftab[0] = 0;
-            new Span<int>(unzftab, 0, 256).CopyTo(new Span<int>(cftab, 1, 256));
-
-            for (int i = 1; i <= 256; i++)
+            int value = 0;
+            for (int i = 0; i < 256; i++)
             {
-                cftab[i] += cftab[i - 1];
+                cftab[i] = value;
+                value += unzftab[i];
             }
+
+            cftab[256] = value;
 
             for (int i = 0; i <= last; i++)
             {
@@ -230,8 +232,6 @@ public partial class FastBZip2InputStream
                 tt[cftab[ch]] = i;
                 cftab[ch]++;
             }
-
-            cftab = null;
 
             tPos = tt[origPtr];
 
