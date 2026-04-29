@@ -42,7 +42,7 @@ internal class Program
     private static void Decode()
     {
         var path = @"C:\Users\Sebastian\Documents\StarCraft II\Accounts\103757627\1-S2-1-10180166\Replays\Multiplayer";
-        var path2 = @"C:\\Users\\Sebastian\\replays\\___ONIZA_REPLAYS\\Oh No It's Zombies 17168.SC2Replay";
+        var path2 = @"C:\\Users\\Sebastian\\replays\\___ONIZA_REPLAYS\\Oh No It's Zombies 22925.SC2Replay";
         //var files = Directory.GetFiles(path);
 
         //foreach (var file in files.Where(x => x.Contains("Oh No It's Zombies")))

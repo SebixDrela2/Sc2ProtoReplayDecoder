@@ -51,6 +51,14 @@ public class ReplayDecoder
         return Sc2Replay.FromData(replayData);
     }
 
+    public async Task<Sc2Replay[]> DecodeReplays(string[] paths)
+    {
+        var tasks = paths.Select(path =>
+            Task.Run(() => DecodeReplay(path)));
+
+        return await Task.WhenAll(tasks);
+    }
+
     public Sc2Replay DecodeReplay(string path)
     {
         using var fileStream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read);

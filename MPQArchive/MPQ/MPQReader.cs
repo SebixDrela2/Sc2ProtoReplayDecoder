@@ -40,7 +40,7 @@ namespace MPQArchive.MPQ
                         goto case MagicHeader;
                 }
             }
-            throw new InvalidOperationException("Did not find any of magic cases.");
+            throw new MPQException("Did not find any of magic cases.");
             exit:
 
             var encryptionTable = EncryptionTable.CreateNew();

@@ -1,5 +1,6 @@
 ﻿namespace Sc2ReplayAnalyzer.Global;
 
+using Sc2ReplayAnalyzer.Decoder.Exceptions;
 using System.Runtime.CompilerServices;
 
 public abstract class ProtocolReaderBase(BinaryReader reader)
@@ -77,7 +78,7 @@ public abstract class ProtocolReaderBase(BinaryReader reader)
 
         if (value != tag)
         {
-            throw new Exception($"Invalid tag: {value}, Expected: {tag}");
+            throw new Sc2TagException($"Invalid tag: {value}, Expected: {tag}");
         }
     }
 }
