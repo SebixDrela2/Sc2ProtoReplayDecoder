@@ -21,7 +21,6 @@ public sealed class BitReader(BinaryReader reader) : IDisposable
         long result = 0L;
         int remainingBits = totalBits;
 
-        // Fast path for small reads (most common case)
         if (totalBits <= 8 && _available >= totalBits)
         {
             int mask = (1 << totalBits) - 1;
@@ -31,7 +30,6 @@ public sealed class BitReader(BinaryReader reader) : IDisposable
             return result;
         }
 
-        // General path for larger reads
         while (remainingBits > 0)
         {
             int count = remainingBits > 8
@@ -55,14 +53,12 @@ public sealed class BitReader(BinaryReader reader) : IDisposable
             return result;
         }
 
-        // Optimized path: if we're byte-aligned and reading a whole number of bytes
         if (_available is 0 && (leftBits & 0b111) is 0)
         {
-            int bytesToRead = leftBits >> 3; // Equivalent to leftBits / 8
+            int bytesToRead = leftBits >> 3;
             return reader.ReadBytes(bytesToRead).ToList();
         }
 
-        // Path for partial bytes at current position
         if (_available is 0)
         {
             int bytesToRead = (leftBits + 7) >> 3;
@@ -81,7 +77,6 @@ public sealed class BitReader(BinaryReader reader) : IDisposable
             return readBytes.ToList();
         }
 
-        // General path: read bits incrementally
         int capacityHint = (leftBits + 7) >> 3;
         result.Capacity = capacityHint;
 

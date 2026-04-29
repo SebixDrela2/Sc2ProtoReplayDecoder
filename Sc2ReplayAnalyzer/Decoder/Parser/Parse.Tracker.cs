@@ -1,5 +1,6 @@
 ﻿using Sc2ReplayAnalyzer.Decoder.Events.TrackerEvents;
 using Sc2ReplayAnalyzer.Json.VersionedProtocolDefinitions;
+using System.Runtime.CompilerServices;
 
 namespace Sc2ReplayAnalyzer.Decoder.Parser;
 
@@ -42,63 +43,42 @@ internal static partial class Parse
             [.. trackerevents.OfType<SUnitDoneEvent>()]
         );
 
-        SetTrackerUnitConnections(events);
+        SetTrackerKillerUnitLink(events);
 
         return events;
     }
 
-    private static void SetTrackerUnitConnections(TrackerEvents events)
-    {
-        SetTrackerUnitIndexLink(events);
-        SetTrackerKillerUnitLink(events);
-    }
-
-    private static void SetTrackerUnitIndexLink(TrackerEvents events)
-    {
-        foreach (var f in events.SUnitBornEvents) f.UnitIndex = GetUnitIndex(f.UnitTagIndex, f.UnitTagRecycle);
-        foreach (var f in events.SUnitInitEvents) f.UnitIndex = GetUnitIndex(f.UnitTagIndex, f.UnitTagRecycle);
-        foreach (var f in events.SUnitDiedEvents) f.UnitIndex = GetUnitIndex(f.UnitTagIndex, f.UnitTagRecycle);
-        foreach (var f in events.SUnitDoneEvents) f.UnitIndex = GetUnitIndex(f.UnitTagIndex, f.UnitTagRecycle);
-        foreach (var f in events.SUnitOwnerChangeEvents) f.UnitIndex = GetUnitIndex(f.UnitTagIndex, f.UnitTagRecycle);
-    }
-
     private static void SetTrackerKillerUnitLink(TrackerEvents events)
     {
-        var diedIndexMap = new SortedDictionary<int, SUnitDiedEvent>();
-        var initIndexMap = new SortedDictionary<int, SUnitInitEvent>();
-        var doneIndexMap = new SortedDictionary<int, SUnitDoneEvent>();
-        var bornIndexMap = new SortedDictionary<int, SUnitBornEvent>();
+        var diedIndexMap = new SortedList<ulong, SUnitDiedEvent>();
+        var initIndexMap = new SortedList<ulong, SUnitInitEvent>();
+        var doneIndexMap = new SortedList<ulong, SUnitDoneEvent>();
+        var bornIndexMap = new SortedList<ulong, SUnitBornEvent>();
 
-        var uniqueBornEventMap = new SortedDictionary<(int UnitTagIndex, int UnitTagRecycle), SUnitBornEvent>();
-        var uniqueInitEventMap = new SortedDictionary<(int UnitTagIndex, int UnitTagRecycle), SUnitInitEvent>();
+        foreach (var element in events.SUnitDiedEvents) diedIndexMap.Add(GetUniqueIndex((element.UnitTagIndex, element.UnitTagRecycle)), element);
+        foreach (var element in events.SUnitInitEvents) initIndexMap.Add(GetUniqueIndex((element.UnitTagIndex, element.UnitTagRecycle)), element);
+        foreach (var element in events.SUnitDoneEvents) doneIndexMap.Add(GetUniqueIndex((element.UnitTagIndex, element.UnitTagRecycle)), element);
+        foreach (var element in events.SUnitBornEvents) bornIndexMap.Add(GetUniqueIndex((element.UnitTagIndex, element.UnitTagRecycle)), element);
 
-        foreach (var element in events.SUnitDiedEvents) diedIndexMap.Add(element.UnitIndex, element);
-        foreach (var element in events.SUnitInitEvents) initIndexMap.Add(element.UnitIndex, element);
-        foreach (var element in events.SUnitDoneEvents) doneIndexMap.Add(element.UnitIndex, element);
-        foreach (var element in events.SUnitBornEvents) bornIndexMap.Add(element.UnitIndex, element);
-
-        foreach (var element in events.SUnitBornEvents) uniqueBornEventMap.Add((element.UnitTagIndex, element.UnitTagRecycle), element);
-        foreach (var element in events.SUnitInitEvents) uniqueInitEventMap.Add((element.UnitTagIndex, element.UnitTagRecycle), element);
-
-        foreach (var x in events.SUnitBornEvents) x.SUnitDiedEvent = diedIndexMap.GetValueOrDefault(x.UnitIndex);
-        foreach (var x in events.SUnitInitEvents) x.SUnitDiedEvent = diedIndexMap.GetValueOrDefault(x.UnitIndex);
-        foreach (var x in events.SUnitInitEvents) x.SUnitDoneEvent = doneIndexMap.GetValueOrDefault(x.UnitIndex);
+        foreach (var element in events.SUnitBornEvents) element.SUnitDiedEvent = diedIndexMap.GetValueOrDefault(GetUniqueIndex((element.UnitTagIndex, element.UnitTagRecycle)));
+        foreach (var element in events.SUnitInitEvents) element.SUnitDiedEvent = diedIndexMap.GetValueOrDefault(GetUniqueIndex((element.UnitTagIndex, element.UnitTagRecycle)));
+        foreach (var element in events.SUnitInitEvents) element.SUnitDoneEvent = doneIndexMap.GetValueOrDefault(GetUniqueIndex((element.UnitTagIndex, element.UnitTagRecycle)));
 
         foreach (var x in events.SUnitDiedEvents)
         {
-            x.KillerUnitBornEvent = (x.KillerUnitTagIndex, x.KillerUnitTagRecycle) is ({ } a, { } b) ? uniqueBornEventMap.GetValueOrDefault((a, b)) : default;
+            x.KillerUnitBornEvent = (x.KillerUnitTagIndex, x.KillerUnitTagRecycle) is ({ } a, { } b) ? bornIndexMap.GetValueOrDefault(GetUniqueIndex((a, b))) : default;
         }
 
         foreach (var x in events.SUnitDiedEvents)
         {
-            x.KillerUnitInitEvent = (x.KillerUnitTagIndex, x.KillerUnitTagRecycle) is ({ } a, { } b) ? uniqueInitEventMap.GetValueOrDefault((a, b)) : default;
+            x.KillerUnitInitEvent = (x.KillerUnitTagIndex, x.KillerUnitTagRecycle) is ({ } a, { } b) ? initIndexMap.GetValueOrDefault(GetUniqueIndex((a, b))) : default;
         }
     }
 
-    private static int GetUnitIndex(int unitTagIndex, int unitTagRecycle)
-    {
-        return (unitTagIndex << 18) + unitTagRecycle;
-    }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static ulong GetUniqueIndex((int, int) pair) => Unsafe.BitCast<(int, int), ulong>(pair);
+
+    //private static int GetUnitIndex(int unitTagIndex, int unitTagRecycle) => (unitTagIndex << 18) | unitTagRecycle;
 
     private static TrackerEvent GetTrackerEvent(TrackerEventPair eventPair)
     {

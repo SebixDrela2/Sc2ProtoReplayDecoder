@@ -3,8 +3,6 @@
 #endif
 
 using ICSharpCode.SharpZipLib.Checksum;
-using System.Runtime.InteropServices;
-using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
 
 namespace MPQArchive.Bzip;
@@ -58,7 +56,7 @@ public class FastBZip2InputStream : Stream
 
     private int bsBuff;
     private int bsLive;
-    private BZip2Crc mCrc = new BZip2Crc();
+    private BZip2Crc mCrc = new();
 
     private bool[] inUse = new bool[256];
     private int nInUse;
@@ -83,7 +81,11 @@ public class FastBZip2InputStream : Stream
     private int[][] perm = new int[FastBZip2InputConstants.GroupCount][];
     private int[] minLens = new int[FastBZip2InputConstants.GroupCount];
 
-    private readonly Stream baseStream;
+    private readonly ArraySegment<byte> _baseInput;
+    private long _position = 0;
+    private ReadOnlySpan<byte> BaseSpan => _baseInput;
+
+
     private bool streamEnd;
 
     private int currentChar = -1;
@@ -107,10 +109,8 @@ public class FastBZip2InputStream : Stream
     /// Construct instance for reading from stream
     /// </summary>
     /// <param name="stream">Data source</param>
-    public FastBZip2InputStream(Stream stream)
+    public FastBZip2InputStream(ArraySegment<byte> data)
     {
-        if (stream == null)
-            throw new ArgumentNullException(nameof(stream));
         // init arrays
         for (int i = 0; i < FastBZip2InputConstants.GroupCount; ++i)
         {
@@ -119,9 +119,11 @@ public class FastBZip2InputStream : Stream
             perm[i] = new int[FastBZip2InputConstants.MaximumAlphaSize];
         }
 
-        baseStream = stream;
+        //baseStream = stream;
         bsLive = 0;
         bsBuff = 0;
+        _baseInput = data;
+
         Initialize();
         InitBlock();
         SetupBlock();
@@ -138,47 +140,23 @@ public class FastBZip2InputStream : Stream
     /// <summary>
     /// Gets a value indicating if the stream supports reading
     /// </summary>
-    public override bool CanRead
-    {
-        get
-        {
-            return baseStream.CanRead;
-        }
-    }
+    public override bool CanRead => true;
 
     /// <summary>
     /// Gets a value indicating whether the current stream supports seeking.
     /// </summary>
-    public override bool CanSeek
-    {
-        get
-        {
-            return false;
-        }
-    }
+    public override bool CanSeek => true;
 
     /// <summary>
     /// Gets a value indicating whether the current stream supports writing.
     /// This property always returns false
     /// </summary>
-    public override bool CanWrite
-    {
-        get
-        {
-            return false;
-        }
-    }
+    public override bool CanWrite => false;
 
     /// <summary>
     /// Gets the length in bytes of the stream.
     /// </summary>
-    public override long Length
-    {
-        get
-        {
-            return baseStream.Length;
-        }
-    }
+    public override long Length => BaseSpan.Length;
 
     /// <summary>
     /// Gets the current position of the stream.
@@ -187,23 +165,14 @@ public class FastBZip2InputStream : Stream
     /// <exception cref="NotSupportedException">Any attempt to set the position.</exception>
     public override long Position
     {
-        get
-        {
-            return baseStream.Position;
-        }
-        set
-        {
-            throw new NotSupportedException("BZip2InputStream position cannot be set");
-        }
+        get => _position;
+        set => throw new NotSupportedException("BZip2InputStream position cannot be set");
     }
 
     /// <summary>
     /// Flushes the stream.
     /// </summary>
-    public override void Flush()
-    {
-        baseStream.Flush();
-    }
+    public override void Flush() { }
 
     /// <summary>
     /// Set the streams position.  This operation is not supported and will throw a NotSupportedException
@@ -291,7 +260,7 @@ public class FastBZip2InputStream : Stream
     {
         if (disposing && IsStreamOwner)
         {
-            baseStream.Dispose();
+            //baseStream.Dispose();
         }
     }
 
@@ -582,7 +551,14 @@ public class FastBZip2InputStream : Stream
 
         try
         {
-            thech = baseStream.ReadByte();
+            if (_position < BaseSpan.Length)
+            {
+                thech = BaseSpan[(int)_position++];
+            }
+            else
+            {
+                thech = -1;
+            }
         }
         catch (Exception)
         {
@@ -735,34 +711,34 @@ public class FastBZip2InputStream : Stream
         }
     }
 
-	private void GetAndMoveToFrontDecode()
-	{
-		Span<byte> yy = stackalloc byte[256];
-		int nextSym;
+    private void GetAndMoveToFrontDecode()
+    {
+        Span<byte> yy = stackalloc byte[256];
+        int nextSym;
 
-		int limitLast = FastBZip2InputConstants.BaseBlockSize * blockSize100k;
-		origPtr = BsGetIntVS(24);
+        int limitLast = FastBZip2InputConstants.BaseBlockSize * blockSize100k;
+        origPtr = BsGetIntVS(24);
 
-		RecvDecodingTables();
-		int EOB = nInUse + 1;
-		int groupNo = -1;
-		int groupPos = 0;
+        RecvDecodingTables();
+        int EOB = nInUse + 1;
+        int groupNo = -1;
+        int groupPos = 0;
 
-		/*--
+        /*--
 			Setting up the unzftab entries here is not strictly
 			necessary, but it does save having to do it later
 			in a separate pass, and so saves a block's worth of
 			cache misses.
 			--*/
-		for (int i = 0; i <= 255; i++)
-		{
-			unzftab[i] = 0;
-		}
+        for (int i = 0; i <= 255; i++)
+        {
+            unzftab[i] = 0;
+        }
 
-		for (int i = 0; i <= 255; i++)
-		{
-			yy[i] = (byte)i;
-		}
+        for (int i = 0; i <= 255; i++)
+        {
+            yy[i] = (byte)i;
+        }
 
         last = -1;
 

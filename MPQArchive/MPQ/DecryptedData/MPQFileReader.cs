@@ -152,8 +152,7 @@ public class MPQFileReader
         }
         else if (type == 16)
         {
-            using var inputStream = new MemoryStream(payload.Array, payload.Offset, payload.Count);
-            using var decompressor = new FastBZip2InputStream(inputStream);
+            using var decompressor = new FastBZip2InputStream(payload);
             using var outputStream = new MemoryStream();
 
             decompressor.CopyTo(outputStream);

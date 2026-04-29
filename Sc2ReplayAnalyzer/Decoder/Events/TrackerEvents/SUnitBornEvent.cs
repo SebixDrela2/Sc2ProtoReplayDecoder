@@ -13,7 +13,7 @@ public class SUnitBornEvent : TrackerEvent
     public int UpkeepPlayerId { get; }
     public string UnitTypeName { get; }
     public int? CreatorUnitTagIndex { get; }
-    public int UnitIndex { get; internal set; }
+    // public int UnitIndex { get; internal set; }
     public SUnitDiedEvent? SUnitDiedEvent { get; internal set; }
 
     public SUnitBornEvent(

@@ -4,6 +4,7 @@ using Sc2ReplayAnalyzer.Decoder;
 using Sc2ReplayAnalyzer.Json;
 using Sc2ReplayAnalyzer.TestApp;
 using Sc2ReplayAnalyzer.Tokenizer;
+using System.Text;
 
 internal class Program
 {
@@ -42,18 +43,34 @@ internal class Program
     private static void Decode()
     {
         var path = @"C:\Users\Sebastian\Documents\StarCraft II\Accounts\103757627\1-S2-1-10180166\Replays\Multiplayer";
-        var path2 = @"C:\\Users\\Sebastian\\replays\\___ONIZA_REPLAYS\\Oh No It's Zombies 25812.SC2Replay";
-        //var files = Directory.GetFiles(path);
+        var files = Directory.GetFiles(path).Where(x => x.Contains("Oh No It's Zombies"));
 
-        //foreach (var file in files.Where(x => x.Contains("Oh No It's Zombies")))
+        foreach(var file in files)
+        {
+            var decoder = new ReplayDecoder();
+            var replay = decoder.DecodeReplay(file);
+            Console.WriteLine(replay.FileName);
+        }
+
+        //var file = files.First();
+
+        //var decoder = new ReplayDecoder();
+        //var replay = decoder.DecodeReplay(file);
+        //var builder = new StringBuilder();
+
+        //foreach(var e in replay.TrackerEvents.SUnitBornEvents.OrderBy(x => x.UnitTagIndex).ThenBy(x => x.UnitTagRecycle))
         //{
-        //    var decoder = new ReplayDecoder();
-        //    var replay = decoder.DecodeReplay(file);
-
-        //    Console.WriteLine(replay.FileName);
+        //    builder.AppendLine($"{e.UnitTagIndex} {e.UnitTagRecycle}");
         //}
 
-        var decoder = new ReplayDecoder();
-        var replay = decoder.DecodeReplay(path2);
+        //File.WriteAllText("thing.txt", builder.ToString());
+
+        ////foreach (var file in files.Where(x => x.Contains("Oh No It's Zombies")))
+        ////{
+        ////    var decoder = new ReplayDecoder();
+        ////    var replay = decoder.DecodeReplay(file);
+
+        ////    Console.WriteLine(replay.FileName);
+        ////}
     }    
 }

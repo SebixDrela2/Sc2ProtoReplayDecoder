@@ -11,7 +11,7 @@ public class SUnitDiedEvent : TrackerEvent
     public int Y { get; }
     public int? KillerUnitTagRecycle { get; }
     public int? KillerUnitTagIndex { get; }
-    public int UnitIndex { get; internal set; }
+    // public int UnitIndex { get; internal set; }
     public SUnitBornEvent? KillerUnitBornEvent { get; internal set; }
     public SUnitInitEvent? KillerUnitInitEvent { get; internal set; }
 

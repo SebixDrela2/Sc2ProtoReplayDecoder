@@ -8,7 +8,7 @@ public class SUnitOwnerChangeEvent : TrackerEvent
     public int UnitTagRecycle { get; }
     public int ControlPlayerId { get; }
     public int UpkeepPlayerId { get; }
-    public int UnitIndex { get; internal set; }
+    // public int UnitIndex { get; internal set; }
 
     // Constructor to initialize the properties
     public SUnitOwnerChangeEvent(TrackerEvent trackerEvent, int unitTagIndex, int unitTagRecycle, int controlPlayerId, int upkeepPlayerId) : base(trackerEvent)
