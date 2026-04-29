@@ -15,7 +15,246 @@ namespace MPQArchive.Bzip;
 /// - SSE/AVX instruction sets for bulk memory operations and MTF shifting
 /// Note: AVX512 support can be added via System.Runtime.Intrinsics.X86.Avx512 when available in future .NET versions
 /// </summary>
-public class FastBZip2InputStream : Stream
+/// 
+
+public partial class FastBZip2InputStream
+{
+    public override int ReadByte()
+    {
+        if (streamEnd)
+        {
+            return -1;
+        }
+
+        int retChar = currentChar;
+        switch (currentState)
+        {
+            case RAND_PART_B_STATE:
+                goto SetupRandPartB;
+
+            case RAND_PART_C_STATE:
+                goto SetupRandPartC;
+
+            case NO_RAND_PART_B_STATE:
+                goto SetupNoRandPartB;
+
+            case NO_RAND_PART_C_STATE:
+                goto SetupNoRandPartC;
+
+            case START_BLOCK_STATE:
+            case NO_RAND_PART_A_STATE:
+            case RAND_PART_A_STATE:
+                break;
+        }
+
+    Exit:
+        return retChar;
+
+    SetupRandPartB:
+        {
+            if (ch2 != chPrev)
+            {
+                currentState = RAND_PART_A_STATE;
+                count = 1;
+                goto SetupRandPartA;
+            }
+            else
+            {
+                count++;
+                if (count >= 4)
+                {
+                    z = ll8[tPos];
+                    tPos = tt[tPos];
+                    if (rNToGo == 0)
+                    {
+                        rNToGo = FastBZip2InputConstants.RandomNumbers[rTPos];
+                        rTPos++;
+                        if (rTPos == 512)
+                        {
+                            rTPos = 0;
+                        }
+                    }
+                    rNToGo--;
+                    z ^= (byte)((rNToGo == 1) ? 1 : 0);
+                    j2 = 0;
+                    currentState = RAND_PART_C_STATE;
+                    goto SetupRandPartC;
+                }
+                else
+                {
+                    currentState = RAND_PART_A_STATE;
+                    goto SetupRandPartA;
+                }
+            }
+        }
+        goto Exit;
+        // SetupRandPartB
+
+        SetupRandPartC:
+        {
+            if (j2 < (int)z)
+            {
+                currentChar = ch2;
+                mCrc.Update(ch2);
+                j2++;
+            }
+            else
+            {
+                currentState = RAND_PART_A_STATE;
+                i2++;
+                count = 0;
+                goto SetupRandPartA;
+            }
+        }
+        goto Exit;
+        // SetupRandPartC
+
+        SetupNoRandPartB:
+        {
+            if (ch2 != chPrev)
+            {
+                currentState = NO_RAND_PART_A_STATE;
+                count = 1;
+                goto SetupNoRandPartA;
+            }
+            else
+            {
+                count++;
+                if (count >= 4)
+                {
+                    z = ll8[tPos];
+                    tPos = tt[tPos];
+                    currentState = NO_RAND_PART_C_STATE;
+                    j2 = 0;
+                    goto SetupNoRandPartC;
+                }
+                else
+                {
+                    currentState = NO_RAND_PART_A_STATE;
+                    goto SetupNoRandPartA;
+                }
+            }
+        }
+        goto Exit;
+        // SetupNoRandPartB
+
+        SetupNoRandPartC:
+        {
+            if (j2 < (int)z)
+            {
+                currentChar = ch2;
+                mCrc.Update(ch2);
+                j2++;
+            }
+            else
+            {
+                currentState = NO_RAND_PART_A_STATE;
+                i2++;
+                count = 0;
+                goto SetupNoRandPartA;
+            }
+        }
+        goto Exit;
+        // SetupNoRandPartC
+
+        SetupRandPartA:
+        {
+            if (i2 <= last)
+            {
+                chPrev = ch2;
+                ch2 = ll8[tPos];
+                tPos = tt[tPos];
+                if (rNToGo == 0)
+                {
+                    rNToGo = FastBZip2InputConstants.RandomNumbers[rTPos];
+                    rTPos++;
+                    if (rTPos == 512)
+                    {
+                        rTPos = 0;
+                    }
+                }
+                rNToGo--;
+                ch2 ^= (int)((rNToGo == 1) ? 1 : 0);
+                i2++;
+
+                currentChar = ch2;
+                currentState = RAND_PART_B_STATE;
+                mCrc.Update(ch2);
+            }
+            else
+            {
+                EndBlock();
+                InitBlock();
+                goto SetupBlock;
+            }
+        }
+        goto Exit;
+
+        SetupNoRandPartA:
+        {
+            if (i2 <= last)
+            {
+                chPrev = ch2;
+                ch2 = ll8[tPos];
+                tPos = tt[tPos];
+                i2++;
+
+                currentChar = ch2;
+                currentState = NO_RAND_PART_B_STATE;
+                mCrc.Update(ch2);
+            }
+            else
+            {
+                EndBlock();
+                InitBlock();
+                goto SetupBlock;
+            }
+        }
+        goto Exit;
+
+        SetupBlock:
+        {
+            int[] cftab = new int[257];
+
+            cftab[0] = 0;
+            new Span<int>(unzftab, 0, 256).CopyTo(new Span<int>(cftab, 1, 256));
+
+            for (int i = 1; i <= 256; i++)
+            {
+                cftab[i] += cftab[i - 1];
+            }
+
+            for (int i = 0; i <= last; i++)
+            {
+                byte ch = ll8[i];
+                tt[cftab[ch]] = i;
+                cftab[ch]++;
+            }
+
+            cftab = null;
+
+            tPos = tt[origPtr];
+
+            count = 0;
+            i2 = 0;
+            ch2 = 256;   /*-- not a char and not EOF --*/
+
+            if (blockRandomised)
+            {
+                rNToGo = 0;
+                rTPos = 0;
+                goto SetupRandPartA;
+            }
+            else
+            {
+                goto SetupNoRandPartA;
+            }
+        }
+        goto Exit;
+    }
+}
+
+public partial class FastBZip2InputStream : Stream
 {
     #region Constants
 
@@ -268,39 +507,39 @@ public class FastBZip2InputStream : Stream
     /// Read a byte from stream advancing position
     /// </summary>
     /// <returns>byte read or -1 on end of stream</returns>
-    public override int ReadByte()
-    {
-        if (streamEnd)
-        {
-            return -1; // ok
-        }
+    //public override int ReadByte()
+    //{
+    //    if (streamEnd)
+    //    {
+    //        return -1;
+    //    }
 
-        int retChar = currentChar;
-        switch (currentState)
-        {
-            case RAND_PART_B_STATE:
-                SetupRandPartB();
-                break;
+    //    int retChar = currentChar;
+    //    switch (currentState)
+    //    {
+    //        case RAND_PART_B_STATE:
+    //            SetupRandPartB();
+    //            break;
 
-            case RAND_PART_C_STATE:
-                SetupRandPartC();
-                break;
+    //        case RAND_PART_C_STATE:
+    //            SetupRandPartC();
+    //            break;
 
-            case NO_RAND_PART_B_STATE:
-                SetupNoRandPartB();
-                break;
+    //        case NO_RAND_PART_B_STATE:
+    //            SetupNoRandPartB();
+    //            break;
 
-            case NO_RAND_PART_C_STATE:
-                SetupNoRandPartC();
-                break;
+    //        case NO_RAND_PART_C_STATE:
+    //            SetupNoRandPartC();
+    //            break;
 
-            case START_BLOCK_STATE:
-            case NO_RAND_PART_A_STATE:
-            case RAND_PART_A_STATE:
-                break;
-        }
-        return retChar;
-    }
+    //        case START_BLOCK_STATE:
+    //        case NO_RAND_PART_A_STATE:
+    //        case RAND_PART_A_STATE:
+    //            break;
+    //    }
+    //    return retChar;
+    //}
 
     #endregion Stream Overrides
 
