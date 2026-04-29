@@ -143,23 +143,16 @@ public class MPQFileReader
 
         if (type == 2)
         {
-            using var inputHandle = MemoryPool<byte>.Shared.Rent(payload.Count);
-            var inputMemory = inputHandle.Memory.Slice(0, payload.Count);
-            payload.AsSpan().CopyTo(inputMemory.Span);
-            using var inputStream = new MemoryStream(inputMemory.ToArray());
-
+            using var inputStream = new MemoryStream(payload.Array, payload.Offset, payload.Count);
             using var decompressor = new DeflateStream(inputStream, CompressionLevel.Fastest);
             using var outputStream = new MemoryStream();
+
             decompressor.CopyTo(outputStream);
             return outputStream.ToArray();
         }
         else if (type == 16)
         {
-            using var inputHandle = MemoryPool<byte>.Shared.Rent(payload.Count);
-            var inputMemory = inputHandle.Memory.Slice(0, payload.Count);
-            payload.AsSpan().CopyTo(inputMemory.Span);
-            using var inputStream = new MemoryStream(inputMemory.ToArray());
-
+            using var inputStream = new MemoryStream(payload.Array, payload.Offset, payload.Count);
             using var decompressor = new FastBZip2InputStream(inputStream);
             using var outputStream = new MemoryStream();
 

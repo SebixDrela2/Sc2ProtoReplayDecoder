@@ -194,7 +194,7 @@ internal static partial class Parse
         {
             foreach (var lobbySlot in lobbyState.m_slots.Value)
             {
-                int aCEnemyRace = (int)lobbySlot.m_aCEnemyRace.Value;
+                int aCEnemyRace = (int)(lobbySlot.m_aCEnemyRace?.Value ?? -1);
                 string toonHandle = lobbySlot.m_toonHandle.Value.ReadStringBytes();
                 List<RewardOverdrive> rewardOverrides = [.. lobbySlot.m_rewardOverrides.Value.Select(x => new RewardOverdrive(x.m_key.Value, x.m_rewards.Value.Select(x => x.Value.Value).ToList()))];
                 int? userId = (int?)(lobbySlot.m_userId.DefaultIfNone()?.Value);
@@ -210,7 +210,7 @@ internal static partial class Parse
                 int? tandemLeaderId = (int?)(lobbySlot.m_tandemLeaderId.DefaultIfNone()?.Value);
                 int commanderMasteryLevel = (int)lobbySlot.m_commanderMasteryLevel.Value;
                 int trophyId = (int)lobbySlot.m_trophyId.Value;
-                int brutalPlusDifficulty = (int)lobbySlot.m_brutalPlusDifficulty.Value;
+                int brutalPlusDifficulty = (int)(lobbySlot.m_brutalPlusDifficulty?.Value ?? -1);
                 int? racePref = (int?)(lobbySlot.m_racePref.m_race.DefaultIfNone()?.Value);
                 int? tandemId = (int?)(lobbySlot.m_tandemId.DefaultIfNone()?.Value);
                 string hero = lobbySlot.m_hero.Value.ReadStringBytes();
@@ -218,13 +218,13 @@ internal static partial class Parse
                 string mount = lobbySlot.m_mount.Value.ReadStringBytes();
                 int handicap = (int)lobbySlot.m_handicap.Value.Value;
                 string observe = lobbySlot.m_observe.GetKind();
-                int aCEnemyWaveType = (int)lobbySlot.m_aCEnemyWaveType.Value;
+                int aCEnemyWaveType = (int)(lobbySlot.m_aCEnemyWaveType?.Value ?? -1);
                 int control = (int)lobbySlot.m_control.Value;
                 List<int> licenses = [.. lobbySlot.m_licenses.Value.Select(x => (int)x.Value.Value)];
                 int? colorPref = GetColorPreference(lobbySlot);
                 bool hasSilencePenalty = lobbySlot.m_hasSilencePenalty;
                 int workingSetSlotId = (int)(lobbySlot.m_workingSetSlotId.DefaultIfNone()?.Value);
-                List<int> retryMutationIndexes = [.. lobbySlot.m_retryMutationIndexes.Value.Select(x => (int)x.Value)];
+                List<int> retryMutationIndexes = [.. lobbySlot.m_retryMutationIndexes?.Value.Select(x => (int)x.Value) ?? []];
                 int? selectedCommanderPrestige = (int?)lobbySlot.m_selectedCommanderPrestige?.Value;
 
                 slots.Add(new Slot(
