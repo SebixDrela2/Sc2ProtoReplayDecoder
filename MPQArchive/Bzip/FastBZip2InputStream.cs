@@ -19,6 +19,281 @@ namespace MPQArchive.Bzip;
 
 public partial class FastBZip2InputStream
 {
+    //public /*override int Read(Span<byte> targetSpan)*/
+    //{
+    //    int i = 0;
+    //    while (i < targetSpan.Length)
+    //    {
+    //        int rb = ReadByte();
+
+    //        if (rb == -1)
+    //        {
+    //            return i;
+    //        }
+
+    //        targetSpan[i] = (byte)rb;
+    //        i++;
+    //    }
+
+    //    return targetSpan.Length;
+    //}
+
+    public override int Read(Span<byte> targetSpan)
+    {
+        Span<int> cftab = stackalloc int[257];
+        int targetPos = 0;
+        int targetEnd = targetSpan.Length;
+
+        LoopCondition:
+        if(targetPos >= targetEnd)
+        {
+            return targetEnd;       
+        }
+
+        LoopBody:
+        if (streamEnd)
+        {
+            return targetPos; // SEBA
+        }
+
+        int retChar = currentChar;
+
+        if (retChar == -1)
+        {
+            return targetPos;
+        }
+
+        targetSpan[targetPos] = (byte)retChar;
+
+        targetPos++;
+
+        switch (currentState)
+        {
+            case RAND_PART_B_STATE:
+                goto SetupRandPartB;
+
+            case RAND_PART_C_STATE:
+                goto SetupRandPartC;
+
+            case NO_RAND_PART_B_STATE:
+                goto SetupNoRandPartB;
+
+            case NO_RAND_PART_C_STATE:
+                goto SetupNoRandPartC;
+
+            case START_BLOCK_STATE:
+            case NO_RAND_PART_A_STATE:
+            case RAND_PART_A_STATE:
+                break;
+        }
+
+    Exit:
+        goto LoopCondition;
+
+    SetupRandPartB:
+        {
+            if (ch2 != chPrev)
+            {
+                currentState = RAND_PART_A_STATE;
+                count = 1;
+                goto SetupRandPartA;
+            }
+            else
+            {
+                count++;
+                if (count >= 4)
+                {
+                    z = ll8[tPos];
+                    tPos = tt[tPos];
+                    if (rNToGo == 0)
+                    {
+                        rNToGo = FastBZip2InputConstants.RandomNumbers[rTPos];
+                        rTPos++;
+                        if (rTPos == 512)
+                        {
+                            rTPos = 0;
+                        }
+                    }
+                    rNToGo--;
+                    z ^= (byte)((rNToGo == 1) ? 1 : 0);
+                    j2 = 0;
+                    currentState = RAND_PART_C_STATE;
+                    goto SetupRandPartC;
+                }
+                else
+                {
+                    currentState = RAND_PART_A_STATE;
+                    goto SetupRandPartA;
+                }
+            }
+        }
+        goto Exit;
+        // SetupRandPartB
+
+    SetupRandPartC:
+        {
+            if (j2 < (int)z)
+            {
+                currentChar = ch2;
+                mCrc.Update(ch2);
+                j2++;
+            }
+            else
+            {
+                currentState = RAND_PART_A_STATE;
+                i2++;
+                count = 0;
+                goto SetupRandPartA;
+            }
+        }
+        goto Exit;
+        // SetupRandPartC
+
+    SetupNoRandPartB:
+        {
+            if (ch2 != chPrev)
+            {
+                currentState = NO_RAND_PART_A_STATE;
+                count = 1;
+                goto SetupNoRandPartA;
+            }
+            else
+            {
+                count++;
+                if (count >= 4)
+                {
+                    z = ll8[tPos];
+                    tPos = tt[tPos];
+                    currentState = NO_RAND_PART_C_STATE;
+                    j2 = 0;
+                    goto SetupNoRandPartC;
+                }
+                else
+                {
+                    currentState = NO_RAND_PART_A_STATE;
+                    goto SetupNoRandPartA;
+                }
+            }
+        }
+        goto Exit;
+        // SetupNoRandPartB
+
+    SetupNoRandPartC:
+        {
+            if (j2 < (int)z)
+            {
+                currentChar = ch2;
+                mCrc.Update(ch2);
+                j2++;
+            }
+            else
+            {
+                currentState = NO_RAND_PART_A_STATE;
+                i2++;
+                count = 0;
+                goto SetupNoRandPartA;
+            }
+        }
+        goto Exit;
+        // SetupNoRandPartC
+
+    SetupRandPartA:
+        {
+            if (i2 <= last)
+            {
+                chPrev = ch2;
+                ch2 = ll8[tPos];
+                tPos = tt[tPos];
+                if (rNToGo == 0)
+                {
+                    rNToGo = FastBZip2InputConstants.RandomNumbers[rTPos];
+                    rTPos++;
+                    if (rTPos == 512)
+                    {
+                        rTPos = 0;
+                    }
+                }
+                rNToGo--;
+                ch2 ^= (int)((rNToGo == 1) ? 1 : 0);
+                i2++;
+
+                currentChar = ch2;
+                currentState = RAND_PART_B_STATE;
+                mCrc.Update(ch2);
+            }
+            else
+            {
+                EndBlock();
+                InitBlock();
+                goto SetupBlock;
+            }
+        }
+        goto Exit;
+
+    SetupNoRandPartA:
+        {
+            if (i2 <= last)
+            {
+                chPrev = ch2;
+                ch2 = ll8[tPos];
+                tPos = tt[tPos];
+                i2++;
+
+                currentChar = ch2;
+                currentState = NO_RAND_PART_B_STATE;
+                mCrc.Update(ch2);
+            }
+            else
+            {
+                EndBlock();
+                InitBlock();
+                goto SetupBlock;
+            }
+        }
+        goto Exit;
+
+    SetupBlock:
+        {
+
+            int value = 0;
+            for (int i = 0; i < 256; i++)
+            {
+                cftab[i] = value;
+                value += unzftab[i];
+            }
+
+            cftab[256] = value;
+
+            for (int i = 0; i <= last; i++)
+            {
+                byte ch = ll8[i];
+                tt[cftab[ch]] = i;
+                cftab[ch]++;
+            }
+
+            tPos = tt[origPtr];
+
+            count = 0;
+            i2 = 0;
+            ch2 = 256;   /*-- not a char and not EOF --*/
+
+            if (blockRandomised)
+            {
+                rNToGo = 0;
+                rTPos = 0;
+                goto SetupRandPartA;
+            }
+            else
+            {
+                goto SetupNoRandPartA;
+            }
+        }
+        goto Exit;
+    }
+}
+
+public partial class FastBZip2InputStream
+{
     public override int ReadByte()
     {
         Span<int> cftab = stackalloc int[257];
@@ -295,6 +570,8 @@ public partial class FastBZip2InputStream : Stream
 
     private int bsBuff;
     private int bsLive;
+    private int _remainingBits;
+
     private BZip2Crc mCrc = new();
 
     private bool[] inUse = new bool[256];
@@ -470,6 +747,9 @@ public partial class FastBZip2InputStream : Stream
     /// than the number of bytes requested if that number of bytes are not
     /// currently available or zero if the end of the stream is reached.
     /// </returns>
+    /// 
+    
+
     public override int Read(byte[] buffer, int offset, int count)
     {
         if (buffer == null)
@@ -478,20 +758,10 @@ public partial class FastBZip2InputStream : Stream
         }
 
         Span<byte> targetSpan = new Span<byte>(buffer, offset, count);
-        int i = 0;
-        while (i < targetSpan.Length)
-        {
-            int rb = ReadByte();
-            if (rb == -1)
-            {
-                return i;
-            }
-            targetSpan[i] = (byte)rb;
-            i++;
-        }
-        return count;
-    }
 
+        return Read(targetSpan);
+    }
+    
     /// <summary>
     /// Closes the stream, releasing any associated resources.
     /// </summary>
@@ -848,8 +1118,7 @@ public partial class FastBZip2InputStream : Stream
     {
         // Reuse a single buffer for lengths across groups instead of allocating separate arrays
         Span<char> lenBuffer = stackalloc char[FastBZip2InputConstants.GroupCount * FastBZip2InputConstants.MaximumAlphaSize];
-
-        bool[] inUse16 = new bool[16];
+        Span<bool> inUse16 = stackalloc bool[16];   // was new bool[16]
 
         //--- Receive the mapping table ---
         for (int i = 0; i < 16; i++)
