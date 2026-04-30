@@ -9,39 +9,78 @@ internal static partial class Parse
     public static TrackerEvents Tracker(IReadOnlyList<TrackerEventPair> trackerEventData)
     {
         List<TrackerEvent> trackerevents = [];
+        List<SPlayerSetupEvent> sPlayerSetupEvent = [];
+        List<SPlayerStatsEvent> sPlayerStatsEvent = [];
+        List<SUnitBornEvent> sUnitBornEvent = [];
+        List<SUnitDiedEvent> sUnitDiedEvent = [];
+        List<SUnitOwnerChangeEvent> sUnitOwnerChangeEvent = [];
+        List<SUnitPositionsEvent> sUnitPositionsEvent = [];
+        List<SUnitTypeChangeEvent> sUnitTypeChangeEvent = [];
+        List<SUpgradeEvent> sUpgradeEvent = [];
+        List<SUnitInitEvent> sUnitInitEvent = [];
+        List<SUnitDoneEvent> sUnitDoneEvent = [];
 
         foreach (var trackerData in trackerEventData)
         {
             TrackerEvent trackerEvent = GetTrackerEvent(trackerData);
-            TrackerEvent detailEvent = trackerEvent.TrackerEventId switch
+            switch(trackerEvent.TrackerEventId)
             {
-                ReplayTrackerEEventId_e_playerSetup(var value) => GetSPlayerSetupEvent(value, trackerEvent),
-                ReplayTrackerEEventId_e_playerStats(var value) => GetSPlayerStatsEvent(value, trackerEvent),
-                ReplayTrackerEEventId_e_unitBorn(var value) => GetSUnitBornEvent(value, trackerEvent),
-                ReplayTrackerEEventId_e_unitDied(var value) => GetSUnitDiedEvent(value, trackerEvent),
-                ReplayTrackerEEventId_e_unitOwnerChange(var value) => GetSUnitOwnerChangeEvent(value, trackerEvent),
-                ReplayTrackerEEventId_e_unitPosition(var value) => GetSUnitPositionsEvent(value, trackerEvent),
-                ReplayTrackerEEventId_e_unitTypeChange(var value) => GetSUnitTypeChangeEvent(value, trackerEvent),
-                ReplayTrackerEEventId_e_upgrade(var value) => GetSUpgradeEvent(value, trackerEvent),
-                ReplayTrackerEEventId_e_unitInit(var value) => GetSUnitInitEvent(value, trackerEvent),
-                ReplayTrackerEEventId_e_unitDone(var value) => GetSUnitDoneEvent(value, trackerEvent),
-                var value => throw new NotSupportedException($"Unknown tracker: {value.GetType().FullName}")
+                case ReplayTrackerEEventId_e_playerSetup(var playerSetup):
+                    sPlayerSetupEvent.Add(GetSPlayerSetupEvent(playerSetup, trackerEvent)); 
+                        break;
+                case ReplayTrackerEEventId_e_playerStats(var playerStats): 
+                
+                    sPlayerStatsEvent.Add(GetSPlayerStatsEvent(playerStats, trackerEvent)); 
+                    break;
+                case ReplayTrackerEEventId_e_unitBorn(var unitBorn): 
+                
+                    sUnitBornEvent.Add(GetSUnitBornEvent(unitBorn, trackerEvent)); 
+                    break;
+                case ReplayTrackerEEventId_e_unitDied(var unitDied): 
+                
+                    sUnitDiedEvent.Add(GetSUnitDiedEvent(unitDied, trackerEvent)); 
+                    break;
+                case ReplayTrackerEEventId_e_unitOwnerChange(var unitOwnerChange): 
+                
+                    sUnitOwnerChangeEvent.Add(GetSUnitOwnerChangeEvent(unitOwnerChange, trackerEvent)); 
+                    break;
+                case ReplayTrackerEEventId_e_unitPosition(var unitPosition): 
+                
+                    sUnitPositionsEvent.Add(GetSUnitPositionsEvent(unitPosition, trackerEvent)); 
+                    break;
+                case ReplayTrackerEEventId_e_unitTypeChange(var unitTypeChange): 
+                
+                    sUnitTypeChangeEvent.Add(GetSUnitTypeChangeEvent(unitTypeChange, trackerEvent)); 
+                    break;
+                case ReplayTrackerEEventId_e_upgrade(var upgrade): 
+                
+                    sUpgradeEvent.Add(GetSUpgradeEvent(upgrade, trackerEvent)); 
+                    break;
+                case ReplayTrackerEEventId_e_unitInit(var unitInit): 
+                
+                    sUnitInitEvent.Add(GetSUnitInitEvent(unitInit, trackerEvent)); 
+                    break;
+                case ReplayTrackerEEventId_e_unitDone(var unitDone): 
+              
+                    sUnitDoneEvent.Add(GetSUnitDoneEvent(unitDone, trackerEvent)); 
+                    break;
+
+                case var value:
+                    throw new NotSupportedException($"Unknown tracker: {value.GetType().FullName}");
             };
-            trackerevents.Add(detailEvent);
         }
 
         var events = new TrackerEvents(
-            [.. trackerevents.OfType<SPlayerSetupEvent>()],
-            [.. trackerevents.OfType<SPlayerStatsEvent>()],
-            [.. trackerevents.OfType<SUnitBornEvent>()],
-            [.. trackerevents.OfType<SUnitDiedEvent>()],
-            [.. trackerevents.OfType<SUnitOwnerChangeEvent>()],
-            [.. trackerevents.OfType<SUnitPositionsEvent>()],
-            [.. trackerevents.OfType<SUnitTypeChangeEvent>()],
-            [.. trackerevents.OfType<SUpgradeEvent>()],
-            [.. trackerevents.OfType<SUnitInitEvent>()],
-            [.. trackerevents.OfType<SUnitDoneEvent>()]
-        );
+            sPlayerSetupEvent,
+            sPlayerStatsEvent,
+            sUnitBornEvent,
+            sUnitDiedEvent,
+            sUnitOwnerChangeEvent,
+            sUnitPositionsEvent,
+            sUnitTypeChangeEvent,
+            sUpgradeEvent,
+            sUnitInitEvent,
+            sUnitDoneEvent);
 
         SetTrackerKillerUnitLink(events);
 

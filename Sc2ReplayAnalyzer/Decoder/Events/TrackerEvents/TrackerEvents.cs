@@ -2,7 +2,7 @@
 
 public class TrackerEvents
 {
-    public TrackerEvents(SPlayerSetupEvent[] sPlayerSetupEvents, SPlayerStatsEvent[] sPlayerStatsEvents, SUnitBornEvent[] sUnitBornEvents, SUnitDiedEvent[] sUnitDiedEvents, SUnitOwnerChangeEvent[] sUnitOwnerChangeEvents, SUnitPositionsEvent[] sUnitPositionsEvents, SUnitTypeChangeEvent[] sUnitTypeChangeEvents, SUpgradeEvent[] sUpgradeEvents, SUnitInitEvent[] sUnitInitEvents, SUnitDoneEvent[] sUnitDoneEvents)
+    public TrackerEvents(List<SPlayerSetupEvent> sPlayerSetupEvents, List<SPlayerStatsEvent> sPlayerStatsEvents, List<SUnitBornEvent> sUnitBornEvents, List<SUnitDiedEvent> sUnitDiedEvents, List<SUnitOwnerChangeEvent> sUnitOwnerChangeEvents, List<SUnitPositionsEvent> sUnitPositionsEvents, List<SUnitTypeChangeEvent> sUnitTypeChangeEvents, List<SUpgradeEvent> sUpgradeEvents, List<SUnitInitEvent> sUnitInitEvents, List<SUnitDoneEvent> sUnitDoneEvents)
     {
         SPlayerSetupEvents = sPlayerSetupEvents;
         SPlayerStatsEvents = sPlayerStatsEvents;
@@ -16,14 +16,14 @@ public class TrackerEvents
         SUnitDoneEvents = sUnitDoneEvents;
     }
 
-    public SPlayerSetupEvent[] SPlayerSetupEvents { get; }
-    public SPlayerStatsEvent[] SPlayerStatsEvents { get; }
-    public SUnitBornEvent[] SUnitBornEvents { get; }
-    public SUnitDiedEvent[] SUnitDiedEvents { get; }
-    public SUnitOwnerChangeEvent[] SUnitOwnerChangeEvents { get; }
-    public SUnitPositionsEvent[] SUnitPositionsEvents { get; }
-    public SUnitTypeChangeEvent[] SUnitTypeChangeEvents { get; }
-    public SUpgradeEvent[] SUpgradeEvents { get; }
-    public SUnitInitEvent[] SUnitInitEvents { get; }
-    public SUnitDoneEvent[] SUnitDoneEvents { get; }
+    public List<SPlayerSetupEvent> SPlayerSetupEvents { get; }
+    public List<SPlayerStatsEvent> SPlayerStatsEvents { get; }
+    public List<SUnitBornEvent> SUnitBornEvents { get; }
+    public List<SUnitDiedEvent> SUnitDiedEvents { get; }
+    public List<SUnitOwnerChangeEvent> SUnitOwnerChangeEvents { get; }
+    public List<SUnitPositionsEvent> SUnitPositionsEvents { get; }
+    public List<SUnitTypeChangeEvent> SUnitTypeChangeEvents { get; }
+    public List<SUpgradeEvent> SUpgradeEvents { get; }
+    public List<SUnitInitEvent> SUnitInitEvents { get; }
+    public List<SUnitDoneEvent> SUnitDoneEvents { get; }
 }
