@@ -1,4 +1,5 @@
-﻿using MPQArchive.MPQ.DecryptedData;
+﻿using MPQArchive.MPQ.Constants;
+using MPQArchive.MPQ.DecryptedData;
 using System.Diagnostics;
 using System.Text;
 
@@ -10,7 +11,9 @@ namespace MPQArchive.MPQ.ReceivedData
         {
             var listingFiles = mpqFileReader.ReadFile("(listfile)");
             var fileContent = Encoding.UTF8.GetString(listingFiles);
-            var lines = fileContent.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+            var lines = fileContent
+                .Split(["\r\n", "\r", "\n"], StringSplitOptions.None)
+                .Where(listingFile => MPQListingFileConstant.UsedListingFiles.Contains(listingFile));
           
             var listingFilesDict = new Dictionary<string, ArraySegment<byte>>();
             var count = 0;

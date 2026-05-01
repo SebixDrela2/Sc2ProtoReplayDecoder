@@ -1,4 +1,6 @@
-﻿using MPQArchive.Bzip;
+﻿using ICSharpCode.SharpZipLib.BZip2;
+using MPQArchive.Bzip;
+using MPQArchive.Bzip.Native;
 using MPQArchive.MPQ.Constants;
 using MPQArchive.MPQ.Utils;
 using System.Buffers;
@@ -128,7 +130,7 @@ public class MPQFileReader
     {
         if (data.Count <= 1)
         {
-            return Array.Empty<byte>();
+            return [];
         }
 
         var type = data[0];
@@ -143,7 +145,7 @@ public class MPQFileReader
 
         if (type == 2)
         {
-            using var inputStream = new MemoryStream(payload.Array, payload.Offset, payload.Count);
+            using var inputStream = new MemoryStream(payload.Array!, payload.Offset, payload.Count);
             using var decompressor = new DeflateStream(inputStream, CompressionLevel.Fastest);
             using var outputStream = new MemoryStream();
 
@@ -152,11 +154,7 @@ public class MPQFileReader
         }
         else if (type == 16)
         {
-            using var decompressor = new FastBZip2InputStream(payload);
-            using var outputStream = new MemoryStream();
-
-            decompressor.CopyTo(outputStream);
-            return outputStream.ToArray();
+            return BZip2FastDecompress.Decompress(payload);
         }
         else
         {

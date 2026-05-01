@@ -51,26 +51,5 @@ internal class Program
             var replay = decoder.DecodeReplay(file);
             Console.WriteLine(replay.FileName);
         }
-
-        //var file = files.First();
-
-        //var decoder = new ReplayDecoder();
-        //var replay = decoder.DecodeReplay(file);
-        //var builder = new StringBuilder();
-
-        //foreach(var e in replay.TrackerEvents.SUnitBornEvents.OrderBy(x => x.UnitTagIndex).ThenBy(x => x.UnitTagRecycle))
-        //{
-        //    builder.AppendLine($"{e.UnitTagIndex} {e.UnitTagRecycle}");
-        //}
-
-        //File.WriteAllText("thing.txt", builder.ToString());
-
-        ////foreach (var file in files.Where(x => x.Contains("Oh No It's Zombies")))
-        ////{
-        ////    var decoder = new ReplayDecoder();
-        ////    var replay = decoder.DecodeReplay(file);
-
-        ////    Console.WriteLine(replay.FileName);
-        ////}
     }    
 }

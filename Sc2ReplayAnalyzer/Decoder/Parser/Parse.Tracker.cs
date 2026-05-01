@@ -117,8 +117,6 @@ internal static partial class Parse
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static ulong GetUniqueIndex((int, int) pair) => Unsafe.BitCast<(int, int), ulong>(pair);
 
-    //private static int GetUnitIndex(int unitTagIndex, int unitTagRecycle) => (unitTagIndex << 18) | unitTagRecycle;
-
     private static TrackerEvent GetTrackerEvent(TrackerEventPair eventPair)
     {
         var eventValue = eventPair.TrackerEventID;

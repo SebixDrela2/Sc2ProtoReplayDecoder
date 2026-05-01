@@ -2,7 +2,6 @@
 using MPQArchive.MPQ.Hashing;
 using MPQArchive.MPQ.ReceivedData;
 using MPQArchive.MPQ.Utils;
-using System.Diagnostics;
 using System.Text;
 
 namespace MPQArchive.MPQ
@@ -14,16 +13,17 @@ namespace MPQArchive.MPQ
 
         private readonly BinaryReader _reader = new BinaryReader(stream, Encoding.UTF8, true);
 
-        private long Position 
-        { 
+        private long Position
+        {
             get => _reader.BaseStream.Position;
             set => _reader.BaseStream.Position = value; 
         }
 
-        public ReceivedData.MPQArchive Read()
+        public ListingFilesReader GetListingFilesReader(out MPQHeader1 mpqHeader, out MPQUserData mpqUserData)
         {
-            MPQHeader1? mpqHeader = null;
-            MPQUserData mpqUserData = null;
+            mpqHeader = default;
+            mpqUserData = default;
+
             long headerOffset = 0;
 
             for (long baseOffset = 0; baseOffset < _reader.BaseStream.Length; Position += 0x200)
@@ -40,6 +40,7 @@ namespace MPQArchive.MPQ
                         goto case MagicHeader;
                 }
             }
+
             throw new MPQException("Did not find any of magic cases.");
             exit:
 
@@ -52,7 +53,13 @@ namespace MPQArchive.MPQ
             var mpqHashTableReader = new MPQHashTableReader(encryption, compositeTable.MPQHashTableEntries);
             var mpqFileReader = new MPQFileReader(_reader, mpqHashTableReader, mpqHeader!, compositeTable, headerOffset);
 
-            var listingFiles = new ListingFilesReader(mpqFileReader).Read();
+            return new ListingFilesReader(mpqFileReader);
+        }
+
+        public ReceivedData.MPQArchive Read()
+        {
+            var listingFilesReader = GetListingFilesReader(out var mpqHeader, out var mpqUserData);
+            var listingFiles = listingFilesReader.Read();
 
             return new ReceivedData.MPQArchive(mpqHeader!, mpqUserData!, listingFiles);
         }
