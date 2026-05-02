@@ -159,53 +159,6 @@ public class ReplayDecoder
         return result;
     }
 
-    //private Dictionary<object, object> ParseAttributeEvents()
-    //{
-    //    var buffer = new BitPackedLittleEndianBuffer(_listingFiles[MPQListingFileConstant.AttributeEvents].Array);
-    //    var attributes = new Dictionary<object, object>();
-
-    //    if (buffer.Done())
-    //    {
-    //        return attributes;
-    //    }
-
-    //    attributes["source"] = buffer.ReadBits(8);
-    //    attributes["mapNamespace"] = buffer.ReadBits(32);
-    //    var count = buffer.ReadBits(32); // Read but not used
-
-    //    attributes["scopes"] = new Dictionary<object, Dictionary<object, List<Dictionary<object, object>>>>();
-
-    //    while (!buffer.Done())
-    //    {
-    //        var value = new Dictionary<object, object>();
-    //        value["namespace"] = buffer.ReadBits(32);
-
-    //        var attrid = buffer.ReadBits(32);
-    //        value["attrid"] = attrid;
-
-    //        var scope = buffer.ReadBits(8);
-    //        value["value"] = StripNull(buffer.ReadAlignedBytes(4).Reverse().ToArray());
-
-    //        // Get or create scopes dictionary
-    //        var scopes = (Dictionary<object, Dictionary<object, List<Dictionary<object, object>>>>)attributes["scopes"];
-
-    //        if (!scopes.ContainsKey(scope))
-    //        {
-    //            scopes[scope] = new Dictionary<object, List<Dictionary<object, object>>>();
-    //        }
-
-    //        if (!scopes[scope].ContainsKey(attrid))
-    //        {
-    //            scopes[scope][attrid] = new List<Dictionary<object, object>>();
-    //        }
-
-    //        // IMPORTANT: Append the value dictionary
-    //        scopes[scope][attrid].Add(value);
-    //    }
-
-    //    return attributes;
-    //}
-
     private MemoryStream GetFileMemoryStream(ArraySegment<byte> data) => new(data.Array, data.Offset, data.Count, false);
 
     private TrackerEventPair ParseEventPair(IVersionedProtocolParser trackerParser, ref long gameLoop)

@@ -57,9 +57,7 @@ public class AttributeEventParser
             return builder.Build();
         }
 
-        buffer.ReadBits(8);
-        buffer.ReadBits(32);
-        buffer.ReadBits(32);
+        buffer.ReadUnalignedBytes(9); // SKIP SCOPE
 
         while (!buffer.Done())
         {
@@ -91,13 +89,15 @@ public class AttributeEventParser
 
         var isNumeric = int.TryParse(asString, out var intValue);
 
-        if (!isNumeric && rawValue.Length >= 4)
+        if (isNumeric && rawValue.Length >= 4)
         {
             Span<byte> intBytes = stackalloc byte[4];
             rawValue[..4].CopyTo(intBytes);
 
             intValue = BitConverter.ToInt32(intBytes);
         }
+
+        Console.WriteLine($"attrid: {attrid}: {(isNumeric ? intValue : asString)}");
 
         object result = attrid switch
         {
@@ -132,7 +132,7 @@ public class AttributeEventParser
         }
 
         return start > end
-            ? ReadOnlySpan<byte>.Empty
+            ? []
             : new ReadOnlySpan<byte>(data, start, end - start + 1);
     }
 
