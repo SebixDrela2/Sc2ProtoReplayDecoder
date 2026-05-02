@@ -97,8 +97,6 @@ public class AttributeEventParser
             intValue = BitConverter.ToInt32(intBytes);
         }
 
-        Console.WriteLine($"attrid: {attrid}: {(isNumeric ? intValue : asString)}");
-
         object result = attrid switch
         {
             PrivacyOption => builder.PrivacyOption = PrivacyMap.TryGetValue(asString, out var privacy) ? privacy : asString,
