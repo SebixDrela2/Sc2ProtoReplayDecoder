@@ -1,4 +1,5 @@
-﻿using Sc2ReplayAnalyzer.Decoder.Events.MetaData;
+﻿using Sc2ReplayAnalyzer.Decoder.Attributes;
+using Sc2ReplayAnalyzer.Decoder.Events.MetaData;
 using Sc2ReplayAnalyzer.Json.BitPackedProtocolDefinitions;
 using Sc2ReplayAnalyzer.Json.VersionedProtocolDefinitions;
 using GameSDetails = Sc2ReplayAnalyzer.Json.VersionedProtocolDefinitions.GameSDetails;
@@ -11,7 +12,8 @@ internal class Sc2ReplayData
 
     public required ReplaySHeader Header { get; init; }
     public required ReplayMetadata MetaData { get; init; }          
-    public required ReplaySInitData InitData { get; init; }        
+    public required ReplaySInitData InitData { get; init; }
+    public required ReplayAttributes Attributes { get; init; }
     public required IReadOnlyList<MessageEventTriplet> MessagesData { get; init; }         
     public required GameSDetails DetailsData { get; init; }         
     public required IReadOnlyList<TrackerEventPair> TrackerData { get; init; }

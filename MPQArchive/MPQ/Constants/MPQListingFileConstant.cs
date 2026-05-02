@@ -8,7 +8,8 @@ public static class MPQListingFileConstant
         MessageEvents,
         Details,
         GameEvents,
-        TrackerEvents
+        TrackerEvents,
+        AttributeEvents
     ];
 
     public const string GameMetaData = "replay.gamemetadata.json";
@@ -17,4 +18,5 @@ public static class MPQListingFileConstant
     public const string Details = "replay.details";
     public const string GameEvents = "replay.game.events";
     public const string TrackerEvents = "replay.tracker.events";
+    public const string AttributeEvents = "replay.attributes.events";
 }

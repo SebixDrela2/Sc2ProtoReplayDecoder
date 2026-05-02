@@ -43,13 +43,29 @@ internal class Program
     private static void Decode()
     {
         var path = @"C:\Users\Sebastian\Documents\StarCraft II\Accounts\103757627\1-S2-1-10180166\Replays\Multiplayer";
-        var files = Directory.GetFiles(path).Where(x => x.Contains("Oh No It's Zombies"));
+        var  files = Directory.GetFiles(path).Where(x => x.Contains("Oh No It's Zombies"));
+
+        var publicGames = 0;
+        var privateGames = 0;
 
         foreach(var file in files)
         {
             var decoder = new ReplayDecoder();
             var replay = decoder.DecodeReplay(file);
-            Console.WriteLine(replay.FileName);
+
+            var attributes = replay.Attributes;
+
+            if (attributes.IsPublic)
+            {
+                publicGames++;
+            }
+            else if (attributes.IsPrivate)
+            {
+                privateGames++;
+            }
         }
+
+        Console.WriteLine($"Public {publicGames}");
+        Console.WriteLine($"Private {privateGames}");
     }    
 }

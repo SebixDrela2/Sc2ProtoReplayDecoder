@@ -1,16 +1,17 @@
 ﻿using MPQArchive.MPQ;
+using MPQArchive.MPQ.Constants;
 using Sc2ReplayAnalyzer.Decoder.APIModel;
+using Sc2ReplayAnalyzer.Decoder.Attributes;
 using Sc2ReplayAnalyzer.Decoder.Events.MetaData;
-using Sc2ReplayAnalyzer.Json.BitPackedProtocolDefinitions;
-using Sc2ReplayAnalyzer.Json.VersionedProtocolDefinitions;
 using Sc2ReplayAnalyzer.Decoder.Factory;
-using Sc2ReplayAnalyzer.Json.protocol95299.Versioned;
-
-using BitPacked = Sc2ReplayAnalyzer.Json.BitPackedProtocolDefinitions;
-using Versioned = Sc2ReplayAnalyzer.Json.VersionedProtocolDefinitions;
-using GameSDetails = Sc2ReplayAnalyzer.Json.VersionedProtocolDefinitions.GameSDetails;
 using Sc2ReplayAnalyzer.Global;
+using Sc2ReplayAnalyzer.Json.BitPackedProtocolDefinitions;
+using Sc2ReplayAnalyzer.Json.protocol95299.Versioned;
+using Sc2ReplayAnalyzer.Json.VersionedProtocolDefinitions;
 using System.Diagnostics;
+using BitPacked = Sc2ReplayAnalyzer.Json.BitPackedProtocolDefinitions;
+using GameSDetails = Sc2ReplayAnalyzer.Json.VersionedProtocolDefinitions.GameSDetails;
+using Versioned = Sc2ReplayAnalyzer.Json.VersionedProtocolDefinitions;
 
 namespace Sc2ReplayAnalyzer.Decoder;
 
@@ -36,10 +37,14 @@ public class ReplayDecoder
         _bitPackedProtocolParserFactory = new BitPackedProtocolParserFactory(CurrentBuildNumber);
         _versionedProtocolParserFactory = new VersionedProtocolParserFactory(CurrentBuildNumber);
 
+        var attributeParser = new AttributeEventParser();
+        var replayAttributes = attributeParser.ParseGlobalAttributes(_listingFiles[MPQListingFileConstant.AttributeEvents].Array);
+
         var replayData = new Sc2ReplayData
         {
             FileName = fileName,
             Header = header,
+            Attributes = replayAttributes,
             MetaData = ParseMetaData(),
             InitData = ParseReplayInitData(),
             MessagesData = ParseMessageEvents(),
@@ -68,13 +73,13 @@ public class ReplayDecoder
 
     private ReplayMetadata ParseMetaData()
     {
-        using var stream = GetFileMemoryStream(_listingFiles["replay.gamemetadata.json"]);
+        using var stream = GetFileMemoryStream(_listingFiles[MPQListingFileConstant.GameMetaData]);
         return System.Text.Json.JsonSerializer.Deserialize<ReplayMetadata>(stream);
     }
 
     private ReplaySInitData ParseReplayInitData()
     {
-        using var stream = GetFileMemoryStream(_listingFiles["replay.initData"]);
+        using var stream = GetFileMemoryStream(_listingFiles[MPQListingFileConstant.InitData]);
         using var reader = new BinaryReader(stream);
 
         var bitPackedParser = _bitPackedProtocolParserFactory.Create(reader);
@@ -86,7 +91,7 @@ public class ReplayDecoder
 
     private IReadOnlyList<MessageEventTriplet> ParseMessageEvents()
     {
-        using var stream = GetFileMemoryStream(_listingFiles["replay.message.events"]);
+        using var stream = GetFileMemoryStream(_listingFiles[MPQListingFileConstant.MessageEvents]);
         using var reader = new BinaryReader(stream);
 
         var bitPackedParser = _bitPackedProtocolParserFactory.Create(reader);
@@ -103,7 +108,7 @@ public class ReplayDecoder
 
     private GameSDetails ParseReplayDetails()
     {
-        using var stream = GetFileMemoryStream(_listingFiles["replay.details"]);
+        using var stream = GetFileMemoryStream(_listingFiles[MPQListingFileConstant.Details]);
         using var reader = new BinaryReader(stream);
 
         var versionedParser = _versionedProtocolParserFactory.Create(reader);
@@ -115,7 +120,7 @@ public class ReplayDecoder
 
     private IReadOnlyList<GameEventTriplet> ParseGameEvents()
     {
-        using var stream = GetFileMemoryStream(_listingFiles["replay.game.events"]);
+        using var stream = GetFileMemoryStream(_listingFiles[MPQListingFileConstant.GameEvents]);
         using var reader = new BinaryReader(stream);
         var bitPackedParser = _bitPackedProtocolParserFactory.Create(reader);
 
@@ -132,7 +137,7 @@ public class ReplayDecoder
 
     private IReadOnlyList<TrackerEventPair> ParseTrackerEvents()
     {
-        using var stream = GetFileMemoryStream(_listingFiles["replay.tracker.events"]);
+        using var stream = GetFileMemoryStream(_listingFiles[MPQListingFileConstant.TrackerEvents]);
         using var reader = new BinaryReader(stream);
         var versionedParser = _versionedProtocolParserFactory.Create(reader);
         var result = new List<TrackerEventPair>(512); // Pre-allocate typical capacity
@@ -153,6 +158,53 @@ public class ReplayDecoder
 
         return result;
     }
+
+    //private Dictionary<object, object> ParseAttributeEvents()
+    //{
+    //    var buffer = new BitPackedLittleEndianBuffer(_listingFiles[MPQListingFileConstant.AttributeEvents].Array);
+    //    var attributes = new Dictionary<object, object>();
+
+    //    if (buffer.Done())
+    //    {
+    //        return attributes;
+    //    }
+
+    //    attributes["source"] = buffer.ReadBits(8);
+    //    attributes["mapNamespace"] = buffer.ReadBits(32);
+    //    var count = buffer.ReadBits(32); // Read but not used
+
+    //    attributes["scopes"] = new Dictionary<object, Dictionary<object, List<Dictionary<object, object>>>>();
+
+    //    while (!buffer.Done())
+    //    {
+    //        var value = new Dictionary<object, object>();
+    //        value["namespace"] = buffer.ReadBits(32);
+
+    //        var attrid = buffer.ReadBits(32);
+    //        value["attrid"] = attrid;
+
+    //        var scope = buffer.ReadBits(8);
+    //        value["value"] = StripNull(buffer.ReadAlignedBytes(4).Reverse().ToArray());
+
+    //        // Get or create scopes dictionary
+    //        var scopes = (Dictionary<object, Dictionary<object, List<Dictionary<object, object>>>>)attributes["scopes"];
+
+    //        if (!scopes.ContainsKey(scope))
+    //        {
+    //            scopes[scope] = new Dictionary<object, List<Dictionary<object, object>>>();
+    //        }
+
+    //        if (!scopes[scope].ContainsKey(attrid))
+    //        {
+    //            scopes[scope][attrid] = new List<Dictionary<object, object>>();
+    //        }
+
+    //        // IMPORTANT: Append the value dictionary
+    //        scopes[scope][attrid].Add(value);
+    //    }
+
+    //    return attributes;
+    //}
 
     private MemoryStream GetFileMemoryStream(ArraySegment<byte> data) => new(data.Array, data.Offset, data.Count, false);
 
