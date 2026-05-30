@@ -4,11 +4,14 @@ using Sc2ReplayAnalyzer.Decoder.APIModel;
 using Sc2ReplayAnalyzer.Decoder.Attributes;
 using Sc2ReplayAnalyzer.Decoder.Events.MetaData;
 using Sc2ReplayAnalyzer.Decoder.Factory;
+using Sc2ReplayAnalyzer.Decoder.Parser;
 using Sc2ReplayAnalyzer.Global;
 using Sc2ReplayAnalyzer.Json.BitPackedProtocolDefinitions;
 using Sc2ReplayAnalyzer.Json.protocol95299.Versioned;
 using Sc2ReplayAnalyzer.Json.VersionedProtocolDefinitions;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
+using System.Text.Json;
 using BitPacked = Sc2ReplayAnalyzer.Json.BitPackedProtocolDefinitions;
 using GameSDetails = Sc2ReplayAnalyzer.Json.VersionedProtocolDefinitions.GameSDetails;
 using Versioned = Sc2ReplayAnalyzer.Json.VersionedProtocolDefinitions;
@@ -37,14 +40,11 @@ public class ReplayDecoder
         _bitPackedProtocolParserFactory = new BitPackedProtocolParserFactory(CurrentBuildNumber);
         _versionedProtocolParserFactory = new VersionedProtocolParserFactory(CurrentBuildNumber);
 
-        var attributeParser = new AttributeEventParser();
-        var replayAttributes = attributeParser.ParseGlobalAttributes(_listingFiles[MPQListingFileConstant.AttributeEvents].Array);
-
         var replayData = new Sc2ReplayData
         {
             FileName = fileName,
             Header = header,
-            Attributes = replayAttributes,
+            Attributes = ParseGlobalAttributes(),
             MetaData = ParseMetaData(),
             InitData = ParseReplayInitData(),
             MessagesData = ParseMessageEvents(),
@@ -71,10 +71,13 @@ public class ReplayDecoder
         return parser.Parse_ReplaySHeader();
     }
 
+    private  ReplayAttributes ParseGlobalAttributes() =>
+        new AttributeEventParser().ParseGlobalAttributes(_listingFiles[MPQListingFileConstant.AttributeEvents].Array);
+
     private ReplayMetadata ParseMetaData()
     {
         using var stream = GetFileMemoryStream(_listingFiles[MPQListingFileConstant.GameMetaData]);
-        return System.Text.Json.JsonSerializer.Deserialize<ReplayMetadata>(stream);
+        return JsonSerializer.Deserialize<ReplayMetadata>(stream);
     }
 
     private ReplaySInitData ParseReplayInitData()
@@ -84,9 +87,12 @@ public class ReplayDecoder
 
         var bitPackedParser = _bitPackedProtocolParserFactory.Create(reader);
 
-        var owo = bitPackedParser.Parse_ReplaySInitData();
+        var result = bitPackedParser.Parse_ReplaySInitData();
 
-        return owo;
+        var authorName = result.m_syncLobbyState.m_gameDescription.m_mapAuthorName.Value.ReadStringBytes();
+
+        return result;
+      
     }
 
     private IReadOnlyList<MessageEventTriplet> ParseMessageEvents()

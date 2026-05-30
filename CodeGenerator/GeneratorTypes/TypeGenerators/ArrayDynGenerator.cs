@@ -25,7 +25,7 @@ internal class ArrayDynGenerator(StringBuilder builder, Sc2GeneratorData data)
 
             if (OpenClass(fullName))
             {
-                AddField("Value", $"List<{elementType}>");
+                AddField("Value", $"{elementType}[]");
                 Close();
             }
 

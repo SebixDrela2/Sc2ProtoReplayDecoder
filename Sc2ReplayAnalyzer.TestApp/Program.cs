@@ -4,6 +4,7 @@ using Sc2ReplayAnalyzer.Decoder;
 using Sc2ReplayAnalyzer.Json;
 using Sc2ReplayAnalyzer.TestApp;
 using Sc2ReplayAnalyzer.Tokenizer;
+using System.Diagnostics;
 using System.Text;
 
 internal class Program
@@ -42,30 +43,11 @@ internal class Program
 
     private static void Decode()
     {
-        var path = @"C:\Users\Sebastian\Documents\StarCraft II\Accounts\103757627\1-S2-1-10180166\Replays\Multiplayer";
-        var  files = Directory.GetFiles(path).Where(x => x.Contains("Oh No It's Zombies"));
+        var decoder = new ReplayDecoder();
 
-        var publicGames = 0;
-        var privateGames = 0;
-
-        foreach(var file in files)
-        {
-            var decoder = new ReplayDecoder();
-            var replay = decoder.DecodeReplay(file);
-
-            var attributes = replay.Attributes;
-
-            if (attributes.IsPublic)
-            {
-                publicGames++;
-            }
-            else if (attributes.IsPrivate)
-            {
-                privateGames++;
-            }
-        }
-
-        Console.WriteLine($"Public {publicGames}");
-        Console.WriteLine($"Private {privateGames}");
+        var path =  @"C:\Users\Sebastian\source\repos\Sc2ReplayAnalyzer\Sc2ReplayAnalyzer.TestApp\Oh No It's Zombies Arctic Map (79).SC2Replay";
+        var stopWatch = Stopwatch.StartNew();
+        var result = decoder.DecodeReplay(path);
+        stopWatch.Stop();
     }    
 }

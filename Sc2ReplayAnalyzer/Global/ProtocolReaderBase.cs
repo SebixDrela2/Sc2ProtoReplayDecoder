@@ -49,17 +49,23 @@ public abstract class ProtocolReaderBase(BinaryReader reader)
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    protected List<byte> ReadBytes(int count)
-    {
-        return reader.ReadBytes(count).ToList();
-    }
+    protected byte[] ReadBytes(int count) => reader.ReadBytes(count);
 
-    protected T[] ReadArray<T>(Func<T> parseMethod, long count) =>
-        [.. Enumerable.Range(0, (int)count).Select(_ => parseMethod())];
+    protected T[] ReadArray<T>(Func<T> parseMethod, long count)
+    {
+        var result = new T[count];
+
+        foreach(ref var item in result.AsSpan())
+        {
+            item = parseMethod();
+        }
+
+        return result;
+    }
 
     protected List<T> ReadList<T>(Func<T> parseMethod, long count)
     {
-        var result = new List<T>();
+        var result = new List<T>((int)count);
 
         for (var i = 0; i < count; ++i)
         {

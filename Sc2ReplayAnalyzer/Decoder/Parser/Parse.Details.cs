@@ -44,7 +44,7 @@ internal static partial class Parse
                            players);
     }
 
-    private static List<DetailsPlayer> GetDetailsPlayers(Option<List<GameSPlayerDetails>> option)
+    private static List<DetailsPlayer> GetDetailsPlayers(Option<GameSPlayerDetails[]> option)
     {
         List<DetailsPlayer> players = [];
 

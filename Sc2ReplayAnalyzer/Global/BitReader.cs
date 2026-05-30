@@ -44,9 +44,10 @@ public sealed class BitReader(BinaryReader reader) : IDisposable
         return result;
     }
 
-    public List<byte> TakeBitArray(int leftBits)
+    public byte[] TakeBitArray(int leftBits)
     {      
-        var result = new List<byte>();
+        var result = new byte[leftBits];
+        var index = 0;
 
         if (leftBits is 0)
         {
@@ -56,7 +57,8 @@ public sealed class BitReader(BinaryReader reader) : IDisposable
         if (_available is 0 && (leftBits & 0b111) is 0)
         {
             int bytesToRead = leftBits >> 3;
-            return reader.ReadBytes(bytesToRead).ToList();
+
+            return reader.ReadBytes(bytesToRead);
         }
 
         if (_available is 0)
@@ -74,18 +76,19 @@ public sealed class BitReader(BinaryReader reader) : IDisposable
                 lastByte &= (byte)mask;
             }
 
-            return readBytes.ToList();
+            return readBytes;
         }
 
         int capacityHint = (leftBits + 7) >> 3;
-        result.Capacity = capacityHint;
 
         while (leftBits > 0)
         {
             int count = leftBits > 8 ? 8 : leftBits;
             byte bits = (byte)RTakeNBits(count);
-            result.Add(bits);
+            result[index] = bits;
             leftBits -= count;
+
+            ++index;
         }
 
         return result;
@@ -110,7 +113,7 @@ public sealed class BitReader(BinaryReader reader) : IDisposable
         return result[0];
     }
 
-    public List<byte> TakeFourCC()
+    public byte[] TakeFourCC()
     {
         var bitArray = TakeBitArray(4 * 8);
 

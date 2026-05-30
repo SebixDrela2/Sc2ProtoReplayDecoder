@@ -32,7 +32,7 @@ internal class BlobTypeStringGenerator(StringBuilder builder, Sc2GeneratorData d
 
             if (OpenClass(fullName))
             {
-                AddField("Value", "List<byte>");
+                AddField("Value", "byte[]");
                 Close();
             }
 
@@ -52,7 +52,7 @@ internal class BlobTypeStringGenerator(StringBuilder builder, Sc2GeneratorData d
 
             if (OpenClass(fullName))
             {   
-                AddField("Value", "List<byte>");
+                AddField("Value", "byte[]");
                 Close();
             }
 

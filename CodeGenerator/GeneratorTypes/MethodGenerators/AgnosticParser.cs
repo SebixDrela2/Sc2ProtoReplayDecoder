@@ -54,7 +54,10 @@ internal class AgnosticParser(StringBuilder methodBuilder, Sc2GeneratorData data
         }
         else if (typeof(T) == typeof(ProtocolConversionBitPacked))
         {
-            numBits = typeName is "GameEMessageId" ? ++numBits : numBits;
+            if (typeName is "GameEMessageId")
+            {
+                ++numBits;
+            }
 
             _generalMethodBuilder.AppendLine($$"""
                     public {{typeName}} Parse_{{typeName}}()

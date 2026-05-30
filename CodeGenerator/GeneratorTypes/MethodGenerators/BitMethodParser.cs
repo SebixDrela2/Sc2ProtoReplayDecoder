@@ -2,6 +2,7 @@
 using Sc2ReplayAnalyzer.Json.Generator;
 using System.Text;
 using System.Text.Json.Nodes;
+using System.Text.RegularExpressions;
 
 namespace Sc2ReplayAnalyzer.CodeGenerator.GeneratorTypes.MethodGenerators;
 
@@ -34,7 +35,7 @@ internal class BitMethodParser(StringBuilder methodBuilder, Sc2GeneratorData dat
                     var arrayLengthNumBits = {{arrayLengthNumBits}};
                     var arrayLength = parse_packed_int(0, arrayLengthNumBits);
 
-                    var value = ReadList(Parse_{{internalType}}, arrayLength);
+                    var value = ReadArray(Parse_{{internalType}}, arrayLength);
 
                     return new {{typeName}}
                     {
@@ -328,7 +329,7 @@ internal class BitMethodParser(StringBuilder methodBuilder, Sc2GeneratorData dat
                 else
                 {
                     _fieldNameMethodBuilder.AppendLine($$"""
-                                var array = ReadList({{fieldConverted.Parser}}, arrayLength);
+                                var array = ReadArray({{fieldConverted.Parser}}, arrayLength);
                         
                 """);
                 }
@@ -336,7 +337,7 @@ internal class BitMethodParser(StringBuilder methodBuilder, Sc2GeneratorData dat
                 if (fieldConverted.ShouldTryFrom)
                 {
                     _fieldNameMethodBuilder.AppendLine($$"""
-                                array = array.Select(x => ProtocolConversion<{{fieldType}}>.From(x)).ToList();
+                                array = array.Select(ProtocolConversion<{{fieldType}}>.From).ToArray();
                 """);
                 }
 
@@ -391,27 +392,22 @@ internal class BitMethodParser(StringBuilder methodBuilder, Sc2GeneratorData dat
                 ? eValueArrayLength
                 : field[TypeInfo][Bounds][Max][EValue].ToString();
             var arraySizeBits = int.Log2(int.Parse(arrayLength)) + 1;
-
-            if (typeName == "GameSBankValueEvent" && fieldName == "m_data")
-            {
-                arraySizeBits = 12; // rare hardcoded case
-            }
+            var fieldReplaced = new Regex(@"\[\]$").Replace(fieldType, "[arrayLength]");
 
             _fieldNameMethodBuilder.AppendLine($$"""
                         var arrayLength = take_n_bits_into_i64({{arraySizeBits}});
-                        var array = new {{fieldType}}();
+                        var array = new {{fieldReplaced}};
 
-                        for (var i = 0 ; i < arrayLength ; ++i)
+                        for (var i = 0; i < arrayLength; ++i)
                         {
-                            var data = {{fieldConverted.Parser}}();
-                            array.Add(data);
+                            array[i] = {{fieldConverted.Parser}}();
                         }
                 """);
 
             if (fieldConverted.ShouldTryFrom)
             {
                 _fieldNameMethodBuilder.AppendLine($$"""
-                        array = array.Select(x => ProtocolConversion<{{fieldType}}>.From(x)).ToList();
+                        array = array.Select(ProtocolConversion<{{fieldType}}>.From).ToArray();
 
                 """);
             }

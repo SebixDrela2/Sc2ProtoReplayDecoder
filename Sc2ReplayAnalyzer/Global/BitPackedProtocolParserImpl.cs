@@ -20,7 +20,7 @@ public abstract class BitPackedProtocolParserImpl : ProtocolReaderBase
 
     public void byte_align() => _bitReader.ByteAlign();
 
-    protected List<byte> take_bit_array(long totalBits) => _bitReader.TakeBitArray((int)totalBits);
+    protected byte[] take_bit_array(long totalBits) => _bitReader.TakeBitArray((int)totalBits);
 
     protected long take_n_bits_into_i64(int totalBits) => _bitReader.TakeBitsI64(totalBits);
 
@@ -28,7 +28,7 @@ public abstract class BitPackedProtocolParserImpl : ProtocolReaderBase
 
     protected object take_null() => _bitReader.TakeNull();
 
-    protected List<byte> take_fourcc() => _bitReader.TakeFourCC();
+    protected byte[] take_fourcc() => _bitReader.TakeFourCC();
 
     protected long parse_packed_int(long offset, int numBits) => _bitReader.ParsePackedInt(offset, numBits);
 

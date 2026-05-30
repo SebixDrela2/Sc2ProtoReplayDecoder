@@ -73,6 +73,11 @@ public class AttributeEventParser
 
             if (scope == GlobalScope)
             {
+                if (rawValue.Length > 1)
+                {
+
+                }
+
                 ProcessGlobalAttribute(attrid, rawValue, ref builder);
             }
         }
@@ -86,16 +91,7 @@ public class AttributeEventParser
         rawValue.CopyTo(valueCopy);
 
         var asString = Encoding.ASCII.GetString(valueCopy).TrimEnd('\0');
-
-        var isNumeric = int.TryParse(asString, out var intValue);
-
-        if (isNumeric && rawValue.Length >= 4)
-        {
-            Span<byte> intBytes = stackalloc byte[4];
-            rawValue[..4].CopyTo(intBytes);
-
-            intValue = BitConverter.ToInt32(intBytes);
-        }
+        var isNumeric = int.TryParse(asString, out var intValue);     
 
         object result = attrid switch
         {

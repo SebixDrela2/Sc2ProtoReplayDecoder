@@ -902,8 +902,8 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
 
     public SMD5 Parse_SMD5() 
     {
-        var m_dataDeprecated = Option.Some<Option<List<uint8>>>(Option.None);
-        Option<List<u8>> m_data = Option.None;
+        var m_dataDeprecated = Option.Some<Option<uint8[]>>(Option.None);
+        Option<u8[]> m_data = Option.None;
         if (m_dataDeprecated is { HasValue: true, Value.HasValue: false })
         {
             var parsed_m_dataDeprecated = Parse_SMD5_m_dataDeprecated();
@@ -923,7 +923,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         };
     }
 
-    public Option<List<uint8>> Parse_SMD5_m_dataDeprecated()
+    public Option<uint8[]> Parse_SMD5_m_dataDeprecated()
     {                             
             var isProvided = parse_bool();
 
@@ -931,7 +931,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
             {
                 var arrayLength = take_n_bits_into_i64(5);
 
-                var array = ReadList(Parse_uint8, arrayLength);
+                var array = ReadArray(Parse_uint8, arrayLength);
         
 
                 return Option.Some(array);
@@ -942,15 +942,14 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
             }
     }
 
-    public List<u8> Parse_SMD5_m_data()
+    public u8[] Parse_SMD5_m_data()
     {                             
         var arrayLength = take_n_bits_into_i64(5);
-        var array = new List<u8>();
+        var array = new u8[arrayLength];
 
-        for (var i = 0 ; i < arrayLength ; ++i)
+        for (var i = 0; i < arrayLength; ++i)
         {
-            var data = take_aligned_byte();
-            array.Add(data);
+            array[i] = take_aligned_byte();
         }
         return array;
     }
@@ -1256,7 +1255,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
 
     public GameSBankFileEvent Parse_GameSBankFileEvent() 
     {
-        Option<List<u8>> m_name = Option.None;
+        Option<u8[]> m_name = Option.None;
         if (m_name is { HasValue: false })                           
         {
             var parsed_m_name = Parse_GameSBankFileEvent_m_name();
@@ -1269,22 +1268,21 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         };
     }
 
-    public List<u8> Parse_GameSBankFileEvent_m_name()
+    public u8[] Parse_GameSBankFileEvent_m_name()
     {                             
         var arrayLength = take_n_bits_into_i64(7);
-        var array = new List<u8>();
+        var array = new u8[arrayLength];
 
-        for (var i = 0 ; i < arrayLength ; ++i)
+        for (var i = 0; i < arrayLength; ++i)
         {
-            var data = take_aligned_byte();
-            array.Add(data);
+            array[i] = take_aligned_byte();
         }
         return array;
     }
 
     public GameSBankSectionEvent Parse_GameSBankSectionEvent() 
     {
-        Option<List<u8>> m_name = Option.None;
+        Option<u8[]> m_name = Option.None;
         if (m_name is { HasValue: false })                           
         {
             var parsed_m_name = Parse_GameSBankSectionEvent_m_name();
@@ -1297,24 +1295,23 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         };
     }
 
-    public List<u8> Parse_GameSBankSectionEvent_m_name()
+    public u8[] Parse_GameSBankSectionEvent_m_name()
     {                             
         var arrayLength = take_n_bits_into_i64(6);
-        var array = new List<u8>();
+        var array = new u8[arrayLength];
 
-        for (var i = 0 ; i < arrayLength ; ++i)
+        for (var i = 0; i < arrayLength; ++i)
         {
-            var data = take_aligned_byte();
-            array.Add(data);
+            array[i] = take_aligned_byte();
         }
         return array;
     }
 
     public GameSBankKeyEvent Parse_GameSBankKeyEvent() 
     {
-        Option<List<u8>> m_name = Option.None;
+        Option<u8[]> m_name = Option.None;
         Option<uint32> m_type = Option.None;
-        Option<List<u8>> m_data = Option.None;
+        Option<u8[]> m_data = Option.None;
         if (m_name is { HasValue: false })                           
         {
             var parsed_m_name = Parse_GameSBankKeyEvent_m_name();
@@ -1341,15 +1338,14 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         };
     }
 
-    public List<u8> Parse_GameSBankKeyEvent_m_name()
+    public u8[] Parse_GameSBankKeyEvent_m_name()
     {                             
         var arrayLength = take_n_bits_into_i64(6);
-        var array = new List<u8>();
+        var array = new u8[arrayLength];
 
-        for (var i = 0 ; i < arrayLength ; ++i)
+        for (var i = 0; i < arrayLength; ++i)
         {
-            var data = take_aligned_byte();
-            array.Add(data);
+            array[i] = take_aligned_byte();
         }
         return array;
     }
@@ -1360,15 +1356,14 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         return m_type;
     }
 
-    public List<u8> Parse_GameSBankKeyEvent_m_data()
+    public u8[] Parse_GameSBankKeyEvent_m_data()
     {                             
         var arrayLength = take_n_bits_into_i64(5);
-        var array = new List<u8>();
+        var array = new u8[arrayLength];
 
-        for (var i = 0 ; i < arrayLength ; ++i)
+        for (var i = 0; i < arrayLength; ++i)
         {
-            var data = take_aligned_byte();
-            array.Add(data);
+            array[i] = take_aligned_byte();
         }
         return array;
     }
@@ -1376,8 +1371,8 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     public GameSBankValueEvent Parse_GameSBankValueEvent() 
     {
         Option<uint32> m_type = Option.None;
-        Option<List<u8>> m_name = Option.None;
-        Option<List<u8>> m_data = Option.None;
+        Option<u8[]> m_name = Option.None;
+        Option<u8[]> m_data = Option.None;
         if (m_type is { HasValue: false })                           
         {
             var parsed_m_type = Parse_GameSBankValueEvent_m_type();
@@ -1410,35 +1405,33 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         return m_type;
     }
 
-    public List<u8> Parse_GameSBankValueEvent_m_name()
+    public u8[] Parse_GameSBankValueEvent_m_name()
     {                             
         var arrayLength = take_n_bits_into_i64(6);
-        var array = new List<u8>();
+        var array = new u8[arrayLength];
 
-        for (var i = 0 ; i < arrayLength ; ++i)
+        for (var i = 0; i < arrayLength; ++i)
         {
-            var data = take_aligned_byte();
-            array.Add(data);
+            array[i] = take_aligned_byte();
         }
         return array;
     }
 
-    public List<u8> Parse_GameSBankValueEvent_m_data()
+    public u8[] Parse_GameSBankValueEvent_m_data()
     {                             
-        var arrayLength = take_n_bits_into_i64(12);
-        var array = new List<u8>();
+        var arrayLength = take_n_bits_into_i64(10);
+        var array = new u8[arrayLength];
 
-        for (var i = 0 ; i < arrayLength ; ++i)
+        for (var i = 0; i < arrayLength; ++i)
         {
-            var data = take_aligned_byte();
-            array.Add(data);
+            array[i] = take_aligned_byte();
         }
         return array;
     }
 
     public GameSBankSignatureEvent Parse_GameSBankSignatureEvent() 
     {
-        Option<List<uint8>> m_signature = Option.None;
+        Option<uint8[]> m_signature = Option.None;
         Option<CToonHandle> m_toonHandle = Option.None;
         if (m_signature is { HasValue: false })                           
         {
@@ -1459,15 +1452,14 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         };
     }
 
-    public List<uint8> Parse_GameSBankSignatureEvent_m_signature()
+    public uint8[] Parse_GameSBankSignatureEvent_m_signature()
     {                             
         var arrayLength = take_n_bits_into_i64(5);
-        var array = new List<uint8>();
+        var array = new uint8[arrayLength];
 
-        for (var i = 0 ; i < arrayLength ; ++i)
+        for (var i = 0; i < arrayLength; ++i)
         {
-            var data = Parse_uint8();
-            array.Add(data);
+            array[i] = Parse_uint8();
         }
         return array;
     }
@@ -1493,7 +1485,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         Option<uint32> m_baseBuildNum = Option.None;
         Option<uint32> m_buildNum = Option.None;
         Option<uint32> m_versionFlags = Option.None;
-        Option<List<u8>> m_hotkeyProfile = Option.None;
+        Option<u8[]> m_hotkeyProfile = Option.None;
         if (m_gameFullyDownloaded is { HasValue: false })                           
         {
             var parsed_m_gameFullyDownloaded = Parse_GameSUserOptionsEvent_m_gameFullyDownloaded();
@@ -1675,15 +1667,14 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         return m_versionFlags;
     }
 
-    public List<u8> Parse_GameSUserOptionsEvent_m_hotkeyProfile()
+    public u8[] Parse_GameSUserOptionsEvent_m_hotkeyProfile()
     {                             
         var arrayLength = take_n_bits_into_i64(7);
-        var array = new List<u8>();
+        var array = new u8[arrayLength];
 
-        for (var i = 0 ; i < arrayLength ; ++i)
+        for (var i = 0; i < arrayLength; ++i)
         {
-            var data = take_aligned_byte();
-            array.Add(data);
+            array[i] = take_aligned_byte();
         }
         return array;
     }
@@ -1913,8 +1904,8 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         Option<CFilePath> m_fileName = Option.None;
         Option<bool> m_automatic = Option.None;
         Option<bool> m_overwrite = Option.None;
-        Option<List<u8>> m_name = Option.None;
-        Option<List<u8>> m_description = Option.None;
+        Option<u8[]> m_name = Option.None;
+        Option<u8[]> m_description = Option.None;
         if (m_fileName is { HasValue: false })                           
         {
             var parsed_m_fileName = Parse_GameSSaveGameEvent_m_fileName();
@@ -1973,28 +1964,26 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         return m_overwrite;
     }
 
-    public List<u8> Parse_GameSSaveGameEvent_m_name()
+    public u8[] Parse_GameSSaveGameEvent_m_name()
     {                             
         var arrayLength = take_n_bits_into_i64(6);
-        var array = new List<u8>();
+        var array = new u8[arrayLength];
 
-        for (var i = 0 ; i < arrayLength ; ++i)
+        for (var i = 0; i < arrayLength; ++i)
         {
-            var data = take_aligned_byte();
-            array.Add(data);
+            array[i] = take_aligned_byte();
         }
         return array;
     }
 
-    public List<u8> Parse_GameSSaveGameEvent_m_description()
+    public u8[] Parse_GameSSaveGameEvent_m_description()
     {                             
         var arrayLength = take_n_bits_into_i64(9);
-        var array = new List<u8>();
+        var array = new u8[arrayLength];
 
-        for (var i = 0 ; i < arrayLength ; ++i)
+        for (var i = 0; i < arrayLength; ++i)
         {
-            var data = take_aligned_byte();
-            array.Add(data);
+            array[i] = take_aligned_byte();
         }
         return array;
     }
@@ -2382,7 +2371,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     public GameSResourceTradeEvent Parse_GameSResourceTradeEvent() 
     {
         Option<GameTPlayerId> m_recipientId = Option.None;
-        Option<List<int32>> m_resources = Option.None;
+        Option<int32[]> m_resources = Option.None;
         if (m_recipientId is { HasValue: false })                           
         {
             var parsed_m_recipientId = Parse_GameSResourceTradeEvent_m_recipientId();
@@ -2408,15 +2397,14 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         return m_recipientId;
     }
 
-    public List<int32> Parse_GameSResourceTradeEvent_m_resources()
+    public int32[] Parse_GameSResourceTradeEvent_m_resources()
     {                             
         var arrayLength = take_n_bits_into_i64(3);
-        var array = new List<int32>();
+        var array = new int32[arrayLength];
 
-        for (var i = 0 ; i < arrayLength ; ++i)
+        for (var i = 0; i < arrayLength; ++i)
         {
-            var data = Parse_int32();
-            array.Add(data);
+            array[i] = Parse_int32();
         }
         return array;
     }
@@ -2982,7 +2970,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
 
     public GameSHijackReplaySessionEvent Parse_GameSHijackReplaySessionEvent() 
     {
-        Option<List<GameSHijackReplaySessionUserInfo>> m_userInfos = Option.None;
+        Option<GameSHijackReplaySessionUserInfo[]> m_userInfos = Option.None;
         Option<GameEHijackMethod> m_method = Option.None;
         if (m_userInfos is { HasValue: false })                           
         {
@@ -3003,15 +2991,14 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         };
     }
 
-    public List<GameSHijackReplaySessionUserInfo> Parse_GameSHijackReplaySessionEvent_m_userInfos()
+    public GameSHijackReplaySessionUserInfo[] Parse_GameSHijackReplaySessionEvent_m_userInfos()
     {                             
         var arrayLength = take_n_bits_into_i64(5);
-        var array = new List<GameSHijackReplaySessionUserInfo>();
+        var array = new GameSHijackReplaySessionUserInfo[arrayLength];
 
-        for (var i = 0 ; i < arrayLength ; ++i)
+        for (var i = 0; i < arrayLength; ++i)
         {
-            var data = Parse_GameSHijackReplaySessionUserInfo();
-            array.Add(data);
+            array[i] = Parse_GameSHijackReplaySessionUserInfo();
         }
         return array;
     }
@@ -3145,7 +3132,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
 
     public GameSHijackReplayGameEvent Parse_GameSHijackReplayGameEvent() 
     {
-        Option<List<GameSHijackReplayGameUserInfo>> m_userInfos = Option.None;
+        Option<GameSHijackReplayGameUserInfo[]> m_userInfos = Option.None;
         Option<GameEHijackMethod> m_method = Option.None;
         if (m_userInfos is { HasValue: false })                           
         {
@@ -3166,15 +3153,14 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         };
     }
 
-    public List<GameSHijackReplayGameUserInfo> Parse_GameSHijackReplayGameEvent_m_userInfos()
+    public GameSHijackReplayGameUserInfo[] Parse_GameSHijackReplayGameEvent_m_userInfos()
     {                             
         var arrayLength = take_n_bits_into_i64(5);
-        var array = new List<GameSHijackReplayGameUserInfo>();
+        var array = new GameSHijackReplayGameUserInfo[arrayLength];
 
-        for (var i = 0 ; i < arrayLength ; ++i)
+        for (var i = 0; i < arrayLength; ++i)
         {
-            var data = Parse_GameSHijackReplayGameUserInfo();
-            array.Add(data);
+            array[i] = Parse_GameSHijackReplayGameUserInfo();
         }
         return array;
     }
@@ -4035,7 +4021,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
 
     public GameSResourceRequestEvent Parse_GameSResourceRequestEvent() 
     {
-        Option<List<int32>> m_resources = Option.None;
+        Option<int32[]> m_resources = Option.None;
         if (m_resources is { HasValue: false })                           
         {
             var parsed_m_resources = Parse_GameSResourceRequestEvent_m_resources();
@@ -4048,15 +4034,14 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         };
     }
 
-    public List<int32> Parse_GameSResourceRequestEvent_m_resources()
+    public int32[] Parse_GameSResourceRequestEvent_m_resources()
     {                             
         var arrayLength = take_n_bits_into_i64(3);
-        var array = new List<int32>();
+        var array = new int32[arrayLength];
 
-        for (var i = 0 ; i < arrayLength ; ++i)
+        for (var i = 0; i < arrayLength; ++i)
         {
-            var data = Parse_int32();
-            array.Add(data);
+            array[i] = Parse_int32();
         }
         return array;
     }
@@ -4388,7 +4373,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
 
     public GameSTriggerMovieFunctionEvent Parse_GameSTriggerMovieFunctionEvent() 
     {
-        Option<List<u8>> m_functionName = Option.None;
+        Option<u8[]> m_functionName = Option.None;
         if (m_functionName is { HasValue: false })                           
         {
             var parsed_m_functionName = Parse_GameSTriggerMovieFunctionEvent_m_functionName();
@@ -4401,15 +4386,14 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         };
     }
 
-    public List<u8> Parse_GameSTriggerMovieFunctionEvent_m_functionName()
+    public u8[] Parse_GameSTriggerMovieFunctionEvent_m_functionName()
     {                             
         var arrayLength = take_n_bits_into_i64(7);
-        var array = new List<u8>();
+        var array = new u8[arrayLength];
 
-        for (var i = 0 ; i < arrayLength ; ++i)
+        for (var i = 0; i < arrayLength; ++i)
         {
-            var data = take_aligned_byte();
-            array.Add(data);
+            array[i] = take_aligned_byte();
         }
         return array;
     }
@@ -4564,7 +4548,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     public GameSTriggerCutsceneBookmarkFiredEvent Parse_GameSTriggerCutsceneBookmarkFiredEvent() 
     {
         Option<int32> m_cutsceneId = Option.None;
-        Option<List<u8>> m_bookmarkName = Option.None;
+        Option<u8[]> m_bookmarkName = Option.None;
         if (m_cutsceneId is { HasValue: false })                           
         {
             var parsed_m_cutsceneId = Parse_GameSTriggerCutsceneBookmarkFiredEvent_m_cutsceneId();
@@ -4590,15 +4574,14 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         return m_cutsceneId;
     }
 
-    public List<u8> Parse_GameSTriggerCutsceneBookmarkFiredEvent_m_bookmarkName()
+    public u8[] Parse_GameSTriggerCutsceneBookmarkFiredEvent_m_bookmarkName()
     {                             
         var arrayLength = take_n_bits_into_i64(7);
-        var array = new List<u8>();
+        var array = new u8[arrayLength];
 
-        for (var i = 0 ; i < arrayLength ; ++i)
+        for (var i = 0; i < arrayLength; ++i)
         {
-            var data = take_aligned_byte();
-            array.Add(data);
+            array[i] = take_aligned_byte();
         }
         return array;
     }
@@ -4627,8 +4610,8 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     public GameSTriggerCutsceneConversationLineEvent Parse_GameSTriggerCutsceneConversationLineEvent() 
     {
         Option<int32> m_cutsceneId = Option.None;
-        Option<List<u8>> m_conversationLine = Option.None;
-        Option<List<u8>> m_altConversationLine = Option.None;
+        Option<u8[]> m_conversationLine = Option.None;
+        Option<u8[]> m_altConversationLine = Option.None;
         if (m_cutsceneId is { HasValue: false })                           
         {
             var parsed_m_cutsceneId = Parse_GameSTriggerCutsceneConversationLineEvent_m_cutsceneId();
@@ -4661,28 +4644,26 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         return m_cutsceneId;
     }
 
-    public List<u8> Parse_GameSTriggerCutsceneConversationLineEvent_m_conversationLine()
+    public u8[] Parse_GameSTriggerCutsceneConversationLineEvent_m_conversationLine()
     {                             
         var arrayLength = take_n_bits_into_i64(7);
-        var array = new List<u8>();
+        var array = new u8[arrayLength];
 
-        for (var i = 0 ; i < arrayLength ; ++i)
+        for (var i = 0; i < arrayLength; ++i)
         {
-            var data = take_aligned_byte();
-            array.Add(data);
+            array[i] = take_aligned_byte();
         }
         return array;
     }
 
-    public List<u8> Parse_GameSTriggerCutsceneConversationLineEvent_m_altConversationLine()
+    public u8[] Parse_GameSTriggerCutsceneConversationLineEvent_m_altConversationLine()
     {                             
         var arrayLength = take_n_bits_into_i64(7);
-        var array = new List<u8>();
+        var array = new u8[arrayLength];
 
-        for (var i = 0 ; i < arrayLength ; ++i)
+        for (var i = 0; i < arrayLength; ++i)
         {
-            var data = take_aligned_byte();
-            array.Add(data);
+            array[i] = take_aligned_byte();
         }
         return array;
     }
@@ -4690,7 +4671,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     public GameSTriggerCutsceneConversationLineMissingEvent Parse_GameSTriggerCutsceneConversationLineMissingEvent() 
     {
         Option<int32> m_cutsceneId = Option.None;
-        Option<List<u8>> m_conversationLine = Option.None;
+        Option<u8[]> m_conversationLine = Option.None;
         if (m_cutsceneId is { HasValue: false })                           
         {
             var parsed_m_cutsceneId = Parse_GameSTriggerCutsceneConversationLineMissingEvent_m_cutsceneId();
@@ -4716,15 +4697,14 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         return m_cutsceneId;
     }
 
-    public List<u8> Parse_GameSTriggerCutsceneConversationLineMissingEvent_m_conversationLine()
+    public u8[] Parse_GameSTriggerCutsceneConversationLineMissingEvent_m_conversationLine()
     {                             
         var arrayLength = take_n_bits_into_i64(7);
-        var array = new List<u8>();
+        var array = new u8[arrayLength];
 
-        for (var i = 0 ; i < arrayLength ; ++i)
+        for (var i = 0; i < arrayLength; ++i)
         {
-            var data = take_aligned_byte();
-            array.Add(data);
+            array[i] = take_aligned_byte();
         }
         return array;
     }
@@ -4986,8 +4966,8 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     {
         Option<uint8> m_catalog = Option.None;
         Option<uint16> m_entry = Option.None;
-        Option<List<u8>> m_field = Option.None;
-        Option<List<u8>> m_value = Option.None;
+        Option<u8[]> m_field = Option.None;
+        Option<u8[]> m_value = Option.None;
         if (m_catalog is { HasValue: false })                           
         {
             var parsed_m_catalog = Parse_GameSCatalogModifyEvent_m_catalog();
@@ -5033,28 +5013,26 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         return m_entry;
     }
 
-    public List<u8> Parse_GameSCatalogModifyEvent_m_field()
+    public u8[] Parse_GameSCatalogModifyEvent_m_field()
     {                             
         var arrayLength = take_n_bits_into_i64(9);
-        var array = new List<u8>();
+        var array = new u8[arrayLength];
 
-        for (var i = 0 ; i < arrayLength ; ++i)
+        for (var i = 0; i < arrayLength; ++i)
         {
-            var data = take_aligned_byte();
-            array.Add(data);
+            array[i] = take_aligned_byte();
         }
         return array;
     }
 
-    public List<u8> Parse_GameSCatalogModifyEvent_m_value()
+    public u8[] Parse_GameSCatalogModifyEvent_m_value()
     {                             
         var arrayLength = take_n_bits_into_i64(9);
-        var array = new List<u8>();
+        var array = new u8[arrayLength];
 
-        for (var i = 0 ; i < arrayLength ; ++i)
+        for (var i = 0; i < arrayLength; ++i)
         {
-            var data = take_aligned_byte();
-            array.Add(data);
+            array[i] = take_aligned_byte();
         }
         return array;
     }
@@ -5414,8 +5392,8 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
 
     public GameSSyncSoundLength Parse_GameSSyncSoundLength() 
     {
-        Option<List<uint32>> m_soundHash = Option.None;
-        Option<List<uint32>> m_length = Option.None;
+        Option<uint32[]> m_soundHash = Option.None;
+        Option<uint32[]> m_length = Option.None;
         if (m_soundHash is { HasValue: false })                           
         {
             var parsed_m_soundHash = Parse_GameSSyncSoundLength_m_soundHash();
@@ -5435,35 +5413,33 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         };
     }
 
-    public List<uint32> Parse_GameSSyncSoundLength_m_soundHash()
+    public uint32[] Parse_GameSSyncSoundLength_m_soundHash()
     {                             
         var arrayLength = take_n_bits_into_i64(7);
-        var array = new List<uint32>();
+        var array = new uint32[arrayLength];
 
-        for (var i = 0 ; i < arrayLength ; ++i)
+        for (var i = 0; i < arrayLength; ++i)
         {
-            var data = Parse_uint32();
-            array.Add(data);
+            array[i] = Parse_uint32();
         }
         return array;
     }
 
-    public List<uint32> Parse_GameSSyncSoundLength_m_length()
+    public uint32[] Parse_GameSSyncSoundLength_m_length()
     {                             
         var arrayLength = take_n_bits_into_i64(7);
-        var array = new List<uint32>();
+        var array = new uint32[arrayLength];
 
-        for (var i = 0 ; i < arrayLength ; ++i)
+        for (var i = 0; i < arrayLength; ++i)
         {
-            var data = Parse_uint32();
-            array.Add(data);
+            array[i] = Parse_uint32();
         }
         return array;
     }
 
     public GameSThumbnail Parse_GameSThumbnail() 
     {
-        Option<List<u8>> m_file = Option.None;
+        Option<u8[]> m_file = Option.None;
         if (m_file is { HasValue: false })                           
         {
             var parsed_m_file = Parse_GameSThumbnail_m_file();
@@ -5476,15 +5452,14 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         };
     }
 
-    public List<u8> Parse_GameSThumbnail_m_file()
+    public u8[] Parse_GameSThumbnail_m_file()
     {                             
         var arrayLength = take_n_bits_into_i64(10);
-        var array = new List<u8>();
+        var array = new u8[arrayLength];
 
-        for (var i = 0 ; i < arrayLength ; ++i)
+        for (var i = 0; i < arrayLength; ++i)
         {
-            var data = take_aligned_byte();
-            array.Add(data);
+            array[i] = take_aligned_byte();
         }
         return array;
     }
@@ -5555,9 +5530,9 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     public GameSToonNameDetails Parse_GameSToonNameDetails() 
     {
         Option<uint8> m_region = Option.None;
-        Option<List<u8>> m_programId = Option.None;
+        Option<u8[]> m_programId = Option.None;
         Option<uint32> m_realm = Option.None;
-        Option<List<u8>> m_name = Option.None;
+        Option<u8[]> m_name = Option.None;
         Option<uint64> m_id = Option.None;
         if (m_region is { HasValue: false })                           
         {
@@ -5605,7 +5580,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         return m_region;
     }
 
-    public List<u8> Parse_GameSToonNameDetails_m_programId()
+    public u8[] Parse_GameSToonNameDetails_m_programId()
     {                             
         var m_programId = take_fourcc();
         return m_programId;
@@ -5617,15 +5592,14 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         return m_realm;
     }
 
-    public List<u8> Parse_GameSToonNameDetails_m_name()
+    public u8[] Parse_GameSToonNameDetails_m_name()
     {                             
         var arrayLength = take_n_bits_into_i64(5);
-        var array = new List<u8>();
+        var array = new u8[arrayLength];
 
-        for (var i = 0 ; i < arrayLength ; ++i)
+        for (var i = 0; i < arrayLength; ++i)
         {
-            var data = take_aligned_byte();
-            array.Add(data);
+            array[i] = take_aligned_byte();
         }
         return array;
     }
@@ -5640,7 +5614,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     {
         Option<CUserName> m_name = Option.None;
         Option<GameSToonNameDetails> m_toon = Option.None;
-        Option<List<u8>> m_race = Option.None;
+        Option<u8[]> m_race = Option.None;
         Option<GameSColor> m_color = Option.None;
         Option<GameTControlId> m_control = Option.None;
         Option<GameTTeamId> m_teamId = Option.None;
@@ -5648,7 +5622,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         Option<EObserve> m_observe = Option.None;
         Option<GameEResultDetails> m_result = Option.None;
         var m_workingSetSlotId = Option.Some<Option<uint8>>(Option.None);
-        Option<List<u8>> m_hero = Option.None;
+        Option<u8[]> m_hero = Option.None;
         if (m_name is { HasValue: false })                           
         {
             var parsed_m_name = Parse_GameSPlayerDetails_m_name();
@@ -5743,15 +5717,14 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         return m_toon;
     }
 
-    public List<u8> Parse_GameSPlayerDetails_m_race()
+    public u8[] Parse_GameSPlayerDetails_m_race()
     {                             
         var arrayLength = take_n_bits_into_i64(7);
-        var array = new List<u8>();
+        var array = new u8[arrayLength];
 
-        for (var i = 0 ; i < arrayLength ; ++i)
+        for (var i = 0; i < arrayLength; ++i)
         {
-            var data = take_aligned_byte();
-            array.Add(data);
+            array[i] = take_aligned_byte();
         }
         return array;
     }
@@ -5808,15 +5781,14 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
             }
     }
 
-    public List<u8> Parse_GameSPlayerDetails_m_hero()
+    public u8[] Parse_GameSPlayerDetails_m_hero()
     {                             
         var arrayLength = take_n_bits_into_i64(7);
-        var array = new List<u8>();
+        var array = new u8[arrayLength];
 
-        for (var i = 0 ; i < arrayLength ; ++i)
+        for (var i = 0; i < arrayLength; ++i)
         {
-            var data = take_aligned_byte();
-            array.Add(data);
+            array[i] = take_aligned_byte();
         }
         return array;
     }
@@ -5824,15 +5796,15 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     public GameSDetails Parse_GameSDetails() 
     {
         var m_playerList = Option.Some<Option<GameCPlayerDetailsArray>>(Option.None);
-        Option<List<u8>> m_title = Option.None;
-        Option<List<u8>> m_difficulty = Option.None;
+        Option<u8[]> m_title = Option.None;
+        Option<u8[]> m_difficulty = Option.None;
         Option<GameSThumbnail> m_thumbnail = Option.None;
         Option<bool> m_isBlizzardMap = Option.None;
         Option<int64> m_timeUTC = Option.None;
         Option<int64> m_timeLocalOffset = Option.None;
         var m_restartAsTransitionMap = Option.Some<Option<bool>>(Option.None);
         Option<bool> m_disableRecoverGame = Option.None;
-        Option<List<u8>> m_description = Option.None;
+        Option<u8[]> m_description = Option.None;
         Option<CFilePath> m_imageFilePath = Option.None;
         Option<uint8> m_campaignIndex = Option.None;
         Option<CFilePath> m_mapFileName = Option.None;
@@ -5988,28 +5960,26 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
             }
     }
 
-    public List<u8> Parse_GameSDetails_m_title()
+    public u8[] Parse_GameSDetails_m_title()
     {                             
         var arrayLength = take_n_bits_into_i64(9);
-        var array = new List<u8>();
+        var array = new u8[arrayLength];
 
-        for (var i = 0 ; i < arrayLength ; ++i)
+        for (var i = 0; i < arrayLength; ++i)
         {
-            var data = take_aligned_byte();
-            array.Add(data);
+            array[i] = take_aligned_byte();
         }
         return array;
     }
 
-    public List<u8> Parse_GameSDetails_m_difficulty()
+    public u8[] Parse_GameSDetails_m_difficulty()
     {                             
         var arrayLength = take_n_bits_into_i64(7);
-        var array = new List<u8>();
+        var array = new u8[arrayLength];
 
-        for (var i = 0 ; i < arrayLength ; ++i)
+        for (var i = 0; i < arrayLength; ++i)
         {
-            var data = take_aligned_byte();
-            array.Add(data);
+            array[i] = take_aligned_byte();
         }
         return array;
     }
@@ -6060,15 +6030,14 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         return m_disableRecoverGame;
     }
 
-    public List<u8> Parse_GameSDetails_m_description()
+    public u8[] Parse_GameSDetails_m_description()
     {                             
         var arrayLength = take_n_bits_into_i64(11);
-        var array = new List<u8>();
+        var array = new u8[arrayLength];
 
-        for (var i = 0 ; i < arrayLength ; ++i)
+        for (var i = 0; i < arrayLength; ++i)
         {
-            var data = take_aligned_byte();
-            array.Add(data);
+            array[i] = take_aligned_byte();
         }
         return array;
     }
@@ -7686,8 +7655,8 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
     {
         Option<GameTSubgroupIndex> m_subgroupIndex = Option.None;
         Option<GameSSelectionMask> m_removeMask = Option.None;
-        Option<List<GameSSelectionDeltaSubgroup>> m_addSubgroups = Option.None;
-        Option<List<GameTUnitTag>> m_addUnitTags = Option.None;
+        Option<GameSSelectionDeltaSubgroup[]> m_addSubgroups = Option.None;
+        Option<GameTUnitTag[]> m_addUnitTags = Option.None;
         if (m_subgroupIndex is { HasValue: false })                           
         {
             var parsed_m_subgroupIndex = Parse_GameSSelectionDelta_m_subgroupIndex();
@@ -7733,28 +7702,26 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         return m_removeMask;
     }
 
-    public List<GameSSelectionDeltaSubgroup> Parse_GameSSelectionDelta_m_addSubgroups()
+    public GameSSelectionDeltaSubgroup[] Parse_GameSSelectionDelta_m_addSubgroups()
     {                             
         var arrayLength = take_n_bits_into_i64(9);
-        var array = new List<GameSSelectionDeltaSubgroup>();
+        var array = new GameSSelectionDeltaSubgroup[arrayLength];
 
-        for (var i = 0 ; i < arrayLength ; ++i)
+        for (var i = 0; i < arrayLength; ++i)
         {
-            var data = Parse_GameSSelectionDeltaSubgroup();
-            array.Add(data);
+            array[i] = Parse_GameSSelectionDeltaSubgroup();
         }
         return array;
     }
 
-    public List<GameTUnitTag> Parse_GameSSelectionDelta_m_addUnitTags()
+    public GameTUnitTag[] Parse_GameSSelectionDelta_m_addUnitTags()
     {                             
         var arrayLength = take_n_bits_into_i64(9);
-        var array = new List<GameTUnitTag>();
+        var array = new GameTUnitTag[arrayLength];
 
-        for (var i = 0 ; i < arrayLength ; ++i)
+        for (var i = 0; i < arrayLength; ++i)
         {
-            var data = Parse_GameTUnitTag();
-            array.Add(data);
+            array[i] = Parse_GameTUnitTag();
         }
         return array;
     }
@@ -7852,7 +7819,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
 
     public GameSSessionSyncInfo Parse_GameSSessionSyncInfo() 
     {
-        Option<List<GameTSyncChecksum>> m_checksums = Option.None;
+        Option<GameTSyncChecksum[]> m_checksums = Option.None;
         if (m_checksums is { HasValue: false })                           
         {
             var parsed_m_checksums = Parse_GameSSessionSyncInfo_m_checksums();
@@ -7865,22 +7832,21 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         };
     }
 
-    public List<GameTSyncChecksum> Parse_GameSSessionSyncInfo_m_checksums()
+    public GameTSyncChecksum[] Parse_GameSSessionSyncInfo_m_checksums()
     {                             
         var arrayLength = take_n_bits_into_i64(6);
-        var array = new List<GameTSyncChecksum>();
+        var array = new GameTSyncChecksum[arrayLength];
 
-        for (var i = 0 ; i < arrayLength ; ++i)
+        for (var i = 0; i < arrayLength; ++i)
         {
-            var data = Parse_GameTSyncChecksum();
-            array.Add(data);
+            array[i] = Parse_GameTSyncChecksum();
         }
         return array;
     }
 
     public GameSGameSyncInfo Parse_GameSGameSyncInfo() 
     {
-        Option<List<GameTSyncChecksum>> m_checksums = Option.None;
+        Option<GameTSyncChecksum[]> m_checksums = Option.None;
         if (m_checksums is { HasValue: false })                           
         {
             var parsed_m_checksums = Parse_GameSGameSyncInfo_m_checksums();
@@ -7893,15 +7859,14 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         };
     }
 
-    public List<GameTSyncChecksum> Parse_GameSGameSyncInfo_m_checksums()
+    public GameTSyncChecksum[] Parse_GameSGameSyncInfo_m_checksums()
     {                             
         var arrayLength = take_n_bits_into_i64(8);
-        var array = new List<GameTSyncChecksum>();
+        var array = new GameTSyncChecksum[arrayLength];
 
-        for (var i = 0 ; i < arrayLength ; ++i)
+        for (var i = 0; i < arrayLength; ++i)
         {
-            var data = Parse_GameTSyncChecksum();
-            array.Add(data);
+            array[i] = Parse_GameTSyncChecksum();
         }
         return array;
     }
@@ -10127,7 +10092,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         var arrayLengthNumBits = 5;
         var arrayLength = parse_packed_int(0, arrayLengthNumBits);
 
-        var value = ReadList(Parse_SUserInitialData, arrayLength);
+        var value = ReadArray(Parse_SUserInitialData, arrayLength);
 
         return new CUserInitialDataArray
         {
@@ -10139,7 +10104,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         var arrayLengthNumBits = 5;
         var arrayLength = parse_packed_int(0, arrayLengthNumBits);
 
-        var value = ReadList(Parse_GameSPlayerDetails, arrayLength);
+        var value = ReadArray(Parse_GameSPlayerDetails, arrayLength);
 
         return new GameCPlayerDetailsArray
         {
@@ -10151,7 +10116,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         var arrayLengthNumBits = 6;
         var arrayLength = parse_packed_int(0, arrayLengthNumBits);
 
-        var value = ReadList(Parse_CFilePath, arrayLength);
+        var value = ReadArray(Parse_CFilePath, arrayLength);
 
         return new GameCModPaths
         {
@@ -10163,7 +10128,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         var arrayLengthNumBits = 6;
         var arrayLength = parse_packed_int(0, arrayLengthNumBits);
 
-        var value = ReadList(Parse_GameCCacheHandle, arrayLength);
+        var value = ReadArray(Parse_GameCCacheHandle, arrayLength);
 
         return new GameCCacheHandles
         {
@@ -10175,7 +10140,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         var arrayLengthNumBits = 5;
         var arrayLength = parse_packed_int(0, arrayLengthNumBits);
 
-        var value = ReadList(Parse_GameSSlotDescription, arrayLength);
+        var value = ReadArray(Parse_GameSSlotDescription, arrayLength);
 
         return new GameSSlotDescriptions
         {
@@ -10187,7 +10152,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         var arrayLengthNumBits = 4;
         var arrayLength = parse_packed_int(0, arrayLengthNumBits);
 
-        var value = ReadList(Parse_CArtifactHandle, arrayLength);
+        var value = ReadArray(Parse_CArtifactHandle, arrayLength);
 
         return new GameCArtifactArray
         {
@@ -10199,7 +10164,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         var arrayLengthNumBits = 3;
         var arrayLength = parse_packed_int(0, arrayLengthNumBits);
 
-        var value = ReadList(Parse_uint32, arrayLength);
+        var value = ReadArray(Parse_uint32, arrayLength);
 
         return new GameCCommanderMasteryTalentArray
         {
@@ -10211,7 +10176,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         var arrayLengthNumBits = 17;
         var arrayLength = parse_packed_int(0, arrayLengthNumBits);
 
-        var value = ReadList(Parse_GameTReward, arrayLength);
+        var value = ReadArray(Parse_GameTReward, arrayLength);
 
         return new GameCRewardArray
         {
@@ -10223,7 +10188,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         var arrayLengthNumBits = 17;
         var arrayLength = parse_packed_int(0, arrayLengthNumBits);
 
-        var value = ReadList(Parse_GameCRewardOverride, arrayLength);
+        var value = ReadArray(Parse_GameCRewardOverride, arrayLength);
 
         return new GameCRewardOverrideArray
         {
@@ -10235,7 +10200,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         var arrayLengthNumBits = 9;
         var arrayLength = parse_packed_int(0, arrayLengthNumBits);
 
-        var value = ReadList(Parse_GameTLicense, arrayLength);
+        var value = ReadArray(Parse_GameTLicense, arrayLength);
 
         return new GameCLicenseArray
         {
@@ -10247,7 +10212,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         var arrayLengthNumBits = 5;
         var arrayLength = parse_packed_int(0, arrayLengthNumBits);
 
-        var value = ReadList(Parse_GameSLobbySlot, arrayLength);
+        var value = ReadArray(Parse_GameSLobbySlot, arrayLength);
 
         return new GameCLobbySlotArray
         {
@@ -10259,7 +10224,7 @@ public class BitPackedProtocolParser(BinaryReader reader) : BitPackedProtocolPar
         var arrayLengthNumBits = 9;
         var arrayLength = parse_packed_int(0, arrayLengthNumBits);
 
-        var value = ReadList(Parse_GameTSelectionIndex, arrayLength);
+        var value = ReadArray(Parse_GameTSelectionIndex, arrayLength);
 
         return new GameSelectionIndexArrayType
         {

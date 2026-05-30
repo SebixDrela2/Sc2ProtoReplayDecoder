@@ -41,7 +41,7 @@ internal static class ProtocolTypeUtils
     public static string GetUnwrappedOptionListTypeName(string unitTypeName)
     {
         var typeName = GetTypeName(unitTypeName);
-        var match = Regex.Match(typeName, @"^Option<List<\s*(.+)\s*>>$");
+        var match = Regex.Match(typeName, @"^Option<\s*(.+)\s*\[\]>$");
 
         if (!match.Success)
         {

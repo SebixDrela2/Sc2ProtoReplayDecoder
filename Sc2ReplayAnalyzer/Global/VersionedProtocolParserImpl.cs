@@ -10,7 +10,7 @@ public abstract class VersionedProtocolParserImpl(BinaryReader reader) : Protoco
     public string DebugView => GetDebugView();
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public List<byte> tagged_bitarray()
+    public byte[] tagged_bitarray()
     {
         ValidateBitArrayTag();
 
@@ -21,7 +21,7 @@ public abstract class VersionedProtocolParserImpl(BinaryReader reader) : Protoco
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public List<byte> tagged_blob()
+    public byte[] tagged_blob()
     {
         ValidateBlobTag();
 
@@ -74,11 +74,8 @@ public abstract class VersionedProtocolParserImpl(BinaryReader reader) : Protoco
 
         return isNegative ? -result : result;
     }
-    
-    public List<byte> ReadBytes(long length)
-    {
-        return reader.ReadBytes((int)length).ToList();
-    }
+
+    public byte[] ReadBytes(long length) => reader.ReadBytes((int)length);
 
     private string GetDebugView()
     {

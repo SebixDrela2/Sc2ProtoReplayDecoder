@@ -1,5 +1,6 @@
 ﻿using Sc2ReplayAnalyzer.Decoder.Events.TrackerEvents;
 using Sc2ReplayAnalyzer.Json.VersionedProtocolDefinitions;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace Sc2ReplayAnalyzer.Decoder.Parser;
@@ -89,6 +90,8 @@ internal static partial class Parse
 
     private static void SetTrackerKillerUnitLink(TrackerEvents events)
     {
+        var owo = Stopwatch.StartNew();
+
         var diedIndexMap = new SortedList<ulong, SUnitDiedEvent>();
         var initIndexMap = new SortedList<ulong, SUnitInitEvent>();
         var doneIndexMap = new SortedList<ulong, SUnitDoneEvent>();
@@ -112,6 +115,8 @@ internal static partial class Parse
         {
             x.KillerUnitInitEvent = (x.KillerUnitTagIndex, x.KillerUnitTagRecycle) is ({ } a, { } b) ? initIndexMap.GetValueOrDefault(GetUniqueIndex((a, b))) : default;
         }
+
+        owo.Stop();
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

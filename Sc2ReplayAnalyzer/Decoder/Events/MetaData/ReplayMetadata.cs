@@ -1,32 +1,7 @@
 ﻿namespace Sc2ReplayAnalyzer.Decoder.Events.MetaData;
 
-public sealed record ReplayMetadata
+public class ReplayMetadata
 {
-    public ReplayMetadata()
-    {
-
-    }
-
-    public ReplayMetadata(
-        string baseBuild,
-        string dataBuild,
-        string dataVersion,
-        int duration,
-        Version gameVersion,
-        bool isNotAvailable,
-        string title,
-        ICollection<MetadataPlayer> players)
-    {
-        BaseBuild = baseBuild;
-        DataBuild = dataBuild;
-        DataVersion = dataVersion;
-        Duration = duration;
-        GameVersion = gameVersion;
-        IsNotAvailable = isNotAvailable;
-        Title = title;
-        Players = players;
-    }
-    
     public string BaseBuild { get; init; }
     
     public string DataBuild { get; init; }

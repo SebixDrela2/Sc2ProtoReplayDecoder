@@ -44,14 +44,14 @@ public  class SVersion
 // NNet.SMD5
 public  class SMD5
 {
-    public Option<List<u8>> m_dataDeprecated;
-    public List<byte> m_data;
+    public Option<u8[]> m_dataDeprecated;
+    public byte[] m_data;
 }
 
 // NNet.Game.SThumbnail
 public  class GameSThumbnail
 {
-    public List<byte> m_file;
+    public byte[] m_file;
 }
 
 // NNet.Game.SColor
@@ -69,16 +69,16 @@ public  class GameSToonNameDetails
     public u8 m_region;
     public uint m_programId;
     public u32 m_realm;
-    public List<byte> m_name;
+    public byte[] m_name;
     public u64 m_id;
 }
 
 // NNet.Game.SPlayerDetails
 public  class GameSPlayerDetails
 {
-    public List<byte> m_name;
+    public byte[] m_name;
     public GameSToonNameDetails m_toon;
-    public List<byte> m_race;
+    public byte[] m_race;
     public GameSColor m_color;
     public u8 m_control;
     public u8 m_teamId;
@@ -86,36 +86,36 @@ public  class GameSPlayerDetails
     public EObserve m_observe;
     public GameEResultDetails m_result;
     public Option<u8> m_workingSetSlotId;
-    public List<byte> m_hero;
+    public byte[] m_hero;
 }
 
 // NNet.Game.SDetails
 public  class GameSDetails
 {
-    public Option<List<GameSPlayerDetails>> m_playerList;
-    public List<byte> m_title;
-    public List<byte> m_difficulty;
+    public Option<GameSPlayerDetails[]> m_playerList;
+    public byte[] m_title;
+    public byte[] m_difficulty;
     public GameSThumbnail m_thumbnail;
     public bool m_isBlizzardMap;
     public i64 m_timeUTC;
     public i64 m_timeLocalOffset;
     public Option<bool> m_restartAsTransitionMap;
     public bool m_disableRecoverGame;
-    public List<byte> m_description;
-    public List<byte> m_imageFilePath;
+    public byte[] m_description;
+    public byte[] m_imageFilePath;
     public u8 m_campaignIndex;
-    public List<byte> m_mapFileName;
-    public Option<List<List<byte>>> m_cacheHandles;
+    public byte[] m_mapFileName;
+    public Option<byte[][]> m_cacheHandles;
     public bool m_miniSave;
     public GameEGameSpeed m_gameSpeed;
     public u32 m_defaultDifficulty;
-    public Option<List<List<byte>>> m_modPaths;
+    public Option<byte[][]> m_modPaths;
 }
 
 // NNet.Replay.SHeader
 public  class ReplaySHeader
 {
-    public List<byte> m_signature;
+    public byte[] m_signature;
     public SVersion m_version;
     public u8 m_type;
     public u32 m_elapsedGameLoops;
@@ -182,14 +182,14 @@ public  class ReplayTrackerSUnitBornEvent
 {
     public u32 m_unitTagIndex;
     public u32 m_unitTagRecycle;
-    public List<byte> m_unitTypeName;
+    public byte[] m_unitTypeName;
     public u8 m_controlPlayerId;
     public u8 m_upkeepPlayerId;
     public u8 m_x;
     public u8 m_y;
     public Option<u32> m_creatorUnitTagIndex;
     public Option<u32> m_creatorUnitTagRecycle;
-    public Option<List<byte>> m_creatorAbilityName;
+    public Option<byte[]> m_creatorAbilityName;
 }
 
 // NNet.Replay.Tracker.SUnitDiedEvent
@@ -218,14 +218,14 @@ public  class ReplayTrackerSUnitTypeChangeEvent
 {
     public u32 m_unitTagIndex;
     public u32 m_unitTagRecycle;
-    public List<byte> m_unitTypeName;
+    public byte[] m_unitTypeName;
 }
 
 // NNet.Replay.Tracker.SUpgradeEvent
 public  class ReplayTrackerSUpgradeEvent
 {
     public u8 m_playerId;
-    public List<byte> m_upgradeTypeName;
+    public byte[] m_upgradeTypeName;
     public i32 m_count;
 }
 
@@ -234,7 +234,7 @@ public  class ReplayTrackerSUnitInitEvent
 {
     public u32 m_unitTagIndex;
     public u32 m_unitTagRecycle;
-    public List<byte> m_unitTypeName;
+    public byte[] m_unitTypeName;
     public u8 m_controlPlayerId;
     public u8 m_upkeepPlayerId;
     public u8 m_x;
@@ -252,7 +252,7 @@ public  class ReplayTrackerSUnitDoneEvent
 public  class ReplayTrackerSUnitPositionsEvent
 {
     public u32 m_firstUnitIndex;
-    public List<i32> m_items;
+    public i32[] m_items;
 }
 
 // NNet.Replay.Tracker.SPlayerSetupEvent
@@ -323,6 +323,6 @@ public record class ReplayTrackerEEventId_e_playerSetup(ReplayTrackerSPlayerSetu
 // NNet.Game.CPlayerDetailsArray
 public  class GameCPlayerDetailsArray
 {
-    public List<GameSPlayerDetails> Value;
+    public GameSPlayerDetails[] Value;
 }
 

@@ -27,7 +27,7 @@ internal class ByteMethodParser(StringBuilder methodBuilder, Sc2GeneratorData da
                     ValidateArrayTag();
 
                     var arrayLength = ParseVlqInt();
-                    var value = ReadList(Parse_{{internalType}}, arrayLength);
+                    var value = ReadArray(Parse_{{internalType}}, arrayLength);
 
                     return new {{typeName}}
                     {
@@ -277,13 +277,13 @@ internal class ByteMethodParser(StringBuilder methodBuilder, Sc2GeneratorData da
                 _fieldNameMethodBuilder.AppendLine($$"""
                             ValidateArrayTag();
                             var arrayLength = ParseVlqInt();
-                            var array = ReadList({{fieldConverted.Parser}}, arrayLength);
+                            var array = ReadArray({{fieldConverted.Parser}}, arrayLength);
                 """);
 
                 if (fieldConverted.ShouldTryFrom)
                 {
                     _fieldNameMethodBuilder.AppendLine($$"""
-                            {{fieldName}} = Option.Some(array.Select(x => ProtocolConversion<{{ProtocolTypeUtils.GetUnwrappedOptionListTypeName(fieldConverted.CSharpType)}}>.From(x)).ToList());                                 
+                            {{fieldName}} = Option.Some(array.Select(ProtocolConversion<{{ProtocolTypeUtils.GetUnwrappedOptionListTypeName(fieldConverted.CSharpType)}}>.From).ToArray());                                 
                 """);
                 }
                 else
@@ -329,14 +329,14 @@ internal class ByteMethodParser(StringBuilder methodBuilder, Sc2GeneratorData da
             _fieldNameMethodBuilder.AppendLine($$"""
                         ValidateArrayTag();
                         var arrayLength = ParseVlqInt();
-                        var array = ReadList({{fieldConverted.Parser}}, arrayLength);
+                        var array = ReadArray({{fieldConverted.Parser}}, arrayLength);
 
                 """);
 
             if (fieldConverted.ShouldTryFrom)
             {
                 _fieldNameMethodBuilder.AppendLine($$"""
-                        return array.Select(x => ProtocolConversion<i32>.From(x)).ToList();
+                        return array.Select(ProtocolConversion<i32>.From).ToArray();
                 """);
             }
             else

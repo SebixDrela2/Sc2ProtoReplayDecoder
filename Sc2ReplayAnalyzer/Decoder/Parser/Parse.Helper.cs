@@ -47,19 +47,22 @@ internal static partial class Parse
     {
         if (option.HasValue)
         {
-            return Encoding.UTF8.GetString([.. option.Value]);
+            return Encoding.UTF8.GetString(option.Value);
         }
 
         return null;
     }
 
-    internal static string ReadStringBytes(this List<byte> bytes)
+    internal static string ReadStringBytes(this byte[] bytes)
     {
         if (bytes is not null)
         {
-            return Encoding.UTF8.GetString([.. bytes]);
+            return Encoding.UTF8.GetString(bytes);
         }
 
         return null;
     }
+
+    internal static string ReadStringBytes(this List<byte> bytes) => default;
+    internal static string ReadStringBytes(this Option<List<byte>> bytes) => default;
 }

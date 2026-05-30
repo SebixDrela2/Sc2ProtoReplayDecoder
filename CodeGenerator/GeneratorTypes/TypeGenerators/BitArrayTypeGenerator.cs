@@ -23,7 +23,7 @@ internal class ArrayGenerator(StringBuilder builder, Sc2GeneratorData data)
 
             if (OpenClass(fullName))
             {
-                AddField("Value", "List<byte>");
+                AddField("Value", "byte[]");
                 Close();
             }
 

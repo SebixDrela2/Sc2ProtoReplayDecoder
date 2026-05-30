@@ -308,8 +308,8 @@ public  class SVersion
 // NNet.SMD5
 public  class SMD5
 {
-    public Option<List<uint8>> m_dataDeprecated;
-    public List<u8> m_data;
+    public Option<uint8[]> m_dataDeprecated;
+    public u8[] m_data;
 }
 
 // NNet.Game.TColorPreference
@@ -365,35 +365,35 @@ public  class GameSDropOurselvesEvent
 // NNet.Game.SBankFileEvent
 public  class GameSBankFileEvent
 {
-    public List<u8> m_name;
+    public u8[] m_name;
 }
 
 // NNet.Game.SBankSectionEvent
 public  class GameSBankSectionEvent
 {
-    public List<u8> m_name;
+    public u8[] m_name;
 }
 
 // NNet.Game.SBankKeyEvent
 public  class GameSBankKeyEvent
 {
-    public List<u8> m_name;
+    public u8[] m_name;
     public uint32 m_type;
-    public List<u8> m_data;
+    public u8[] m_data;
 }
 
 // NNet.Game.SBankValueEvent
 public  class GameSBankValueEvent
 {
     public uint32 m_type;
-    public List<u8> m_name;
-    public List<u8> m_data;
+    public u8[] m_name;
+    public u8[] m_data;
 }
 
 // NNet.Game.SBankSignatureEvent
 public  class GameSBankSignatureEvent
 {
-    public List<uint8> m_signature;
+    public uint8[] m_signature;
     public CToonHandle m_toonHandle;
 }
 
@@ -413,7 +413,7 @@ public  class GameSUserOptionsEvent
     public uint32 m_baseBuildNum;
     public uint32 m_buildNum;
     public uint32 m_versionFlags;
-    public List<u8> m_hotkeyProfile;
+    public u8[] m_hotkeyProfile;
 }
 
 // NNet.Game.SPickMapTagEvent
@@ -491,8 +491,8 @@ public  class GameSSaveGameEvent
     public CFilePath m_fileName;
     public bool m_automatic;
     public bool m_overwrite;
-    public List<u8> m_name;
-    public List<u8> m_description;
+    public u8[] m_name;
+    public u8[] m_description;
 }
 
 // NNet.Game.SSaveGameDoneEvent
@@ -569,7 +569,7 @@ public  class GameSSelectionSyncCheckEvent
 public  class GameSResourceTradeEvent
 {
     public GameTPlayerId m_recipientId;
-    public List<int32> m_resources;
+    public int32[] m_resources;
 }
 
 // NNet.Game.STriggerChatMessageEvent
@@ -663,7 +663,7 @@ public  class GameSHijackReplaySessionUserInfo
 // NNet.Game.SHijackReplaySessionEvent
 public  class GameSHijackReplaySessionEvent
 {
-    public List<GameSHijackReplaySessionUserInfo> m_userInfos;
+    public GameSHijackReplaySessionUserInfo[] m_userInfos;
     public GameEHijackMethod m_method;
 }
 
@@ -681,7 +681,7 @@ public  class GameSHijackReplayGameUserInfo
 // NNet.Game.SHijackReplayGameEvent
 public  class GameSHijackReplayGameEvent
 {
-    public List<GameSHijackReplayGameUserInfo> m_userInfos;
+    public GameSHijackReplayGameUserInfo[] m_userInfos;
     public GameEHijackMethod m_method;
 }
 
@@ -871,7 +871,7 @@ public  class GameSTriggerPlanetPanelDeathCompleteEvent
 // NNet.Game.SResourceRequestEvent
 public  class GameSResourceRequestEvent
 {
-    public List<int32> m_resources;
+    public int32[] m_resources;
 }
 
 // NNet.Game.SResourceRequestFulfillEvent
@@ -985,7 +985,7 @@ public  class GameSTriggerPortraitLoadedEvent
 // NNet.Game.STriggerMovieFunctionEvent
 public  class GameSTriggerMovieFunctionEvent
 {
-    public List<u8> m_functionName;
+    public u8[] m_functionName;
 }
 
 // NNet.Game.STriggerCustomDialogDismissedEvent
@@ -1034,7 +1034,7 @@ public  class GameSTriggerGameCreditsFinishedEvent
 public  class GameSTriggerCutsceneBookmarkFiredEvent
 {
     public int32 m_cutsceneId;
-    public List<u8> m_bookmarkName;
+    public u8[] m_bookmarkName;
 }
 
 // NNet.Game.STriggerCutsceneEndSceneFiredEvent
@@ -1047,15 +1047,15 @@ public  class GameSTriggerCutsceneEndSceneFiredEvent
 public  class GameSTriggerCutsceneConversationLineEvent
 {
     public int32 m_cutsceneId;
-    public List<u8> m_conversationLine;
-    public List<u8> m_altConversationLine;
+    public u8[] m_conversationLine;
+    public u8[] m_altConversationLine;
 }
 
 // NNet.Game.STriggerCutsceneConversationLineMissingEvent
 public  class GameSTriggerCutsceneConversationLineMissingEvent
 {
     public int32 m_cutsceneId;
-    public List<u8> m_conversationLine;
+    public u8[] m_conversationLine;
 }
 
 // NNet.Game.SGameUserLeaveEvent
@@ -1100,8 +1100,8 @@ public  class GameSCatalogModifyEvent
 {
     public uint8 m_catalog;
     public uint16 m_entry;
-    public List<u8> m_field;
-    public List<u8> m_value;
+    public u8[] m_field;
+    public u8[] m_value;
 }
 
 // NNet.Game.SHeroTalentTreeSelectedEvent
@@ -1205,14 +1205,14 @@ public  class GameSUICoord
 // NNet.Game.SSyncSoundLength
 public  class GameSSyncSoundLength
 {
-    public List<uint32> m_soundHash;
-    public List<uint32> m_length;
+    public uint32[] m_soundHash;
+    public uint32[] m_length;
 }
 
 // NNet.Game.SThumbnail
 public  class GameSThumbnail
 {
-    public List<u8> m_file;
+    public u8[] m_file;
 }
 
 // NNet.Game.SColor
@@ -1228,9 +1228,9 @@ public  class GameSColor
 public  class GameSToonNameDetails
 {
     public uint8 m_region;
-    public List<u8> m_programId;
+    public u8[] m_programId;
     public uint32 m_realm;
-    public List<u8> m_name;
+    public u8[] m_name;
     public uint64 m_id;
 }
 
@@ -1239,7 +1239,7 @@ public  class GameSPlayerDetails
 {
     public CUserName m_name;
     public GameSToonNameDetails m_toon;
-    public List<u8> m_race;
+    public u8[] m_race;
     public GameSColor m_color;
     public GameTControlId m_control;
     public GameTTeamId m_teamId;
@@ -1247,22 +1247,22 @@ public  class GameSPlayerDetails
     public EObserve m_observe;
     public GameEResultDetails m_result;
     public Option<uint8> m_workingSetSlotId;
-    public List<u8> m_hero;
+    public u8[] m_hero;
 }
 
 // NNet.Game.SDetails
 public  class GameSDetails
 {
     public Option<GameCPlayerDetailsArray> m_playerList;
-    public List<u8> m_title;
-    public List<u8> m_difficulty;
+    public u8[] m_title;
+    public u8[] m_difficulty;
     public GameSThumbnail m_thumbnail;
     public bool m_isBlizzardMap;
     public int64 m_timeUTC;
     public int64 m_timeLocalOffset;
     public Option<bool> m_restartAsTransitionMap;
     public bool m_disableRecoverGame;
-    public List<u8> m_description;
+    public u8[] m_description;
     public CFilePath m_imageFilePath;
     public uint8 m_campaignIndex;
     public CFilePath m_mapFileName;
@@ -1451,8 +1451,8 @@ public  class GameSSelectionDelta
 {
     public GameTSubgroupIndex m_subgroupIndex;
     public GameSSelectionMask m_removeMask;
-    public List<GameSSelectionDeltaSubgroup> m_addSubgroups;
-    public List<GameTUnitTag> m_addUnitTags;
+    public GameSSelectionDeltaSubgroup[] m_addSubgroups;
+    public GameTUnitTag[] m_addUnitTags;
 }
 
 // NNet.Game.SSelectionSyncData
@@ -1469,13 +1469,13 @@ public  class GameSSelectionSyncData
 // NNet.Game.SSessionSyncInfo
 public  class GameSSessionSyncInfo
 {
-    public List<GameTSyncChecksum> m_checksums;
+    public GameTSyncChecksum[] m_checksums;
 }
 
 // NNet.Game.SGameSyncInfo
 public  class GameSGameSyncInfo
 {
-    public List<GameTSyncChecksum> m_checksums;
+    public GameTSyncChecksum[] m_checksums;
 }
 
 // NNet.Replay.SInitData
@@ -2248,43 +2248,43 @@ public partial class GameTTeamCount
 // NNet.CAllowedRaces
 public  class CAllowedRaces
 {
-    public List<byte> Value;
+    public byte[] Value;
 }
 
 // NNet.CAllowedObserveTypes
 public  class CAllowedObserveTypes
 {
-    public List<byte> Value;
+    public byte[] Value;
 }
 
 // NNet.Game.CAllowedColors
 public  class GameCAllowedColors
 {
-    public List<byte> Value;
+    public byte[] Value;
 }
 
 // NNet.Game.CAllowedDifficulty
 public  class GameCAllowedDifficulty
 {
-    public List<byte> Value;
+    public byte[] Value;
 }
 
 // NNet.Game.CAllowedAIBuild
 public  class GameCAllowedAIBuild
 {
-    public List<byte> Value;
+    public byte[] Value;
 }
 
 // NNet.Game.CAllowedControls
 public  class GameCAllowedControls
 {
-    public List<byte> Value;
+    public byte[] Value;
 }
 
 // NNet.Game.SelectionMaskType
 public  class GameSelectionMaskType
 {
-    public List<byte> Value;
+    public byte[] Value;
 }
 
 // NNet.Game.TQueryID
@@ -2422,174 +2422,174 @@ public  class Gamec_ignoreSyncValue
 // NNet.CUserInitialDataArray
 public  class CUserInitialDataArray
 {
-    public List<SUserInitialData> Value;
+    public SUserInitialData[] Value;
 }
 
 // NNet.Game.CPlayerDetailsArray
 public  class GameCPlayerDetailsArray
 {
-    public List<GameSPlayerDetails> Value;
+    public GameSPlayerDetails[] Value;
 }
 
 // NNet.Game.CModPaths
 public  class GameCModPaths
 {
-    public List<CFilePath> Value;
+    public CFilePath[] Value;
 }
 
 // NNet.Game.CCacheHandles
 public  class GameCCacheHandles
 {
-    public List<GameCCacheHandle> Value;
+    public GameCCacheHandle[] Value;
 }
 
 // NNet.Game.SSlotDescriptions
 public  class GameSSlotDescriptions
 {
-    public List<GameSSlotDescription> Value;
+    public GameSSlotDescription[] Value;
 }
 
 // NNet.Game.CArtifactArray
 public  class GameCArtifactArray
 {
-    public List<CArtifactHandle> Value;
+    public CArtifactHandle[] Value;
 }
 
 // NNet.Game.CCommanderMasteryTalentArray
 public  class GameCCommanderMasteryTalentArray
 {
-    public List<uint32> Value;
+    public uint32[] Value;
 }
 
 // NNet.Game.CRetryMutationIndexArray
 public  class GameCRetryMutationIndexArray
 {
-    public List<uint32> Value;
+    public uint32[] Value;
 }
 
 // NNet.Game.CRewardArray
 public  class GameCRewardArray
 {
-    public List<GameTReward> Value;
+    public GameTReward[] Value;
 }
 
 // NNet.Game.CRewardOverrideArray
 public  class GameCRewardOverrideArray
 {
-    public List<GameCRewardOverride> Value;
+    public GameCRewardOverride[] Value;
 }
 
 // NNet.Game.CLicenseArray
 public  class GameCLicenseArray
 {
-    public List<GameTLicense> Value;
+    public GameTLicense[] Value;
 }
 
 // NNet.Game.CLobbySlotArray
 public  class GameCLobbySlotArray
 {
-    public List<GameSLobbySlot> Value;
+    public GameSLobbySlot[] Value;
 }
 
 // NNet.Game.SelectionIndexArrayType
 public  class GameSelectionIndexArrayType
 {
-    public List<GameTSelectionIndex> Value;
+    public GameTSelectionIndex[] Value;
 }
 
 // NNet.CFilePath
 public  class CFilePath
 {
-    public List<byte> Value;
+    public byte[] Value;
 }
 
 // NNet.CUserName
 public  class CUserName
 {
-    public List<byte> Value;
+    public byte[] Value;
 }
 
 // NNet.CClanTag
 public  class CClanTag
 {
-    public List<byte> Value;
+    public byte[] Value;
 }
 
 // NNet.CHeroHandle
 public  class CHeroHandle
 {
-    public List<byte> Value;
+    public byte[] Value;
 }
 
 // NNet.CSkinHandle
 public  class CSkinHandle
 {
-    public List<byte> Value;
+    public byte[] Value;
 }
 
 // NNet.CMountHandle
 public  class CMountHandle
 {
-    public List<byte> Value;
+    public byte[] Value;
 }
 
 // NNet.CArtifactHandle
 public  class CArtifactHandle
 {
-    public List<byte> Value;
+    public byte[] Value;
 }
 
 // NNet.CToonHandle
 public  class CToonHandle
 {
-    public List<byte> Value;
+    public byte[] Value;
 }
 
 // NNet.CCommanderHandle
 public  class CCommanderHandle
 {
-    public List<byte> Value;
+    public byte[] Value;
 }
 
 // NNet.Game.CCheatString
 public  class GameCCheatString
 {
-    public List<byte> Value;
+    public byte[] Value;
 }
 
 // NNet.Game.CTriggerChatMessageString
 public  class GameCTriggerChatMessageString
 {
-    public List<byte> Value;
+    public byte[] Value;
 }
 
 // NNet.Game.CGameCacheName
 public  class GameCGameCacheName
 {
-    public List<byte> Value;
+    public byte[] Value;
 }
 
 // NNet.Game.CAuthorName
 public  class GameCAuthorName
 {
-    public List<byte> Value;
+    public byte[] Value;
 }
 
 // NNet.Game.CChatString
 public  class GameCChatString
 {
-    public List<byte> Value;
+    public byte[] Value;
 }
 
 // NNet.CCacheHandle
 public  class CCacheHandle
 {
-    public List<byte> Value;
+    public byte[] Value;
 }
 
 // NNet.Game.CCacheHandle
 public  class GameCCacheHandle
 {
-    public List<byte> Value;
+    public byte[] Value;
 }
 

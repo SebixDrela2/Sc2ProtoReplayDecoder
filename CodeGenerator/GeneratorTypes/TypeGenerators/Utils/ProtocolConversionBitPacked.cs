@@ -32,7 +32,7 @@ public class ProtocolConversionBitPacked : IProtocolTypeConversionAlignment
             },
             "ArrayType" or "DynArrayType" => new ProtocolJsonTypeConversion
             {
-                CSharpType = "List<{}>",
+                CSharpType = "{}[]",
                 Parser = "{}",
                 IsVector = true,
             },
@@ -41,7 +41,7 @@ public class ProtocolConversionBitPacked : IProtocolTypeConversionAlignment
             "AsciiStringType" or
             "StringType" => new ProtocolJsonTypeConversion
             {
-                CSharpType = $"List<u8>",
+                CSharpType = $"u8[]",
                 Parser = "take_aligned_byte",
                 IsVector = true,
             },
@@ -53,7 +53,7 @@ public class ProtocolConversionBitPacked : IProtocolTypeConversionAlignment
             },
             "FourCCType" => new ProtocolJsonTypeConversion
             {
-                CSharpType = "List<u8>",
+                CSharpType = "u8[]",
                 Parser = "take_fourcc",
             },
             "NullType" => new ProtocolJsonTypeConversion
@@ -179,7 +179,7 @@ public class ProtocolConversionBitPacked : IProtocolTypeConversionAlignment
             var elementType = GetElementType(field, typeInfoType);
             var enclosedFieldConverted = FromNnetName(elementType);
 
-            enclosedFieldConverted.CSharpType = $"List<{enclosedFieldConverted.CSharpType}>";
+            enclosedFieldConverted.CSharpType = $"{enclosedFieldConverted.CSharpType}[]";
             enclosedFieldConverted.IsVector = true;
             enclosedFieldConverted.IsOptional = true;
 

@@ -192,8 +192,8 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
 
     public SMD5 Parse_SMD5() 
     {
-        var m_dataDeprecated = Option.Some<Option<List<u8>>>(Option.None);
-        Option<List<byte>> m_data = Option.None;
+        var m_dataDeprecated = Option.Some<Option<u8[]>>(Option.None);
+        Option<byte[]> m_data = Option.None;
         ValidateStructTag();
         var structFieldCount = ParseVlqInt();           
         for (var i = 0; i < structFieldCount; i++)
@@ -236,18 +236,18 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
             m_data = Option.OkOrReturnMissingFieldErr(m_data),
         };
     }
-    public Option<List<u8>> Parse_SMD5_m_dataDeprecated()
+    public Option<u8[]> Parse_SMD5_m_dataDeprecated()
     {                             
         ValidateOptTag();
         var isProvided = ReadByte();
 
-        Option<List<u8>> m_dataDeprecated = default;
+        Option<u8[]> m_dataDeprecated = default;
         if (isProvided != 0)
         {                                   
             ValidateArrayTag();
             var arrayLength = ParseVlqInt();
-            var array = ReadList(tagged_vlq_int, arrayLength);
-            m_dataDeprecated = Option.Some(array.Select(x => ProtocolConversion<u8>.From(x)).ToList());                                 
+            var array = ReadArray(tagged_vlq_int, arrayLength);
+            m_dataDeprecated = Option.Some(array.Select(ProtocolConversion<u8>.From).ToArray());                                 
         }
         else
         {
@@ -256,7 +256,7 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
 
         return m_dataDeprecated;
     }
-    public List<byte> Parse_SMD5_m_data()
+    public byte[] Parse_SMD5_m_data()
     {                             
         var m_data = tagged_blob();
         return m_data;
@@ -264,7 +264,7 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
 
     public GameSThumbnail Parse_GameSThumbnail() 
     {
-        Option<List<byte>> m_file = Option.None;
+        Option<byte[]> m_file = Option.None;
         ValidateStructTag();
         var structFieldCount = ParseVlqInt();           
         for (var i = 0; i < structFieldCount; i++)
@@ -293,7 +293,7 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
             m_file = Option.OkOrReturnMissingFieldErr(m_file),
         };
     }
-    public List<byte> Parse_GameSThumbnail_m_file()
+    public byte[] Parse_GameSThumbnail_m_file()
     {                             
         var m_file = tagged_blob();
         return m_file;
@@ -401,7 +401,7 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
         Option<u8> m_region = Option.None;
         Option<uint> m_programId = Option.None;
         Option<u32> m_realm = Option.None;
-        Option<List<byte>> m_name = Option.None;
+        Option<byte[]> m_name = Option.None;
         Option<u64> m_id = Option.None;
         ValidateStructTag();
         var structFieldCount = ParseVlqInt();           
@@ -502,7 +502,7 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
         var m_realm = tagged_vlq_int();
         return ProtocolConversion<u32>.From(m_realm);
     }
-    public List<byte> Parse_GameSToonNameDetails_m_name()
+    public byte[] Parse_GameSToonNameDetails_m_name()
     {                             
         var m_name = tagged_blob();
         return m_name;
@@ -515,9 +515,9 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
 
     public GameSPlayerDetails Parse_GameSPlayerDetails() 
     {
-        Option<List<byte>> m_name = Option.None;
+        Option<byte[]> m_name = Option.None;
         Option<GameSToonNameDetails> m_toon = Option.None;
-        Option<List<byte>> m_race = Option.None;
+        Option<byte[]> m_race = Option.None;
         Option<GameSColor> m_color = Option.None;
         Option<u8> m_control = Option.None;
         Option<u8> m_teamId = Option.None;
@@ -525,7 +525,7 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
         Option<EObserve> m_observe = Option.None;
         Option<GameEResultDetails> m_result = Option.None;
         var m_workingSetSlotId = Option.Some<Option<u8>>(Option.None);
-        Option<List<byte>> m_hero = Option.None;
+        Option<byte[]> m_hero = Option.None;
         ValidateStructTag();
         var structFieldCount = ParseVlqInt();           
         for (var i = 0; i < structFieldCount; i++)
@@ -694,7 +694,7 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
             m_hero = Option.OkOrReturnMissingFieldErr(m_hero),
         };
     }
-    public List<byte> Parse_GameSPlayerDetails_m_name()
+    public byte[] Parse_GameSPlayerDetails_m_name()
     {                             
         var m_name = tagged_blob();
         return m_name;
@@ -704,7 +704,7 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
         var m_toon = Parse_GameSToonNameDetails();
         return m_toon;
     }
-    public List<byte> Parse_GameSPlayerDetails_m_race()
+    public byte[] Parse_GameSPlayerDetails_m_race()
     {                             
         var m_race = tagged_blob();
         return m_race;
@@ -758,7 +758,7 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
 
         return m_workingSetSlotId;
     }
-    public List<byte> Parse_GameSPlayerDetails_m_hero()
+    public byte[] Parse_GameSPlayerDetails_m_hero()
     {                             
         var m_hero = tagged_blob();
         return m_hero;
@@ -766,24 +766,24 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
 
     public GameSDetails Parse_GameSDetails() 
     {
-        var m_playerList = Option.Some<Option<List<GameSPlayerDetails>>>(Option.None);
-        Option<List<byte>> m_title = Option.None;
-        Option<List<byte>> m_difficulty = Option.None;
+        var m_playerList = Option.Some<Option<GameSPlayerDetails[]>>(Option.None);
+        Option<byte[]> m_title = Option.None;
+        Option<byte[]> m_difficulty = Option.None;
         Option<GameSThumbnail> m_thumbnail = Option.None;
         Option<bool> m_isBlizzardMap = Option.None;
         Option<i64> m_timeUTC = Option.None;
         Option<i64> m_timeLocalOffset = Option.None;
         var m_restartAsTransitionMap = Option.Some<Option<bool>>(Option.None);
         Option<bool> m_disableRecoverGame = Option.None;
-        Option<List<byte>> m_description = Option.None;
-        Option<List<byte>> m_imageFilePath = Option.None;
+        Option<byte[]> m_description = Option.None;
+        Option<byte[]> m_imageFilePath = Option.None;
         Option<u8> m_campaignIndex = Option.None;
-        Option<List<byte>> m_mapFileName = Option.None;
-        var m_cacheHandles = Option.Some<Option<List<List<byte>>>>(Option.None);
+        Option<byte[]> m_mapFileName = Option.None;
+        var m_cacheHandles = Option.Some<Option<byte[][]>>(Option.None);
         Option<bool> m_miniSave = Option.None;
         Option<GameEGameSpeed> m_gameSpeed = Option.None;
         Option<u32> m_defaultDifficulty = Option.None;
-        var m_modPaths = Option.Some<Option<List<List<byte>>>>(Option.None);
+        var m_modPaths = Option.Some<Option<byte[][]>>(Option.None);
         ValidateStructTag();
         var structFieldCount = ParseVlqInt();           
         for (var i = 0; i < structFieldCount; i++)
@@ -1050,17 +1050,17 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
             m_modPaths = Option.OkOrReturnMissingFieldErr(m_modPaths),
         };
     }
-    public Option<List<GameSPlayerDetails>> Parse_GameSDetails_m_playerList()
+    public Option<GameSPlayerDetails[]> Parse_GameSDetails_m_playerList()
     {                             
         ValidateOptTag();
         var isProvided = ReadByte();
 
-        Option<List<GameSPlayerDetails>> m_playerList = default;
+        Option<GameSPlayerDetails[]> m_playerList = default;
         if (isProvided != 0)
         {                                   
             ValidateArrayTag();
             var arrayLength = ParseVlqInt();
-            var array = ReadList(Parse_GameSPlayerDetails, arrayLength);
+            var array = ReadArray(Parse_GameSPlayerDetails, arrayLength);
             m_playerList = Option.Some(array);
         }
         else
@@ -1070,12 +1070,12 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
 
         return m_playerList;
     }
-    public List<byte> Parse_GameSDetails_m_title()
+    public byte[] Parse_GameSDetails_m_title()
     {                             
         var m_title = tagged_blob();
         return m_title;
     }
-    public List<byte> Parse_GameSDetails_m_difficulty()
+    public byte[] Parse_GameSDetails_m_difficulty()
     {                             
         var m_difficulty = tagged_blob();
         return m_difficulty;
@@ -1124,12 +1124,12 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
         var m_disableRecoverGame = tagged_bool();
         return m_disableRecoverGame;
     }
-    public List<byte> Parse_GameSDetails_m_description()
+    public byte[] Parse_GameSDetails_m_description()
     {                             
         var m_description = tagged_blob();
         return m_description;
     }
-    public List<byte> Parse_GameSDetails_m_imageFilePath()
+    public byte[] Parse_GameSDetails_m_imageFilePath()
     {                             
         var m_imageFilePath = tagged_blob();
         return m_imageFilePath;
@@ -1139,22 +1139,22 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
         var m_campaignIndex = tagged_vlq_int();
         return ProtocolConversion<u8>.From(m_campaignIndex);
     }
-    public List<byte> Parse_GameSDetails_m_mapFileName()
+    public byte[] Parse_GameSDetails_m_mapFileName()
     {                             
         var m_mapFileName = tagged_blob();
         return m_mapFileName;
     }
-    public Option<List<List<byte>>> Parse_GameSDetails_m_cacheHandles()
+    public Option<byte[][]> Parse_GameSDetails_m_cacheHandles()
     {                             
         ValidateOptTag();
         var isProvided = ReadByte();
 
-        Option<List<List<byte>>> m_cacheHandles = default;
+        Option<byte[][]> m_cacheHandles = default;
         if (isProvided != 0)
         {                                   
             ValidateArrayTag();
             var arrayLength = ParseVlqInt();
-            var array = ReadList(tagged_blob, arrayLength);
+            var array = ReadArray(tagged_blob, arrayLength);
             m_cacheHandles = Option.Some(array);
         }
         else
@@ -1179,17 +1179,17 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
         var m_defaultDifficulty = tagged_vlq_int();
         return ProtocolConversion<u32>.From(m_defaultDifficulty);
     }
-    public Option<List<List<byte>>> Parse_GameSDetails_m_modPaths()
+    public Option<byte[][]> Parse_GameSDetails_m_modPaths()
     {                             
         ValidateOptTag();
         var isProvided = ReadByte();
 
-        Option<List<List<byte>>> m_modPaths = default;
+        Option<byte[][]> m_modPaths = default;
         if (isProvided != 0)
         {                                   
             ValidateArrayTag();
             var arrayLength = ParseVlqInt();
-            var array = ReadList(tagged_blob, arrayLength);
+            var array = ReadArray(tagged_blob, arrayLength);
             m_modPaths = Option.Some(array);
         }
         else
@@ -1202,7 +1202,7 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
 
     public ReplaySHeader Parse_ReplaySHeader() 
     {
-        Option<List<byte>> m_signature = Option.None;
+        Option<byte[]> m_signature = Option.None;
         Option<SVersion> m_version = Option.None;
         Option<u8> m_type = Option.None;
         Option<u32> m_elapsedGameLoops = Option.None;
@@ -1351,7 +1351,7 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
             m_ngdpRootKeyIsDevData = Option.OkOrReturnMissingFieldErr(m_ngdpRootKeyIsDevData),
         };
     }
-    public List<byte> Parse_ReplaySHeader_m_signature()
+    public byte[] Parse_ReplaySHeader_m_signature()
     {                             
         var m_signature = tagged_blob();
         return m_signature;
@@ -2255,14 +2255,14 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
     {
         Option<u32> m_unitTagIndex = Option.None;
         Option<u32> m_unitTagRecycle = Option.None;
-        Option<List<byte>> m_unitTypeName = Option.None;
+        Option<byte[]> m_unitTypeName = Option.None;
         Option<u8> m_controlPlayerId = Option.None;
         Option<u8> m_upkeepPlayerId = Option.None;
         Option<u8> m_x = Option.None;
         Option<u8> m_y = Option.None;
         var m_creatorUnitTagIndex = Option.Some<Option<u32>>(Option.None);
         var m_creatorUnitTagRecycle = Option.Some<Option<u32>>(Option.None);
-        var m_creatorAbilityName = Option.Some<Option<List<byte>>>(Option.None);
+        var m_creatorAbilityName = Option.Some<Option<byte[]>>(Option.None);
         ValidateStructTag();
         var structFieldCount = ParseVlqInt();           
         for (var i = 0; i < structFieldCount; i++)
@@ -2427,7 +2427,7 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
         var m_unitTagRecycle = tagged_vlq_int();
         return ProtocolConversion<u32>.From(m_unitTagRecycle);
     }
-    public List<byte> Parse_ReplayTrackerSUnitBornEvent_m_unitTypeName()
+    public byte[] Parse_ReplayTrackerSUnitBornEvent_m_unitTypeName()
     {                             
         var m_unitTypeName = tagged_blob();
         return m_unitTypeName;
@@ -2490,12 +2490,12 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
 
         return m_creatorUnitTagRecycle;
     }
-    public Option<List<byte>> Parse_ReplayTrackerSUnitBornEvent_m_creatorAbilityName()
+    public Option<byte[]> Parse_ReplayTrackerSUnitBornEvent_m_creatorAbilityName()
     {                             
         ValidateOptTag();
         var isProvided = ReadByte();
 
-        Option<List<byte>> m_creatorAbilityName = default;
+        Option<byte[]> m_creatorAbilityName = default;
         if (isProvided != 0)
         {                                   
             var res = tagged_blob();
@@ -2810,7 +2810,7 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
     {
         Option<u32> m_unitTagIndex = Option.None;
         Option<u32> m_unitTagRecycle = Option.None;
-        Option<List<byte>> m_unitTypeName = Option.None;
+        Option<byte[]> m_unitTypeName = Option.None;
         ValidateStructTag();
         var structFieldCount = ParseVlqInt();           
         for (var i = 0; i < structFieldCount; i++)
@@ -2877,7 +2877,7 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
         var m_unitTagRecycle = tagged_vlq_int();
         return ProtocolConversion<u32>.From(m_unitTagRecycle);
     }
-    public List<byte> Parse_ReplayTrackerSUnitTypeChangeEvent_m_unitTypeName()
+    public byte[] Parse_ReplayTrackerSUnitTypeChangeEvent_m_unitTypeName()
     {                             
         var m_unitTypeName = tagged_blob();
         return m_unitTypeName;
@@ -2886,7 +2886,7 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
     public ReplayTrackerSUpgradeEvent Parse_ReplayTrackerSUpgradeEvent() 
     {
         Option<u8> m_playerId = Option.None;
-        Option<List<byte>> m_upgradeTypeName = Option.None;
+        Option<byte[]> m_upgradeTypeName = Option.None;
         Option<i32> m_count = Option.None;
         ValidateStructTag();
         var structFieldCount = ParseVlqInt();           
@@ -2949,7 +2949,7 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
         var m_playerId = tagged_vlq_int();
         return ProtocolConversion<u8>.From(m_playerId);
     }
-    public List<byte> Parse_ReplayTrackerSUpgradeEvent_m_upgradeTypeName()
+    public byte[] Parse_ReplayTrackerSUpgradeEvent_m_upgradeTypeName()
     {                             
         var m_upgradeTypeName = tagged_blob();
         return m_upgradeTypeName;
@@ -2964,7 +2964,7 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
     {
         Option<u32> m_unitTagIndex = Option.None;
         Option<u32> m_unitTagRecycle = Option.None;
-        Option<List<byte>> m_unitTypeName = Option.None;
+        Option<byte[]> m_unitTypeName = Option.None;
         Option<u8> m_controlPlayerId = Option.None;
         Option<u8> m_upkeepPlayerId = Option.None;
         Option<u8> m_x = Option.None;
@@ -3091,7 +3091,7 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
         var m_unitTagRecycle = tagged_vlq_int();
         return ProtocolConversion<u32>.From(m_unitTagRecycle);
     }
-    public List<byte> Parse_ReplayTrackerSUnitInitEvent_m_unitTypeName()
+    public byte[] Parse_ReplayTrackerSUnitInitEvent_m_unitTypeName()
     {                             
         var m_unitTypeName = tagged_blob();
         return m_unitTypeName;
@@ -3177,7 +3177,7 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
     public ReplayTrackerSUnitPositionsEvent Parse_ReplayTrackerSUnitPositionsEvent() 
     {
         Option<u32> m_firstUnitIndex = Option.None;
-        Option<List<i32>> m_items = Option.None;
+        Option<i32[]> m_items = Option.None;
         ValidateStructTag();
         var structFieldCount = ParseVlqInt();           
         for (var i = 0; i < structFieldCount; i++)
@@ -3225,13 +3225,13 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
         var m_firstUnitIndex = tagged_vlq_int();
         return ProtocolConversion<u32>.From(m_firstUnitIndex);
     }
-    public List<i32> Parse_ReplayTrackerSUnitPositionsEvent_m_items()
+    public i32[] Parse_ReplayTrackerSUnitPositionsEvent_m_items()
     {                             
         ValidateArrayTag();
         var arrayLength = ParseVlqInt();
-        var array = ReadList(tagged_vlq_int, arrayLength);
+        var array = ReadArray(tagged_vlq_int, arrayLength);
 
-        return array.Select(x => ProtocolConversion<i32>.From(x)).ToList();
+        return array.Select(ProtocolConversion<i32>.From).ToArray();
     }
 
     public ReplayTrackerSPlayerSetupEvent Parse_ReplayTrackerSPlayerSetupEvent() 
@@ -3527,7 +3527,7 @@ public class VersionedProtocolParser(BinaryReader reader) : VersionedProtocolPar
         ValidateArrayTag();
 
         var arrayLength = ParseVlqInt();
-        var value = ReadList(Parse_GameSPlayerDetails, arrayLength);
+        var value = ReadArray(Parse_GameSPlayerDetails, arrayLength);
 
         return new GameCPlayerDetailsArray
         {

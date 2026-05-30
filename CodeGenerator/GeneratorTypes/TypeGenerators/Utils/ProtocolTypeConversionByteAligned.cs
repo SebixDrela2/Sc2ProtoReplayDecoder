@@ -66,7 +66,7 @@ public class ProtocolTypeConversionByteAligned : IProtocolTypeConversionAlignmen
         "NNet.CFilePath" or
         "NNet.CUserName" => new ProtocolJsonTypeConversion
         {
-            CSharpType = "List<byte>",
+            CSharpType = "byte[]",
             Parser = "tagged_blob",
         },
         "BoolType" => new ProtocolJsonTypeConversion
@@ -85,7 +85,7 @@ public class ProtocolTypeConversionByteAligned : IProtocolTypeConversionAlignmen
         "NNet.CUserArchiveDataArray" or
         "NNet.CUserInitialDataArray" => new ProtocolJsonTypeConversion
         {
-            CSharpType = "List<{}>",
+            CSharpType = "{}[]",
             Parser = "{}",
             IsVector = true,
         },
@@ -106,7 +106,7 @@ public class ProtocolTypeConversionByteAligned : IProtocolTypeConversionAlignmen
         },
         "NNet.Game.CCacheHandles" => new ProtocolJsonTypeConversion
         {
-            CSharpType = "List<List<byte>>",
+            CSharpType = "byte[][]",
             Parser = "tagged_blob",
             IsVector = true,
         },
@@ -117,7 +117,7 @@ public class ProtocolTypeConversionByteAligned : IProtocolTypeConversionAlignmen
         },
         "NNet.Game.CPlayerDetailsArray" => new ProtocolJsonTypeConversion
         {
-            CSharpType = "List<GameSPlayerDetails>",
+            CSharpType = "GameSPlayerDetails[]",
             Parser = "Parse_GameSPlayerDetails",
             IsVector = true
         },
@@ -128,7 +128,7 @@ public class ProtocolTypeConversionByteAligned : IProtocolTypeConversionAlignmen
         },
         "NNet.Game.CModPaths" => new ProtocolJsonTypeConversion
         {
-            CSharpType = "List<List<byte>>",
+            CSharpType = "byte[][]",
             Parser = "tagged_blob",
             IsVector = true,
         },
@@ -190,7 +190,7 @@ public class ProtocolTypeConversionByteAligned : IProtocolTypeConversionAlignmen
             var elementType = field[TypeInfo][TypeInfo][ElementType][FullName].ToString();
 
             var enclosedFieldConverted = FromNnetName(elementType);
-            enclosedFieldConverted.CSharpType = $"List<{enclosedFieldConverted.CSharpType}>";
+            enclosedFieldConverted.CSharpType = $"{enclosedFieldConverted.CSharpType}[]";
             enclosedFieldConverted.IsVector = true;
             enclosedFieldConverted.IsOptional = true;
 
